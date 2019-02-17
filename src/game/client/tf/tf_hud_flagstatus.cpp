@@ -153,7 +153,25 @@ void CTFArrowPanel::Paint()
 			}
 		}
 	}
+	else if ( pEnt->GetTeamNumber() == TF_TEAM_MERCENARY )
+	{
+		pMaterial = m_RedMaterial;
 
+		if ( pLocalPlayer && ( pLocalPlayer->GetObserverMode() == OBS_MODE_IN_EYE ) )
+		{
+			// is our target a player?
+			C_BaseEntity *pTargetEnt = pLocalPlayer->GetObserverTarget();
+			if ( pTargetEnt && pTargetEnt->IsPlayer() )
+			{
+				// does our target have the flag and are they carrying the flag we're currently drawing?
+				C_TFPlayer *pTarget = static_cast< C_TFPlayer* >( pTargetEnt );
+				if ( pTarget->HasTheFlag() && ( pTarget->GetItem() == pEnt ) )
+				{
+					pMaterial = m_RedMaterialNoArrow;
+				}
+			}
+		}
+	}
 	int x = 0;
 	int y = 0;
 	ipanel()->GetAbsPos( GetVPanel(), x, y );
@@ -323,6 +341,7 @@ void CTFHudFlagObjectives::ApplySchemeSettings( IScheme *pScheme )
 
 	m_pRedFlag = dynamic_cast<CTFFlagStatus *>( FindChildByName( "RedFlag" ) );
 	m_pBlueFlag = dynamic_cast<CTFFlagStatus *>( FindChildByName( "BlueFlag" ) );
+	m_pMercenaryFlag = dynamic_cast<CTFFlagStatus *>(FindChildByName("MercenaryFlag"));
 
 	m_pCapturePoint = dynamic_cast<CTFArrowPanel *>( FindChildByName( "CaptureFlag" ) );
 
@@ -356,6 +375,10 @@ void CTFHudFlagObjectives::Reset()
 	if ( m_pRedFlag && !m_pRedFlag->IsVisible() )
 	{
 		m_pRedFlag->SetVisible( true );
+	}
+	if (m_pMercenaryFlag && !m_pMercenaryFlag->IsVisible())
+	{
+		m_pMercenaryFlag->SetVisible(true);
 	}
 
 	if ( m_pSpecCarriedImage && m_pSpecCarriedImage->IsVisible() )
@@ -405,6 +428,10 @@ void CTFHudFlagObjectives::OnTick()
 				{
 					m_pBlueFlag->SetEntity( pFlag );
 				}
+				else if ( m_pBlueFlag && pFlag->GetTeamNumber() == TF_TEAM_MERCENARY )
+				{
+					m_pMercenaryFlag->SetEntity( pFlag );
+				}
 			}
 		}
 		else
@@ -429,6 +456,12 @@ void CTFHudFlagObjectives::OnTick()
 			SetDialogVariable( "redscore", pTeam->GetFlagCaptures() );
 		}
 
+		pTeam = GetGlobalTFTeam( TF_TEAM_MERCENARY );
+		if ( pTeam )
+		{
+			SetDialogVariable( "mercenaryscore", pTeam->GetFlagCaptures() );
+		}
+		
 		SetPlayingToLabelVisible( true );
 		SetDialogVariable( "rounds", tf_flag_caps_per_round.GetInt() );
 	}
@@ -445,7 +478,13 @@ void CTFHudFlagObjectives::OnTick()
 		{
 			SetDialogVariable( "redscore", pTeam->Get_Score() );
 		}
-
+		
+		pTeam = GetGlobalTFTeam( TF_TEAM_MERCENARY );
+		if ( pTeam )
+		{
+			SetDialogVariable( "mercenaryscore", pTeam->Get_Score() );
+		}
+		
 		SetPlayingToLabelVisible( false );
 	}
 
@@ -530,6 +569,11 @@ void CTFHudFlagObjectives::UpdateStatus( void )
 				m_pRedFlag->SetVisible( false );
 			}
 
+			if (m_pMercenaryFlag && m_pMercenaryFlag->IsVisible())
+			{
+				m_pMercenaryFlag->SetVisible(false);
+			}
+
 			if ( !m_pCarriedImage->IsVisible() )
 			{
 				m_pCarriedImage->SetVisible( true );
@@ -602,6 +646,15 @@ void CTFHudFlagObjectives::UpdateStatus( void )
 			}
 
 			m_pRedFlag->UpdateStatus();
+		}
+		if (m_pMercenaryFlag)
+		{
+			if (!m_pMercenaryFlag->IsVisible())
+			{
+				m_pMercenaryFlag->SetVisible(true);
+			}
+
+			m_pMercenaryFlag->UpdateStatus();
 		}
 	}
 }

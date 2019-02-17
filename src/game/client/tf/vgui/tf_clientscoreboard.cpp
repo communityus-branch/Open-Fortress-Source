@@ -232,7 +232,7 @@ void CTFClientScoreBoardDialog::Update()
 void CTFClientScoreBoardDialog::UpdateTeamInfo()
 {
 	// update the team sections in the scoreboard
-	for ( int teamIndex = TF_TEAM_RED; teamIndex <= TF_TEAM_BLUE; teamIndex++ )
+	for ( int teamIndex = TF_TEAM_RED; teamIndex <= TF_TEAM_MERCENARY; teamIndex++ )
 	{
 		wchar_t *teamName = NULL;
 		C_Team *team = GetGlobalTeam( teamIndex );
@@ -249,6 +249,10 @@ void CTFClientScoreBoardDialog::UpdateTeamInfo()
 				case TF_TEAM_BLUE:
 					pDialogVarTeamScore = "blueteamscore";
 					pDialogVarTeamPlayerCount = "blueteamplayercount";
+					break;
+				case TF_TEAM_MERCENARY:
+					pDialogVarTeamScore = "mercenaryteamscore";
+					pDialogVarTeamPlayerCount = "mercenaryteamplayercount";
 					break;
 				default:
 					Assert( false );
@@ -290,7 +294,9 @@ bool AreEnemyTeams( int iTeam1, int iTeam2 )
 
 	if ( iTeam1 == TF_TEAM_BLUE && iTeam2 == TF_TEAM_RED )
 		return true;
-
+	
+	if ( iTeam1 == TF_TEAM_MERCENARY)
+		return true;
 	return false;
 }
 
@@ -344,6 +350,9 @@ void CTFClientScoreBoardDialog::UpdatePlayerList()
 				break;
 			case TF_TEAM_RED:
 				pPlayerList = m_pPlayerListRed;
+				break;
+			case TF_TEAM_MERCENARY:
+				pPlayerList = m_pPlayerListMercenary;
 				break;
 			}
 			if ( null == pPlayerList )

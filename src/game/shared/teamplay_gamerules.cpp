@@ -7,6 +7,7 @@
 #include "cbase.h"
 #include "KeyValues.h"
 #include "gamerules.h"
+#include "shareddefs.h"
 #include "teamplay_gamerules.h"
 
 #ifdef CLIENT_DLL
@@ -356,14 +357,20 @@ bool CTeamplayRules::FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity *pA
 {
 	if ( pAttacker && PlayerRelationship( pPlayer, pAttacker ) == GR_TEAMMATE && !info.IsForceFriendlyFire() )
 	{
+		
+		if (*GetTeamID(pPlayer) == 77) //82=red // merc 77
+		{
+			return true;
+		}
 		// my teammate hit me.
-		if ( (friendlyfire.GetInt() == 0) && (pAttacker != pPlayer) )
+		else if ( (friendlyfire.GetInt() == 0) && (pAttacker != pPlayer))
 		{
 			// friendly fire is off, and this hit came from someone other than myself,  then don't get hurt
 			return false;
 		}
 	}
 
+	
 	return BaseClass::FPlayerCanTakeDamage( pPlayer, pAttacker, info );
 }
 
@@ -373,7 +380,7 @@ int CTeamplayRules::PlayerRelationship( CBaseEntity *pPlayer, CBaseEntity *pTarg
 {
 	// half life multiplay has a simple concept of Player Relationships.
 	// you are either on another player's team, or you are not.
-	if ( !pPlayer || !pTarget || !pTarget->IsPlayer() )
+	if ( !pPlayer || !pTarget || !pTarget->IsPlayer() || (*GetTeamID(pTarget) == '4') || (*GetTeamID(pPlayer) == '4') ) //actualy changes shit
 		return GR_NOTTEAMMATE;
 
 	if ( (*GetTeamID(pPlayer) != '\0') && (*GetTeamID(pTarget) != '\0') && !stricmp( GetTeamID(pPlayer), GetTeamID(pTarget) ) )

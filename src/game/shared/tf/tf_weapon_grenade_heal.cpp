@@ -112,9 +112,13 @@ void CTFGrenadeHealProjectile::Spawn()
 	{
 		DispatchParticleEffect( "heal_ticker_blue", PATTACH_ABSORIGIN_FOLLOW, this );
 	}
-	else
+	else if ( GetTeamNumber() == TF_TEAM_RED )
 	{
 		DispatchParticleEffect( "heal_ticker_red", PATTACH_ABSORIGIN_FOLLOW, this );
+	}
+	else
+	{
+		DispatchParticleEffect( "heal_ticker_mercenary", PATTACH_ABSORIGIN_FOLLOW, this );
 	}
 }
 
@@ -187,6 +191,10 @@ void CTFGrenadeHealProjectile::Detonate()
 	if ( GetTeamNumber() == TF_TEAM_BLUE )
 	{
 		DispatchParticleEffect( "heal_grenade_blue", GetAbsOrigin(), vec3_angle );
+	}
+	else if ( GetTeamNumber() == TF_TEAM_RED )
+	{
+		DispatchParticleEffect( "heal_grenade_red", GetAbsOrigin(), vec3_angle );
 	}
 	else
 	{

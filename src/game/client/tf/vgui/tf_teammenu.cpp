@@ -120,7 +120,7 @@ bool CTFTeamButton::IsTeamFull()
 		CTFTeamMenu *pTeamMenu = dynamic_cast< CTFTeamMenu* >( GetParent() );
 		if ( pTeamMenu )
 		{
-			bRetVal = ( m_iTeam == TF_TEAM_BLUE ) ? pTeamMenu->IsBlueTeamDisabled() : pTeamMenu->IsRedTeamDisabled(); // it is
+			bRetVal = ( m_iTeam == TF_TEAM_BLUE ) ? pTeamMenu->IsBlueTeamDisabled() : pTeamMenu->IsRedTeamDisabled();
 		}
 	}
 
@@ -354,6 +354,15 @@ void CTFTeamMenu::ShowPanel( bool bShow )
 			GetFocusNavGroup().SetCurrentFocus( m_pRedTeamButton->GetVPanel(), m_pRedTeamButton->GetVPanel() );
 			break;
 
+		case TF_TEAM_MERCENARY:
+			if ( IsConsole() )
+			{
+				m_pMercenaryTeamButton->OnCursorEntered();
+				m_pMercenaryTeamButton->SetDefaultAnimation( "enter_enabled" );
+			}
+			GetFocusNavGroup().SetCurrentFocus( m_pMercenaryTeamButton->GetVPanel(), m_pMercenaryTeamButton->GetVPanel() );
+			break;			
+			
 		default:
 			if ( IsConsole() )
 			{
@@ -548,13 +557,17 @@ void CTFTeamMenu::OnCommand( const char *command )
 			}
 			else if ( Q_stricmp( pTeam, "red" ) == 0 )
 			{
-				iTeam = TF_TEAM_RED;
+				iTeam = TF_TEAM_MERCENARY;
 			}
 			else if ( Q_stricmp( pTeam, "blue" ) == 0 )
 			{
-				iTeam = TF_TEAM_BLUE;
+				iTeam = TF_TEAM_MERCENARY;
 			}
-
+			else if ( Q_stricmp( pTeam, "mercenary" ) == 0 )
+			{
+				iTeam = TF_TEAM_MERCENARY;
+			}
+			
 			if ( iTeam == TF_TEAM_RED && m_bRedDisabled )
 			{
 				return;
@@ -565,6 +578,8 @@ void CTFTeamMenu::OnCommand( const char *command )
 				return;
 			}
 
+	
+			
 			// are we selecting the team we're already on?
 			if ( pLocalPlayer->GetTeamNumber() != iTeam )
 			{
@@ -593,14 +608,16 @@ void CTFTeamMenu::OnTick()
 
 	C_Team *pRed = GetGlobalTeam( TF_TEAM_RED );
 	C_Team *pBlue = GetGlobalTeam( TF_TEAM_BLUE );
-
-	if ( !pRed || !pBlue )
+	C_Team *pMercenary = GetGlobalTeam( TF_TEAM_MERCENARY );
+	
+	if ( !pRed || !pBlue || !pMercenary )
 		return;
 
 	// set our team counts
 	SetDialogVariable( "bluecount", pBlue->Get_Number_Players() );
 	SetDialogVariable( "redcount", pRed->Get_Number_Players() );
-
+	SetDialogVariable( "mercenarycount", pMercenary->Get_Number_Players() );
+	
 	C_TFPlayer *pLocalPlayer = C_TFPlayer::GetLocalTFPlayer();
 
 	if ( !pLocalPlayer )
@@ -612,7 +629,7 @@ void CTFTeamMenu::OnTick()
 		return;
 
 	// check if teams are unbalanced
-	m_bRedDisabled = m_bBlueDisabled = false;
+	m_bRedDisabled = m_bBlueDisabled = m_bMercenaryDisabled = false;
 
 	int iHeavyTeam, iLightTeam;
 
@@ -630,6 +647,11 @@ void CTFTeamMenu::OnTick()
 		m_bBlueDisabled = true;
 	}
 
+	if ( ( bUnbalanced && iHeavyTeam == TF_TEAM_MERCENARY ) || ( pRules->WouldChangeUnbalanceTeams( TF_TEAM_MERCENARY, iCurrentTeam ) ) )
+	{
+		m_bBlueDisabled = true;
+	}	
+	
 	if ( m_pSpecTeamButton && m_pSpecLabel )
 	{
 		ConVarRef mp_allowspectators( "mp_allowspectators" );

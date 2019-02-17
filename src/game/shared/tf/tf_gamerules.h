@@ -60,12 +60,16 @@ public:
 	DECLARE_DATADESC();
 	void	InputSetRedTeamRespawnWaveTime( inputdata_t &inputdata );
 	void	InputSetBlueTeamRespawnWaveTime( inputdata_t &inputdata );
+	void	InputSetMercenaryTeamRespawnWaveTime( inputdata_t &inputdata );
 	void	InputAddRedTeamRespawnWaveTime( inputdata_t &inputdata );
 	void	InputAddBlueTeamRespawnWaveTime( inputdata_t &inputdata );
+	void	InputAddMercenaryTeamRespawnWaveTime( inputdata_t &inputdata );
 	void	InputSetRedTeamGoalString( inputdata_t &inputdata );
 	void	InputSetBlueTeamGoalString( inputdata_t &inputdata );
+	void	InputSetMercenaryTeamGoalString( inputdata_t &inputdata );
 	void	InputSetRedTeamRole( inputdata_t &inputdata );
 	void	InputSetBlueTeamRole( inputdata_t &inputdata );
+	void	InputSetMercenaryTeamRole( inputdata_t &inputdata );
 
 	virtual void Activate();
 #endif
@@ -311,7 +315,7 @@ private:
 	CNetworkVar( int, m_nGameType ); // Type of game this map is (CTF, CP)
 	CNetworkString( m_pszTeamGoalStringRed, MAX_TEAMGOAL_STRING );
 	CNetworkString( m_pszTeamGoalStringBlue, MAX_TEAMGOAL_STRING );
-
+	CNetworkString( m_pszTeamGoalStringMercenary, MAX_TEAMGOAL_STRING );
 public:
 
 	bool m_bControlSpawnsPerTeam[ MAX_TEAMS ][ MAX_CONTROL_POINTS ];

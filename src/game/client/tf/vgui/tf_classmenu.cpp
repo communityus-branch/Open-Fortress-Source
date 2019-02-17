@@ -574,7 +574,7 @@ void CTFClassMenu::UpdateNumClassLabels( int iTeam )
 				if ( pImage )
 				{
 					pImage->SetVisible( true );
-					pImage->SetImage( iTeam == TF_TEAM_BLUE ? g_sClassImagesBlue[i] : g_sClassImagesRed[i] );
+					pImage->SetImage( iTeam == TF_TEAM_BLUE ? g_sClassImagesBlue[i] : g_sClassImagesRed[i] /* : g_sClassImagesMercenary[i] */); //make more teams
 				}
 
 				nTotalCount++;

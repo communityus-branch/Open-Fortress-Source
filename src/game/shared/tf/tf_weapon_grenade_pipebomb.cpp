@@ -139,6 +139,10 @@ const char *CTFGrenadePipebombProjectile::GetTrailParticleName( void )
 		{
 			return "stickybombtrail_blue";
 		}
+		else if ( GetTeamNumber() == TF_TEAM_RED)
+		{
+			return "stickybombtrail_red";
+		}
 		else
 		{
 			return "stickybombtrail_red";
@@ -150,11 +154,14 @@ const char *CTFGrenadePipebombProjectile::GetTrailParticleName( void )
 		{
 			return "pipebombtrail_blue";
 		}
+		else if ( GetTeamNumber() == TF_TEAM_RED )
+		{
+			return "pipebombtrail_red";
+		}
 		else
 		{
 			return "pipebombtrail_red";
 		}
-
 	}
 }
 
@@ -195,6 +202,16 @@ void CTFGrenadePipebombProjectile::OnDataChanged(DataUpdateType_t updateType)
 				}
 				break;
 			case TF_TEAM_RED:
+				if ( m_iType == TF_GL_MODE_REMOTE_DETONATE )
+				{
+					ParticleProp()->Create( "critical_grenade_red", PATTACH_ABSORIGIN_FOLLOW );
+				}
+				else
+				{
+					ParticleProp()->Create( "critical_pipe_red", PATTACH_ABSORIGIN_FOLLOW );
+				}
+				break;
+			case TF_TEAM_MERCENARY:
 
 				if ( m_iType == TF_GL_MODE_REMOTE_DETONATE )
 				{

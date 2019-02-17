@@ -164,12 +164,14 @@ BEGIN_NETWORK_TABLE_NOBASE( CTFGameRules, DT_TFGameRules )
 	RecvPropInt( RECVINFO( m_nGameType ) ),
 	RecvPropString( RECVINFO( m_pszTeamGoalStringRed ) ),
 	RecvPropString( RECVINFO( m_pszTeamGoalStringBlue ) ),
+	RecvPropString( RECVINFO(m_pszTeamGoalStringMercenary)),
 
 #else
 
 	SendPropInt( SENDINFO( m_nGameType ), 3, SPROP_UNSIGNED ),
 	SendPropString( SENDINFO( m_pszTeamGoalStringRed ) ),
 	SendPropString( SENDINFO( m_pszTeamGoalStringBlue ) ),
+	SendPropString( SENDINFO( m_pszTeamGoalStringMercenary ) ),
 
 #endif
 END_NETWORK_TABLE()
@@ -207,12 +209,16 @@ BEGIN_DATADESC( CTFGameRulesProxy )
 	// Inputs.
 	DEFINE_INPUTFUNC( FIELD_FLOAT, "SetRedTeamRespawnWaveTime", InputSetRedTeamRespawnWaveTime ),
 	DEFINE_INPUTFUNC( FIELD_FLOAT, "SetBlueTeamRespawnWaveTime", InputSetBlueTeamRespawnWaveTime ),
+	DEFINE_INPUTFUNC( FIELD_FLOAT, "SetMercenaryTeamRespawnWaveTime", InputSetMercenaryTeamRespawnWaveTime ),
 	DEFINE_INPUTFUNC( FIELD_FLOAT, "AddRedTeamRespawnWaveTime", InputAddRedTeamRespawnWaveTime ),
 	DEFINE_INPUTFUNC( FIELD_FLOAT, "AddBlueTeamRespawnWaveTime", InputAddBlueTeamRespawnWaveTime ),
+	DEFINE_INPUTFUNC( FIELD_FLOAT, "AddMercenaryTeamRespawnWaveTime", InputAddMercenaryTeamRespawnWaveTime ),
 	DEFINE_INPUTFUNC( FIELD_STRING, "SetRedTeamGoalString", InputSetRedTeamGoalString ),
+	DEFINE_INPUTFUNC( FIELD_STRING, "SetMercenaryTeamGoalString", InputSetMercenaryTeamGoalString ),
 	DEFINE_INPUTFUNC( FIELD_STRING, "SetBlueTeamGoalString", InputSetBlueTeamGoalString ),
 	DEFINE_INPUTFUNC( FIELD_INTEGER, "SetRedTeamRole", InputSetRedTeamRole ),
 	DEFINE_INPUTFUNC( FIELD_INTEGER, "SetBlueTeamRole", InputSetBlueTeamRole ),
+	DEFINE_INPUTFUNC( FIELD_INTEGER, "SetMercenaryTeamRole", InputSetMercenaryTeamRole ),
 END_DATADESC()
 
 //-----------------------------------------------------------------------------
@@ -227,6 +233,11 @@ void CTFGameRulesProxy::InputSetRedTeamRespawnWaveTime( inputdata_t &inputdata )
 // Purpose: 
 //-----------------------------------------------------------------------------
 void CTFGameRulesProxy::InputSetBlueTeamRespawnWaveTime( inputdata_t &inputdata )
+{
+	TFGameRules()->SetTeamRespawnWaveTime( TF_TEAM_BLUE, inputdata.value.Float() );
+}
+
+void CTFGameRulesProxy::InputSetMercenaryTeamRespawnWaveTime( inputdata_t &inputdata )
 {
 	TFGameRules()->SetTeamRespawnWaveTime( TF_TEAM_BLUE, inputdata.value.Float() );
 }
@@ -247,6 +258,10 @@ void CTFGameRulesProxy::InputAddBlueTeamRespawnWaveTime( inputdata_t &inputdata 
 	TFGameRules()->AddTeamRespawnWaveTime( TF_TEAM_BLUE, inputdata.value.Float() );
 }
 
+void CTFGameRulesProxy::InputAddMercenaryTeamRespawnWaveTime( inputdata_t &inputdata )
+{
+	TFGameRules()->AddTeamRespawnWaveTime( TF_TEAM_MERCENARY, inputdata.value.Float() );
+}
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
@@ -254,13 +269,17 @@ void CTFGameRulesProxy::InputSetRedTeamGoalString( inputdata_t &inputdata )
 {
 	TFGameRules()->SetTeamGoalString( TF_TEAM_RED, inputdata.value.String() );
 }
-
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
 void CTFGameRulesProxy::InputSetBlueTeamGoalString( inputdata_t &inputdata )
 {
 	TFGameRules()->SetTeamGoalString( TF_TEAM_BLUE, inputdata.value.String() );
+}
+
+void CTFGameRulesProxy::InputSetMercenaryTeamGoalString( inputdata_t &inputdata )
+{
+	TFGameRules()->SetTeamGoalString( TF_TEAM_MERCENARY, inputdata.value.String() );
 }
 
 //-----------------------------------------------------------------------------
@@ -281,6 +300,15 @@ void CTFGameRulesProxy::InputSetRedTeamRole( inputdata_t &inputdata )
 void CTFGameRulesProxy::InputSetBlueTeamRole( inputdata_t &inputdata )
 {
 	CTFTeam *pTeam = TFTeamMgr()->GetTeam( TF_TEAM_BLUE );
+	if ( pTeam )
+	{
+		pTeam->SetRole( inputdata.value.Int() );
+	}
+}
+
+void CTFGameRulesProxy::InputSetMercenaryTeamRole( inputdata_t &inputdata )
+{
+	CTFTeam *pTeam = TFTeamMgr()->GetTeam( TF_TEAM_MERCENARY );
 	if ( pTeam )
 	{
 		pTeam->SetRole( inputdata.value.Int() );
@@ -432,6 +460,7 @@ CTFGameRules::CTFGameRules()
 
 	m_pszTeamGoalStringRed.GetForModify()[0] = '\0';
 	m_pszTeamGoalStringBlue.GetForModify()[0] = '\0';
+	m_pszTeamGoalStringMercenary.GetForModify()[0] = '\0';
 }
 
 //-----------------------------------------------------------------------------
@@ -582,6 +611,20 @@ void CTFGameRules::SetTeamGoalString( int iTeam, const char *pszGoal )
 			if ( Q_stricmp( m_pszTeamGoalStringBlue.Get(), pszGoal ) )
 			{
 				Q_strncpy( m_pszTeamGoalStringBlue.GetForModify(), pszGoal, MAX_TEAMGOAL_STRING );
+			}
+		}
+	}
+	else if ( iTeam == TF_TEAM_MERCENARY )
+	{
+		if ( !pszGoal || !pszGoal[0] )
+		{
+			m_pszTeamGoalStringMercenary.GetForModify()[0] = '\0';
+		}
+		else
+		{
+			if ( Q_stricmp( m_pszTeamGoalStringMercenary.Get(), pszGoal ) )
+			{
+				Q_strncpy( m_pszTeamGoalStringMercenary.GetForModify(), pszGoal, MAX_TEAMGOAL_STRING );
 			}
 		}
 	}
@@ -1266,7 +1309,12 @@ void CTFGameRules::RadiusDamage( const CTakeDamageInfo &info, const Vector &vecS
 				UTIL_LogPrintf( "Team \"RED\" triggered \"Intermission_Win_Limit\"\n" );
 				bWinner = true;
 			}
-
+			else if ( TFTeamMgr()->GetTeam( TF_TEAM_MERCENARY )->GetScore() >= mp_winlimit.GetInt() )
+			{
+				UTIL_LogPrintf( "Team \"Mercenary\" triggered \"Intermission_Win_Limit\"\n" );
+				bWinner = true;
+			}
+			
 			if ( bWinner )
 			{
 				IGameEvent *event = gameeventmanager->CreateEvent( "tf_game_over" );
@@ -1405,14 +1453,22 @@ void cc_ShowRespawnTimes()
 		float flBlueScalar = pRules->GetRespawnTimeScalar( TF_TEAM_BLUE );
 		float flNextBlueRespawn = pRules->GetNextRespawnWave( TF_TEAM_BLUE, NULL ) - gpGlobals->curtime;
 
+		float flMercenaryMin = ( pRules->m_TeamRespawnWaveTimes[TF_TEAM_MERCENARY] >= 0 ? pRules->m_TeamRespawnWaveTimes[TF_TEAM_MERCENARY] : mp_respawnwavetime.GetFloat() );
+		float flMercenaryScalar = pRules->GetRespawnTimeScalar( TF_TEAM_MERCENARY );
+		float flNextMercenaryRespawn = pRules->GetNextRespawnWave( TF_TEAM_MERCENARY, NULL ) - gpGlobals->curtime;	
+	
 		char tempRed[128];
 		Q_snprintf( tempRed, sizeof( tempRed ),   "Red:  Min Spawn %2.2f, Scalar %2.2f, Next Spawn In: %.2f\n", flRedMin, flRedScalar, flNextRedRespawn );
 
 		char tempBlue[128];
 		Q_snprintf( tempBlue, sizeof( tempBlue ), "Blue: Min Spawn %2.2f, Scalar %2.2f, Next Spawn In: %.2f\n", flBlueMin, flBlueScalar, flNextBlueRespawn );
+		
+		char tempMercenary[128];
+		Q_snprintf( tempMercenary, sizeof( tempMercenary ), "Mercenary: Min Spawn %2.2f, Scalar %2.2f, Next Spawn In: %.2f\n", flMercenaryMin, flMercenaryScalar, flNextMercenaryRespawn );
 
 		ClientPrint( pPlayer, HUD_PRINTTALK, tempRed );
 		ClientPrint( pPlayer, HUD_PRINTTALK, tempBlue );
+		ClientPrint( pPlayer, HUD_PRINTTALK, tempMercenary );
 	}
 }
 
@@ -1639,7 +1695,7 @@ void CTFGameRules::ClientSettingsChanged( CBasePlayer *pPlayer )
 
 	const char *pszFov = engine->GetClientConVarValue( pPlayer->entindex(), "fov_desired" );
 	int iFov = atoi(pszFov);
-	iFov = clamp( iFov, 75, 90 );
+	iFov = clamp( iFov, 50, 130 );
 	pTFPlayer->SetDefaultFOV( iFov );
 }
 
@@ -2087,8 +2143,10 @@ void CTFGameRules::SendWinPanelInfo( void )
 	{
 		int iBlueScore = GetGlobalTeam( TF_TEAM_BLUE )->GetScore();
 		int iRedScore = GetGlobalTeam( TF_TEAM_RED )->GetScore();
+		int iMercenaryScore = GetGlobalTeam( TF_TEAM_MERCENARY )->GetScore();
 		int iBlueScorePrev = iBlueScore;
 		int iRedScorePrev = iRedScore;
+		int iMercenaryScorePrev = iMercenaryScore;
 
 		bool bRoundComplete = m_bForceMapReset || ( IsGameUnderTimeLimit() && ( GetTimeLeft() <= 0 ) );
 
@@ -2108,6 +2166,9 @@ void CTFGameRules::SendWinPanelInfo( void )
 				break;
 			case TEAM_UNASSIGNED:
 				break;	// stalemate; nothing to do
+			case TF_TEAM_MERCENARY:
+				iMercenaryScorePrev = ( iMercenaryScore - TEAMPLAY_ROUND_WIN_SCORE >= 0 ) ? ( iMercenaryScore - TEAMPLAY_ROUND_WIN_SCORE ) : 0;
+				break;
 			}
 		}
 			
@@ -2221,6 +2282,9 @@ void CTFGameRules::FillOutTeamplayRoundWinEvent( IGameEvent *event )
 	case TF_TEAM_BLUE:
 		iLosingTeam = TF_TEAM_RED;
 		break;
+	case TF_TEAM_MERCENARY:
+		iLosingTeam = TF_TEAM_RED + TF_TEAM_BLUE;
+	break;
 	case TEAM_UNASSIGNED:
 	default:
 		iLosingTeam = TEAM_UNASSIGNED;
@@ -2256,7 +2320,8 @@ void CTFGameRules::SetupSpawnPointsForRound( void )
 			CHandle<CTeamControlPoint> hControlPoint = pTFSpawn->GetControlPoint();
 			CHandle<CTeamControlPointRound> hRoundBlue = pTFSpawn->GetRoundBlueSpawn();
 			CHandle<CTeamControlPointRound> hRoundRed = pTFSpawn->GetRoundRedSpawn();
-
+			CHandle<CTeamControlPointRound> hRoundMercenary = pTFSpawn->GetRoundMercenarySpawn();
+			
 			if ( hControlPoint && pCurrentRound->IsControlPointInRound( hControlPoint ) )
 			{
 				// this spawn is associated with one of our control points
@@ -2272,6 +2337,11 @@ void CTFGameRules::SetupSpawnPointsForRound( void )
 			{
 				pTFSpawn->SetDisabled( false );
 				pTFSpawn->ChangeTeam( TF_TEAM_RED );
+			}
+			else if ( hRoundMercenary && ( hRoundMercenary == pCurrentRound ) )
+			{
+				pTFSpawn->SetDisabled( false );
+				pTFSpawn->ChangeTeam( TF_TEAM_MERCENARY );
 			}
 			else
 			{
@@ -2559,7 +2629,7 @@ void CTFGameRules::HandleSwitchTeams( void )
 			pPlayer->TeamFortress_RemoveEverythingFromWorld();
 
 			// Ignore players who aren't on an active team
-			if ( pPlayer->GetTeamNumber() != TF_TEAM_RED && pPlayer->GetTeamNumber() != TF_TEAM_BLUE )
+			if ( pPlayer->GetTeamNumber() != TF_TEAM_RED && pPlayer->GetTeamNumber() != TF_TEAM_BLUE && pPlayer->GetTeamNumber() != TF_TEAM_MERCENARY)
 			{
 				continue;
 			}
@@ -3099,6 +3169,8 @@ const char *CTFGameRules::GetTeamGoalString( int iTeam )
 		return m_pszTeamGoalStringRed.Get();
 	if ( iTeam == TF_TEAM_BLUE )
 		return m_pszTeamGoalStringBlue.Get();
+	if ( iTeam == TF_TEAM_MERCENARY )
+		return m_pszTeamGoalStringMercenary.Get();
 	return NULL;
 }
 

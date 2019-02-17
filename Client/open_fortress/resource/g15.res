@@ -1,6 +1,6 @@
 "Logitech G-15 Keyboard Layout"
 {
-	"game"		"Team Fortress 2"
+	"game"		"Open Fortress"
 	"chatlines"	"8"  // number of chat lines to keep (1-64)
 	
 	// These need to be 1bpp HICONs

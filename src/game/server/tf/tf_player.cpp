@@ -1148,10 +1148,22 @@ CBaseEntity* CTFPlayer::EntSelectSpawnPoint()
 				g_pLastSpawnPoints[ GetTeamNumber() ] = pSpot;
 			}
 
-			// need to save this for later so we can apply and modifiers to the armor and grenades...after the call to InitClass()
+			// need to save this for later so we can apply and modifiers to the armor and grenades...after the call to InitClass() //by tf2team
 			m_pSpawnPoint = dynamic_cast<CTFTeamSpawn*>( pSpot );
 			break;
 		}
+	case TF_TEAM_MERCENARY:
+		{
+			pSpawnPointName = "info_player_teamspawn";
+			if ( SelectSpawnSpot( pSpawnPointName, pSpot ) )
+			{
+				g_pLastSpawnPoints[ GetTeamNumber() ] = pSpot;
+			}
+
+			// need to save this for later so we can apply and modifiers to the armor and grenades...after the call to InitClass() //by tf2team
+			m_pSpawnPoint = dynamic_cast<CTFTeamSpawn*>( pSpot );
+			break;
+		} 
 	case TEAM_SPECTATOR:
 	case TEAM_UNASSIGNED:
 		//stickynote start
@@ -1275,8 +1287,9 @@ int CTFPlayer::GetAutoTeam( void )
 
 	CTFTeam *pBlue = TFTeamMgr()->GetTeam( TF_TEAM_BLUE );
 	CTFTeam *pRed  = TFTeamMgr()->GetTeam( TF_TEAM_RED );
-
-	if ( pBlue && pRed )
+	CTFTeam *pMercenary = TFTeamMgr()->GetTeam(TF_TEAM_MERCENARY);
+	
+	if ( pBlue && pRed && pMercenary )
 	{
 		if ( pBlue->GetNumPlayers() < pRed->GetNumPlayers() )
 		{
@@ -1285,6 +1298,10 @@ int CTFPlayer::GetAutoTeam( void )
 		else if ( pRed->GetNumPlayers() < pBlue->GetNumPlayers() )
 		{
 			iTeam = TF_TEAM_RED;
+		}
+		else if ( pRed->GetNumPlayers() < pBlue->GetNumPlayers() || pBlue->GetNumPlayers() < pRed->GetNumPlayers() )
+		{
+			iTeam = TF_TEAM_MERCENARY;
 		}
 		else
 		{
@@ -1311,7 +1328,7 @@ void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 	}
 	else
 	{
-		for ( int i = 0; i < TF_TEAM_COUNT; ++i )
+		for ( int i = 0; i < TF_TEAM_COUNT ; ++i )
 		{
 			if ( stricmp( pTeamName, g_aTeamNames[i] ) == 0 )
 			{
@@ -1491,7 +1508,7 @@ void CTFPlayer::ChangeTeam( int iTeamNum )
 	}
 	else // active player
 	{
-		if ( !IsDead() && (iOldTeam == TF_TEAM_RED || iOldTeam == TF_TEAM_BLUE) )
+		if ( !IsDead() && (iOldTeam == TF_TEAM_RED || iOldTeam == TF_TEAM_BLUE || iOldTeam == TF_TEAM_MERCENARY ) )
 		{
 			// Kill player if switching teams while alive
 			CommitSuicide( false, true );
@@ -1775,6 +1792,10 @@ bool CTFPlayer::ClientCommand( const CCommand &args )
 				ShowViewPortPanel( PANEL_CLASS_BLUE, true );
 				break;
 
+			case TF_TEAM_MERCENARY:
+				ShowViewPortPanel( PANEL_CLASS_MERCENARY, true );
+				break;				
+				
 			default:
 				break;
 			}
@@ -2781,6 +2802,9 @@ bool CTFPlayer::ShouldCollide( int collisionGroup, int contentsMask ) const
 		case TF_TEAM_BLUE:
 			if ( !( contentsMask & CONTENTS_BLUETEAM ) )
 				return false;
+			break;
+		case TF_TEAM_MERCENARY:
+				return true;
 			break;
 		}
 	}

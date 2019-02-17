@@ -234,7 +234,7 @@ enum CastVote
 
 #define MAX_PLACE_NAME_LENGTH		18
 
-#define MAX_FOV						90
+#define MAX_FOV						130
 
 //===================================================================================================================
 // Team Defines
@@ -525,6 +525,7 @@ typedef enum
 // basic team colors
 #define COLOR_RED		Color(255, 64, 64, 255)
 #define COLOR_BLUE		Color(153, 204, 255, 255)
+#define COLOR_MERCENARY	Color(128, 0, 128, 255)
 #define COLOR_YELLOW	Color(255, 178, 0, 255)
 #define COLOR_GREEN		Color(153, 255, 153, 255)
 #define COLOR_GREY		Color(204, 204, 204, 255)

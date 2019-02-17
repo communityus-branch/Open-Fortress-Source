@@ -204,6 +204,10 @@ void CTFMapOverview::InitTeamColorsAndIcons()
 	m_TeamColors[TF_TEAM_BLUE] = COLOR_TF_BLUE;
 	m_TeamIcons[TF_TEAM_BLUE] = AddIconTexture( "sprites/minimap_icons/blue_player" );
 	m_CameraIcons[TF_TEAM_BLUE] = AddIconTexture( "sprites/minimap_icons/blue_camera" );
+	
+	m_TeamColors[TF_TEAM_MERCENARY] = COLOR_TF_MERCENARY;
+	m_TeamIcons[TF_TEAM_MERCENARY] = AddIconTexture( "sprites/minimap_icons/mercenary_player" );
+	m_CameraIcons[TF_TEAM_MERCENARY] = AddIconTexture( "sprites/minimap_icons/mercenary_camera" );	
 
 	Q_memset( m_flPlayerChatTime, 0, sizeof(m_flPlayerChatTime ) );
 	m_iVoiceIcon = AddIconTexture( "voice/icntlk_pl" );
@@ -616,17 +620,22 @@ bool CTFMapOverview::DrawCapturePoint( int iCP, MapObject_t *obj )
 	// fixup for noone is capping, but someone is in the area
 	int iNumBlue = g_pObjectiveResource->GetNumPlayersInArea( iCP, TF_TEAM_BLUE );
 	int iNumRed = g_pObjectiveResource->GetNumPlayersInArea( iCP, TF_TEAM_RED );
+	int iNumMercenary = g_pObjectiveResource->GetNumPlayersInArea( iCP, TF_TEAM_MERCENARY );
 
 	int iOwningTeam = g_pObjectiveResource->GetOwningTeam( iCP );
 	if ( iCappingTeam == TEAM_UNASSIGNED )
 	{
-		if ( iNumBlue > 0 && iNumRed == 0 && iOwningTeam != TF_TEAM_BLUE )
+		if ( iNumBlue > 0 && iNumRed == 0 && iNumMercenary == 0 && iOwningTeam != TF_TEAM_BLUE )
 		{
 			iCappingTeam = TF_TEAM_BLUE;
 		}
-		else if ( iNumRed > 0 && iNumBlue == 0 && iOwningTeam != TF_TEAM_RED )
+		else if ( iNumRed > 0 && iNumBlue == 0 && iNumMercenary == 0 && iOwningTeam != TF_TEAM_RED )
 		{
 			iCappingTeam = TF_TEAM_RED;
+		}
+		else if ( iNumMercenary > 0 && iNumBlue == 0 && iNumRed == 0 && iOwningTeam != TF_TEAM_MERCENARY )
+		{
+			iCappingTeam = TF_TEAM_MERCENARY;
 		}
 	}
 

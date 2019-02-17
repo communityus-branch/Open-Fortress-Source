@@ -396,25 +396,24 @@ bool CFuncRespawnRoomVisualizer::ShouldCollide( int collisionGroup, int contents
 	// Respawn rooms are open in win state
 	if ( TFGameRules()->State_Get() == GR_STATE_TEAM_WIN )
 		return false;
-
 	if ( GetTeamNumber() == TEAM_UNASSIGNED )
 		return false;
-
 	if ( collisionGroup == COLLISION_GROUP_PLAYER_MOVEMENT )
 	{
 		switch( GetTeamNumber() )
 		{
+		case TF_TEAM_MERCENARY:
+				return false;
+			break;
 		case TF_TEAM_BLUE:
 			if ( !(contentsMask & CONTENTS_BLUETEAM) )
 				return false;
 			break;
-
 		case TF_TEAM_RED:
 			if ( !(contentsMask & CONTENTS_REDTEAM) )
 				return false;
 			break;
 		}
-
 		return true;
 	}
 

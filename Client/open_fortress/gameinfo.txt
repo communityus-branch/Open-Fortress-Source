@@ -1,18 +1,22 @@
 "GameInfo"
 {
-	game	"Open Fortress: Deathmatch"
-	gamelogo 1
-	type multiplayer_only
-	nomodels 1
-	nohimodel 1
-	nocrosshair 0
-	nodegraph	0
+	game			"Open Fortress: Deathmatch"
+	gamelogo 		1
+	type 			multiplayer_only
+	icon			"resource/game"
+	developer 		"Random People Inc."
+	developer_url 	"https://github.com/KaidemonLP/Open-Fortress-Source"	
+	nomodels		1
+	nohimodel 		1
+	nocrosshair 	0
+	nodegraph		0
+	
 	hidden_maps
 	{
 		"test_speakers"		1
 		"test_hardware"		1
 	}
-	supportsvr	1
+	supportsvr	0
 	FileSystem
 	{
 		SteamAppId		243750	// Source SDK Base 2013 Multiplayer

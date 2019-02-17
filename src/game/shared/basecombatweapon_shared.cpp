@@ -1435,10 +1435,8 @@ bool CBaseCombatWeapon::DefaultDeploy( char *szViewModel, char *szWeaponModel, i
 	SetWeaponVisible( true );
 
 /*
-
 This code is disabled for now, because moving through the weapons in the carousel 
 selects and deploys each weapon as you pass it. (sjb)
-
 */
 
 	SetContextThink( NULL, 0, HIDEWEAPON_THINK_CONTEXT );

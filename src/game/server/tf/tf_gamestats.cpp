@@ -753,6 +753,13 @@ void CTFGameStats::Event_RoundEnd( int iWinningTeam, bool bFullRound, float flRo
 			map->m_Header.m_iBlueSuddenDeathWins++;
 		}
 		break;
+	case TF_TEAM_MERCENARY:
+		map->m_Header.m_iMercenaryWins++;
+		if ( bWasSuddenDeathWin )
+		{
+			map->m_Header.m_iMercenarySuddenDeathWins++;
+		}
+		break;
 	case TEAM_UNASSIGNED:
 		map->m_Header.m_iStalemates++;
 		break;

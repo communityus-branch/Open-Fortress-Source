@@ -48,6 +48,7 @@ private:
 	float	m_flTimeUpdateTeamScore;
 	int		m_iBlueTeamScore;
 	int		m_iRedTeamScore;
+	int		m_iMercenaryTeamScore;
 
 	bool	m_bShouldBeVisible;
 };

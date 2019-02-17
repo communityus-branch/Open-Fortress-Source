@@ -136,6 +136,10 @@ void CHudNotificationPanel::SetupNotifyCustom( const char *pszText, const char *
 	{
 		m_pBackground->SetImage( "../hud/score_panel_blue_bg" );
 	}
+	else if ( iBackgroundTeam == TF_TEAM_MERCENARY )
+	{
+		m_pBackground->SetImage( "../hud/score_panel_mercenary_bg" );
+	}
 	else
 	{
 		m_pBackground->SetImage( "../hud/notification_black" );
@@ -234,12 +238,14 @@ void CHudNotificationPanel::OnTick( void )
 const char *CHudNotificationPanel::GetNotificationByType( int iType )
 {
 	bool bOnBlueTeam = false;
+	bool bOnMercenaryTeam = false;
 
 	C_TFPlayer *pLocalPlayer = C_TFPlayer::GetLocalTFPlayer();
 
 	if ( pLocalPlayer )
 	{
 		bOnBlueTeam = ( pLocalPlayer->GetTeamNumber() == TF_TEAM_BLUE );
+		bOnMercenaryTeam = ( pLocalPlayer->GetTeamNumber() == TF_TEAM_MERCENARY );
 	}
 
 	const char *pszResult = "";
@@ -250,6 +256,10 @@ const char *CHudNotificationPanel::GetNotificationByType( int iType )
 		if ( bOnBlueTeam )
 		{
 			pszResult = "resource/UI/notifications/notify_your_flag_taken_blue.res";
+		}
+		else if ( bOnMercenaryTeam )
+		{
+			pszResult = "resource/UI/notifications/notify_your_flag_taken_mercenary.res";
 		}
 		else
 		{

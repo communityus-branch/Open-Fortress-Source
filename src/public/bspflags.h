@@ -41,7 +41,7 @@
 // unused 
 // NOTE: If it's visible, grab from the top + update LAST_VISIBLE_CONTENTS
 // if not visible, then grab from the bottom.
-#define CONTENTS_UNUSED6		0x400
+#define CONTENTS_TEAM0		0x400
 
 #define CONTENTS_TEAM1			0x800	// per team contents used to differentiate collisions 
 #define CONTENTS_TEAM2			0x1000	// between players and objects on different teams

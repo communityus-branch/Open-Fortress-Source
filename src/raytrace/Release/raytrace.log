@@ -1,5 +1,5 @@
-﻿Build started 13.2.2019. 19:01:04.
-     1>Project "E:\Making gaems\OF2-Source\src\raytrace\raytrace.vcxproj" on node 5 (Build target(s)).
+﻿Build started 17.2.2019. 5:05:10.
+     1>Project "E:\Making gaems\Open-Fortress-Source\src\raytrace\raytrace.vcxproj" on node 5 (Build target(s)).
      1>PreBuildEvent:
          if EXIST ..\lib\public\.\raytrace.lib ( for /f "delims=" %%A in ('attrib "..\lib\public\.\raytrace.lib"') do set valveTmpIsReadOnly="%%A"
          ) else ( if not EXIST ..\lib\public\. mkdir ..\lib\public\. )
@@ -16,9 +16,9 @@
        CustomBuild:
          Running VPC CRC Check - raytrace.vpc
        Lib:
-         raytrace.vcxproj -> E:\Making gaems\OF2-Source\src\raytrace\..\lib\public\.\raytrace.lib
-     1>Done Building Project "E:\Making gaems\OF2-Source\src\raytrace\raytrace.vcxproj" (Build target(s)).
+         raytrace.vcxproj -> E:\Making gaems\Open-Fortress-Source\src\raytrace\..\lib\public\.\raytrace.lib
+     1>Done Building Project "E:\Making gaems\Open-Fortress-Source\src\raytrace\raytrace.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.45
+Time Elapsed 00:00:00.74

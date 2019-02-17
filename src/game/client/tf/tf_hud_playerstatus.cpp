@@ -535,6 +535,10 @@ void CTFClassImage::SetClass( int iTeam, int iClass, int iCloakstate )
 	{
 		Q_strncpy( szImage, g_szBlueClassImages[ iClass ], sizeof(szImage) );
 	}
+	else if ( iTeam == TF_TEAM_MERCENARY )
+	{
+		Q_strncpy( szImage, g_szBlueClassImages[ iClass ], sizeof(szImage) );
+	}
 	else
 	{
 		Q_strncpy( szImage, g_szRedClassImages[ iClass ], sizeof(szImage) );

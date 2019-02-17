@@ -56,10 +56,16 @@ void CTFHudNotify::Display( CBaseEntity *pActivator )
 	{
 	case TF_TEAM_RED:
 		filter.RemoveRecipientsByTeam( GetGlobalTeam(TF_TEAM_BLUE) );
+		filter.RemoveRecipientsByTeam( GetGlobalTeam(TF_TEAM_MERCENARY) );
 		break;
 
 	case TF_TEAM_BLUE:
 		filter.RemoveRecipientsByTeam( GetGlobalTeam(TF_TEAM_RED) );
+		filter.RemoveRecipientsByTeam( GetGlobalTeam(TF_TEAM_MERCENARY) );
+		break;
+	case TF_TEAM_MERCENARY:
+		filter.RemoveRecipientsByTeam( GetGlobalTeam(TF_TEAM_RED) );
+		filter.RemoveRecipientsByTeam( GetGlobalTeam(TF_TEAM_BLUE) );
 		break;
 	}
 

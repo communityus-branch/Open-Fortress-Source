@@ -61,6 +61,7 @@ private:
 
 	vgui::SectionedListPanel	*m_pPlayerListBlue;
 	vgui::SectionedListPanel	*m_pPlayerListRed;
+	vgui::SectionedListPanel	*m_pPlayerListMercenary;
 	CTFLabel					*m_pLabelPlayerName;
 	vgui::ImagePanel			*m_pImagePanelHorizLine;
 	CTFClassImage				*m_pClassImage;

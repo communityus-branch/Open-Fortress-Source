@@ -281,6 +281,7 @@ protected:
 			UTIL_LogPrintf( "World triggered \"Game_Over\" reason \"%s\"\n", event->GetString( "reason" ) );
 			UTIL_LogPrintf( "Team \"Red\" final score \"%d\" with \"%d\" players\n", GetGlobalTeam( TF_TEAM_RED )->GetScore(), GetGlobalTeam( TF_TEAM_RED )->GetNumPlayers() );
 			UTIL_LogPrintf( "Team \"Blue\" final score \"%d\" with \"%d\" players\n", GetGlobalTeam( TF_TEAM_BLUE )->GetScore(), GetGlobalTeam( TF_TEAM_BLUE )->GetNumPlayers() );
+			UTIL_LogPrintf( "Team \"Mercenary\" final score \"%d\" with \"%d\" players\n", GetGlobalTeam( TF_TEAM_MERCENARY )->GetScore(), GetGlobalTeam( TF_TEAM_MERCENARY )->GetNumPlayers() );
  			return true;		
  		}
  		else if ( FStrEq( eventName, "player_chargedeployed" ) )
@@ -573,7 +574,11 @@ protected:
 				{
 					pszWinner = "Blue";
 				}
-
+				else if ( iTeam == TF_TEAM_MERCENARY )
+				{
+					pszWinner = "Mercenary";
+				}
+				
 				CTeamControlPointMaster *pMaster = g_hControlPointMasters.Count() ? g_hControlPointMasters[0] : NULL;
 				if ( pMaster && pMaster->PlayingMiniRounds() )
 				{
@@ -599,6 +604,7 @@ protected:
 			{
 				UTIL_LogPrintf( "Team \"Red\" current score \"%d\" with \"%d\" players\n", GetGlobalTeam( TF_TEAM_RED )->GetScore(), GetGlobalTeam( TF_TEAM_RED )->GetNumPlayers() );
 				UTIL_LogPrintf( "Team \"Blue\" current score \"%d\" with \"%d\" players\n", GetGlobalTeam( TF_TEAM_BLUE )->GetScore(), GetGlobalTeam( TF_TEAM_BLUE )->GetNumPlayers() );
+				UTIL_LogPrintf( "Team \"Mercenary\" current score \"%d\" with \"%d\" players\n", GetGlobalTeam( TF_TEAM_MERCENARY )->GetScore(), GetGlobalTeam( TF_TEAM_MERCENARY )->GetNumPlayers() );
 			}
 		}
 

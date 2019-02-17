@@ -30,6 +30,7 @@ C_TF_PlayerResource::C_TF_PlayerResource()
 	m_Colors[TEAM_SPECTATOR] = COLOR_TF_SPECTATOR;
 	m_Colors[TF_TEAM_RED] = COLOR_RED;
 	m_Colors[TF_TEAM_BLUE] = COLOR_BLUE;
+	m_Colors[TF_TEAM_MERCENARY] = COLOR_MERCENARY;
 }
 
 //-----------------------------------------------------------------------------

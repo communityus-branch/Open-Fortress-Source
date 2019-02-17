@@ -454,7 +454,7 @@ void CHudWeaponSelection::PostChildPaint()
 						const CHudTexture *pTexture = pWeapon->GetSpriteInactive(); // red team
 						if ( pPlayer )
 						{
-							if ( pPlayer->GetTeamNumber() == TF_TEAM_BLUE )
+							if ( pPlayer->GetTeamNumber() == TF_TEAM_BLUE || pPlayer->GetTeamNumber() == TF_TEAM_MERCENARY )
 							{
 								pTexture = pWeapon->GetSpriteActive();
 							}
@@ -552,7 +552,7 @@ void CHudWeaponSelection::PostChildPaint()
 						const CHudTexture *pTexture = pWeapon->GetSpriteInactive(); // red team
 						if ( pPlayer )
 						{
-							if ( pPlayer->GetTeamNumber() == TF_TEAM_BLUE )
+							if ( pPlayer->GetTeamNumber() == TF_TEAM_BLUE || pPlayer->GetTeamNumber() == TF_TEAM_MERCENARY )
 							{
 								pTexture = pWeapon->GetSpriteActive();
 							}
@@ -595,7 +595,7 @@ void CHudWeaponSelection::PostChildPaint()
 						const CHudTexture *pTexture = pWeapon->GetSpriteInactive(); // red team
 						if ( pPlayer )
 						{
-							if ( pPlayer->GetTeamNumber() == TF_TEAM_BLUE )
+							if ( pPlayer->GetTeamNumber() == TF_TEAM_BLUE || pPlayer->GetTeamNumber() == TF_TEAM_MERCENARY )
 							{
 								pTexture = pWeapon->GetSpriteActive();
 							}

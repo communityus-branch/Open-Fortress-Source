@@ -106,6 +106,10 @@ void CObjectTeleporter_Entrance::TeleporterSend( CTFPlayer *pPlayer )
 		TE_TFParticleEffect( filter, 0.0, "teleported_blue", origin, vec3_angle );
 		TE_TFParticleEffect( filter, 0.0, "player_sparkles_blue", origin, vec3_angle, pPlayer, PATTACH_POINT );
 		break;
+	case TF_TEAM_MERCENARY:
+		TE_TFParticleEffect( filter, 0.0, "teleported_mercenary", origin, vec3_angle );
+		TE_TFParticleEffect( filter, 0.0, "player_sparkles_mercenary", origin, vec3_angle, pPlayer, PATTACH_POINT );
+		break;
 	default:
 		break;
 	}
@@ -155,6 +159,9 @@ void CObjectTeleporter_Exit::TeleporterReceive( CTFPlayer *pPlayer, float flDela
 		break;
 	case TF_TEAM_BLUE:
 		TE_TFParticleEffect( filter, 0.0, "teleportedin_blue", origin, vec3_angle );
+		break;
+	case TF_TEAM_MERCENARY:
+		TE_TFParticleEffect( filter, 0.0, "teleportedin_mercenary", origin, vec3_angle );
 		break;
 	default:
 		break;

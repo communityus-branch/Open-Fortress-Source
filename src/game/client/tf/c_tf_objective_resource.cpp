@@ -58,7 +58,8 @@ const char *C_TFObjectiveResource::GetGameSpecificCPBarFG( int index, int iOwnin
 
 	if ( iOwningTeam == TF_TEAM_BLUE )
 		return "progress_bar_blu";
-
+	if ( iOwningTeam == TF_TEAM_MERCENARY )
+		return "progress_bar_mercenary";
 	return "progress_bar";
 }
 

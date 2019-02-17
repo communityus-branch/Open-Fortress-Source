@@ -160,6 +160,12 @@ void CTFWinPanel::FireGameEvent( IGameEvent * event )
 			pTopPlayersLabel = "#Winpanel_RedMVPs";
 			pLocalizedTeamName =  g_pVGuiLocalize->Find( "TF_RedTeam_Name" );
 			break;
+		case TF_TEAM_MERCENARY:
+			pImagePanelBG->SetImage( "../hud/winpanel_mercenary_bg_main.vmt" );
+			pTeamLabel = ( bRoundComplete ? "#Winpanel_MercenaryWins" : ( bIsAreaDefense ? "#Winpanel_MercenaryDefends" : "#Winpanel_MercenaryAdvances" ) );
+			pTopPlayersLabel = "#Winpanel_MercenaryMVPs";
+			pLocalizedTeamName =  g_pVGuiLocalize->Find( "TF_MercenaryTeam_Name" );
+			break;
 		case TEAM_UNASSIGNED:	// stalemate
 			pImagePanelBG->SetImage( "../hud/winpanel_black_bg_main.vmt" );
 			pTeamLabel = "#Winpanel_Stalemate";

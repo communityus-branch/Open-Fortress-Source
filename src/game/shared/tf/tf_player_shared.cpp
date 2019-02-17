@@ -854,6 +854,9 @@ void CTFPlayerShared::OnAddInvulnerable( void )
 		case TF_TEAM_RED:
 			pEffectName =  "effects/invuln_overlay_red";
 			break;
+		case TF_TEAM_MERCENARY:
+			pEffectName = "effects/invuln_overlay_blue";
+			break;
 		default:
 			pEffectName = "effects/invuln_overlay_blue";
 			break;

@@ -972,6 +972,9 @@ void CWeaponMedigun::ManageChargeEffect( void )
 			case TF_TEAM_RED:
 				pszEffectName = "medicgun_invulnstatus_fullcharge_red";
 				break;
+			case TF_TEAM_MERCENARY:
+				pszEffectName = "medicgun_invulnstatus_fullcharge_red";
+				break;
 			default:
 				pszEffectName = "";
 				break;

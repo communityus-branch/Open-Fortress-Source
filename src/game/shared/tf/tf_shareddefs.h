@@ -26,6 +26,7 @@ enum
 {
 	TF_TEAM_RED = LAST_SHARED_TEAM+1,
 	TF_TEAM_BLUE,
+	TF_TEAM_MERCENARY,
 	TF_TEAM_COUNT
 };
 
@@ -38,6 +39,7 @@ extern color32 g_aTeamColors[TF_TEAM_COUNT];
 
 #define CONTENTS_REDTEAM	CONTENTS_TEAM1
 #define CONTENTS_BLUETEAM	CONTENTS_TEAM2
+#define CONTENTS_MERCENARYTEAM	CONTENTS_TEAM0
 
 // Team roles
 enum 
@@ -70,6 +72,7 @@ enum
 //-----------------------------------------------------------------------------
 #define PANEL_CLASS_BLUE		"class_blue"
 #define PANEL_CLASS_RED			"class_red"
+#define PANEL_CLASS_MERCENARY	"class_mercenary"
 #define PANEL_MAPINFO			"mapinfo"
 #define PANEL_ROUNDINFO			"roundinfo"
 
@@ -116,6 +119,7 @@ enum
 
 	// Add any new classes after Engineer
 	TF_CLASS_CIVILIAN,		// Civilians are a special class. It is not a player class.
+	TF_CLASS_MERCENARY,
 	TF_CLASS_COUNT_ALL,
 
 	TF_CLASS_RANDOM
@@ -144,6 +148,7 @@ enum
 	TF_GAMETYPE_UNDEFINED = 0,
 	TF_GAMETYPE_CTF,
 	TF_GAMETYPE_CP,
+	TF_GAMETYPE_DM,
 };
 extern const char *g_aGameTypeNames[];	// localized gametype names
 
@@ -205,6 +210,7 @@ enum
 	TF_WPN_TYPE_GRENADE,
 	TF_WPN_TYPE_BUILDING,
 	TF_WPN_TYPE_PDA,
+	TF_WPN_TYPE_WEARABLE,
 };
 
 extern const char *g_aAmmoNames[];

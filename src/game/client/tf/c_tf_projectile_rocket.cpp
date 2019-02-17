@@ -69,6 +69,9 @@ void C_TFProjectile_Rocket::CreateRocketTrails( void )
 		case TF_TEAM_RED:
 			ParticleProp()->Create( "critical_rocket_red", PATTACH_ABSORIGIN_FOLLOW );
 			break;
+		case TF_TEAM_MERCENARY:
+			ParticleProp()->Create( "critical_rocket_red", PATTACH_ABSORIGIN_FOLLOW );
+			break;
 		default:
 			break;
 		}

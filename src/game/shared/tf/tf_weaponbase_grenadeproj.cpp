@@ -237,7 +237,7 @@ void CTFWeaponBaseGrenadeProj::Spawn( void )
 	ChangeTeam( GetThrower()->GetTeamNumber() );
 
 	// Set skin based on team ( red = 1, blue = 2 )
-	m_nSkin = ( GetTeamNumber() == TF_TEAM_BLUE ) ? 1 : 0;
+	m_nSkin = ( GetTeamNumber() == TF_TEAM_BLUE ) ? 1 : 0; //add more teams
 
 	// Setup the think and touch functions (see CBaseEntity).
 	SetThink( &CTFWeaponBaseGrenadeProj::DetonateThink );

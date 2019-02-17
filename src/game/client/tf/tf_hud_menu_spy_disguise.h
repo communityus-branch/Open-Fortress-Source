@@ -45,6 +45,7 @@ private:
 private:
 	EditablePanel *m_pClassItems_Red[9];
 	EditablePanel *m_pClassItems_Blue[9];
+	EditablePanel *m_pClassItems_Mercenary[9];
 
 	EditablePanel *m_pActiveSelection;
 

@@ -1111,6 +1111,9 @@ void CCaptureFlag::ManageTrailEffects( void )
 				case TF_TEAM_RED:
 					pEffectName = "player_intel_trail_red";
 					break;
+				case TF_TEAM_MERCENARY:
+					pEffectName = "player_intel_trail_red";
+					break;
 				default:
 					pEffectName = "player_intel_trail_blue";
 					break;
@@ -1317,6 +1320,11 @@ void CCaptureFlagReturnIcon::DrawReturnProgressBar( void )
 		ubColor[0] = 0;
 		ubColor[1] = 0;
 		ubColor[2] = 255;
+		break;
+	case TF_TEAM_MERCENARY:
+		ubColor[0] = 128;
+		ubColor[1] = 0;
+		ubColor[2] = 128;
 		break;
 	default:
 		ubColor[0] = 100;

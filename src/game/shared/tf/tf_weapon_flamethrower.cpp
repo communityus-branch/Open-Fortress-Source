@@ -684,7 +684,7 @@ void CTFFlameThrower::RestartParticleEffect( void )
 	{
 		if ( m_bCritFire )
 		{
-			pszParticleEffect = ( pOwner->GetTeamNumber() == TF_TEAM_BLUE ? "flamethrower_crit_blue" : "flamethrower_crit_red" );
+			pszParticleEffect = ( pOwner->GetTeamNumber() == TF_TEAM_BLUE ? "flamethrower_crit_blue" : "flamethrower_crit_red" );//add more teams
 		}
 		else 
 		{
@@ -760,11 +760,11 @@ CTFFlameEntity *CTFFlameEntity::Create( const Vector &vecOrigin, const QAngle &v
 	CBaseEntity *pAttacker = (CBaseEntity *) pFlame->m_hAttacker;
 	if ( pAttacker )
 	{
-		pFlame->m_iAttackerTeam = pAttacker->GetTeamNumber();
+		pFlame->m_iAttackerTeam = /* pAttacker->GetTeamNumber() */ 77;
 	}
 
 	// Set team.
-	pFlame->ChangeTeam( pOwner->GetTeamNumber() );
+	pFlame->ChangeTeam(  pOwner->GetTeamNumber() );
 	pFlame->m_iDmgType = iDmgType;
 	pFlame->m_flDmgAmount = flDmgAmount;
 

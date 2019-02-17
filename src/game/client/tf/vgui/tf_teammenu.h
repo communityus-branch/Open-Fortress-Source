@@ -88,6 +88,7 @@ private:
 
 	CTFTeamButton	*m_pBlueTeamButton;
 	CTFTeamButton	*m_pRedTeamButton;
+	CTFTeamButton	*m_pMercenaryTeamButton;
 	CTFTeamButton	*m_pAutoTeamButton;
 	CTFTeamButton	*m_pSpecTeamButton;
 	CTFLabel		*m_pSpecLabel;
@@ -100,10 +101,10 @@ private:
 
 	bool m_bRedDisabled;
 	bool m_bBlueDisabled;
-
+	bool m_bMercenaryDisabled;
 
 private:
-	enum { NUM_TEAMS = 3 };
+	enum { NUM_TEAMS = 4 };
 
 	ButtonCode_t m_iTeamMenuKey;
 };

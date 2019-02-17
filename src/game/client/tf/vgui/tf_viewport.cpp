@@ -132,6 +132,9 @@ CON_COMMAND( changeclass, "Choose a new class" )
 		case TF_TEAM_BLUE:
 			gViewPortInterface->ShowPanel( PANEL_CLASS_BLUE, true );
 			break;
+		case TF_TEAM_MERCENARY:
+			gViewPortInterface->ShowPanel( PANEL_CLASS_MERCENARY, true );
+			break;
 		default:
 			break;
 		}
@@ -318,6 +321,9 @@ void TFViewport::OnScreenSizeChanged( int iOldWide, int iOldTall )
 				break;
 			case TF_TEAM_BLUE:
 				gViewPortInterface->ShowPanel( PANEL_CLASS_BLUE, true );
+				break;
+			case TF_TEAM_MERCENARY:
+				gViewPortInterface->ShowPanel( PANEL_CLASS_MERCENARY, true );
 				break;
 			}
 		}

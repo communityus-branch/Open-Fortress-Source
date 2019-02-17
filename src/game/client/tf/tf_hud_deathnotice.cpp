@@ -61,7 +61,7 @@ private:
 
 	CPanelAnimationVar( Color, m_clrBlueText, "TeamBlue", "153 204 255 255" );
 	CPanelAnimationVar( Color, m_clrRedText, "TeamRed", "255 64 64 255" );
-
+	CPanelAnimationVar(Color, m_clrMercenaryText, "TeamMercenary", "128 0 128 255");
 };
 
 DECLARE_HUDELEMENT( CTFHudDeathNotice );
@@ -291,6 +291,9 @@ Color CTFHudDeathNotice::GetTeamColor( int iTeamNumber )
 		break;
 	case TF_TEAM_RED:
 		return m_clrRedText;
+		break;
+	case TF_TEAM_MERCENARY:
+		return m_clrMercenaryText;
 		break;
 	case TEAM_UNASSIGNED:		
 		return Color( 255, 255, 255, 255 );

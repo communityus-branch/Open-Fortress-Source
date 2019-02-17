@@ -37,7 +37,7 @@ ConVar bot_changeclass( "bot_changeclass", "0", 0, "Force all bots to change to 
 ConVar bot_dontmove( "bot_dontmove", "0", FCVAR_CHEAT );
 ConVar bot_saveme( "bot_saveme", "0", FCVAR_CHEAT );
 static ConVar bot_mimic( "bot_mimic", "0", 0, "Bot uses usercmd of player by index." );
-static ConVar bot_mimic_yaw_offset( "bot_mimic_yaw_offset", "180", 0, "Offsets the bot yaw." );
+static ConVar bot_mimic_yaw_offset( "bot_mimic_yaw_offset", "0", 0, "Offsets the bot yaw." );
 ConVar bot_selectweaponslot( "bot_selectweaponslot", "-1", FCVAR_CHEAT, "set to weapon slot that bot should switch to." );
 ConVar bot_randomnames( "bot_randomnames", "0", FCVAR_CHEAT );
 ConVar bot_jump( "bot_jump", "0", FCVAR_CHEAT, "Force all bots to repeatedly jump." );
@@ -182,6 +182,8 @@ CON_COMMAND_F( bot, "Add a bot.", FCVAR_CHEAT )
 				iTeam = TF_TEAM_RED;
 			else if ( stricmp( pVal, "spectator" ) == 0 )
 				iTeam = TEAM_SPECTATOR;
+			else if ( stricmp( pVal, "mercenary" ) == 0 )
+				iTeam = TF_TEAM_MERCENARY;
 			else if ( stricmp( pVal, "random" ) == 0 )
 				iTeam = RandomInt( 0, 100 ) < 50 ? TF_TEAM_BLUE : TF_TEAM_RED;
 			else
@@ -325,6 +327,9 @@ void Bot_Think( CTFPlayer *pBot )
 			break;
 		case TF_TEAM_BLUE:
 			pszTeam = "blue";
+			break;
+		case TF_TEAM_MERCENARY:
+			pszTeam = "mercenary";
 			break;
 		case TEAM_SPECTATOR:
 			pszTeam = "spectator";

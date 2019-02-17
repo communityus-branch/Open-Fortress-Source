@@ -270,6 +270,9 @@ const char *CBuildingStatusItem::GetBackgroundImage( void )
 	case TF_TEAM_RED:
 		pResult = "obj_status_background_red";
 		break;
+	case TF_TEAM_MERCENARY:
+		pResult = "obj_status_background_mercenary";
+		break;
 	default:
 		break;
 	}
@@ -710,6 +713,9 @@ const char *CBuildingStatusItem_SentryGun::GetBackgroundImage( void )
 		break;
 	case TF_TEAM_RED:
 		pResult = "obj_status_background_tall_red";
+		break;
+	case TF_TEAM_MERCENARY:
+		pResult = "obj_status_background_tall_mercenary";
 		break;
 	default:
 		break;

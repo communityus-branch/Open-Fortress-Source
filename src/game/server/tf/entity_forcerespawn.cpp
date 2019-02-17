@@ -54,7 +54,7 @@ void CTFForceRespawn::ForceRespawn( bool bSwitchTeams )
 			pPlayer->TeamFortress_RemoveEverythingFromWorld();
 
 			// Ignore players who aren't on an active team
-			if ( pPlayer->GetTeamNumber() != TF_TEAM_RED && pPlayer->GetTeamNumber() != TF_TEAM_BLUE )
+			if ( pPlayer->GetTeamNumber() != TF_TEAM_RED && pPlayer->GetTeamNumber() != TF_TEAM_BLUE && pPlayer->GetTeamNumber() != TF_TEAM_MERCENARY )
 			{
 				// Let the player spawn immediately when they do pick a class
 				pPlayer->AllowInstantSpawn();
@@ -70,6 +70,10 @@ void CTFForceRespawn::ForceRespawn( bool bSwitchTeams )
 				else if ( pPlayer->GetTeamNumber() == TF_TEAM_BLUE )
 				{
 					pPlayer->ForceChangeTeam( TF_TEAM_RED );
+				}
+				else if ( pPlayer->GetTeamNumber() == TF_TEAM_MERCENARY )
+				{
+					// pPlayer->ForceChangeTeam( TF_TEAM_RED ); //no need to switch
 				}
 			}
 

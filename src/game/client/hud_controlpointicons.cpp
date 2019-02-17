@@ -1291,7 +1291,7 @@ void CControlPointProgressBar::UpdateBarText( void )
 		// If the opponents can never recapture this point back, we use a different string
 		if ( iPlayerTeam != TEAM_UNASSIGNED )
 		{
-			int iEnemyTeam = ( iPlayerTeam == TF_TEAM_RED ) ? TF_TEAM_BLUE : TF_TEAM_RED;
+			int iEnemyTeam = ( iPlayerTeam == TF_TEAM_RED ) ? TF_TEAM_BLUE : TF_TEAM_RED /* TF_TEAM_MERCENARY */;
 			if ( !ObjectiveResource()->TeamCanCapPoint( iCP, iEnemyTeam ) )
 			{
 				m_pBarText->SetText( "#Team_Capture_Owned" );

@@ -93,6 +93,7 @@ const char *pszHeadLabelNames[] =
 
 #define TF_PLAYER_HEAD_LABEL_RED 0
 #define TF_PLAYER_HEAD_LABEL_BLUE 1
+#define TF_PLAYER_HEAD_LABEL_MERCENARY 2
 
 CLIENTEFFECT_REGISTER_BEGIN( PrecacheInvuln )
 CLIENTEFFECT_MATERIAL( "models/effects/invulnfx_blue.vmt" )
@@ -356,9 +357,13 @@ void C_TFRagdoll::CreateTFRagdoll()
 		{
 			m_nSkin = 0;
 		}
-		else
+		else if ( m_iTeam == TF_TEAM_BLUE )
 		{
 			m_nSkin = 1;
+		}
+		else //mercenary
+		{
+			m_nSkin = 0;
 		}
 	}
 
@@ -750,6 +755,7 @@ void CSpyInvisProxy::OnBind( C_BaseEntity *pEnt )
 		break;
 
 	case TF_TEAM_BLUE:
+	case TF_TEAM_MERCENARY:
 	default:
 		r = 0.4; g = 0.5; b = 1.0;
 		break;
@@ -1322,7 +1328,9 @@ void C_TFPlayer::OnDataChanged( DataUpdateType_t updateType )
 					case TF_TEAM_BLUE:
 						pTeam = "blue";
 						break;
-
+					case TF_TEAM_MERCENARY:
+						pTeam = "mercenary";
+						break;
 					case TEAM_SPECTATOR:
 						pTeam = "spectate";
 						break;
@@ -1417,6 +1425,9 @@ void C_TFPlayer::InitInvulnerableMaterial( void )
 	case TF_TEAM_RED:	
 		pszMaterial = "models/effects/invulnfx_red.vmt";
 		break;
+	case TF_TEAM_MERCENARY:	
+		pszMaterial = "models/effects/invulnfx_red.vmt";
+		break;
 	default:
 		break;
 	}
@@ -1475,6 +1486,9 @@ void C_TFPlayer::OnAddTeleported( void )
 			pEffect = "player_recent_teleport_blue";
 			break;
 		case TF_TEAM_RED:
+			pEffect = "player_recent_teleport_red";
+			break;
+		case TF_TEAM_MERCENARY:
 			pEffect = "player_recent_teleport_red";
 			break;
 		default:
@@ -1640,7 +1654,8 @@ bool C_TFPlayer::IsEnemyPlayer( void )
 	
 	case TF_TEAM_BLUE:
 		return ( GetTeamNumber() == TF_TEAM_RED );
-
+	case TF_TEAM_MERCENARY:
+		return ( GetTeamNumber() == TF_TEAM_MERCENARY );
 	default:
 		break;
 	}
@@ -1663,6 +1678,9 @@ void C_TFPlayer::ShowNemesisIcon( bool bShow )
 			break;
 		case TF_TEAM_BLUE:
 			pszEffect = "particle_nemesis_blue";
+			break;
+		case TF_TEAM_MERCENARY:
+			pszEffect = "particle_nemesis_red";
 			break;
 		default:
 			return;	// shouldn't get called if we're not on a team; bail out if it does
@@ -2646,6 +2664,12 @@ void C_TFPlayer::GetTeamColor( Color &color )
 		color[1] = 109;
 		color[2] = 129;
 	}
+	else if ( GetTeamNumber() == TF_TEAM_MERCENARY)
+	{
+		color[0] = 159;
+		color[1] = 55;
+		color[2] = 34;		
+	}
 	else
 	{
 		color[0] = 255;
@@ -2832,6 +2856,10 @@ bool C_TFPlayer::ShouldCollide( int collisionGroup, int contentsMask ) const
 			if ( !( contentsMask & CONTENTS_BLUETEAM ) )
 				return false;
 			break;
+		case TF_TEAM_MERCENARY:
+			if ( !( contentsMask & CONTENTS_MERCENARYTEAM ) )
+				return false;
+			break;			
 		}
 	}
 	return BaseClass::ShouldCollide( collisionGroup, contentsMask );
@@ -2871,7 +2899,9 @@ int C_TFPlayer::GetSkin()
 	case TF_TEAM_BLUE:
 		nSkin = 1;
 		break;
-
+	case TF_TEAM_MERCENARY:
+		nSkin = 0;
+		break;
 	default:
 		nSkin = 0;
 		break;
@@ -3439,11 +3469,14 @@ IMaterial *C_TFPlayer::GetHeadLabelMaterial( void )
 	{
 		return g_pHeadLabelMaterial[TF_PLAYER_HEAD_LABEL_RED];
 	}
-	else
+	else if ( GetTeamNumber() == TF_TEAM_BLUE )
 	{
 		return g_pHeadLabelMaterial[TF_PLAYER_HEAD_LABEL_BLUE];
 	}
-
+	else
+	{
+		return g_pHeadLabelMaterial[TF_PLAYER_HEAD_LABEL_MERCENARY];
+	}
 	return BaseClass::GetHeadLabelMaterial();
 }
 
