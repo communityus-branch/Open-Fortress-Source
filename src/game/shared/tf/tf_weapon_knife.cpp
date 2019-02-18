@@ -65,7 +65,7 @@ void CTFKnife::PrimaryAttack( void )
 		{
 			CTFPlayer *pTarget = ToTFPlayer( trace.m_pEnt );
 
-			if ( pTarget && pTarget->GetTeamNumber() != pPlayer->GetTeamNumber() )
+			if ( (pTarget && pTarget->GetTeamNumber() != pPlayer->GetTeamNumber()) || (pTarget && pTarget->GetTeamNumber() == 4))
 			{
 				// Deal extra damage to players when stabbing them from behind
 				if ( IsBehindTarget( trace.m_pEnt ) )

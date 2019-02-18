@@ -760,11 +760,13 @@ CTFFlameEntity *CTFFlameEntity::Create( const Vector &vecOrigin, const QAngle &v
 	CBaseEntity *pAttacker = (CBaseEntity *) pFlame->m_hAttacker;
 	if ( pAttacker )
 	{
-		pFlame->m_iAttackerTeam = /* pAttacker->GetTeamNumber() */ 77;
+		pFlame->m_iAttackerTeam =  pAttacker->GetTeamNumber();
 	}
 
 	// Set team.
-	pFlame->ChangeTeam(  pOwner->GetTeamNumber() );
+	/* if ( pOwner->GetTeamNumber() == 4) pFlame->ChangeTeam(77);
+	else */ 
+	pFlame->ChangeTeam( pOwner->GetTeamNumber()  );
 	pFlame->m_iDmgType = iDmgType;
 	pFlame->m_flDmgAmount = flDmgAmount;
 

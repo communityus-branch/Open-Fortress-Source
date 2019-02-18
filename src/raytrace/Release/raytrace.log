@@ -1,5 +1,5 @@
-﻿Build started 18.2.2019. 20:15:26.
-     1>Project "E:\Making gaems\Open-Fortress-Source\src\raytrace\raytrace.vcxproj" on node 4 (Build target(s)).
+﻿Build started 18.2.2019. 23:04:54.
+     1>Project "E:\Making gaems\Open-Fortress-Source\src\raytrace\raytrace.vcxproj" on node 5 (Build target(s)).
      1>PreBuildEvent:
          if EXIST ..\lib\public\.\raytrace.lib ( for /f "delims=" %%A in ('attrib "..\lib\public\.\raytrace.lib"') do set valveTmpIsReadOnly="%%A"
          ) else ( if not EXIST ..\lib\public\. mkdir ..\lib\public\. )
@@ -15,11 +15,10 @@
          :VCEnd
        CustomBuild:
          Running VPC CRC Check - raytrace.vpc
-         The process cannot access the file because it is being used by another process.
        Lib:
          raytrace.vcxproj -> E:\Making gaems\Open-Fortress-Source\src\raytrace\..\lib\public\.\raytrace.lib
      1>Done Building Project "E:\Making gaems\Open-Fortress-Source\src\raytrace\raytrace.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:03.75
+Time Elapsed 00:00:00.64

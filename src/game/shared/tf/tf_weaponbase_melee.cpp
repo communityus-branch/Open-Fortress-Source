@@ -188,7 +188,7 @@ void CTFWeaponBaseMelee::Swing( CTFPlayer *pPlayer )
 		WeaponSound( MELEE_MISS );
 	}
 
-	m_flSmackTime = gpGlobals->curtime + m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_flSmackDelay;
+	m_flSmackTime = gpGlobals->curtime /* + m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_flSmackDelay */ ;
 }
 
 //-----------------------------------------------------------------------------

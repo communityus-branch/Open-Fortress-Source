@@ -37,8 +37,8 @@ BEGIN_DATADESC( CTFWeaponBaseGrenadeProj )
 DEFINE_THINKFUNC( DetonateThink ),
 END_DATADESC()
 
-ConVar tf_grenade_show_radius( "tf_grenade_show_radius", "0", FCVAR_CHEAT | FCVAR_DEVELOPMENTONLY, "Render radius of grenades" );
-ConVar tf_grenade_show_radius_time( "tf_grenade_show_radius_time", "5.0", FCVAR_CHEAT | FCVAR_DEVELOPMENTONLY, "Time to show grenade radius" );
+ConVar tf_grenade_show_radius( "tf_grenade_show_radius", "0", FCVAR_CHEAT , "Render radius of grenades" );
+ConVar tf_grenade_show_radius_time( "tf_grenade_show_radius_time", "5.0", FCVAR_CHEAT , "Time to show grenade radius" );
 extern void SendProxy_Origin( const SendProp *pProp, const void *pStruct, const void *pData, DVariant *pOut, int iElement, int objectID );
 extern void SendProxy_Angles( const SendProp *pProp, const void *pStruct, const void *pData, DVariant *pOut, int iElement, int objectID );
 
@@ -112,6 +112,7 @@ void CTFWeaponBaseGrenadeProj::Precache( void )
 	PrecacheModel( NOGRENADE_SPRITE );
 	PrecacheParticleSystem( "critical_grenade_blue" );
 	PrecacheParticleSystem( "critical_grenade_red" );
+	PrecacheParticleSystem( "critical_grenade_mercenary" );
 #endif
 }
 
@@ -196,7 +197,9 @@ void CTFWeaponBaseGrenadeProj::InitGrenade( const Vector &velocity, const Angula
 
 	SetDamage( weaponInfo.GetWeaponData( TF_WEAPON_PRIMARY_MODE ).m_nDamage );
 	SetDamageRadius( weaponInfo.m_flDamageRadius );
-	ChangeTeam( pOwner->GetTeamNumber() );
+	if ( pOwner->GetTeamNumber() == 4) ChangeTeam(77);
+	else ChangeTeam( pOwner->GetTeamNumber()  );
+	
 
 	IPhysicsObject *pPhysicsObject = VPhysicsGetObject();
 	if ( pPhysicsObject )

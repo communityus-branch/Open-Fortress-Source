@@ -427,9 +427,11 @@ int CTeamplayRules::IPointsForKill( CBasePlayer *pAttacker, CBasePlayer *pKilled
 	if ( !pAttacker )
 		return 1;
 
-	if ( pAttacker != pKilled && PlayerRelationship( pAttacker, pKilled ) == GR_TEAMMATE )
-		return -1;
-
+	if ( pAttacker != pKilled && PlayerRelationship( pAttacker, pKilled ) == GR_TEAMMATE )//teamkill
+	{
+		if(*GetTeamID(pKilled) == 77) return 1;
+		else return -1;
+	}
 	return 1;
 }
 
