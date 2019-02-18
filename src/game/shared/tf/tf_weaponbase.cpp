@@ -2062,7 +2062,7 @@ int CTFWeaponBase::GetSkin()
 				nSkin = 1;
 				break;
 			case TF_TEAM_MERCENARY:
-				nSkin = 0;
+				nSkin = 2;
 				break;
 			}
 		}

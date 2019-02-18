@@ -756,6 +756,7 @@ void CSpyInvisProxy::OnBind( C_BaseEntity *pEnt )
 
 	case TF_TEAM_BLUE:
 	case TF_TEAM_MERCENARY:
+		r = 0.5; g = 0; b = 0.5;
 	default:
 		r = 0.4; g = 0.5; b = 1.0;
 		break;
@@ -1426,7 +1427,7 @@ void C_TFPlayer::InitInvulnerableMaterial( void )
 		pszMaterial = "models/effects/invulnfx_red.vmt";
 		break;
 	case TF_TEAM_MERCENARY:	
-		pszMaterial = "models/effects/invulnfx_red.vmt";
+		pszMaterial = "models/effects/invulnfx_mercenary.vmt";
 		break;
 	default:
 		break;
@@ -1489,7 +1490,7 @@ void C_TFPlayer::OnAddTeleported( void )
 			pEffect = "player_recent_teleport_red";
 			break;
 		case TF_TEAM_MERCENARY:
-			pEffect = "player_recent_teleport_red";
+			pEffect = "player_recent_teleport_mercenary";
 			break;
 		default:
 			break;
@@ -1680,7 +1681,7 @@ void C_TFPlayer::ShowNemesisIcon( bool bShow )
 			pszEffect = "particle_nemesis_blue";
 			break;
 		case TF_TEAM_MERCENARY:
-			pszEffect = "particle_nemesis_red";
+			pszEffect = "particle_nemesis_mercenary";
 			break;
 		default:
 			return;	// shouldn't get called if we're not on a team; bail out if it does
@@ -2887,7 +2888,7 @@ int C_TFPlayer::GetSkin()
 	{
 		iVisibleTeam = m_Shared.GetDisguiseTeam();
 	}
-
+	
 	int nSkin;
 
 	switch( iVisibleTeam )
@@ -2900,7 +2901,7 @@ int C_TFPlayer::GetSkin()
 		nSkin = 1;
 		break;
 	case TF_TEAM_MERCENARY:
-		nSkin = 0;
+		nSkin = 4;
 		break;
 	default:
 		nSkin = 0;

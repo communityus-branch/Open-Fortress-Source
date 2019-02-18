@@ -133,7 +133,7 @@ CON_COMMAND( changeclass, "Choose a new class" )
 			gViewPortInterface->ShowPanel( PANEL_CLASS_BLUE, true );
 			break;
 		case TF_TEAM_MERCENARY:
-			gViewPortInterface->ShowPanel( PANEL_CLASS_MERCENARY, true );
+			gViewPortInterface->ShowPanel( PANEL_CLASS_RED, true );
 			break;
 		default:
 			break;

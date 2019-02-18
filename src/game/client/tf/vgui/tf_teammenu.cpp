@@ -357,10 +357,10 @@ void CTFTeamMenu::ShowPanel( bool bShow )
 		case TF_TEAM_MERCENARY:
 			if ( IsConsole() )
 			{
-				m_pMercenaryTeamButton->OnCursorEntered();
-				m_pMercenaryTeamButton->SetDefaultAnimation( "enter_enabled" );
+				m_pRedTeamButton->OnCursorEntered();
+				m_pRedTeamButton->SetDefaultAnimation( "enter_enabled" );
 			}
-			GetFocusNavGroup().SetCurrentFocus( m_pMercenaryTeamButton->GetVPanel(), m_pMercenaryTeamButton->GetVPanel() );
+			GetFocusNavGroup().SetCurrentFocus( m_pRedTeamButton->GetVPanel(), m_pRedTeamButton->GetVPanel() );
 			break;			
 			
 		default:
