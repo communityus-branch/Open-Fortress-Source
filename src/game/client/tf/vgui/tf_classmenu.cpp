@@ -48,6 +48,7 @@ static int iRemapIndexToClass[TF_CLASS_MENU_BUTTONS] =
 	TF_CLASS_SPY,
 	0,
 	0,
+	TF_CLASS_MERCENARY,
 	TF_CLASS_RANDOM
 };
 
@@ -535,6 +536,7 @@ static int g_sClassDefines[] = {
 	TF_CLASS_MEDIC,
 	TF_CLASS_SNIPER,
 	TF_CLASS_SPY,
+	TF_CLASS_MERCENARY,
 	0,
 };
 

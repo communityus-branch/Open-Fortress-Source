@@ -41,6 +41,7 @@ static char *g_szBlueClassImages[] =
 	"../hud/class_pyroblue",
 	"../hud/class_spyblue",
 	"../hud/class_engiblue",
+	"../hud/class_mercenaryblue",
 	"",
 };
 
@@ -56,6 +57,7 @@ static char *g_szRedClassImages[] =
 	"../hud/class_pyrored",
 	"../hud/class_spyred",
 	"../hud/class_engired",
+	"../hud/class_mercenaryred",
 	"",
 };
 

@@ -24,6 +24,7 @@ bool UseHWMorphModels();
 #define TF_CLASS_SPY_FILE				"scripts/playerclasses/spy"
 #define TF_CLASS_ENGINEER_FILE			"scripts/playerclasses/engineer"
 #define TF_CLASS_CIVILIAN_FILE			"scripts/playerclasses/civilian"
+#define TF_CLASS_MERCENARY_FILE			"scripts/playerclasses/mercenary"
 
 const char *s_aPlayerClassFiles[] =
 {
@@ -37,7 +38,8 @@ const char *s_aPlayerClassFiles[] =
 	TF_CLASS_PYRO_FILE,
 	TF_CLASS_SPY_FILE,
 	TF_CLASS_ENGINEER_FILE,
-	TF_CLASS_CIVILIAN_FILE
+	TF_CLASS_CIVILIAN_FILE,
+	TF_CLASS_MERCENARY_FILE
 };
 
 TFPlayerClassData_t s_aTFPlayerClassData[TF_CLASS_COUNT_ALL];

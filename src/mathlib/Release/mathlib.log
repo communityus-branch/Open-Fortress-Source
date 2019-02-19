@@ -1,4 +1,4 @@
-﻿Build started 18.2.2019. 23:04:54.
+﻿Build started 19.2.2019. 15:05:10.
      1>Project "E:\Making gaems\Open-Fortress-Source\src\mathlib\mathlib.vcxproj" on node 2 (Build target(s)).
      1>PreBuildEvent:
          if EXIST ..\lib\public\.\mathlib.lib ( for /f "delims=" %%A in ('attrib "..\lib\public\.\mathlib.lib"') do set valveTmpIsReadOnly="%%A"
@@ -15,7 +15,6 @@
          :VCEnd
        CustomBuild:
          Running VPC CRC Check - mathlib.vpc
-         The process cannot access the file because it is being used by another process.
        Lib:
          mathlib.vcxproj -> E:\Making gaems\Open-Fortress-Source\src\mathlib\..\lib\public\.\mathlib.lib
      1>Done Building Project "E:\Making gaems\Open-Fortress-Source\src\mathlib\mathlib.vcxproj" (Build target(s)).

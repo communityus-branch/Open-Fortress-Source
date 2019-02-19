@@ -2490,7 +2490,13 @@ int CTFPlayer::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 		float flDamage = info.GetDamage() * tf_damagescale_self_soldier.GetFloat();
 		info.SetDamage( flDamage );
 	}
-
+	
+	if ( IsPlayerClass( TF_CLASS_MERCENARY ) && info.GetAttacker() == this ) 
+	{
+		float flDamage = info.GetDamage() * tf_damagescale_self_soldier.GetFloat();
+		info.SetDamage( flDamage );
+	}
+	
 	// Save damage force for ragdolls.
 	m_vecTotalBulletForce = info.GetDamageForce();
 	m_vecTotalBulletForce.x = clamp( m_vecTotalBulletForce.x, -15000.0f, 15000.0f );
@@ -6175,12 +6181,14 @@ void CTFPlayer::PowerplayThink( void )
 			case TF_CLASS_SCOUT: flDuration = InstancedScriptedScene( this, "scenes/player/scout/low/laughlong02.vcd", NULL, 0.0f, false, NULL, true ); break;
 			case TF_CLASS_SNIPER: flDuration = InstancedScriptedScene( this, "scenes/player/sniper/low/laughlong01.vcd", NULL, 0.0f, false, NULL, true ); break;
 			case TF_CLASS_SOLDIER: flDuration = InstancedScriptedScene( this, "scenes/player/soldier/low/laughevil02.vcd", NULL, 0.0f, false, NULL, true ); break;
+			case TF_CLASS_MERCENARY: flDuration = InstancedScriptedScene( this, "scenes/player/mercenary/low/laughevil02.vcd", NULL, 0.0f, false, NULL, true ); break;
 			case TF_CLASS_DEMOMAN: flDuration = InstancedScriptedScene( this, "scenes/player/demoman/low/laughlong02.vcd", NULL, 0.0f, false, NULL, true ); break;
 			case TF_CLASS_MEDIC: flDuration = InstancedScriptedScene( this, "scenes/player/medic/low/laughlong02.vcd", NULL, 0.0f, false, NULL, true ); break;
 			case TF_CLASS_HEAVYWEAPONS: flDuration = InstancedScriptedScene( this, "scenes/player/heavy/low/laughlong01.vcd", NULL, 0.0f, false, NULL, true ); break;
 			case TF_CLASS_PYRO: flDuration = InstancedScriptedScene( this, "scenes/player/pyro/low/laughlong01.vcd", NULL, 0.0f, false, NULL, true ); break;
 			case TF_CLASS_SPY: flDuration = InstancedScriptedScene( this, "scenes/player/spy/low/laughevil01.vcd", NULL, 0.0f, false, NULL, true ); break;
 			case TF_CLASS_ENGINEER: flDuration = InstancedScriptedScene( this, "scenes/player/engineer/low/laughlong01.vcd", NULL, 0.0f, false, NULL, true ); break;
+			case TF_CLASS_MERCENARY: flDuration = InstancedScriptedScene( this, "scenes/player/mercenary/low/laughlong02.vcd", NULL, 0.0f, false, NULL, true ); break;
 			}
 		}
 
