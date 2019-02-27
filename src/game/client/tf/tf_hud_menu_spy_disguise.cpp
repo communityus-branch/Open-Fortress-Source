@@ -140,15 +140,15 @@ void CHudMenuSpyDisguise::ApplySchemeSettings( IScheme *pScheme )
 		m_pClassItems_Blue[7]->LoadControlSettings( "resource/UI/disguise_menu/sniper_blue.res" );
 		m_pClassItems_Blue[8]->LoadControlSettings( "resource/UI/disguise_menu/spy_blue.res" );
 
-		m_pClassItems_Mercenary[0]->LoadControlSettings("resource/UI/disguise_menu/scout_blue.res");
-		m_pClassItems_Mercenary[1]->LoadControlSettings("resource/UI/disguise_menu/soldier_blue.res");
-		m_pClassItems_Mercenary[2]->LoadControlSettings("resource/UI/disguise_menu/pyro_blue.res");
-		m_pClassItems_Mercenary[3]->LoadControlSettings("resource/UI/disguise_menu/demoman_blue.res");
-		m_pClassItems_Mercenary[4]->LoadControlSettings("resource/UI/disguise_menu/heavy_blue.res");
-		m_pClassItems_Mercenary[5]->LoadControlSettings("resource/UI/disguise_menu/engineer_blue.res");
-		m_pClassItems_Mercenary[6]->LoadControlSettings("resource/UI/disguise_menu/medic_blue.res");
-		m_pClassItems_Mercenary[7]->LoadControlSettings("resource/UI/disguise_menu/sniper_blue.res");
-		m_pClassItems_Mercenary[8]->LoadControlSettings("resource/UI/disguise_menu/spy_blue.res");
+		m_pClassItems_Mercenary[0]->LoadControlSettings("resource/UI/disguise_menu/scout_mercenary.res");
+		m_pClassItems_Mercenary[1]->LoadControlSettings("resource/UI/disguise_menu/soldier_mercenary.res");
+		m_pClassItems_Mercenary[2]->LoadControlSettings("resource/UI/disguise_menu/pyro_mercenary.res");
+		m_pClassItems_Mercenary[3]->LoadControlSettings("resource/UI/disguise_menu/demoman_mercenary.res");
+		m_pClassItems_Mercenary[4]->LoadControlSettings("resource/UI/disguise_menu/heavy_mercenary.res");
+		m_pClassItems_Mercenary[5]->LoadControlSettings("resource/UI/disguise_menu/engineer_mercenary.res");
+		m_pClassItems_Mercenary[6]->LoadControlSettings("resource/UI/disguise_menu/medic_mercenary.res");
+		m_pClassItems_Mercenary[7]->LoadControlSettings("resource/UI/disguise_menu/sniper_mercenary.res");
+		m_pClassItems_Mercenary[8]->LoadControlSettings("resource/UI/disguise_menu/spy_mercenary.res");
 
 		m_pActiveSelection = NULL;
 	}
@@ -208,8 +208,8 @@ int	CHudMenuSpyDisguise::HudElementKeyInput( int down, ButtonCode_t keynum, cons
 		TF_CLASS_MEDIC,
 		TF_CLASS_SNIPER,
 		TF_CLASS_SPY,
-		TF_CLASS_CIVILIAN,
-		TF_CLASS_MERCENARY
+		TF_CLASS_MERCENARY,
+		TF_CLASS_CIVILIAN
 	};
 
 	bool bController = ( IsConsole() || ( keynum >= JOYSTICK_FIRST ) );
@@ -331,8 +331,22 @@ void CHudMenuSpyDisguise::SelectDisguise( int iClass, int iTeam )
 void CHudMenuSpyDisguise::ToggleDisguiseTeam( void )
 {
 	// flip the teams
-	m_iShowingTeam = ( m_iShowingTeam == TF_TEAM_BLUE ) ? TF_TEAM_RED : TF_TEAM_BLUE /* : TF_TEAM_MERCENARY */; //make more teams
-
+	
+	if ( m_iShowingTeam == TF_TEAM_RED )
+	{
+		m_iShowingTeam = TF_TEAM_BLUE;
+	}
+	else if ( m_iShowingTeam == TF_TEAM_BLUE )
+	{
+		//if ( isdeatmatch== 1)
+		m_iShowingTeam = TF_TEAM_MERCENARY;
+		//else m_iShowingTeam = TF_TEAM_RED;
+	}
+	else if ( m_iShowingTeam == TF_TEAM_MERCENARY )
+	{
+		m_iShowingTeam = TF_TEAM_RED;
+	}
+	
 	// show / hide the class items
 	bool bShowBlue = ( m_iShowingTeam == TF_TEAM_BLUE );
 	

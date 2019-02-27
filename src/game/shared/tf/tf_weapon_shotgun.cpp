@@ -66,6 +66,7 @@ CREATE_SIMPLE_WEAPON_TABLE( TFScatterGun, tf_weapon_scattergun )
 CTFShotgun::CTFShotgun()
 {
 	m_bReloadsSingly = true;
+//	m_bReloadsAll = true;
 }
 
 //-----------------------------------------------------------------------------

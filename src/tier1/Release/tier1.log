@@ -1,4 +1,4 @@
-﻿Build started 19.2.2019. 15:05:10.
+﻿Build started 27.2.2019. 19:34:08.
      1>Project "E:\Making gaems\Open-Fortress-Source\src\tier1\tier1.vcxproj" on node 3 (Build target(s)).
      1>PreBuildEvent:
          if EXIST ..\lib\public\.\tier1.lib ( for /f "delims=" %%A in ('attrib "..\lib\public\.\tier1.lib"') do set valveTmpIsReadOnly="%%A"
@@ -21,4 +21,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.67
+Time Elapsed 00:00:00.66

@@ -417,6 +417,26 @@ int CBaseCombatWeapon::WeaponRangeAttack2Condition( float flDot, float flDist )
 		}
 		return COND_CAN_RANGE_ATTACK2;
 	}
+	if ( m_bReloadsAll )
+	{
+		if (m_iClip2 <=0)
+		{
+			return COND_NO_SECONDARY_AMMO;
+		}
+		else if ( flDist < m_fMinRange2) 
+		{
+			return COND_TOO_CLOSE_TO_ATTACK;
+		}
+		else if (flDist > m_fMaxRange2) 
+		{
+			return COND_TOO_FAR_TO_ATTACK;
+		}
+		else if (flDot < 0.5) 
+		{
+			return COND_NOT_FACING_ATTACK;
+		}
+		return COND_CAN_RANGE_ATTACK2;
+	}
 
 	return COND_NONE;
 }

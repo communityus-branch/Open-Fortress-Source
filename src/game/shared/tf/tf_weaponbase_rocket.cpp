@@ -112,7 +112,7 @@ void CTFBaseRocket::Spawn( void )
 #else
 
 	//Derived classes must have set model.
-	Assert( GetModel() );	
+	Assert( GetModel() );
 
 	SetSolid( SOLID_BBOX );
 	SetMoveType( MOVETYPE_FLY, MOVECOLLIDE_FLY_CUSTOM );

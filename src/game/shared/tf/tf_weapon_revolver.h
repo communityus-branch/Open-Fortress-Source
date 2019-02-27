@@ -1,7 +1,9 @@
 //====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
 //
+// Purpose: 
 //
 //=============================================================================
+
 #ifndef TF_WEAPON_REVOLVER_H
 #define TF_WEAPON_REVOLVER_H
 #ifdef _WIN32
@@ -32,12 +34,11 @@ public:
 	DECLARE_DATADESC();
 #endif
 
-	CTFRevolver() {}
-	~CTFRevolver() {}
+	CTFRevolver();// {}
+//	~CTFRevolver() {}
+
 
 	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_REVOLVER; }
-
-	virtual bool DefaultReload( int iClipSize1, int iClipSize2, int iActivity );
 
 private:
 

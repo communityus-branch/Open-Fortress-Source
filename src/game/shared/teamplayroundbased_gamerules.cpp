@@ -7,6 +7,7 @@
 #include "cbase.h"
 #include "mp_shareddefs.h"
 #include "teamplayroundbased_gamerules.h"
+#include "tf_shareddefs.h"
 
 #ifdef CLIENT_DLL
 	#include "iclientmode.h"
@@ -139,7 +140,7 @@ ConVar mp_capdeteriorate_time( "mp_capdeteriorate_time", "90.0", FCVAR_REPLICATE
 ConVar mp_teams_unbalance_limit( "mp_teams_unbalance_limit", "1", FCVAR_REPLICATED | FCVAR_NOTIFY,
 					 "Teams are unbalanced when one team has this many more players than the other team. (0 disables check)",
 					 true, 0,	// min value
-					 true, 30	// max value
+					 true, 32	// max value
 					 );
 
 ConVar mp_disable_respawn_times( "mp_disable_respawn_times", "0", FCVAR_NOTIFY | FCVAR_REPLICATED );
@@ -2308,6 +2309,8 @@ bool CTeamplayRoundBasedRules::WouldChangeUnbalanceTeams( int iNewTeam, int iCur
 	{
 		if ( pTeam == pNewTeam )
 			continue;
+		if ( pTeam == GetGlobalTeam( TF_TEAM_MERCENARY) )
+			continue;
 
 		int iNumPlayers = pTeam->GetNumPlayers();
 
@@ -2345,7 +2348,7 @@ bool CTeamplayRoundBasedRules::AreTeamsUnbalanced( int &iHeaviestTeam, int &iLig
 
 	int i = FIRST_GAME_TEAM;
 
-	for ( CTeam *pTeam = GetGlobalTeam(i); pTeam != NULL; pTeam = GetGlobalTeam(++i) )
+	for (CTeam *pTeam = GetGlobalTeam(i); pTeam != GetGlobalTeam(TF_TEAM_MERCENARY) ; pTeam = GetGlobalTeam(++i))
 	{
 		int iNumPlayers = pTeam->GetNumPlayers();
 

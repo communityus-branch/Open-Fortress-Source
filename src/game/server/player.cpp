@@ -69,6 +69,7 @@
 #include "dt_utlvector_send.h"
 #include "vote_controller.h"
 #include "ai_speech.h"
+#include "tf_shareddefs.h"
 
 #if defined USES_ECON_ITEMS
 #include "econ_wearable.h"
@@ -732,10 +733,12 @@ int CBasePlayer::ShouldTransmit( const CCheckTransmitInfo *pInfo )
 bool CBasePlayer::WantsLagCompensationOnEntity( const CBasePlayer *pPlayer, const CUserCmd *pCmd, const CBitVec<MAX_EDICTS> *pEntityTransmitBits ) const
 {
 	// Team members shouldn't be adjusted unless friendly fire is on.
-	if ( pPlayer->GetTeamNumber() == 77 )
+	if ( pPlayer->GetTeamNumber() == 77 || pPlayer->GetTeamNumber() == 4 || pPlayer->GetTeamNumber() == TF_TEAM_MERCENARY )
 		return true;
-	if ( !friendlyfire.GetInt() && pPlayer->GetTeamNumber() == GetTeamNumber() )
+	
+	if ( !friendlyfire.GetInt() && pPlayer->GetTeamNumber() == GetTeamNumber() ) 
 		return false;
+	
 	// If this entity hasn't been transmitted to us and acked, then don't bother lag compensating it.
 	if ( pEntityTransmitBits && !pEntityTransmitBits->Get( pPlayer->entindex() ) )
 		return false;
@@ -6173,7 +6176,7 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 #ifdef HL2_EPISODIC
 		GiveAmmo( 5,	"Hopwire" );
 #endif		
-		GiveNamedItem( "weapon_smg1" );
+		GiveNamedItem( "tf_weapon_flamethrower" );
 		GiveNamedItem( "weapon_frag" );
 		GiveNamedItem( "weapon_crowbar" );
 		GiveNamedItem( "weapon_pistol" );

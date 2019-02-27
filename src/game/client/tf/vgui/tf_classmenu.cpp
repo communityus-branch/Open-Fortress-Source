@@ -523,6 +523,22 @@ static const char *g_sClassImagesRed[] = {
 	"",
 };
 
+static const char *g_sClassImagesMercenary[] = {
+	"",
+	"class_sel_sm_scout_mercenary",
+	"class_sel_sm_soldier_mercenary",
+	"class_sel_sm_pyro_mercenary",
+	
+	"class_sel_sm_demo_mercenary",
+	"class_sel_sm_heavy_mercenary",
+	"class_sel_sm_engineer_mercenary",
+	
+	"class_sel_sm_medic_mercenary",
+	"class_sel_sm_sniper_mercenary",
+	"class_sel_sm_spy_mercenary",
+	"",
+};
+
 static int g_sClassDefines[] = {
 	0,
 	TF_CLASS_SCOUT,	
@@ -537,6 +553,7 @@ static int g_sClassDefines[] = {
 	TF_CLASS_SNIPER,
 	TF_CLASS_SPY,
 	TF_CLASS_MERCENARY,
+	TF_CLASS_CIVILIAN,
 	0,
 };
 
@@ -576,7 +593,17 @@ void CTFClassMenu::UpdateNumClassLabels( int iTeam )
 				if ( pImage )
 				{
 					pImage->SetVisible( true );
-					pImage->SetImage( iTeam == TF_TEAM_BLUE ? g_sClassImagesBlue[i] : g_sClassImagesRed[i] /* : g_sClassImagesMercenary[i] */); //make more teams
+					if ( iTeam == TF_TEAM_RED ){
+						pImage->SetImage( g_sClassImagesRed[i] );
+					}
+					else if ( iTeam == TF_TEAM_BLUE )
+					{
+						pImage->SetImage( g_sClassImagesBlue[i] );
+					}
+					else if ( iTeam == TF_TEAM_MERCENARY )
+					{
+						pImage->SetImage( g_sClassImagesMercenary[i] );
+					}					
 				}
 
 				nTotalCount++;

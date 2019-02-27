@@ -1112,7 +1112,7 @@ void CCaptureFlag::ManageTrailEffects( void )
 					pEffectName = "player_intel_trail_red";
 					break;
 				case TF_TEAM_MERCENARY:
-					pEffectName = "player_intel_trail_red";
+					pEffectName = "player_intel_trail_mercenary";
 					break;
 				default:
 					pEffectName = "player_intel_trail_blue";

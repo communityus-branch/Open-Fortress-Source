@@ -75,6 +75,7 @@ PRECACHE_WEAPON_REGISTER( tf_weapon_pistol_scout );
 //-----------------------------------------------------------------------------
 CTFPistol::CTFPistol( void )
 {
+//	m_bReloadsAll = true;
 	m_flSoonestPrimaryAttack = gpGlobals->curtime;
 }
 

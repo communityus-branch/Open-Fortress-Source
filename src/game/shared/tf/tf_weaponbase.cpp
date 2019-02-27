@@ -426,6 +426,10 @@ void CTFWeaponBase::PrimaryAttack( void )
 	{
 		m_iReloadMode.Set( TF_RELOAD_START );
 	}
+	else if ( m_bReloadsAll ) 
+	{
+		m_iReloadMode.Set ( TF_RELOAD_START );
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -541,7 +545,9 @@ bool CTFWeaponBase::Reload( void )
 		if ( Clip1() >= GetMaxClip1())
 			return false;
 	}
-
+	// Reload all + reload canceling
+	if ( m_bReloadsAll )
+		return ReloadsAll();
 	// Reload one object at a time.
 	if ( m_bReloadsSingly )
 		return ReloadSingly();
@@ -676,6 +682,138 @@ bool CTFWeaponBase::ReloadSingly( void )
 			{
 				// We're done, allow primary attack as soon as we like
 				//SetReloadTimer( SequenceDuration() );
+			}
+
+			pPlayer->DoAnimationEvent( PLAYERANIMEVENT_RELOAD_END );
+
+			m_iReloadMode.Set( TF_RELOAD_START );
+			return true;
+		}
+	}
+}
+
+bool CTFWeaponBase::ReloadsAll( void )
+{
+	// Don't reload.
+	if ( m_flNextPrimaryAttack > gpGlobals->curtime )
+		return false;
+
+	// Get the current player.
+	CTFPlayer *pPlayer = ToTFPlayer( GetPlayerOwner() );
+	if ( !pPlayer )
+		return false;
+
+	// check to see if we're ready to reload
+	switch ( m_iReloadMode )
+	{
+	case TF_RELOAD_START:
+		{
+			// Play weapon and player animations.
+			if ( SendWeaponAnim( ACT_RELOAD_START ) )
+			{
+				SetReloadTimer( SequenceDuration() );
+			}
+			else
+			{
+				// Update the reload timers with script values.
+				UpdateReloadTimers( true );
+			}
+
+			// Next reload the shells.
+			m_iReloadMode.Set( TF_RELOADING );
+
+			m_iReloadStartClipAmount = Clip1();
+
+			return true;
+		}
+	case TF_RELOADING:
+		{
+			// Did we finish the reload start?  Now we can reload a rocket.
+			if ( m_flTimeWeaponIdle > gpGlobals->curtime )
+				return false;
+
+			// Play weapon reload animations and sound.
+			if ( Clip1() == m_iReloadStartClipAmount )
+			{
+				pPlayer->DoAnimationEvent( PLAYERANIMEVENT_RELOAD );
+			}
+			else
+			{
+				pPlayer->DoAnimationEvent( PLAYERANIMEVENT_RELOAD_LOOP );
+			}
+
+			m_bReloadedThroughAnimEvent = false;
+
+			if ( SendWeaponAnim( ACT_VM_RELOAD ) )
+			{
+				if ( GetWeaponID() == TF_WEAPON_GRENADELAUNCHER )
+				{
+					SetReloadTimer( GetTFWpnData().m_WeaponData[TF_WEAPON_PRIMARY_MODE].m_flTimeReload );
+				}
+				else
+				{
+					SetReloadTimer( SequenceDuration() );
+				}
+			}
+			else
+			{
+				// Update the reload timers.
+				UpdateReloadTimers( false );
+			}
+
+#ifndef CLIENT_DLL
+			WeaponSound( RELOAD );
+#endif
+
+			// Next continue to reload shells?
+			m_iReloadMode.Set( TF_RELOADING_CONTINUE );
+			return true;
+		}
+	case TF_RELOADING_CONTINUE:
+		{
+			// Did we finish the reload start?  Now we can finish reloading the rocket.
+			if ( m_flTimeWeaponIdle > gpGlobals->curtime )
+				return false;
+
+			// If we have ammo, remove ammo and add it to clip
+			if ( pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) > 0 && !m_bReloadedThroughAnimEvent )
+			{
+				pPlayer->RemoveAmmo( GetMaxClip1() - m_iClip1 , m_iPrimaryAmmoType );
+				m_iClip1 =  GetMaxClip1();
+			}
+			
+			m_iReloadMode.Set( TF_RELOAD_FINISH );
+			if ( Clip1() == GetMaxClip1() || pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) <= 0 )
+			{
+				m_iReloadMode.Set( TF_RELOAD_FINISH );
+			}
+			else
+			{
+				m_iReloadMode.Set( TF_RELOADING );
+			}
+
+			return true;
+		}
+
+	case TF_RELOAD_FINISH:
+		{
+			if ( SendWeaponAnim( ACT_RELOAD_FINISH ) )
+			{
+				// We're done, allow primary attack as soon as we like
+				SetReloadTimer( SequenceDuration() );
+			}
+
+			pPlayer->DoAnimationEvent( PLAYERANIMEVENT_RELOAD_END );
+
+			m_iReloadMode.Set( TF_RELOAD_START );
+			return true;
+		}
+	default:
+		{
+			if ( SendWeaponAnim( ACT_RELOAD_FINISH ) )
+			{
+				// We're done, allow primary attack as soon as we like
+				SetReloadTimer( SequenceDuration() );
 			}
 
 			pPlayer->DoAnimationEvent( PLAYERANIMEVENT_RELOAD_END );
@@ -879,8 +1017,6 @@ void CTFWeaponBase::ItemBusyFrame( void )
 	}
 
 	// Interrupt a reload on reload singly weapons.
-	if ( m_bReloadsSingly )
-	{
 		CTFPlayer *pPlayer = GetTFPlayerOwner();
 		if ( pPlayer )
 		{
@@ -898,7 +1034,7 @@ void CTFWeaponBase::ItemBusyFrame( void )
 				}
 			}
 		}
-	}
+
 }
 
 //-----------------------------------------------------------------------------
@@ -935,6 +1071,10 @@ void CTFWeaponBase::ItemPostFrame( void )
 	{
 		ReloadSinglyPostFrame();
 	}
+	else if ( m_bReloadsAll )
+	{
+		ReloadsAllPostFrame();
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -953,6 +1093,23 @@ void CTFWeaponBase::ReloadSinglyPostFrame( void )
 		// reload/continue reloading
 		Reload();
 	}
+}
+
+void CTFWeaponBase::ReloadsAllPostFrame( void )
+{
+	
+	if ( m_flTimeWeaponIdle > gpGlobals->curtime )
+		return;
+
+	// if the clip is empty and we have ammo remaining, 
+	if (  (  /* ( Clip1() == 0 )  &&  */ ( GetOwner()->GetAmmoCount(m_iPrimaryAmmoType) > 0 ) )  ||
+		// or we are already in the process of reloading but not finished
+		( m_iReloadMode != TF_RELOAD_START ) )
+	{
+		// reload/continue reloading
+		Reload();
+	}
+	
 }
 
 //-----------------------------------------------------------------------------

@@ -90,8 +90,9 @@ enum
 #define TF_SPY_UNDEFINED		TEAM_UNASSIGNED
 
 
-#define COLOR_TF_BLUE	Color( 64, 64, 255, 255 )
-#define COLOR_TF_RED	Color( 255, 64, 64, 255 )
+#define COLOR_TF_BLUE		Color( 64, 64, 255, 255 )
+#define COLOR_TF_RED		Color( 255, 64, 64, 255 )
+#define COLOR_TF_MERCENARY	Color( 128, 0, 128, 255 )
 
 //-----------------------------------------------------------------------------
 // Player Classes.
@@ -99,7 +100,7 @@ enum
 #define TF_CLASS_COUNT			( TF_CLASS_COUNT_ALL - 1 )
 
 #define TF_FIRST_NORMAL_CLASS	( TF_CLASS_UNDEFINED + 1 )
-#define TF_LAST_NORMAL_CLASS	( TF_CLASS_MERCENARY )
+#define TF_LAST_NORMAL_CLASS	( TF_CLASS_CIVILIAN )
 
 #define	TF_CLASS_MENU_BUTTONS	( TF_CLASS_RANDOM + 1 )
 
@@ -118,8 +119,8 @@ enum
 	TF_CLASS_ENGINEER,		// TF_LAST_NORMAL_CLASS
 
 	// Add any new classes after Engineer
-	TF_CLASS_CIVILIAN,		// Civilians are a special class. It is not a player class.
 	TF_CLASS_MERCENARY,
+	TF_CLASS_CIVILIAN,		// Civilians are a special class. It is not a player class.
 	TF_CLASS_COUNT_ALL,
 
 	TF_CLASS_RANDOM

@@ -155,7 +155,7 @@ void CTFArrowPanel::Paint()
 	}
 	else if ( pEnt->GetTeamNumber() == TF_TEAM_MERCENARY )
 	{
-		pMaterial = m_RedMaterial;
+		pMaterial = m_MercenaryMaterial;
 
 		if ( pLocalPlayer && ( pLocalPlayer->GetObserverMode() == OBS_MODE_IN_EYE ) )
 		{
@@ -167,7 +167,7 @@ void CTFArrowPanel::Paint()
 				C_TFPlayer *pTarget = static_cast< C_TFPlayer* >( pTargetEnt );
 				if ( pTarget->HasTheFlag() && ( pTarget->GetItem() == pEnt ) )
 				{
-					pMaterial = m_RedMaterialNoArrow;
+					pMaterial = m_MercenaryMaterialNoArrow;
 				}
 			}
 		}

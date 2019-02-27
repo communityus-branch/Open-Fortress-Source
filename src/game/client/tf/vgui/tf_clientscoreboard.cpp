@@ -232,7 +232,7 @@ void CTFClientScoreBoardDialog::Update()
 void CTFClientScoreBoardDialog::UpdateTeamInfo()
 {
 	// update the team sections in the scoreboard
-	for ( int teamIndex = TF_TEAM_RED; teamIndex <= TF_TEAM_MERCENARY; teamIndex++ )
+	for (int teamIndex = TF_TEAM_RED; teamIndex <= TF_TEAM_MERCENARY ; teamIndex++)
 	{
 		wchar_t *teamName = NULL;
 		C_Team *team = GetGlobalTeam( teamIndex );
@@ -289,14 +289,15 @@ void CTFClientScoreBoardDialog::UpdateTeamInfo()
 
 bool AreEnemyTeams( int iTeam1, int iTeam2 )
 {
+	if ( iTeam1 == TF_TEAM_MERCENARY || iTeam2 == TF_TEAM_MERCENARY )
+		return true;
+	
 	if ( iTeam1 == TF_TEAM_RED && iTeam2 == TF_TEAM_BLUE )
 		return true;
 
 	if ( iTeam1 == TF_TEAM_BLUE && iTeam2 == TF_TEAM_RED )
 		return true;
 	
-	if ( iTeam1 == TF_TEAM_MERCENARY)
-		return true;
 	return false;
 }
 

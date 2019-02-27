@@ -286,6 +286,7 @@ public:
 	virtual bool			Reload( void );
 	bool					DefaultReload( int iClipSize1, int iClipSize2, int iActivity );
 	bool					ReloadsSingly( void ) const;
+	bool					ReloadsAll( void ) const;
 
 	virtual bool			AutoFiresFullClip( void ) const { return false; }
 	virtual void			UpdateAutoFire( void );
@@ -619,6 +620,7 @@ public:
 	float					m_fMaxRange1;			// What's the furthest this weapon can be used?
 	float					m_fMaxRange2;			// What's the furthest this weapon can be used?
 	bool					m_bReloadsSingly;		// True if this weapon reloads 1 round at a time
+	bool					m_bReloadsAll;			// True if this weapon reloads the whole magazine and has reload canceling
 	float					m_fFireDuration;		// The amount of time that the weapon has sustained firing
 	int						m_iSubType;
 

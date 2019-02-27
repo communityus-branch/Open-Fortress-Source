@@ -468,8 +468,7 @@ bool CBaseObject::ShouldCollide( int collisionGroup, int contentsMask ) const
 			break;
 			
 		case TF_TEAM_MERCENARY:
-			if ( !( contentsMask & CONTENTS_MERCENARYTEAM ) )
-				return false;
+				return true;
 			break;
 		}
 	}

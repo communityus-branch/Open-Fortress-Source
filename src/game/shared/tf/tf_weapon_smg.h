@@ -32,8 +32,9 @@ public:
 	DECLARE_DATADESC();
 #endif
 
-	CTFSMG() {}
-	~CTFSMG() {}
+	CTFSMG();// {}
+//	~CTFSMG() {}
+
 
 	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_SMG; }
 

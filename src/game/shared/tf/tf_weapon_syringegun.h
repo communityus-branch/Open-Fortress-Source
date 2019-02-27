@@ -34,8 +34,8 @@ public:
 	DECLARE_DATADESC();
 #endif
 
-	CTFSyringeGun() {}
-	~CTFSyringeGun() {}
+	CTFSyringeGun();// {}
+//	~CTFSyringeGun() {}
 
 	virtual void Precache();
 	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_SYRINGEGUN_MEDIC; }

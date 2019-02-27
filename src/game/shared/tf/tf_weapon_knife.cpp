@@ -65,7 +65,7 @@ void CTFKnife::PrimaryAttack( void )
 		{
 			CTFPlayer *pTarget = ToTFPlayer( trace.m_pEnt );
 
-			if ( (pTarget && pTarget->GetTeamNumber() != pPlayer->GetTeamNumber()) || (pTarget && pTarget->GetTeamNumber() == 4))
+			if ( pTarget && pTarget->GetTeamNumber() != pPlayer->GetTeamNumber() )
 			{
 				// Deal extra damage to players when stabbing them from behind
 				if ( IsBehindTarget( trace.m_pEnt ) )
@@ -76,6 +76,17 @@ void CTFKnife::PrimaryAttack( void )
 					// store the victim to compare when we do the damage
 					m_hBackstabVictim = trace.m_pEnt;
 				}
+			}
+			else if ( pPlayer->GetTeamNumber() == TF_TEAM_MERCENARY ){
+				// Deal extra damage to players when stabbing them from behind
+				if ( IsBehindTarget( trace.m_pEnt ) )
+				{
+					// this will be a backstab, do the strong anim
+					m_iWeaponMode = TF_WEAPON_SECONDARY_MODE;
+
+					// store the victim to compare when we do the damage
+					m_hBackstabVictim = trace.m_pEnt;
+				}		
 			}
 		}
 	}

@@ -150,8 +150,8 @@ Vector g_TFClassViewVectors[12] =
 	Vector( 0, 0, 68 ),		// TF_CLASS_PYRO,
 	Vector( 0, 0, 75 ),		// TF_CLASS_SPY,
 	Vector( 0, 0, 68 ),		// TF_CLASS_ENGINEER,		// TF_LAST_NORMAL_CLASS
-	Vector(0, 0, 68),		// TF_CLASS_CIVILIAN,
 	Vector( 0, 0, 68 ),		// TF_CLASS_MERCENARY,
+	Vector( 0, 0, 68 ),		// TF_CLASS_CIVILIAN,
 };
 
 const CViewVectors *CTFGameRules::GetViewVectors() const
@@ -2280,10 +2280,10 @@ void CTFGameRules::FillOutTeamplayRoundWinEvent( IGameEvent *event )
 	switch( event->GetInt( "team" ) )
 	{
 	case TF_TEAM_RED:
-		iLosingTeam = TF_TEAM_BLUE;
+		iLosingTeam = TF_TEAM_BLUE + TF_TEAM_MERCENARY;
 		break;
 	case TF_TEAM_BLUE:
-		iLosingTeam = TF_TEAM_RED;
+		iLosingTeam = TF_TEAM_RED + TF_TEAM_MERCENARY;
 		break;
 	case TF_TEAM_MERCENARY:
 		iLosingTeam = TF_TEAM_RED + TF_TEAM_BLUE;

@@ -1,7 +1,9 @@
 //====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
 //
+// Purpose: 
 //
 //=============================================================================
+
 #include "cbase.h"
 #include "tf_weapon_syringegun.h"
 #include "tf_fx_shared.h"
@@ -39,6 +41,12 @@ END_DATADESC()
 //
 // Weapon SyringeGun functions.
 //
+
+CTFSyringeGun::CTFSyringeGun()
+{
+//	m_bReloadsAll = true;
+}
+
 void CTFSyringeGun::Precache()
 {
 	BaseClass::Precache();

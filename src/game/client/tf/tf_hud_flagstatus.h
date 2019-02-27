@@ -36,10 +36,12 @@ private:
 
 	CMaterialReference	m_RedMaterial;
 	CMaterialReference	m_BlueMaterial;
+	CMaterialReference	m_MercenaryMaterial;
 	CMaterialReference	m_NeutralMaterial;
 
 	CMaterialReference	m_RedMaterialNoArrow;
 	CMaterialReference	m_BlueMaterialNoArrow;
+	CMaterialReference	m_MercenaryMaterialNoArrow;
 };
 
 //-----------------------------------------------------------------------------

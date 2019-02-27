@@ -363,7 +363,8 @@ const char *classNames[] =
 	"pyro",
 	"spy",
 	"engineer",
-	"mercenary"
+	"mercenary",
+	"civilian"
 };
 
 bool TFPlayerHasCondition( int inBits, int condition )

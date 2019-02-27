@@ -177,7 +177,7 @@ Color CHudChat::GetClientColor( int clientIndex )
 		{
 		case TF_TEAM_RED		: return pScheme->GetColor( "TFColors.ChatTextRed", g_ColorRed );
 		case TF_TEAM_BLUE		: return pScheme->GetColor( "TFColors.ChatTextBlue", g_ColorBlue );;
-		case TF_TEAM_MERCENARY	: return pScheme->GetColor( "TFColors.ChatTextMercenary", g_ColorRed );;
+		case TF_TEAM_MERCENARY	: return pScheme->GetColor( "TFColors.ChatTextMercenary", g_ColorMercenary );;
 		default	: return g_ColorGrey;
 		}
 	}

@@ -40,6 +40,7 @@ namespace vgui
 
 extern Color g_ColorBlue;
 extern Color g_ColorRed;
+extern Color g_ColorMercenary;
 extern Color g_ColorGreen;
 extern Color g_ColorDarkGreen;
 extern Color g_ColorYellow;

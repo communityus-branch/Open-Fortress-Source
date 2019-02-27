@@ -172,6 +172,7 @@ public:
 			if ( gViewPortInterface )
 			{
 				gViewPortInterface->ShowPanel( PANEL_CLASS_RED, false );
+				gViewPortInterface->ShowPanel( PANEL_CLASS_MERCENARY, false );
 			}
 		}
 
@@ -194,6 +195,7 @@ public:
 //-----------------------------------------------------------------------------
 // Purpose: Draws the red class menu
 //-----------------------------------------------------------------------------
+
 
 class CTFClassMenu_Red : public CTFClassMenu
 {
@@ -242,6 +244,7 @@ public:
 			if ( gViewPortInterface )
 			{
 				gViewPortInterface->ShowPanel( PANEL_CLASS_BLUE, false );
+				gViewPortInterface->ShowPanel( PANEL_CLASS_MERCENARY, false );
 			}
 		}
 
@@ -260,6 +263,80 @@ public:
 
 	virtual void UpdateClassCounts( void ){ UpdateNumClassLabels( TF_TEAM_RED ); }
 };
+
+//-----------------------------------------------------------------------------
+// Purpose: Draws the red class menu
+//-----------------------------------------------------------------------------
+
+
+
+class CTFClassMenu_Mercenary : public CTFClassMenu
+{
+private:
+	DECLARE_CLASS_SIMPLE( CTFClassMenu_Mercenary, CTFClassMenu );
+
+public:
+	CTFClassMenu_Mercenary( IViewPort *pViewPort ) : BaseClass( pViewPort )
+	{
+		m_pClassButtons[TF_CLASS_SCOUT] = new CImageMouseOverButton<CTFClassInfoPanel>( this, "scout_mercenary", m_pClassInfoPanel );
+		m_pClassButtons[TF_CLASS_SOLDIER] = new CImageMouseOverButton<CTFClassInfoPanel>( this, "soldier_mercenary", m_pClassInfoPanel );
+		m_pClassButtons[TF_CLASS_MERCENARY] = new CImageMouseOverButton<CTFClassInfoPanel>( this, "mercenary_mercenary", m_pClassInfoPanel );
+		m_pClassButtons[TF_CLASS_PYRO] = new CImageMouseOverButton<CTFClassInfoPanel>( this, "pyro_mercenary", m_pClassInfoPanel );
+		m_pClassButtons[TF_CLASS_DEMOMAN] = new CImageMouseOverButton<CTFClassInfoPanel>( this, "demoman_mercenary", m_pClassInfoPanel );
+		m_pClassButtons[TF_CLASS_MEDIC] = new CImageMouseOverButton<CTFClassInfoPanel>( this, "medic_mercenary", m_pClassInfoPanel );
+		m_pClassButtons[TF_CLASS_HEAVYWEAPONS] = new CImageMouseOverButton<CTFClassInfoPanel>( this, "heavyweapons_mercenary", m_pClassInfoPanel );
+		m_pClassButtons[TF_CLASS_SNIPER] = new CImageMouseOverButton<CTFClassInfoPanel>( this, "sniper_mercenary", m_pClassInfoPanel );
+		m_pClassButtons[TF_CLASS_ENGINEER] = new CImageMouseOverButton<CTFClassInfoPanel>( this, "engineer_mercenary", m_pClassInfoPanel );
+		m_pClassButtons[TF_CLASS_SPY] = new CImageMouseOverButton<CTFClassInfoPanel>( this, "spy_mercenary", m_pClassInfoPanel );
+		m_pClassButtons[TF_CLASS_RANDOM] = new CImageMouseOverButton<CTFClassInfoPanel>( this, "randompc_mercenary", m_pClassInfoPanel );
+	}
+
+	virtual void ApplySchemeSettings( IScheme *pScheme )
+	{
+		BaseClass::ApplySchemeSettings( pScheme );
+
+		LoadControlSettings( "Resource/UI/Classmenu_mercenary.res" );
+
+		for( int i = 0; i < GetChildCount(); i++ ) 
+		{
+			CImageMouseOverButton<CTFClassInfoPanel> *button = dynamic_cast<CImageMouseOverButton<CTFClassInfoPanel> *>( GetChild( i ) );
+
+			if ( button )
+			{
+				button->SetPreserveArmedButtons( true );
+				button->SetUpdateDefaultButtons( true );
+			}
+		}
+	}
+
+	virtual void ShowPanel( bool bShow )
+	{
+		if ( bShow )
+		{
+			// make sure the Red and Blue class menu isn't open
+			if ( gViewPortInterface )
+			{
+				gViewPortInterface->ShowPanel( PANEL_CLASS_BLUE, false );
+				gViewPortInterface->ShowPanel( PANEL_CLASS_RED, false );
+			}
+		}
+
+		BaseClass::ShowPanel( bShow );
+	}
+
+	virtual const char *GetName( void )
+	{ 
+		return PANEL_CLASS_MERCENARY;
+	}
+
+	virtual int GetTeamNumber( void )
+	{
+		return TF_TEAM_MERCENARY;
+	}
+
+	virtual void UpdateClassCounts( void ){ UpdateNumClassLabels( TF_TEAM_MERCENARY ); }
+};
+
 
 #endif // TF_CLASSMENU_H
 

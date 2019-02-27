@@ -130,6 +130,10 @@ void CTFWeaponBaseGun::PrimaryAttack( void )
 	{
 		m_iReloadMode.Set( TF_RELOAD_START );
 	}
+	else if ( m_bReloadsAll )
+	{
+		m_iReloadMode.Set( TF_RELOAD_START );
+	}
 }	
 
 //-----------------------------------------------------------------------------

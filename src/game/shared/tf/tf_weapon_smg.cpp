@@ -30,3 +30,7 @@ END_DATADESC()
 //
 // Weapon SMG functions.
 //
+CTFSMG::CTFSMG( void )
+{
+//	m_bReloadsAll = true;
+}

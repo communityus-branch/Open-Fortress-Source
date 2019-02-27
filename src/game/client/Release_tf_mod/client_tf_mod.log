@@ -1,5 +1,5 @@
-﻿Build started 19.2.2019. 15:05:11.
-     1>Project "E:\Making gaems\Open-Fortress-Source\src\game\client\client_tf_mod.vcxproj" on node 2 (Build target(s)).
+﻿Build started 27.2.2019. 19:34:10.
+     1>Project "E:\Making gaems\Open-Fortress-Source\src\game\client\client_tf_mod.vcxproj" on node 3 (Build target(s)).
      1>PreBuildEvent:
          if EXIST ..\..\..\game\tf_mod\bin\.\client.dll for /f "delims=" %%A in ('attrib "..\..\..\game\tf_mod\bin\.\client.dll"') do set valveTmpIsReadOnly="%%A"
          set valveTmpIsReadOnlyLetter=%valveTmpIsReadOnly:~6,1%
@@ -33,4 +33,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.53
+Time Elapsed 00:00:01.35

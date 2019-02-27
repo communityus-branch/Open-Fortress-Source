@@ -93,6 +93,7 @@ CON_COMMAND( showmapinfo, "Show map info panel" )
 			gViewPortInterface->ShowPanel( PANEL_TEAM, false );
 			gViewPortInterface->ShowPanel( PANEL_CLASS_RED, false );
 			gViewPortInterface->ShowPanel( PANEL_CLASS_BLUE, false );
+			gViewPortInterface->ShowPanel( PANEL_CLASS_MERCENARY, false );
 			gViewPortInterface->ShowPanel( PANEL_INTRO, false );
 			gViewPortInterface->ShowPanel( PANEL_ROUNDINFO, false );
 
@@ -133,7 +134,7 @@ CON_COMMAND( changeclass, "Choose a new class" )
 			gViewPortInterface->ShowPanel( PANEL_CLASS_BLUE, true );
 			break;
 		case TF_TEAM_MERCENARY:
-			gViewPortInterface->ShowPanel( PANEL_CLASS_RED, true );
+			gViewPortInterface->ShowPanel( PANEL_CLASS_MERCENARY, true );
 			break;
 		default:
 			break;
@@ -250,6 +251,10 @@ IViewPortPanel* TFViewport::CreatePanelByName(const char *szPanelName)
 	{
 		newpanel = new CTFClassMenu_Blue( this );	
 	}
+	else if ( Q_strcmp( PANEL_CLASS_MERCENARY, szPanelName ) == 0 )
+	{
+		newpanel = new CTFClassMenu_Mercenary( this );	
+	}
 	else if ( Q_strcmp( PANEL_INTRO, szPanelName ) == 0 )
 	{
 		newpanel = new CTFIntroMenu( this );
@@ -269,6 +274,7 @@ void TFViewport::CreateDefaultPanels( void )
 	AddNewPanel( CreatePanelByName( PANEL_TEAM ), "PANEL_TEAM" );
 	AddNewPanel( CreatePanelByName( PANEL_CLASS_RED ), "PANEL_CLASS_RED" );
 	AddNewPanel( CreatePanelByName( PANEL_CLASS_BLUE ), "PANEL_CLASS_BLUE" );
+	AddNewPanel( CreatePanelByName( PANEL_CLASS_MERCENARY ), "PANEL_CLASS_MERCENARY" );
 	AddNewPanel( CreatePanelByName( PANEL_INTRO ), "PANEL_INTRO" );
 	AddNewPanel( CreatePanelByName( PANEL_ROUNDINFO ), "PANEL_ROUNDINFO" );
 

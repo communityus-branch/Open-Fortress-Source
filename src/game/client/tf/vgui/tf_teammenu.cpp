@@ -252,6 +252,7 @@ CTFTeamMenu::CTFTeamMenu( IViewPort *pViewPort ) : CTeamMenu( pViewPort )
 
 	m_pBlueTeamButton = new CTFTeamButton( this, "teambutton0" );
 	m_pRedTeamButton = new CTFTeamButton( this, "teambutton1" );
+	m_pMercenaryTeamButton = new CTFTeamButton( this, "teambutton4" );
 	m_pAutoTeamButton = new CTFTeamButton( this, "teambutton2" );
 	m_pSpecTeamButton = new CTFTeamButton( this, "teambutton3" );
 	m_pSpecLabel = new CTFLabel( this, "TeamMenuSpectate", "" );
@@ -324,6 +325,7 @@ void CTFTeamMenu::ShowPanel( bool bShow )
 
 		gViewPortInterface->ShowPanel( PANEL_CLASS_RED, false );
 		gViewPortInterface->ShowPanel( PANEL_CLASS_BLUE, false );
+		gViewPortInterface->ShowPanel( PANEL_CLASS_MERCENARY, false );
 
 		engine->CheckPoint( "TeamMenu" );
 
@@ -357,10 +359,10 @@ void CTFTeamMenu::ShowPanel( bool bShow )
 		case TF_TEAM_MERCENARY:
 			if ( IsConsole() )
 			{
-				m_pRedTeamButton->OnCursorEntered();
-				m_pRedTeamButton->SetDefaultAnimation( "enter_enabled" );
+				m_pMercenaryTeamButton->OnCursorEntered();
+				m_pMercenaryTeamButton->SetDefaultAnimation( "enter_enabled" );
 			}
-			GetFocusNavGroup().SetCurrentFocus( m_pRedTeamButton->GetVPanel(), m_pRedTeamButton->GetVPanel() );
+			GetFocusNavGroup().SetCurrentFocus( m_pMercenaryTeamButton->GetVPanel(), m_pMercenaryTeamButton->GetVPanel() );
 			break;			
 			
 		default:
@@ -646,11 +648,6 @@ void CTFTeamMenu::OnTick()
 	{
 		m_bBlueDisabled = true;
 	}
-
-	if ( ( bUnbalanced && iHeavyTeam == TF_TEAM_MERCENARY ) || ( pRules->WouldChangeUnbalanceTeams( TF_TEAM_MERCENARY, iCurrentTeam ) ) )
-	{
-		m_bBlueDisabled = true;
-	}	
 	
 	if ( m_pSpecTeamButton && m_pSpecLabel )
 	{

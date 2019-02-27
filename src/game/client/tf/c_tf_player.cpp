@@ -98,6 +98,7 @@ const char *pszHeadLabelNames[] =
 CLIENTEFFECT_REGISTER_BEGIN( PrecacheInvuln )
 CLIENTEFFECT_MATERIAL( "models/effects/invulnfx_blue.vmt" )
 CLIENTEFFECT_MATERIAL( "models/effects/invulnfx_red.vmt" )
+CLIENTEFFECT_MATERIAL( "models/effects/invulnfx_mercenary.vmt" )
 CLIENTEFFECT_REGISTER_END()
 
 // -------------------------------------------------------------------------------- //
@@ -361,7 +362,11 @@ void C_TFRagdoll::CreateTFRagdoll()
 		{
 			m_nSkin = 1;
 		}
-		else //mercenary
+		else if ( m_iTeam == TF_TEAM_MERCENARY ) //mercenary
+		{
+			m_nSkin = 4;
+		}
+		else
 		{
 			m_nSkin = 0;
 		}
@@ -757,6 +762,7 @@ void CSpyInvisProxy::OnBind( C_BaseEntity *pEnt )
 	case TF_TEAM_BLUE:
 	case TF_TEAM_MERCENARY:
 		r = 0.5; g = 0; b = 0.5;
+		break;
 	default:
 		r = 0.4; g = 0.5; b = 1.0;
 		break;
@@ -1652,7 +1658,6 @@ bool C_TFPlayer::IsEnemyPlayer( void )
 	{
 	case TF_TEAM_RED:
 		return ( GetTeamNumber() == TF_TEAM_BLUE );
-	
 	case TF_TEAM_BLUE:
 		return ( GetTeamNumber() == TF_TEAM_RED );
 	case TF_TEAM_MERCENARY:
@@ -1693,6 +1698,7 @@ void C_TFPlayer::ShowNemesisIcon( bool bShow )
 		// stop effects for both team colors (to make sure we remove effects in event of team change)
 		ParticleProp()->StopParticlesNamed( "particle_nemesis_red", true );
 		ParticleProp()->StopParticlesNamed( "particle_nemesis_blue", true );
+		ParticleProp()->StopParticlesNamed( "particle_nemesis_mercenary", true );
 	}
 	m_bIsDisplayingNemesisIcon = bShow;
 }
@@ -2667,9 +2673,9 @@ void C_TFPlayer::GetTeamColor( Color &color )
 	}
 	else if ( GetTeamNumber() == TF_TEAM_MERCENARY)
 	{
-		color[0] = 159;
-		color[1] = 55;
-		color[2] = 34;		
+		color[0] = 128;
+		color[1] = 0;
+		color[2] = 128;		
 	}
 	else
 	{
@@ -2911,7 +2917,22 @@ int C_TFPlayer::GetSkin()
 	// 3 and 4 are invulnerable
 	if ( m_Shared.InCond( TF_COND_INVULNERABLE ) )
 	{
-		nSkin += 2;
+		switch( iVisibleTeam )
+		{
+			case TF_TEAM_RED:
+				nSkin = 2;
+				break;
+
+			case TF_TEAM_BLUE:
+				nSkin = 3;
+				break;
+			case TF_TEAM_MERCENARY:
+				nSkin = 5;
+				break;
+			default:
+				nSkin = 2;
+			break;
+		}
 	}
 	else if ( m_Shared.InCond( TF_COND_DISGUISED ) && !IsEnemyPlayer() )
 	{

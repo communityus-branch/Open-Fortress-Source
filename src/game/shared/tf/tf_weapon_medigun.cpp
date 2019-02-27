@@ -179,10 +179,13 @@ void CWeaponMedigun::Precache()
 	PrecacheScriptSound( "WeaponMedigun.Charged" );
 	PrecacheParticleSystem( "medicgun_invulnstatus_fullcharge_blue" );
 	PrecacheParticleSystem( "medicgun_invulnstatus_fullcharge_red" );
+	PrecacheParticleSystem( "medicgun_invulnstatus_fullcharge_mercenary" );
 	PrecacheParticleSystem( "medicgun_beam_red_invun" );
 	PrecacheParticleSystem( "medicgun_beam_red" );
 	PrecacheParticleSystem( "medicgun_beam_blue_invun" );
 	PrecacheParticleSystem( "medicgun_beam_blue" );
+	PrecacheParticleSystem( "medicgun_beam_mercenary_invun" );
+	PrecacheParticleSystem( "medicgun_beam_mercenary" );
 }
 
 //-----------------------------------------------------------------------------
@@ -286,6 +289,7 @@ float CWeaponMedigun::GetStickRange( void )
 float CWeaponMedigun::GetHealRate( void )
 {
 	return (float)m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_nDamage;
+//	return (float)m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_nDamage;
 }
 
 //-----------------------------------------------------------------------------
@@ -536,7 +540,7 @@ bool CWeaponMedigun::FindAndHealTargets( void )
 		{
 			if ( pTarget != pNewTarget && pNewTarget->IsPlayer() )
 			{
-				pTFPlayer->m_Shared.Heal( pOwner, GetHealRate() );
+				pTFPlayer->m_Shared.Heal( pOwner, -GetHealRate() );
 			}
 
 			pTFPlayer->m_Shared.RecalculateInvuln( false );
@@ -973,7 +977,7 @@ void CWeaponMedigun::ManageChargeEffect( void )
 				pszEffectName = "medicgun_invulnstatus_fullcharge_red";
 				break;
 			case TF_TEAM_MERCENARY:
-				pszEffectName = "medicgun_invulnstatus_fullcharge_red";
+				pszEffectName = "medicgun_invulnstatus_fullcharge_mercenary";
 				break;
 			default:
 				pszEffectName = "";
@@ -1150,7 +1154,7 @@ void CWeaponMedigun::UpdateEffects( void )
 				pszEffectName = "medicgun_beam_red";
 			}
 		}
-		else
+		else if ( pFiringPlayer->GetTeamNumber() == TF_TEAM_BLUE )
 		{
 			if ( m_bChargeRelease )
 			{
@@ -1161,7 +1165,17 @@ void CWeaponMedigun::UpdateEffects( void )
 				pszEffectName = "medicgun_beam_blue";
 			}
 		}
-
+		else
+		{
+			if ( m_bChargeRelease )
+			{
+				pszEffectName = "medicgun_beam_mercenary_invun";
+			}
+			else
+			{
+				pszEffectName = "medicgun_beam_mercenary";
+			}
+		}
 		CNewParticleEffect *pEffect = pEffectOwner->ParticleProp()->Create( pszEffectName, PATTACH_POINT_FOLLOW, "muzzle" );
 		pEffectOwner->ParticleProp()->AddControlPoint( pEffect, 1, m_hHealingTarget, PATTACH_ABSORIGIN_FOLLOW, NULL, Vector(0,0,50) );
 

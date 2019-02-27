@@ -42,6 +42,7 @@ static char *g_szBlueClassImages[] =
 	"../hud/class_spyblue",
 	"../hud/class_engiblue",
 	"../hud/class_mercenaryblue",
+	"../hud/class_civilianblue",
 	"",
 };
 
@@ -58,6 +59,24 @@ static char *g_szRedClassImages[] =
 	"../hud/class_spyred",
 	"../hud/class_engired",
 	"../hud/class_mercenaryred",
+	"../hud/class_civilianred",
+	"",
+};
+
+static char *g_szMercenaryClassImages[] = 
+{ 
+	"",
+	"../hud/class_scoutmercenary", 
+	"../hud/class_snipermercenary",
+	"../hud/class_soldiermercenary",
+	"../hud/class_demomercenary",
+	"../hud/class_medicmercenary",
+	"../hud/class_heavymercenary",
+	"../hud/class_pyromercenary",
+	"../hud/class_spymercenary",
+	"../hud/class_engimercenary",
+	"../hud/class_mercenarymercenary",
+	"../hud/class_civilianmercenary",
 	"",
 };
 
@@ -539,7 +558,7 @@ void CTFClassImage::SetClass( int iTeam, int iClass, int iCloakstate )
 	}
 	else if ( iTeam == TF_TEAM_MERCENARY )
 	{
-		Q_strncpy( szImage, g_szBlueClassImages[ iClass ], sizeof(szImage) );
+		Q_strncpy( szImage, g_szMercenaryClassImages[ iClass ], sizeof(szImage) );
 	}
 	else
 	{

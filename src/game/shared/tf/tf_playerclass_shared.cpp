@@ -23,8 +23,8 @@ bool UseHWMorphModels();
 #define TF_CLASS_PYRO_FILE				"scripts/playerclasses/pyro"
 #define TF_CLASS_SPY_FILE				"scripts/playerclasses/spy"
 #define TF_CLASS_ENGINEER_FILE			"scripts/playerclasses/engineer"
-#define TF_CLASS_CIVILIAN_FILE			"scripts/playerclasses/civilian"
 #define TF_CLASS_MERCENARY_FILE			"scripts/playerclasses/mercenary"
+#define TF_CLASS_CIVILIAN_FILE			"scripts/playerclasses/civilian"
 
 const char *s_aPlayerClassFiles[] =
 {
@@ -38,8 +38,8 @@ const char *s_aPlayerClassFiles[] =
 	TF_CLASS_PYRO_FILE,
 	TF_CLASS_SPY_FILE,
 	TF_CLASS_ENGINEER_FILE,
+	TF_CLASS_MERCENARY_FILE,
 	TF_CLASS_CIVILIAN_FILE,
-	TF_CLASS_MERCENARY_FILE
 };
 
 TFPlayerClassData_t s_aTFPlayerClassData[TF_CLASS_COUNT_ALL];
@@ -136,7 +136,7 @@ const char *TFPlayerClassData_t::GetModelName() const
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose: Loads up class.txt @modelsetc
 //-----------------------------------------------------------------------------
 void TFPlayerClassData_t::ParseData( KeyValues *pKeyValuesData )
 {

@@ -42,7 +42,7 @@ public:
 #endif
 
 	CTFPistol();
-	~CTFPistol() {}
+//	~CTFPistol() {}
 
 	virtual void	ItemPostFrame( void );
 	virtual void	PrimaryAttack( void );

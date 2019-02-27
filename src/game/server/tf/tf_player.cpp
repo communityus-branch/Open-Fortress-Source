@@ -1299,10 +1299,6 @@ int CTFPlayer::GetAutoTeam( void )
 		{
 			iTeam = TF_TEAM_RED;
 		}
-		else if ( pRed->GetNumPlayers() < pBlue->GetNumPlayers() || pBlue->GetNumPlayers() < pRed->GetNumPlayers() )
-		{
-			iTeam = TF_TEAM_MERCENARY;
-		}
 		else
 		{
 			iTeam = RandomInt( 0, 1 ) ? TF_TEAM_RED : TF_TEAM_BLUE;
@@ -1378,7 +1374,15 @@ void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 
 		ChangeTeam( iTeam );
 
-		ShowViewPortPanel( ( iTeam == TF_TEAM_RED ) ? PANEL_CLASS_RED : PANEL_CLASS_BLUE );
+		if ( iTeam == TF_TEAM_RED ) {
+			ShowViewPortPanel( PANEL_CLASS_RED );
+		}
+		else if ( iTeam == TF_TEAM_BLUE ) {
+			ShowViewPortPanel( PANEL_CLASS_BLUE );
+		}
+		else if ( iTeam == TF_TEAM_MERCENARY ) {
+			ShowViewPortPanel( PANEL_CLASS_MERCENARY );
+		}
 	}
 }
 
@@ -1700,7 +1704,6 @@ bool CTFPlayer::ClientCommand( const CCommand &args )
 	
 	m_flLastAction = gpGlobals->curtime;
 
-#ifdef _DEBUG
 	if ( FStrEq( pcmd, "addcond" ) )
 	{
 		if ( args.ArgC() >= 2 )
@@ -1745,7 +1748,10 @@ bool CTFPlayer::ClientCommand( const CCommand &args )
 			m_Shared.RemoveCond( iCond );
 		}
 		return true;
-	}
+	}	
+	
+#ifdef _DEBUG
+
 	else if ( FStrEq( pcmd, "burn" ) ) 
 	{
 		m_Shared.Burn( this );
@@ -5843,7 +5849,7 @@ bool CTFPlayer::WantsLagCompensationOnEntity( const CBasePlayer *pPlayer, const 
 	bool bIsMedic = false;
 
 	//Do Lag comp on medics trying to heal team mates.
-	if ( IsPlayerClass( TF_CLASS_MEDIC ) == true )
+	if ( IsPlayerClass( TF_CLASS_MEDIC ) == true  && pPlayer->GetTeamNumber() != 77 )
 	{
 		bIsMedic = true;
 
@@ -5860,7 +5866,9 @@ bool CTFPlayer::WantsLagCompensationOnEntity( const CBasePlayer *pPlayer, const 
 			}
 		}
 	}
-
+	if ( pPlayer->GetTeamNumber() == 77 || pPlayer->GetTeamNumber() == 4 || pPlayer->GetTeamNumber() == TF_TEAM_MERCENARY ) //lag compensate mercenary
+		return true;
+	
 	if ( pPlayer->GetTeamNumber() == GetTeamNumber() && bIsMedic == false )
 		return false;
 	
@@ -6188,7 +6196,6 @@ void CTFPlayer::PowerplayThink( void )
 			case TF_CLASS_PYRO: flDuration = InstancedScriptedScene( this, "scenes/player/pyro/low/laughlong01.vcd", NULL, 0.0f, false, NULL, true ); break;
 			case TF_CLASS_SPY: flDuration = InstancedScriptedScene( this, "scenes/player/spy/low/laughevil01.vcd", NULL, 0.0f, false, NULL, true ); break;
 			case TF_CLASS_ENGINEER: flDuration = InstancedScriptedScene( this, "scenes/player/engineer/low/laughlong01.vcd", NULL, 0.0f, false, NULL, true ); break;
-			case TF_CLASS_MERCENARY: flDuration = InstancedScriptedScene( this, "scenes/player/mercenary/low/laughlong02.vcd", NULL, 0.0f, false, NULL, true ); break;
 			}
 		}
 

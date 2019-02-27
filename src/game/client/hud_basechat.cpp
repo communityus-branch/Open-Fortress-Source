@@ -43,6 +43,7 @@ const int kChatFilterVersion = 1;
 
 Color g_ColorBlue( 153, 204, 255, 255 );
 Color g_ColorRed( 255, 63, 63, 255 );
+Color g_ColorMercenary( 128, 0, 128, 255 );
 Color g_ColorGreen( 153, 255, 153, 255 );
 Color g_ColorDarkGreen( 64, 255, 64, 255 );
 Color g_ColorYellow( 255, 178, 0, 255 );
