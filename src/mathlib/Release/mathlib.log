@@ -1,4 +1,4 @@
-﻿Build started 27.2.2019. 19:34:08.
+﻿Build started 2.3.2019. 12:56:17.
      1>Project "E:\Making gaems\Open-Fortress-Source\src\mathlib\mathlib.vcxproj" on node 2 (Build target(s)).
      1>PreBuildEvent:
          if EXIST ..\lib\public\.\mathlib.lib ( for /f "delims=" %%A in ('attrib "..\lib\public\.\mathlib.lib"') do set valveTmpIsReadOnly="%%A"
@@ -21,4 +21,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.58
+Time Elapsed 00:00:00.45

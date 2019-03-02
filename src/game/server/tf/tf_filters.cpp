@@ -97,3 +97,63 @@ void CFilterTFTeam::InputRoundActivate( inputdata_t &input )
 		}
 	}
 }
+/*
+//=============================================================================
+//
+// Team Fortress Team Filter
+//COPY PASTED FROM PREVIOUS LINE OF CODE FROM FILE
+//Sorry, KaiDemon. I stole a little bit of your code to make this. 
+//I didnt make it redd lmao. Its normal tf2 code
+
+class CFilter_Class : public CBaseFilter
+{
+	DECLARE_CLASS( CFilter_Class, CBaseFilter );
+
+public:
+
+	inline bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity );
+
+private:
+
+	int	m_iAllowedClass;
+
+	DECLARE_DATADESC();
+};
+
+BEGIN_DATADESC( CFilter_Class )
+
+DEFINE_KEYFIELD( m_iAllowedClass, FIELD_INTEGER, "class_filter" ),
+
+END_DATADESC()
+
+
+LINK_ENTITY_TO_CLASS( filter_activator_tf_class, CFilter_Class );
+
+//-----------------------------------------------------------------------------
+// Purpose:
+//-----------------------------------------------------------------------------
+bool CFilter_Class::PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+{
+	CTFPlayer *pPlayer = dynamic_cast< CTFPlayer * >(pEntity);
+
+	if (!pPlayer)
+		return false;
+
+
+	if (  TFGameRules() &&
+		( TFGameRules()->State_Get() == GR_STATE_TEAM_WIN ) && 
+		(TFGameRules()->GetWinningTeam() == pPlayer->GetTeamNumber()))
+	{
+		if ( m_bNegated )
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
+	return (pPlayer->IsPlayerClass(m_iAllowedClass));
+}
+*/

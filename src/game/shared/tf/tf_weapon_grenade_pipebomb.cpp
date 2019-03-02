@@ -145,7 +145,7 @@ const char *CTFGrenadePipebombProjectile::GetTrailParticleName( void )
 		}
 		else
 		{
-			return "stickybombtrail_red";
+			return "stickybombtrail_mercenary";
 		}
 	}
 	else
@@ -160,7 +160,7 @@ const char *CTFGrenadePipebombProjectile::GetTrailParticleName( void )
 		}
 		else
 		{
-			return "pipebombtrail_red";
+			return "pipebombtrail_mercenary";
 		}
 	}
 }
@@ -250,11 +250,14 @@ void CTFGrenadePipebombProjectile::Simulate( void )
 			{
 				ParticleProp()->Create( "stickybomb_pulse_red", PATTACH_ABSORIGIN );
 			}
-			else
+			else if ( GetTeamNumber() == TF_TEAM_BLUE )
 			{
 				ParticleProp()->Create( "stickybomb_pulse_blue", PATTACH_ABSORIGIN );
 			}
-
+			else 
+			{
+				ParticleProp()->Create( "stickybomb_pulse_mercenary", PATTACH_ABSORIGIN );
+			}
 			m_bPulsed = true;
 		}
 	}
@@ -368,6 +371,7 @@ void CTFGrenadePipebombProjectile::Precache()
 	PrecacheModel( TF_WEAPON_PIPEGRENADE_MODEL );
 	PrecacheParticleSystem( "stickybombtrail_blue" );
 	PrecacheParticleSystem( "stickybombtrail_red" );
+	PrecacheParticleSystem( "stickybombtrail_mercenary" );
 
 	BaseClass::Precache();
 }
@@ -518,7 +522,7 @@ void CTFGrenadePipebombProjectile::VPhysicsCollision( int index, gamevcollisione
 	bool bIsDynamicProp = ( NULL != dynamic_cast<CDynamicProp *>( pHitEntity ) );
 
 	// Pipebombs stick to the world when they touch it
-	if ( pHitEntity && ( pHitEntity->IsWorld() || bIsDynamicProp ) && gpGlobals->curtime > m_flMinSleepTime )
+	if ( pHitEntity  && ( pHitEntity->IsWorld() || bIsDynamicProp ) && gpGlobals->curtime > m_flMinSleepTime )
 	{
 		m_bTouched = true;
 		VPhysicsGetObject()->EnableMotion( false );

@@ -193,7 +193,7 @@ void CTFWeaponBaseGrenadeProj::InitGrenade( const Vector &velocity, const Angula
 
 	SetGravity( 0.4f/*BaseClass::GetGrenadeGravity()*/ );
 	SetFriction( 0.2f/*BaseClass::GetGrenadeFriction()*/ );
-	SetElasticity( 0.45f/*BaseClass::GetGrenadeElasticity()*/ );
+	SetElasticity( 0.4f/*BaseClass::GetGrenadeElasticity()*/ );
 
 	SetDamage( weaponInfo.GetWeaponData( TF_WEAPON_PRIMARY_MODE ).m_nDamage );
 	SetDamageRadius( weaponInfo.m_flDamageRadius );

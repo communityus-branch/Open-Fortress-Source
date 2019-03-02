@@ -809,7 +809,7 @@ void CTFFlameEntity::FlameThink( void )
 		CTFTeam *pTeam = pAttacker->GetOpposingTFTeam();
 		if ( !pTeam )
 			return;
-	
+		
 		bool bHitWorld = false;
 
 		// check collision against all enemy players

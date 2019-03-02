@@ -2288,6 +2288,9 @@ bool CTeamplayRoundBasedRules::WouldChangeUnbalanceTeams( int iNewTeam, int iCur
 	// if they are joining a non-playing team, allow
 	if ( iNewTeam < FIRST_GAME_TEAM )
 		return false;
+	
+	if ( iNewTeam == TF_TEAM_MERCENARY )
+		return false;
 
 	CTeam *pNewTeam = GetGlobalTeam( iNewTeam );
 

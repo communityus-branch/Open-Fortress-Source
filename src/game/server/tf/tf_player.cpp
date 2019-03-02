@@ -4744,9 +4744,13 @@ CTFTeam *CTFPlayer::GetOpposingTFTeam( void )
 	{
 		return TFTeamMgr()->GetTeam( TF_TEAM_BLUE );
 	}
-	else
+	else if ( iTeam == TF_TEAM_BLUE)
 	{
 		return TFTeamMgr()->GetTeam( TF_TEAM_RED );
+	}
+	else
+	{
+		return TFTeamMgr()->GetTeam( TF_TEAM_MERCENARY );
 	}
 }
 
