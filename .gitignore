@@ -18,3 +18,5 @@ ipch
 *.vcxproj.filters
 *.vcxproj.vpc_crc
 *.sln
+client.dll
+server.dll

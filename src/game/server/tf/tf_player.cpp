@@ -83,7 +83,7 @@ ConVar tf_damagescale_self_soldier( "tf_damagescale_self_soldier", "0.60", FCVAR
 ConVar tf_damage_lineardist( "tf_damage_lineardist", "0", FCVAR_DEVELOPMENTONLY );
 ConVar tf_damage_range( "tf_damage_range", "0.5", FCVAR_DEVELOPMENTONLY );
 
-ConVar tf_max_voice_speak_delay( "tf_max_voice_speak_delay", "1.5", FCVAR_DEVELOPMENTONLY, "Max time after a voice command until player can do another one" );
+ConVar tf_max_voice_speak_delay( "tf_max_voice_speak_delay", "1.5", FCVAR_REPLICATED, "Max time after a voice command until player can do another one" );
 
 extern ConVar spec_freeze_time;
 extern ConVar spec_freeze_traveltime;
@@ -1706,39 +1706,41 @@ bool CTFPlayer::ClientCommand( const CCommand &args )
 
 	if ( FStrEq( pcmd, "addcond" ) )
 	{
-		if ( args.ArgC() >= 2 )
-		{
-			int iCond = clamp( atoi( args[1] ), 0, TF_COND_LAST-1 );
-
-			CTFPlayer *pTargetPlayer = this;
-			if ( args.ArgC() >= 4 )
+		if ( sv_cheats->GetBool() ){
+			if ( args.ArgC() >= 2 )
 			{
-				// Find the matching netname
-				for ( int i = 1; i <= gpGlobals->maxClients; i++ )
+				int iCond = clamp( atoi( args[1] ), 0, TF_COND_LAST-1 );
+
+				CTFPlayer *pTargetPlayer = this;
+				if ( args.ArgC() >= 4 )
 				{
-					CBasePlayer *pPlayer = ToBasePlayer( UTIL_PlayerByIndex(i) );
-					if ( pPlayer )
+					// Find the matching netname
+					for ( int i = 1; i <= gpGlobals->maxClients; i++ )
 					{
-						if ( Q_strstr( pPlayer->GetPlayerName(), args[3] ) )
+						CBasePlayer *pPlayer = ToBasePlayer( UTIL_PlayerByIndex(i) );
+						if ( pPlayer )
 						{
-							pTargetPlayer = ToTFPlayer(pPlayer);
-							break;
+							if ( Q_strstr( pPlayer->GetPlayerName(), args[3] ) )
+							{
+								pTargetPlayer = ToTFPlayer(pPlayer);
+								break;
+							}
 						}
 					}
 				}
-			}
 
-			if ( args.ArgC() >= 3 )
-			{
-				float flDuration = atof( args[2] );
-				pTargetPlayer->m_Shared.AddCond( iCond, flDuration );
+				if ( args.ArgC() >= 3 )
+				{
+					float flDuration = atof( args[2] );
+					pTargetPlayer->m_Shared.AddCond( iCond, flDuration );
+				}
+				else
+				{
+					pTargetPlayer->m_Shared.AddCond( iCond );
+				}
 			}
-			else
-			{
-				pTargetPlayer->m_Shared.AddCond( iCond );
-			}
+			return true;
 		}
-		return true;
 	}
 	else if ( FStrEq( pcmd, "removecond" ) )
 	{
@@ -1748,8 +1750,34 @@ bool CTFPlayer::ClientCommand( const CCommand &args )
 			m_Shared.RemoveCond( iCond );
 		}
 		return true;
-	}	
-	
+	}
+	else if ( FStrEq( pcmd, "taunt" ) )
+	{
+		Taunt();
+		return true;
+	}
+	else if ( FStrEq( pcmd, "build" ) )
+	{
+		if ( args.ArgC() == 2 )
+		{
+			// player wants to build something
+			int iBuilding = atoi( args[ 1 ] );
+
+			StartBuildingObjectOfType( iBuilding );
+		}
+		return true;
+	}
+	else if ( FStrEq( pcmd, "destroy" ) )
+	{
+		if ( args.ArgC() == 2 )
+		{
+			// player wants to destroy something
+			int iBuilding = atoi( args[ 1 ] );
+
+			DetonateOwnedObjectsOfType( iBuilding );
+		}
+		return true;
+	}
 #ifdef _DEBUG
 
 	else if ( FStrEq( pcmd, "burn" ) ) 
@@ -1920,33 +1948,6 @@ bool CTFPlayer::ClientCommand( const CCommand &args )
 			DoAnimationEvent( PLAYERANIMEVENT_ATTACK_PRIMARY );
 		}
 
-		return true;
-	}
-	else if ( FStrEq( pcmd, "taunt" ) )
-	{
-		Taunt();
-		return true;
-	}
-	else if ( FStrEq( pcmd, "build" ) )
-	{
-		if ( args.ArgC() == 2 )
-		{
-			// player wants to build something
-			int iBuilding = atoi( args[ 1 ] );
-
-			StartBuildingObjectOfType( iBuilding );
-		}
-		return true;
-	}
-	else if ( FStrEq( pcmd, "destroy" ) )
-	{
-		if ( args.ArgC() == 2 )
-		{
-			// player wants to destroy something
-			int iBuilding = atoi( args[ 1 ] );
-
-			DetonateOwnedObjectsOfType( iBuilding );
-		}
 		return true;
 	}
 	else if ( FStrEq( pcmd, "extendfreeze" ) )
@@ -2162,11 +2163,11 @@ void CTFPlayer::StartBuildingObjectOfType( int iType )
 	{
 		CTFWeaponBase *pWpn = ( CTFWeaponBase *)GetWeapon(i);
 
-		if ( pWpn == NULL )
-			continue;
+//		if ( pWpn == NULL )
+//			continue;
 
-		if ( pWpn->GetWeaponID() != TF_WEAPON_BUILDER )
-			continue;
+//		if ( pWpn->GetWeaponID() != TF_WEAPON_BUILDER )
+//			continue;
 
 		CTFWeaponBuilder *pBuilder = dynamic_cast< CTFWeaponBuilder * >( pWpn );
 

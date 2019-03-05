@@ -1,4 +1,4 @@
-﻿Build started 2.3.2019. 12:56:17.
+﻿Build started 5.3.2019. 17:25:42.
      1>Project "E:\Making gaems\Open-Fortress-Source\src\vgui2\vgui_controls\vgui_controls.vcxproj" on node 4 (Build target(s)).
      1>PreBuildEvent:
          if EXIST ..\..\lib\public\.\vgui_controls.lib ( for /f "delims=" %%A in ('attrib "..\..\lib\public\.\vgui_controls.lib"') do set valveTmpIsReadOnly="%%A"
@@ -15,10 +15,11 @@
          :VCEnd
        CustomBuild:
          Running VPC CRC Check - vgui_controls.vpc
+         The process cannot access the file because it is being used by another process.
        Lib:
          vgui_controls.vcxproj -> E:\Making gaems\Open-Fortress-Source\src\vgui2\vgui_controls\..\..\lib\public\.\vgui_controls.lib
      1>Done Building Project "E:\Making gaems\Open-Fortress-Source\src\vgui2\vgui_controls\vgui_controls.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.54
+Time Elapsed 00:00:03.04

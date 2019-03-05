@@ -287,13 +287,13 @@ void CTFSniperRifle::ItemPostFrame( void )
 	if ( pPlayer->m_Shared.IsJumping() )
 	{
 		// Unzoom if we're jumping
-		if ( IsZoomed() )
-		{
-			ToggleZoom();
-		}
+//		if ( IsZoomed() )
+//		{
+//			ToggleZoom();
+//		}
 
-		m_flChargedDamage = 0.0f;
-		m_bRezoomAfterShot = false;
+//		m_flChargedDamage = 0.0f;
+//		m_bRezoomAfterShot = false;
 	}
 	else if ( m_flNextSecondaryAttack <= gpGlobals->curtime )
 	{
@@ -349,12 +349,12 @@ bool CTFSniperRifle::Lower( void )
 void CTFSniperRifle::Zoom( void )
 {
 	// Don't allow the player to zoom in while jumping
-	CTFPlayer *pPlayer = GetTFPlayerOwner();
-	if ( pPlayer && pPlayer->m_Shared.IsJumping() )
-	{
-		if ( pPlayer->GetFOV() >= 75 )
-			return;
-	}
+//	CTFPlayer *pPlayer = GetTFPlayerOwner();
+//	if ( pPlayer && pPlayer->m_Shared.IsJumping() )
+//	{
+//		if ( pPlayer->GetFOV() >= 75 )
+//			return;
+//	}
 
 	ToggleZoom();
 

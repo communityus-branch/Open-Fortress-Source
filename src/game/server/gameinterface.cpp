@@ -566,6 +566,34 @@ EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CServerGameDLL, IServerGameDLL, INTERFACEVERSI
 // When bumping the version to this interface, check that our assumption is still valid and expose the older version in the same way
 COMPILE_TIME_ASSERT( INTERFACEVERSION_SERVERGAMEDLL_INT == 10 );
 
+static void MountAdditionalContent()
+{
+	KeyValues *pMainFile = new KeyValues( "gameinfo.txt" );
+#ifndef _WINDOWS
+	// case sensitivity
+	pMainFile->LoadFromFile( filesystem, "GameInfo.txt", "MOD" );
+	if (!pMainFile)
+#endif
+	pMainFile->LoadFromFile( filesystem, "gameinfo.txt", "MOD" );
+	
+	if (pMainFile)
+	{
+		KeyValues* pFileSystemInfo = pMainFile->FindKey( "FileSystem" );
+		if (pFileSystemInfo)
+			for ( KeyValues *pKey = pFileSystemInfo->GetFirstSubKey(); pKey; pKey = pKey->GetNextKey() )
+			{
+				if ( strcmp(pKey->GetName(),"AdditionalContentId") == 0 )
+				{
+					int appid = abs(pKey->GetInt());
+					if (appid)
+						if( filesystem->MountSteamContent(-appid) != FILESYSTEM_MOUNT_OK )
+							Warning("Unable to mount extra content with appId: %i\n", appid);
+				}
+			}
+	}	
+	pMainFile->deleteThis();
+}
+
 bool CServerGameDLL::DLLInit( CreateInterfaceFn appSystemFactory, 
 		CreateInterfaceFn physicsFactory, CreateInterfaceFn fileSystemFactory, 
 		CGlobalVars *pGlobals)
@@ -639,6 +667,9 @@ bool CServerGameDLL::DLLInit( CreateInterfaceFn appSystemFactory,
 		return false;
 
 	// cache the globals
+
+	MountAdditionalContent();
+	
 	gpGlobals = pGlobals;
 
 	g_pSharedChangeInfo = engine->GetSharedEdictChangeInfo();
