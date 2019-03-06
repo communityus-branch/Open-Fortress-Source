@@ -19,6 +19,6 @@ ipch
 *.vcxproj.vpc_crc
 *.sln
 src/game/client/release_tf_mod/
-src/game/server/release_tf_mod
+src/game/server/release_tf_mod/
 client.dll
 server.dll
