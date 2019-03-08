@@ -96,7 +96,7 @@ CON_COMMAND( showmapinfo, "Show map info panel" )
 			gViewPortInterface->ShowPanel( PANEL_CLASS_MERCENARY, false );
 			gViewPortInterface->ShowPanel( PANEL_INTRO, false );
 			gViewPortInterface->ShowPanel( PANEL_ROUNDINFO, false );
-
+			gViewPortInterface->ShowPanel( PANEL_DMTEAMSELECT, false);
 			gViewPortInterface->ShowPanel( PANEL_MAPINFO, true );
 		}
 	}
@@ -119,6 +119,9 @@ CON_COMMAND( changeteam, "Choose a new team" )
 CON_COMMAND( changeclass, "Choose a new class" )
 {
 	if ( !gViewPortInterface )
+		return;
+
+	if (TFGameRules() && TFGameRules()->IsDMGamemode())
 		return;
 
 	C_TFPlayer *pPlayer = C_TFPlayer::GetLocalTFPlayer();
@@ -255,6 +258,10 @@ IViewPortPanel* TFViewport::CreatePanelByName(const char *szPanelName)
 	{
 		newpanel = new CTFClassMenu_Mercenary( this );	
 	}
+	else if (Q_strcmp(PANEL_DMTEAMSELECT, szPanelName) == 0)
+	{
+		newpanel = new CTFDMTeamMenu(this);
+	}
 	else if ( Q_strcmp( PANEL_INTRO, szPanelName ) == 0 )
 	{
 		newpanel = new CTFIntroMenu( this );
@@ -275,6 +282,7 @@ void TFViewport::CreateDefaultPanels( void )
 	AddNewPanel( CreatePanelByName( PANEL_CLASS_RED ), "PANEL_CLASS_RED" );
 	AddNewPanel( CreatePanelByName( PANEL_CLASS_BLUE ), "PANEL_CLASS_BLUE" );
 	AddNewPanel( CreatePanelByName( PANEL_CLASS_MERCENARY ), "PANEL_CLASS_MERCENARY" );
+	AddNewPanel(CreatePanelByName( PANEL_DMTEAMSELECT ), "PANEL_DMTEAMSELECT");
 	AddNewPanel( CreatePanelByName( PANEL_INTRO ), "PANEL_INTRO" );
 	AddNewPanel( CreatePanelByName( PANEL_ROUNDINFO ), "PANEL_ROUNDINFO" );
 

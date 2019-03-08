@@ -75,6 +75,7 @@ enum
 #define PANEL_CLASS_MERCENARY	"class_mercenary"
 #define PANEL_MAPINFO			"mapinfo"
 #define PANEL_ROUNDINFO			"roundinfo"
+#define PANEL_DMTEAMSELECT      "dmteamselect"
 
 // file we'll save our list of viewed intro movies in
 #define MOVIES_FILE				"viewed.res"

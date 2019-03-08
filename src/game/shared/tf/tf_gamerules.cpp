@@ -82,6 +82,9 @@ ConVar tf_caplinear( "tf_caplinear", "1", FCVAR_REPLICATED | FCVAR_DEVELOPMENTON
 ConVar tf_stalematechangeclasstime( "tf_stalematechangeclasstime", "20", FCVAR_REPLICATED | FCVAR_DEVELOPMENTONLY, "Amount of time that players are allowed to change class in stalemates." );
 ConVar tf_birthday( "tf_birthday", "0", FCVAR_NOTIFY | FCVAR_REPLICATED );
 
+// Open Fortress Convars
+ConVar of_gamemode_dm("of_gamemode_dm", "0", FCVAR_NOTIFY | FCVAR_REPLICATED | FCVAR_DEVELOPMENTONLY);
+
 #ifdef GAME_DLL
 // TF overrides the default value of this convar
 ConVar mp_waitingforplayers_time( "mp_waitingforplayers_time", (IsX360()?"15":"30"), FCVAR_GAMEDLL | FCVAR_DEVELOPMENTONLY, "WaitingForPlayers time length in seconds" );
@@ -329,6 +332,23 @@ void CTFGameRulesProxy::Activate()
 }
 #endif
 
+//-----------------------------------------------------------------------------
+// DM Logic 
+//-----------------------------------------------------------------------------
+class CTFLogicDM : public CBaseEntity
+{
+public:
+	DECLARE_CLASS(CTFLogicDM, CBaseEntity);
+	void	Spawn(void);
+};
+
+LINK_ENTITY_TO_CLASS(of_logic_dm, CTFLogicDM);
+
+void CTFLogicDM::Spawn(void)
+{
+	BaseClass::Spawn();
+}
+
 // (We clamp ammo ourselves elsewhere).
 ConVar ammo_max( "ammo_max", "5000", FCVAR_REPLICATED );
 
@@ -545,17 +565,27 @@ void CTFGameRules::Activate()
 {
 	m_iBirthdayMode = BIRTHDAY_RECALCULATE;
 
-	m_nGameType.Set( TF_GAMETYPE_UNDEFINED );
+	m_nGameType.Set(TF_GAMETYPE_UNDEFINED);
 
-	CCaptureFlag *pFlag = dynamic_cast<CCaptureFlag*> ( gEntList.FindEntityByClassname( NULL, "item_teamflag" ) );
-	if ( pFlag )
+	CCaptureFlag *pFlag = dynamic_cast<CCaptureFlag*> (gEntList.FindEntityByClassname(NULL, "item_teamflag"));
+	if (pFlag)
 	{
-		m_nGameType.Set( TF_GAMETYPE_CTF );
+		m_nGameType.Set(TF_GAMETYPE_CTF);
 	}
 
-	if ( g_hControlPointMasters.Count() )
+	if (g_hControlPointMasters.Count())
 	{
-		m_nGameType.Set( TF_GAMETYPE_CP );
+		m_nGameType.Set(TF_GAMETYPE_CP);
+	}
+
+	if (gEntList.FindEntityByClassname(NULL, "of_logic_dm") || !Q_strncmp(STRING(gpGlobals->mapname), "dm_", 3) )
+	{
+		m_nGameType.Set(TF_GAMETYPE_DM);
+	    of_gamemode_dm.SetValue(1);
+		ConColorMsg(Color(77, 116, 85, 255), "[TFGameRules] Executing server DM gamemode config file\n", NULL);
+		engine->ServerCommand("exec config_dm.cfg \n");
+		engine->ServerExecute();
+		return;
 	}
 }
 

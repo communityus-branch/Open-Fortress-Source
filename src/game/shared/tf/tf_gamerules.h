@@ -321,6 +321,8 @@ public:
 	bool m_bControlSpawnsPerTeam[ MAX_TEAMS ][ MAX_CONTROL_POINTS ];
 	int	 m_iPreviousRoundWinners;
 
+	virtual bool	IsDMGamemode(void) { return GetGameType() == TF_GAMETYPE_DM; }
+
 	int		m_iBirthdayMode;
 };
 
@@ -332,6 +334,7 @@ inline CTFGameRules* TFGameRules()
 {
 	return static_cast<CTFGameRules*>(g_pGameRules);
 }
+
 
 #ifdef GAME_DLL
 	bool EntityPlacementTest( CBaseEntity *pMainEnt, const Vector &vOrigin, Vector &outPos, bool bDropToGround );

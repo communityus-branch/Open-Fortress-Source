@@ -109,4 +109,45 @@ private:
 	ButtonCode_t m_iTeamMenuKey;
 };
 
+//-----------------------------------------------------------------------------
+// Purpose: Displays the DM team menu
+//-----------------------------------------------------------------------------
+class CTFDMTeamMenu : public CTeamMenu
+{
+private:
+	DECLARE_CLASS_SIMPLE(CTFDMTeamMenu, CTeamMenu);
+
+public:
+	CTFDMTeamMenu(IViewPort *pViewPort);
+	~CTFDMTeamMenu();
+
+	virtual const char *GetName(void) { return PANEL_DMTEAMSELECT; }
+	void Update();
+	void ShowPanel(bool bShow);
+
+protected:
+	virtual void ApplySchemeSettings(vgui::IScheme *pScheme);
+	virtual void OnKeyCodePressed(vgui::KeyCode code);
+
+	// command callbacks
+	virtual void OnCommand(const char *command);
+
+	virtual void LoadMapPage(const char *mapName);
+
+	virtual void OnTick(void);
+
+private:
+
+	CTFTeamButton	*m_pAutoTeamButton;
+	CTFTeamButton	*m_pSpecTeamButton;
+	CTFLabel		*m_pSpecLabel;
+	CTFLabel		*m_pCancelButton;
+
+
+private:
+	enum { NUM_TEAMS = 3 };
+
+	ButtonCode_t m_iTeamMenuKey;
+};
+
 #endif // TF_TEAMMENU_H

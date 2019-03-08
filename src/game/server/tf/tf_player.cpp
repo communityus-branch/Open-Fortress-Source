@@ -1313,6 +1313,12 @@ int CTFPlayer::GetAutoTeam( void )
 //-----------------------------------------------------------------------------
 void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 {
+	if (TFGameRules()->IsDMGamemode() && stricmp(pTeamName, "spectate") != 0)
+	{
+		ChangeTeam(TF_TEAM_MERCENARY);
+		SetDesiredPlayerClassIndex(TF_CLASS_MERCENARY);
+		return;
+	}
 	int iTeam = TF_TEAM_RED;
 	if ( stricmp( pTeamName, "auto" ) == 0 )
 	{
@@ -1547,6 +1553,9 @@ void CTFPlayer::HandleCommand_JoinClass( const char *pClassName )
 {
 	// can only join a class after you join a valid team
 	if ( GetTeamNumber() <= LAST_SHARED_TEAM )
+		return;
+
+	if (TFGameRules()->IsDMGamemode())
 		return;
 
 	// In case we don't get the class menu message before the spawn timer
@@ -2805,6 +2814,11 @@ bool CTFPlayer::ShouldCollide( int collisionGroup, int contentsMask ) const
 	if ( ( ( collisionGroup == COLLISION_GROUP_PLAYER_MOVEMENT ) && tf_avoidteammates.GetBool() ) ||
 		collisionGroup == TFCOLLISION_GROUP_ROCKETS )
 	{
+		if (TFGameRules() && TFGameRules()->IsDMGamemode())
+		{
+			return BaseClass::ShouldCollide(collisionGroup, contentsMask);
+		}
+
 		switch( GetTeamNumber() )
 		{
 		case TF_TEAM_RED:
@@ -3012,7 +3026,7 @@ void CTFPlayer::AddDamagerToHistory( EHANDLE hDamager )
 	// sanity check: ignore damager if it is on our team.  (Catch-all for 
 	// damaging self in rocket jumps, etc.)
 	CTFPlayer *pDamager = ToTFPlayer( hDamager );
-	if ( !pDamager || ( pDamager->GetTeam() == GetTeam() ) )
+	if ( !pDamager || ( pDamager->GetTeam() == GetTeam() && !TFGameRules()->IsDMGamemode()))
 		return;
 
 	// If this damager is different from the most recent damager, shift the
@@ -3146,7 +3160,7 @@ void CTFPlayer::Event_Killed( const CTakeDamageInfo &info )
 	}
 
 	RemoveTeleportEffect();
-
+	
 	// Stop being invisible
 	m_Shared.RemoveCond( TF_COND_STEALTHED );
 
