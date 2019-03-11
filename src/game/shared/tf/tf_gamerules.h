@@ -200,6 +200,7 @@ public:
 	virtual int GetGameType( void ){ return m_nGameType; }
 
 	virtual bool FlagsMayBeCapped( void );
+	virtual bool WeaponSpawnersMayBeUsed( void );
 
 	void	RunPlayerConditionThink ( void );
 

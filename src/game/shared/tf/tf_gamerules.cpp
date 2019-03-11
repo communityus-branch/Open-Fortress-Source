@@ -35,6 +35,7 @@
 	#include "entity_healthkit.h"
 	#include "tf_gamestats.h"
 	#include "entity_capture_flag.h"
+	#include "entity_weapon_spawner.h"
 	#include "tf_player_resource.h"
 	#include "tf_obj_sentrygun.h"
 	#include "tier0/icommandline.h"
@@ -490,6 +491,14 @@ CTFGameRules::CTFGameRules()
 // Purpose: 
 //-----------------------------------------------------------------------------
 bool CTFGameRules::FlagsMayBeCapped( void )
+{
+	if ( State_Get() != GR_STATE_TEAM_WIN )
+		return true;
+
+	return false;
+}
+
+bool CTFGameRules::WeaponSpawnersMayBeUsed( void )
 {
 	if ( State_Get() != GR_STATE_TEAM_WIN )
 		return true;

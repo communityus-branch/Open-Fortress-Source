@@ -176,6 +176,7 @@ enum
 	TF_ITEM_ARMOR			= (1<<2),
 	TF_ITEM_AMMO_PACK		= (1<<3),
 	TF_ITEM_GRENADE_PACK	= (1<<4),
+	TF_ITEM_WEAPON_SPAWNER	= (1<<5),
 };
 
 //-----------------------------------------------------------------------------
@@ -397,6 +398,9 @@ enum
 #define TF_FLAGINFO_STOLEN		(1<<0)
 #define TF_FLAGINFO_DROPPED		(1<<1)
 
+#define TF_WEAPONSPAWNERINFO_NONE		(1<<2)
+#define TF_WEAPONSPAWNERINFO_TAKEN		(1<<3)
+#define TF_WEAPONSPAWNERINFO_DROPPED	(1<<4)
 enum {
 	TF_FLAGEVENT_PICKUP = 1,
 	TF_FLAGEVENT_CAPTURE,

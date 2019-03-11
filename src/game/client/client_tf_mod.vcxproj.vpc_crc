@@ -1,7 +1,7 @@
 [vpc crc file version 2]
 b9c20ec3 E:\Making gaems\Open-Fortress-Source\src\devtools\bin\vpc.exe
 _Nc_VS2013/vpcgame:tf_mod_
-bd53251d client_tf_mod.vpc
+d6a24b50 client_tf_mod.vpc
 92e66859 ..\..\game\client\client_base.vpc
 4832e67a ..\..\vpc_scripts\source_dll_base.vpc
 d752cf80 ..\..\vpc_scripts\platform_dirs.vpc
