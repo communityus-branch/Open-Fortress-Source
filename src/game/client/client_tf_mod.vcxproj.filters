@@ -1907,9 +1907,6 @@
     <ClInclude Include="..\..\game\shared\tf\entity_capture_flag.h">
       <Filter>Source Files\TF</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\game\shared\tf\entity_weapon_spawner.h">
-      <Filter>Source Files\TF</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\game\shared\Multiplayer\multiplayer_animstate.h">
       <Filter>Source Files\TF</Filter>
     </ClInclude>
@@ -3524,9 +3521,6 @@
       <Filter>Source Files\TF</Filter>
     </ClCompile>
     <ClCompile Include="..\..\game\shared\tf\entity_capture_flag.cpp">
-      <Filter>Source Files\TF</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\game\shared\tf\entity_weapon_spawner.cpp">
       <Filter>Source Files\TF</Filter>
     </ClCompile>
     <ClCompile Include="..\..\game\shared\Multiplayer\multiplayer_animstate.cpp">

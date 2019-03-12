@@ -836,7 +836,6 @@
     <ClInclude Include="tf\c_tf_team.h" />
     <ClInclude Include="tf\clientmode_tf.h" />
     <ClInclude Include="..\..\game\shared\tf\entity_capture_flag.h" />
-    <ClInclude Include="..\..\game\shared\tf\entity_weapon_spawner.h" />
     <ClInclude Include="..\..\game\shared\Multiplayer\multiplayer_animstate.h" />
     <ClInclude Include="tf\tf_fx_muzzleflash.h" />
     <ClInclude Include="..\..\game\shared\tf\tf_fx_shared.h" />
@@ -1476,7 +1475,6 @@
     <ClCompile Include="tf\c_tf_team.cpp" />
     <ClCompile Include="tf\clientmode_tf.cpp" />
     <ClCompile Include="..\..\game\shared\tf\entity_capture_flag.cpp" />
-    <ClCompile Include="..\..\game\shared\tf\entity_weapon_spawner.cpp" />
     <ClCompile Include="..\..\game\shared\Multiplayer\multiplayer_animstate.cpp" />
     <ClCompile Include="tf\teammaterialproxy.cpp" />
     <ClCompile Include="tf\tf_fx_blood.cpp" />

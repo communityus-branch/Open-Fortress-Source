@@ -725,6 +725,7 @@
     <ClInclude Include="te_particlesystem.h" />
     <ClInclude Include="..\..\game\shared\tf\baseobject_shared.h" />
     <ClInclude Include="tf\entity_ammopack.h" />
+	<ClInclude Include="tf\entity_weapon_spawner.h" />
     <ClInclude Include="tf\entity_armor.h" />
     <ClInclude Include="..\..\game\shared\tf\entity_capture_flag.h" />
     <ClInclude Include="tf\entity_forcerespawn.h" />
@@ -1319,6 +1320,7 @@
     <ClCompile Include="..\..\game\shared\tf\achievements_tf.cpp" />
     <ClCompile Include="..\..\game\shared\tf\baseobject_shared.cpp" />
     <ClCompile Include="tf\entity_ammopack.cpp" />
+	<ClCompile Include="tf\entity_weapon_spawner.cpp" />
     <ClCompile Include="tf\entity_armor.cpp" />
     <ClCompile Include="..\..\game\shared\tf\entity_capture_flag.cpp" />
     <ClCompile Include="tf\entity_forcerespawn.cpp" />

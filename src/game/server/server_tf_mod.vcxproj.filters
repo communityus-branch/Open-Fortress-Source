@@ -1565,6 +1565,9 @@
     <ClInclude Include="tf\entity_ammopack.h">
       <Filter>Source Files\TF</Filter>
     </ClInclude>
+    <ClInclude Include="tf\entity_weapon_spawner.h">
+      <Filter>Source Files\TF</Filter>
+    </ClInclude>
     <ClInclude Include="tf\entity_armor.h">
       <Filter>Source Files\TF</Filter>
     </ClInclude>
@@ -3082,6 +3085,9 @@
     <ClCompile Include="tf\entity_ammopack.cpp">
       <Filter>Source Files\TF</Filter>
     </ClCompile>
+    <ClInclude Include="tf\entity_weapon_spawner.cpp">
+      <Filter>Source Files\TF</Filter>
+    </ClInclude>
     <ClCompile Include="tf\entity_armor.cpp">
       <Filter>Source Files\TF</Filter>
     </ClCompile>

@@ -11,7 +11,6 @@
 #include "effect_dispatch_data.h"
 #include "tf_item.h"
 #include "entity_capture_flag.h"
-#include "entity_weapon_spawner.h"
 #include "baseobject_shared.h"
 #include "tf_weapon_medigun.h"
 #include "tf_weapon_pipebomblauncher.h"

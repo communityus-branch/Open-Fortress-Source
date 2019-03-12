@@ -1,4 +1,4 @@
-﻿Build started 10.3.2019. 20:24:43.
+﻿Build started 13.3.2019. 0:32:21.
      1>Project "E:\Making gaems\Open-Fortress-Source\src\tier1\tier1.vcxproj" on node 3 (Build target(s)).
      1>PreBuildEvent:
          if EXIST ..\lib\public\.\tier1.lib ( for /f "delims=" %%A in ('attrib "..\lib\public\.\tier1.lib"') do set valveTmpIsReadOnly="%%A"
@@ -15,11 +15,10 @@
          :VCEnd
        CustomBuild:
          Running VPC CRC Check - tier1.vpc
-         The process cannot access the file because it is being used by another process.
        Lib:
          tier1.vcxproj -> E:\Making gaems\Open-Fortress-Source\src\tier1\..\lib\public\.\tier1.lib
      1>Done Building Project "E:\Making gaems\Open-Fortress-Source\src\tier1\tier1.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.49
+Time Elapsed 00:00:00.70
