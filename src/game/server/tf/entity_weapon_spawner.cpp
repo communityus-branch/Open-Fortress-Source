@@ -3,14 +3,20 @@
 // Purpose: CTF AmmoPack.
 //
 //=============================================================================//
+
 #include "cbase.h"
-#include "items.h"
 #include "tf_gamerules.h"
 #include "tf_shareddefs.h"
 #include "tf_player.h"
 #include "tf_team.h"
 #include "engine/IEngineSound.h"
 #include "entity_weapon_spawner.h"
+#include "tf_weaponbase.h"
+#include "basecombatcharacter.h"
+#include "in_buttons.h"
+#include "tf_fx.h"
+#include "items.h"
+#include "tf_viewmodel.h"
 
 //=============================================================================
 //
@@ -20,8 +26,6 @@
 #define TF_WEAPON_PICKUP_SOUND		"AmmoPack.Touch"
 #define TF_WEAPON_MODEL				"models/weapons/w_models/w_scattergun.mdl"
 #define TF_WEAPON_ID				"tf_weapon_scattergun"
-
-LINK_ENTITY_TO_CLASS( dm_weapon_spawner, CWeaponSpawner );
 
 //=============================================================================
 //
@@ -34,11 +38,10 @@ LINK_ENTITY_TO_CLASS( dm_weapon_spawner, CWeaponSpawner );
 void CWeaponSpawner::Spawn( void )
 {
 	Precache();
-	SetModel( GetPowerupModel() );
+	SetModel( TF_WEAPON_MODEL );
 
 	BaseClass::Spawn();
 }
-
 //-----------------------------------------------------------------------------
 // Purpose: Precache function for the ammopack
 //-----------------------------------------------------------------------------
@@ -60,22 +63,55 @@ bool CWeaponSpawner::MyTouch( CBasePlayer *pPlayer )
 		CTFPlayer *pTFPlayer = ToTFPlayer( pPlayer );
 		if ( !pTFPlayer )
 			return false;
-
-			bSuccess = true;
+		
+		bSuccess = true;
 
 		// did we give them anything?
 		if ( bSuccess )
 		{
+		
+			
 			CSingleUserRecipientFilter filter( pPlayer );
 			EmitSound( filter, entindex(), TF_WEAPON_PICKUP_SOUND );
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			char item_to_give[ 256 ];
-			Q_strncpy( item_to_give, TF_WEAPON_ID , sizeof( item_to_give ) );
-			Q_strlower( item_to_give );
+/*
+			CTFWeaponBase *pWeapon = (CTFWeaponBase *)GetWeapon( iWeapon );
+			
+			if ( pWeapon && pWeapon->GetWeaponID() != TF_WEAPON_ID )
+			{
+				Weapon_Detach( pWeapon );
+				UTIL_Remove( pWeapon );
+			}
+			
+			pWeapon = (CTFWeaponBase *)Weapon_OwnsThisID( TF_WEAPON_ID );		
+			
+			if ( pWeapon )
+			{
+				pWeapon->ChangeTeam( GetTeamNumber() );
+				pWeapon->GiveDefaultAmmo();
+	
+				if ( m_bRegenerating == false )
+				{
+					pWeapon->WeaponReset();
+				}
+			}
+			else
+			{
+				pWeapon = (CTFWeaponBase *)GiveNamedItem( pszWeaponName );
 
-			string_t iszItem = AllocPooledString( item_to_give );	// Make a copy of the classname
-			pPlayer->GiveNamedItem( STRING(iszItem) );
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				if ( pWeapon )
+				{
+					pWeapon->DefaultTouch( this );
+				}
+			}
+
+			if ( m_bRegenerating == false )
+			{
+				SetActiveWeapon( NULL );
+				Weapon_Switch( Weapon_GetSlot( 0 ) );
+				Weapon_SetLast( Weapon_GetSlot( 1 ) );
+			}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 		}
 	}
 	return bSuccess;

@@ -83,8 +83,10 @@ ConVar tf_damagescale_self_soldier( "tf_damagescale_self_soldier", "0.60", FCVAR
 ConVar tf_damage_lineardist( "tf_damage_lineardist", "0", FCVAR_DEVELOPMENTONLY );
 ConVar tf_damage_range( "tf_damage_range", "0.5", FCVAR_DEVELOPMENTONLY );
 
-ConVar tf_max_voice_speak_delay( "tf_max_voice_speak_delay", "1.5", FCVAR_REPLICATED, "Max time after a voice command until player can do another one" );
+ConVar tf_max_voice_speak_delay( "tf_max_voice_speak_delay", "1.5", FCVAR_REPLICATED , "Max time after a voice command until player can do another one" );
 
+extern ConVar dm_forceclass;
+extern ConVar dm_forceteam;
 extern ConVar spec_freeze_time;
 extern ConVar spec_freeze_traveltime;
 extern ConVar sv_maxunlag;
@@ -1003,7 +1005,7 @@ void CTFPlayer::GiveDefaultItems()
 	// Give weapons.
 	ManageRegularWeapons( pData );
 
-	// Give a builder weapon for each object the playerclass is allowed to build
+	// Give a builder weapon for each object the player class is allowed to build
 	ManageBuilderWeapons( pData );
 }
 
@@ -1313,12 +1315,15 @@ int CTFPlayer::GetAutoTeam( void )
 //-----------------------------------------------------------------------------
 void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 {
-	if (TFGameRules()->IsDMGamemode() && stricmp(pTeamName, "spectate") != 0)
+	if ( TFGameRules()->IsDMGamemode() && stricmp(pTeamName, "spectate") != 0)
 	{
-		ChangeTeam(TF_TEAM_MERCENARY);
-		SetDesiredPlayerClassIndex(TF_CLASS_MERCENARY);
-		return;
-	}
+		
+		if( dm_forceteam.GetBool() == 1) ChangeTeam(TF_TEAM_MERCENARY);
+		if( dm_forceclass.GetBool() == 1) SetDesiredPlayerClassIndex(TF_CLASS_MERCENARY);
+		
+		if( dm_forceteam.GetBool() == 1 ) return;
+	}	
+
 	int iTeam = TF_TEAM_RED;
 	if ( stricmp( pTeamName, "auto" ) == 0 )
 	{
@@ -1379,15 +1384,17 @@ void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 		}
 
 		ChangeTeam( iTeam );
-
-		if ( iTeam == TF_TEAM_RED ) {
-			ShowViewPortPanel( PANEL_CLASS_RED );
-		}
-		else if ( iTeam == TF_TEAM_BLUE ) {
-			ShowViewPortPanel( PANEL_CLASS_BLUE );
-		}
-		else if ( iTeam == TF_TEAM_MERCENARY ) {
-			ShowViewPortPanel( PANEL_CLASS_MERCENARY );
+	if ( dm_forceclass.GetBool() == 0 && TFGameRules()->IsDMGamemode() )
+		{
+			if ( iTeam == TF_TEAM_RED ) {
+				ShowViewPortPanel( PANEL_CLASS_RED );
+			}
+			else if ( iTeam == TF_TEAM_BLUE ) {
+				ShowViewPortPanel( PANEL_CLASS_BLUE );
+			}
+			else if ( iTeam == TF_TEAM_MERCENARY ) {
+				ShowViewPortPanel( PANEL_CLASS_MERCENARY );
+			}
 		}
 	}
 }
@@ -1555,7 +1562,7 @@ void CTFPlayer::HandleCommand_JoinClass( const char *pClassName )
 	if ( GetTeamNumber() <= LAST_SHARED_TEAM )
 		return;
 
-	if (TFGameRules()->IsDMGamemode())
+	if (TFGameRules()->IsDMGamemode() && dm_forceclass.GetBool()== 1 )
 		return;
 
 	// In case we don't get the class menu message before the spawn timer
@@ -2814,7 +2821,7 @@ bool CTFPlayer::ShouldCollide( int collisionGroup, int contentsMask ) const
 	if ( ( ( collisionGroup == COLLISION_GROUP_PLAYER_MOVEMENT ) && tf_avoidteammates.GetBool() ) ||
 		collisionGroup == TFCOLLISION_GROUP_ROCKETS )
 	{
-		if (TFGameRules() && TFGameRules()->IsDMGamemode())
+		if (TFGameRules() && TFGameRules()->IsDMGamemode() && dm_forceteam.GetBool() == 1)
 		{
 			return BaseClass::ShouldCollide(collisionGroup, contentsMask);
 		}

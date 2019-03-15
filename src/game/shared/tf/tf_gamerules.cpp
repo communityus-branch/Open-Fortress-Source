@@ -78,6 +78,8 @@ static int g_TauntCamAchievements[] =
 
 extern ConVar mp_capstyle;
 extern ConVar sv_turbophysics;
+extern ConVar tf_bunnyhop;
+extern ConVar tf_crouchjump;
 
 ConVar tf_caplinear( "tf_caplinear", "1", FCVAR_REPLICATED | FCVAR_DEVELOPMENTONLY, "If set to 1, teams must capture control points linearly." );
 ConVar tf_stalematechangeclasstime( "tf_stalematechangeclasstime", "20", FCVAR_REPLICATED | FCVAR_DEVELOPMENTONLY, "Amount of time that players are allowed to change class in stalemates." );
@@ -572,6 +574,10 @@ static const char *s_PreserveEnts[] =
 //-----------------------------------------------------------------------------
 void CTFGameRules::Activate()
 {
+
+	tf_bunnyhop.SetValue(0);
+	tf_crouchjump.SetValue(0);
+
 	m_iBirthdayMode = BIRTHDAY_RECALCULATE;
 
 	m_nGameType.Set(TF_GAMETYPE_UNDEFINED);
@@ -591,6 +597,8 @@ void CTFGameRules::Activate()
 	{
 		m_nGameType.Set(TF_GAMETYPE_DM);
 	    of_gamemode_dm.SetValue(1);
+		tf_bunnyhop.SetValue(1);
+		tf_crouchjump.SetValue(1);
 		ConColorMsg(Color(77, 116, 85, 255), "[TFGameRules] Executing server DM gamemode config file\n", NULL);
 		engine->ServerCommand("exec config_dm.cfg \n");
 		engine->ServerExecute();
@@ -1270,6 +1278,10 @@ void CTFGameRules::RadiusDamage( const CTakeDamageInfo &info, const Vector &vecS
 					if ( CheckCapsPerRound() )
 						return;
 				}
+			}
+			if ( TFGameRules()->IsDMGamemode() && CountActivePlayers() > 0)
+			{
+				
 			}
 		}
 
