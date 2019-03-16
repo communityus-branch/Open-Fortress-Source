@@ -35,9 +35,10 @@ ConVar	tf_avoidteammates( "tf_avoidteammates", "1", FCVAR_REPLICATED | FCVAR_CHE
 ConVar  tf_solidobjects( "tf_solidobjects", "1", FCVAR_REPLICATED | FCVAR_CHEAT  );
 ConVar	tf_clamp_back_speed( "tf_clamp_back_speed", "0.9", FCVAR_REPLICATED  );
 ConVar  tf_clamp_back_speed_min( "tf_clamp_back_speed_min", "100", FCVAR_REPLICATED  );
-ConVar 	tf_bunnyhop( "tf_bunnyhop", "0", FCVAR_NOTIFY | FCVAR_REPLICATED , "Allows enables/disables bunnyhoping." );
-ConVar 	tf_crouchjump( "tf_crouchjump", "0", FCVAR_NOTIFY | FCVAR_REPLICATED , "Allows enables/disables crouch jumping." );
-ConVar 	tf_bunnyhop_max_speed_factor( "tf_bunnyhop_max_speed_factor", "1.2", FCVAR_NOTIFY | FCVAR_REPLICATED , "Max Speed achievable with bunnyhoping." );
+
+ConVar 	of_bunnyhop( "of_bunnyhop", "0", FCVAR_NOTIFY | FCVAR_REPLICATED , "Allows enables/disables bunnyhoping." );
+ConVar 	of_crouchjump( "of_crouchjump", "0", FCVAR_NOTIFY | FCVAR_REPLICATED , "Allows enables/disables crouch jumping." );
+ConVar 	of_bunnyhop_max_speed_factor( "of_bunnyhop_max_speed_factor", "1.2", FCVAR_NOTIFY | FCVAR_REPLICATED , "Max Speed achievable with bunnyhoping." );
 
 #define TF_MAX_SPEED   400
 
@@ -326,7 +327,7 @@ void CTFGameMovement::AirDash( void )
 void CTFGameMovement::PreventBunnyJumping()
 {
 	// Speed at which bunny jumping is limited
-	float maxscaledspeed = tf_bunnyhop_max_speed_factor.GetFloat() * player->m_flMaxspeed;
+	float maxscaledspeed = of_bunnyhop_max_speed_factor.GetFloat() * player->m_flMaxspeed;
 	if ( maxscaledspeed <= 0.0f )
 		return;
 
@@ -365,14 +366,14 @@ bool CTFGameMovement::CheckJumpButton()
 	if ( player->GetFlags() & FL_DUCKING )
 	{
 		// Let a scout do it.
-		bool bAllow = ( bScout && !bOnGround ) || ( tf_crouchjump.GetBool() && bOnGround );
+		bool bAllow = ( bScout && !bOnGround ) || ( of_crouchjump.GetBool() && bOnGround );
 		
 		if ( !bAllow )
 			return false;
 	}
 
 	// Cannot jump while in the unduck transition.
-	if ( ( player->m_Local.m_bDucking && (  player->GetFlags() & FL_DUCKING ) ) || ( player->m_Local.m_flDuckJumpTime > 0.0f ) && !tf_crouchjump.GetBool() )
+	if ( ( player->m_Local.m_bDucking && (  player->GetFlags() & FL_DUCKING ) ) || ( player->m_Local.m_flDuckJumpTime > 0.0f ) && !of_crouchjump.GetBool() )
 	{
 		return false;
 	}
@@ -382,7 +383,7 @@ bool CTFGameMovement::CheckJumpButton()
 	{
 		if ( !bOnGround )
 			return false;
-		if ( tf_bunnyhop.GetBool() == 0 )
+		if ( of_bunnyhop.GetBool() == 0 )
 			return false;
 	}
 	// In air, so ignore jumps (unless you are a scout).

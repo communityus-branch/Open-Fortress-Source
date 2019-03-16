@@ -61,8 +61,8 @@ ConVar tf_spy_cloak_no_attack_time( "tf_spy_cloak_no_attack_time", "2.0", FCVAR_
 
 ConVar tf_damage_disablespread( "tf_damage_disablespread", "1", FCVAR_NOTIFY | FCVAR_REPLICATED, "Toggles the random damage spread applied to all player damage." );
 
-ConVar dm_forceclass( "dm_forceclass", "1", FCVAR_REPLICATED , "Force players to be Mercenary in DM." );
-ConVar dm_forceteam( "dm_forceteam", "1", FCVAR_REPLICATED , "Force players on the Mercenary team in DM." );
+ConVar ofd_forceclass( "ofd_forceclass", "1", FCVAR_REPLICATED , "Force players to be Mercenary in DM." );
+ConVar ofd_forceteam( "ofd_forceteam", "1", FCVAR_REPLICATED , "Force players on the Mercenary team in DM." );
 
 #define TF_SPY_STEALTH_BLINKTIME   0.3f
 #define TF_SPY_STEALTH_BLINKSCALE  0.85f

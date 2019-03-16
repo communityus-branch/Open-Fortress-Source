@@ -72,6 +72,7 @@ public:
 protected:
 
 	void			Swing( CTFPlayer *pPlayer );
+	void			SwingNoDelay( CTFPlayer *pPlayer );
 
 protected:
 

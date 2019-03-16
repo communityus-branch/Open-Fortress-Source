@@ -85,8 +85,8 @@ ConVar tf_damage_range( "tf_damage_range", "0.5", FCVAR_DEVELOPMENTONLY );
 
 ConVar tf_max_voice_speak_delay( "tf_max_voice_speak_delay", "1.5", FCVAR_REPLICATED , "Max time after a voice command until player can do another one" );
 
-extern ConVar dm_forceclass;
-extern ConVar dm_forceteam;
+extern ConVar ofd_forceclass;
+extern ConVar ofd_forceteam;
 extern ConVar spec_freeze_time;
 extern ConVar spec_freeze_traveltime;
 extern ConVar sv_maxunlag;
@@ -1122,12 +1122,12 @@ void CTFPlayer::ManageRegularWeapons( TFPlayerClassData_t *pData )
 			}
 		}
 	}
-
+// add just merc now
 	if ( m_bRegenerating == false )
 	{
 		SetActiveWeapon( NULL );
-		Weapon_Switch( Weapon_GetSlot( 0 ) );
-		Weapon_SetLast( Weapon_GetSlot( 1 ) );
+		Weapon_Switch( Weapon_GetSlot( 1 ) );
+		Weapon_SetLast( Weapon_GetSlot( 0 ) );
 	}
 }
 
@@ -1318,10 +1318,10 @@ void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 	if ( TFGameRules()->IsDMGamemode() && stricmp(pTeamName, "spectate") != 0)
 	{
 		
-		if( dm_forceteam.GetBool() == 1) ChangeTeam(TF_TEAM_MERCENARY);
-		if( dm_forceclass.GetBool() == 1) SetDesiredPlayerClassIndex(TF_CLASS_MERCENARY);
+		if( ofd_forceteam.GetBool() == 1) ChangeTeam(TF_TEAM_MERCENARY);
+		if( ofd_forceclass.GetBool() == 1) SetDesiredPlayerClassIndex(TF_CLASS_MERCENARY);
 		
-		if( dm_forceteam.GetBool() == 1 ) return;
+		if( ofd_forceteam.GetBool() == 1 ) return;
 	}	
 
 	int iTeam = TF_TEAM_RED;
@@ -1384,7 +1384,7 @@ void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 		}
 
 		ChangeTeam( iTeam );
-	if ( dm_forceclass.GetBool() == 0 && TFGameRules()->IsDMGamemode() )
+	if ( ofd_forceclass.GetBool() == 0 && TFGameRules()->IsDMGamemode() )
 		{
 			if ( iTeam == TF_TEAM_RED ) {
 				ShowViewPortPanel( PANEL_CLASS_RED );
@@ -1562,7 +1562,7 @@ void CTFPlayer::HandleCommand_JoinClass( const char *pClassName )
 	if ( GetTeamNumber() <= LAST_SHARED_TEAM )
 		return;
 
-	if (TFGameRules()->IsDMGamemode() && dm_forceclass.GetBool()== 1 )
+	if (TFGameRules()->IsDMGamemode() && ofd_forceclass.GetBool()== 1 )
 		return;
 
 	// In case we don't get the class menu message before the spawn timer
@@ -2821,7 +2821,7 @@ bool CTFPlayer::ShouldCollide( int collisionGroup, int contentsMask ) const
 	if ( ( ( collisionGroup == COLLISION_GROUP_PLAYER_MOVEMENT ) && tf_avoidteammates.GetBool() ) ||
 		collisionGroup == TFCOLLISION_GROUP_ROCKETS )
 	{
-		if (TFGameRules() && TFGameRules()->IsDMGamemode() && dm_forceteam.GetBool() == 1)
+		if (TFGameRules() && TFGameRules()->IsDMGamemode() && ofd_forceteam.GetBool() == 1)
 		{
 			return BaseClass::ShouldCollide(collisionGroup, contentsMask);
 		}

@@ -50,7 +50,7 @@
 
 //#include "tf_overview.h"
 
-extern ConVar	dm_forceclass;
+extern ConVar	ofd_forceclass;
 
 /*
 CON_COMMAND( spec_help, "Show spectator help screen")
@@ -123,7 +123,7 @@ CON_COMMAND( changeclass, "Choose a new class" )
 	if ( !gViewPortInterface )
 		return;
 
-	if (TFGameRules() && TFGameRules()->IsDMGamemode() && dm_forceclass.GetBool() == 1)
+	if (TFGameRules() && TFGameRules()->IsDMGamemode() && ofd_forceclass.GetBool() == 1)
 		return;
 
 	C_TFPlayer *pPlayer = C_TFPlayer::GetLocalTFPlayer();

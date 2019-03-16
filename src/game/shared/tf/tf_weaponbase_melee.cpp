@@ -188,7 +188,33 @@ void CTFWeaponBaseMelee::Swing( CTFPlayer *pPlayer )
 		WeaponSound( MELEE_MISS );
 	}
 
-	m_flSmackTime = gpGlobals->curtime /* + m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_flSmackDelay */ ;
+	m_flSmackTime = gpGlobals->curtime  + m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_flSmackDelay  ;
+}
+
+void CTFWeaponBaseMelee::SwingNoDelay( CTFPlayer *pPlayer )
+{
+	CalcIsAttackCritical();
+
+	// Play the melee swing and miss (whoosh) always.
+	SendPlayerAnimEvent( pPlayer );
+
+	DoViewModelAnimation();
+
+	// Set next attack times.
+	m_flNextPrimaryAttack = gpGlobals->curtime + m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_flTimeFireDelay;
+
+	SetWeaponIdleTime( m_flNextPrimaryAttack + m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_flTimeIdleEmpty );
+	
+	if ( IsCurrentAttackACrit() )
+	{
+		WeaponSound( BURST );
+	}
+	else
+	{
+		WeaponSound( MELEE_MISS );
+	}
+
+	m_flSmackTime = gpGlobals->curtime;
 }
 
 //-----------------------------------------------------------------------------
