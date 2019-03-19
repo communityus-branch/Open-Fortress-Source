@@ -42,4 +42,3 @@ PRECACHE_WEAPON_REGISTER( tf_weapon_bat );
 CTFBat::CTFBat()
 {
 }
-

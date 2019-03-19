@@ -725,7 +725,6 @@
     <ClInclude Include="te_particlesystem.h" />
     <ClInclude Include="..\..\game\shared\tf\baseobject_shared.h" />
     <ClInclude Include="tf\entity_ammopack.h" />
-	<ClInclude Include="tf\entity_weapon_spawner.h" />
     <ClInclude Include="tf\entity_armor.h" />
     <ClInclude Include="..\..\game\shared\tf\entity_capture_flag.h" />
     <ClInclude Include="tf\entity_forcerespawn.h" />
@@ -776,6 +775,7 @@
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_bottle.h" />
     <ClInclude Include="tf\tf_weapon_builder.h" />
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_club.h" />
+    <ClInclude Include="..\..\game\shared\tf\tf_weapon_crowbar.h" />
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_fireaxe.h" />
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_fists.h" />
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_flamethrower.h" />
@@ -789,6 +789,7 @@
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_pda.h" />
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_pipebomblauncher.h" />
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_pistol.h" />
+    <ClInclude Include="..\..\game\shared\tf\tf_weapon_railgun.h" />
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_revolver.h" />
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_rocketlauncher.h" />
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_shotgun.h" />
@@ -1320,7 +1321,6 @@
     <ClCompile Include="..\..\game\shared\tf\achievements_tf.cpp" />
     <ClCompile Include="..\..\game\shared\tf\baseobject_shared.cpp" />
     <ClCompile Include="tf\entity_ammopack.cpp" />
-	<ClCompile Include="tf\entity_weapon_spawner.cpp" />
     <ClCompile Include="tf\entity_armor.cpp" />
     <ClCompile Include="..\..\game\shared\tf\entity_capture_flag.cpp" />
     <ClCompile Include="tf\entity_forcerespawn.cpp" />
@@ -1383,6 +1383,7 @@
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_bottle.cpp" />
     <ClCompile Include="tf\tf_weapon_builder.cpp" />
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_club.cpp" />
+    <ClCompile Include="..\..\game\shared\tf\tf_weapon_crowbar.cpp" />
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_fireaxe.cpp" />
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_fists.cpp" />
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_flamethrower.cpp" />
@@ -1396,6 +1397,7 @@
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_pda.cpp" />
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_pipebomblauncher.cpp" />
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_pistol.cpp" />
+    <ClCompile Include="..\..\game\shared\tf\tf_weapon_railgun.cpp" />
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_revolver.cpp" />
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_rocketlauncher.cpp" />
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_shotgun.cpp" />

@@ -2072,6 +2072,9 @@
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_club.h">
       <Filter>Source Files\TF\Weapon</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\game\shared\tf\tf_weapon_crowbar.h">
+      <Filter>Source Files\TF\Weapon</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_fireaxe.h">
       <Filter>Source Files\TF\Weapon</Filter>
     </ClInclude>
@@ -2109,6 +2112,9 @@
       <Filter>Source Files\TF\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_pistol.h">
+      <Filter>Source Files\TF\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\game\shared\tf\tf_weapon_railgun.h">
       <Filter>Source Files\TF\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_revolver.h">
@@ -3775,6 +3781,9 @@
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_club.cpp">
       <Filter>Source Files\TF\Weapon</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\game\shared\tf\tf_weapon_crowbar.cpp">
+      <Filter>Source Files\TF\Weapon</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_fireaxe.cpp">
       <Filter>Source Files\TF\Weapon</Filter>
     </ClCompile>
@@ -3812,6 +3821,9 @@
       <Filter>Source Files\TF\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_pistol.cpp">
+      <Filter>Source Files\TF\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\game\shared\tf\tf_weapon_railgun.cpp">
       <Filter>Source Files\TF\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_revolver.cpp">

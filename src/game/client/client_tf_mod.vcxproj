@@ -891,6 +891,7 @@
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_bonesaw.h" />
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_bottle.h" />
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_club.h" />
+    <ClInclude Include="..\..\game\shared\tf\tf_weapon_crowbar.h" />
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_fireaxe.h" />
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_fists.h" />
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_flamethrower.h" />
@@ -904,6 +905,7 @@
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_pda.h" />
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_pipebomblauncher.h" />
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_pistol.h" />
+    <ClInclude Include="..\..\game\shared\tf\tf_weapon_railgun.h" />
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_revolver.h" />
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_rocketlauncher.h" />
     <ClInclude Include="..\..\game\shared\tf\tf_weapon_shotgun.h" />
@@ -1562,6 +1564,7 @@
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_bonesaw.cpp" />
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_bottle.cpp" />
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_club.cpp" />
+    <ClCompile Include="..\..\game\shared\tf\tf_weapon_crowbar.cpp" />
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_fireaxe.cpp" />
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_fists.cpp" />
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_flamethrower.cpp" />
@@ -1575,6 +1578,7 @@
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_pda.cpp" />
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_pipebomblauncher.cpp" />
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_pistol.cpp" />
+    <ClCompile Include="..\..\game\shared\tf\tf_weapon_railgun.cpp" />
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_revolver.cpp" />
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_rocketlauncher.cpp" />
     <ClCompile Include="..\..\game\shared\tf\tf_weapon_shotgun.cpp" />

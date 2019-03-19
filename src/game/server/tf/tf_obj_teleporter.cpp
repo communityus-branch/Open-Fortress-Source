@@ -16,6 +16,7 @@
 #include "particle_parse.h"
 #include "tf_gamestats.h"
 #include "tf_weapon_sniperrifle.h"
+#include "tf_weapon_railgun.h"
 #include "tf_fx.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -650,7 +651,7 @@ void CObjectTeleporter::TeleporterThink( void )
 					{
 						CTFWeaponBase *pWpn = pTeleportingPlayer->GetActiveTFWeapon();
 
-						if ( pWpn && pWpn->GetWeaponID() == TF_WEAPON_SNIPERRIFLE )
+						if ( pWpn && (pWpn->GetWeaponID() == TF_WEAPON_SNIPERRIFLE || pWpn->GetWeaponID() == TF_WEAPON_RAILGUN ) )
 						{
 							CTFSniperRifle *pRifle = static_cast<CTFSniperRifle*>( pWpn );
 							pRifle->ToggleZoom();

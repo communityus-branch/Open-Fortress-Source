@@ -5,7 +5,7 @@
 //=============================================================================//
 #include "cbase.h" 
 #include "tf_fx_shared.h"
-#include "tf_weapon_sniperrifle.h"
+#include "tf_weapon_railgun.h"
 #include "in_buttons.h"
 
 // Client specific.
@@ -25,14 +25,14 @@
 void ToolFramework_RecordMaterialParams( IMaterial *pMaterial );
 #endif
 
-#define TF_WEAPON_SNIPERRIFLE_CHARGE_PER_SEC	50.0
-#define TF_WEAPON_SNIPERRIFLE_UNCHARGE_PER_SEC	75.0
-#define	TF_WEAPON_SNIPERRIFLE_DAMAGE_MIN		50
-#define TF_WEAPON_SNIPERRIFLE_DAMAGE_MAX		150
-#define TF_WEAPON_SNIPERRIFLE_RELOAD_TIME		1.5f
-#define TF_WEAPON_SNIPERRIFLE_ZOOM_TIME			0.3f
+#define TF_WEAPON_RAILGUN_CHARGE_PER_SEC	100.0
+#define TF_WEAPON_RAILGUN_UNCHARGE_PER_SEC	75.0
+#define	TF_WEAPON_RAILGUN_DAMAGE_MIN		90
+#define TF_WEAPON_RAILGUN_DAMAGE_MAX		150
+#define TF_WEAPON_RAILGUN_RELOAD_TIME		1.5f
+#define TF_WEAPON_RAILGUN_ZOOM_TIME			0.3f
 
-#define TF_WEAPON_SNIPERRIFLE_NO_CRIT_AFTER_ZOOM_TIME	0.2f
+#define TF_WEAPON_RAILGUN_NO_CRIT_AFTER_ZOOM_TIME	0.0f
 
 #define SNIPER_DOT_SPRITE_RED		"effects/sniperdot_red.vmt"
 #define SNIPER_DOT_SPRITE_BLUE		"effects/sniperdot_blue.vmt"
@@ -42,9 +42,9 @@ void ToolFramework_RecordMaterialParams( IMaterial *pMaterial );
 // Weapon Sniper Rifles tables.
 //
 
-IMPLEMENT_NETWORKCLASS_ALIASED( TFSniperRifle, DT_TFSniperRifle )
+IMPLEMENT_NETWORKCLASS_ALIASED( TFRailgun, DT_TFRailgun )
 
-BEGIN_NETWORK_TABLE_NOBASE( CTFSniperRifle, DT_SniperRifleLocalData )
+BEGIN_NETWORK_TABLE_NOBASE( CTFRailgun, DT_RailgunLocalData )
 #if !defined( CLIENT_DLL )
 	SendPropFloat( SENDINFO(m_flChargedDamage), 0, SPROP_NOSCALE | SPROP_CHANGES_OFTEN ),
 #else
@@ -52,15 +52,15 @@ BEGIN_NETWORK_TABLE_NOBASE( CTFSniperRifle, DT_SniperRifleLocalData )
 #endif
 END_NETWORK_TABLE()
 
-BEGIN_NETWORK_TABLE( CTFSniperRifle, DT_TFSniperRifle )
+BEGIN_NETWORK_TABLE( CTFRailgun, DT_TFRailgun )
 #if !defined( CLIENT_DLL )
-	SendPropDataTable( "SniperRifleLocalData", 0, &REFERENCE_SEND_TABLE( DT_SniperRifleLocalData ), SendProxy_SendLocalWeaponDataTable ),
+	SendPropDataTable( "RailgunLocalData", 0, &REFERENCE_SEND_TABLE( DT_RailgunLocalData ), SendProxy_SendLocalWeaponDataTable ),
 #else
-	RecvPropDataTable( "SniperRifleLocalData", 0, 0, &REFERENCE_RECV_TABLE( DT_SniperRifleLocalData ) ),
+	RecvPropDataTable( "RailgunLocalData", 0, 0, &REFERENCE_RECV_TABLE( DT_RailgunLocalData ) ),
 #endif
 END_NETWORK_TABLE()
 
-BEGIN_PREDICTION_DATA( CTFSniperRifle )
+BEGIN_PREDICTION_DATA( CTFRailgun )
 #ifdef CLIENT_DLL
 	DEFINE_PRED_FIELD( m_flUnzoomTime, FIELD_FLOAT, 0 ),
 	DEFINE_PRED_FIELD( m_flRezoomTime, FIELD_FLOAT, 0 ),
@@ -69,8 +69,8 @@ BEGIN_PREDICTION_DATA( CTFSniperRifle )
 #endif
 END_PREDICTION_DATA()
 
-LINK_ENTITY_TO_CLASS( tf_weapon_sniperrifle, CTFSniperRifle );
-PRECACHE_WEAPON_REGISTER( tf_weapon_sniperrifle );
+LINK_ENTITY_TO_CLASS( tf_weapon_Railgun, CTFRailgun );
+PRECACHE_WEAPON_REGISTER( tf_weapon_Railgun );
 
 //=============================================================================
 //
@@ -80,29 +80,29 @@ PRECACHE_WEAPON_REGISTER( tf_weapon_sniperrifle );
 //-----------------------------------------------------------------------------
 // Purpose: Constructor.
 //-----------------------------------------------------------------------------
-CTFSniperRifle::CTFSniperRifle()
+CTFRailgun::CTFRailgun()
 {
 // Server specific.
 #ifdef GAME_DLL
-	m_hSniperDot = NULL;
+	m_hRailgunDot = NULL;
 #endif
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Destructor.
 //-----------------------------------------------------------------------------
-CTFSniperRifle::~CTFSniperRifle()
+CTFRailgun::~CTFRailgun()
 {
 // Server specific.
 #ifdef GAME_DLL
-	DestroySniperDot();
+	DestroyRailgunDot();
 #endif
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CTFSniperRifle::Spawn()
+void CTFRailgun::Spawn()
 {
 	m_iAltFireHint = HINT_ALTFIRE_SNIPERRIFLE;
 	BaseClass::Spawn();
@@ -113,7 +113,7 @@ void CTFSniperRifle::Spawn()
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFSniperRifle::Precache()
+void CTFRailgun::Precache()
 {
 	BaseClass::Precache();
 	PrecacheModel( SNIPER_DOT_SPRITE_RED );
@@ -123,7 +123,7 @@ void CTFSniperRifle::Precache()
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CTFSniperRifle::ResetTimers( void )
+void CTFRailgun::ResetTimers( void )
 {
 	m_flUnzoomTime = -1;
 	m_flRezoomTime = -1;
@@ -133,7 +133,7 @@ void CTFSniperRifle::ResetTimers( void )
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-bool CTFSniperRifle::Reload( void )
+bool CTFRailgun::Reload( void )
 {
 	// We currently don't reload.
 	return true;
@@ -142,7 +142,7 @@ bool CTFSniperRifle::Reload( void )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-bool CTFSniperRifle::CanHolster( void ) const
+bool CTFRailgun::CanHolster( void ) const
 {
  	CTFPlayer *pPlayer = GetTFPlayerOwner();
  	if ( pPlayer )
@@ -161,12 +161,12 @@ bool CTFSniperRifle::CanHolster( void ) const
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-bool CTFSniperRifle::Holster( CBaseCombatWeapon *pSwitchingTo )
+bool CTFRailgun::Holster( CBaseCombatWeapon *pSwitchingTo )
 {
 // Server specific.
 #ifdef GAME_DLL
 	// Destroy the sniper dot.
-	DestroySniperDot();
+	DestroyRailgunDot();
 #endif
 
 	CTFPlayer *pPlayer = ToTFPlayer( GetPlayerOwner() );
@@ -181,7 +181,7 @@ bool CTFSniperRifle::Holster( CBaseCombatWeapon *pSwitchingTo )
 	return BaseClass::Holster( pSwitchingTo );
 }
 
-void CTFSniperRifle::WeaponReset( void )
+void CTFRailgun::WeaponReset( void )
 {
 	BaseClass::WeaponReset();
 
@@ -191,7 +191,7 @@ void CTFSniperRifle::WeaponReset( void )
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFSniperRifle::HandleZooms( void )
+void CTFRailgun::HandleZooms( void )
 {
 	// Get the owning player.
 	CTFPlayer *pPlayer = ToTFPlayer( GetOwner() );
@@ -240,7 +240,7 @@ void CTFSniperRifle::HandleZooms( void )
 		if ( m_flRezoomTime > 0 || m_flUnzoomTime > 0 )
 		{
 			// Prevent them from rezooming in less time than they would have
-			m_flNextSecondaryAttack = m_flRezoomTime + TF_WEAPON_SNIPERRIFLE_ZOOM_TIME;
+			m_flNextSecondaryAttack = m_flRezoomTime + TF_WEAPON_RAILGUN_ZOOM_TIME;
 			m_flRezoomTime = -1;
 		}
 		else
@@ -253,7 +253,7 @@ void CTFSniperRifle::HandleZooms( void )
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFSniperRifle::ItemPostFrame( void )
+void CTFRailgun::ItemPostFrame( void )
 {
 	// If we're lowered, we're not allowed to fire
 	if ( m_bLowered )
@@ -277,9 +277,9 @@ void CTFSniperRifle::ItemPostFrame( void )
 
 #ifdef GAME_DLL
 	// Update the sniper dot position if we have one
-	if ( m_hSniperDot )
+	if ( m_hRailgunDot )
 	{
-		UpdateSniperDot();
+		UpdateRailgunDot();
 	}
 #endif
 
@@ -300,11 +300,11 @@ void CTFSniperRifle::ItemPostFrame( void )
 		// Don't start charging in the time just after a shot before we unzoom to play rack anim.
 		if ( pPlayer->m_Shared.InCond( TF_COND_AIMING ) && !m_bRezoomAfterShot )
 		{
-			m_flChargedDamage = min( m_flChargedDamage + gpGlobals->frametime * TF_WEAPON_SNIPERRIFLE_CHARGE_PER_SEC, TF_WEAPON_SNIPERRIFLE_DAMAGE_MAX );
+			m_flChargedDamage = min( m_flChargedDamage + gpGlobals->frametime * TF_WEAPON_RAILGUN_CHARGE_PER_SEC, TF_WEAPON_RAILGUN_DAMAGE_MAX );
 		}
 		else
 		{
-			m_flChargedDamage = max( 0, m_flChargedDamage - gpGlobals->frametime * TF_WEAPON_SNIPERRIFLE_UNCHARGE_PER_SEC );
+			m_flChargedDamage = max( 0, m_flChargedDamage - gpGlobals->frametime * TF_WEAPON_RAILGUN_UNCHARGE_PER_SEC );
 		}
 	}
 
@@ -328,7 +328,7 @@ void CTFSniperRifle::ItemPostFrame( void )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-bool CTFSniperRifle::Lower( void )
+bool CTFRailgun::Lower( void )
 {
 	if ( BaseClass::Lower() )
 	{
@@ -346,7 +346,7 @@ bool CTFSniperRifle::Lower( void )
 //-----------------------------------------------------------------------------
 // Purpose: Secondary attack.
 //-----------------------------------------------------------------------------
-void CTFSniperRifle::Zoom( void )
+void CTFRailgun::Zoom( void )
 {
 	// Don't allow the player to zoom in while jumping
 //	CTFPlayer *pPlayer = GetTFPlayerOwner();
@@ -360,13 +360,13 @@ void CTFSniperRifle::Zoom( void )
 
 	// at least 0.1 seconds from now, but don't stomp a previous value
 	m_flNextPrimaryAttack = max( m_flNextPrimaryAttack, gpGlobals->curtime + 0.1 );
-	m_flNextSecondaryAttack = gpGlobals->curtime + TF_WEAPON_SNIPERRIFLE_ZOOM_TIME;
+	m_flNextSecondaryAttack = gpGlobals->curtime + TF_WEAPON_RAILGUN_ZOOM_TIME;
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CTFSniperRifle::ZoomOutIn( void )
+void CTFRailgun::ZoomOutIn( void )
 {
 	ZoomOut();
 
@@ -384,7 +384,7 @@ void CTFSniperRifle::ZoomOutIn( void )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CTFSniperRifle::ZoomIn( void )
+void CTFRailgun::ZoomIn( void )
 {
 	// Start aiming.
 	CTFPlayer *pPlayer = GetTFPlayerOwner();
@@ -402,12 +402,12 @@ void CTFSniperRifle::ZoomIn( void )
 
 #ifdef GAME_DLL
 	// Create the sniper dot.
-	CreateSniperDot();
+	CreateRailgunDot();
 	pPlayer->ClearExpression();
 #endif
 }
 
-bool CTFSniperRifle::IsZoomed( void )
+bool CTFRailgun::IsZoomed( void )
 {
 	CTFPlayer *pPlayer = GetTFPlayerOwner();
 
@@ -422,7 +422,7 @@ bool CTFSniperRifle::IsZoomed( void )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CTFSniperRifle::ZoomOut( void )
+void CTFRailgun::ZoomOut( void )
 {
 	BaseClass::ZoomOut();
 
@@ -437,7 +437,7 @@ void CTFSniperRifle::ZoomOut( void )
 
 #ifdef GAME_DLL
 	// Destroy the sniper dot.
-	DestroySniperDot();
+	DestroyRailgunDot();
 	pPlayer->ClearExpression();
 #endif
 
@@ -451,7 +451,7 @@ void CTFSniperRifle::ZoomOut( void )
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFSniperRifle::Fire( CTFPlayer *pPlayer )
+void CTFRailgun::Fire( CTFPlayer *pPlayer )
 {
 	// Check the ammo.  We don't use clip ammo, check the primary ammo type.
 	if ( pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) <= 0 )
@@ -488,9 +488,9 @@ void CTFSniperRifle::Fire( CTFPlayer *pPlayer )
 	m_flChargedDamage = 0.0f;
 
 #ifdef GAME_DLL
-	if ( m_hSniperDot )
+	if ( m_hRailgunDot )
 	{
-		m_hSniperDot->ResetChargeTime();
+		m_hRailgunDot->ResetChargeTime();
 	}
 #endif
 }
@@ -498,7 +498,7 @@ void CTFSniperRifle::Fire( CTFPlayer *pPlayer )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CTFSniperRifle::SetRezoom( bool bRezoom, float flDelay )
+void CTFRailgun::SetRezoom( bool bRezoom, float flDelay )
 {
 	m_flUnzoomTime = gpGlobals->curtime + flDelay;
 
@@ -509,35 +509,35 @@ void CTFSniperRifle::SetRezoom( bool bRezoom, float flDelay )
 // Purpose: 
 // Output : float
 //-----------------------------------------------------------------------------
-float CTFSniperRifle::GetProjectileDamage( void )
+float CTFRailgun::GetProjectileDamage( void )
 {
 	// Uncharged? Min damage.
-	return max( m_flChargedDamage, TF_WEAPON_SNIPERRIFLE_DAMAGE_MIN );
+	return max( m_flChargedDamage, TF_WEAPON_RAILGUN_DAMAGE_MIN );
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-int	CTFSniperRifle::GetDamageType( void ) const
+int	CTFRailgun::GetDamageType( void ) const
 {
 	// Only do hit location damage if we're zoomed
-	CTFPlayer *pPlayer = ToTFPlayer( GetPlayerOwner() );
-	if ( pPlayer && pPlayer->m_Shared.InCond( TF_COND_ZOOMED ) )
+//	CTFPlayer *pPlayer = ToTFPlayer( GetPlayerOwner() );
+//	if ( pPlayer && pPlayer->m_Shared.InCond( TF_COND_ZOOMED ) )
 		return BaseClass::GetDamageType();
 
-	return ( BaseClass::GetDamageType() & ~DMG_USE_HITLOCATIONS );
+//	return ( BaseClass::GetDamageType() & ~DMG_USE_HITLOCATIONS );
 }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFSniperRifle::CreateSniperDot( void )
+void CTFRailgun::CreateRailgunDot( void )
 {
 // Server specific.
 #ifdef GAME_DLL
 
 	// Check to see if we have already been created?
-	if ( m_hSniperDot )
+	if ( m_hRailgunDot )
 		return;
 
 	// Get the owning player (make sure we have one).
@@ -546,8 +546,8 @@ void CTFSniperRifle::CreateSniperDot( void )
 		return;
 
 	// Create the sniper dot, but do not make it visible yet.
-	m_hSniperDot = CSniperDot::Create( GetAbsOrigin(), pPlayer, true );
-	m_hSniperDot->ChangeTeam( pPlayer->GetTeamNumber() );
+	m_hRailgunDot = CRailgunDot::Create( GetAbsOrigin(), pPlayer, true );
+//	m_hRailgunDot->ChangeTeam( pPlayer->GetTeamNumber() );
 
 #endif
 }
@@ -555,16 +555,16 @@ void CTFSniperRifle::CreateSniperDot( void )
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFSniperRifle::DestroySniperDot( void )
+void CTFRailgun::DestroyRailgunDot( void )
 {
 // Server specific.
 #ifdef GAME_DLL
 
 	// Destroy the sniper dot.
-	if ( m_hSniperDot )
+	if ( m_hRailgunDot )
 	{
-		UTIL_Remove( m_hSniperDot );
-		m_hSniperDot = NULL;
+		UTIL_Remove( m_hRailgunDot );
+		m_hRailgunDot = NULL;
 	}
 
 #endif
@@ -573,7 +573,7 @@ void CTFSniperRifle::DestroySniperDot( void )
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CTFSniperRifle::UpdateSniperDot( void )
+void CTFRailgun::UpdateRailgunDot( void )
 {
 // Server specific.
 #ifdef GAME_DLL
@@ -592,7 +592,7 @@ void CTFSniperRifle::UpdateSniperDot( void )
 	UTIL_TraceLine( vecMuzzlePos, vecEndPos, ( MASK_SHOT & ~CONTENTS_WINDOW ), GetOwner(), COLLISION_GROUP_NONE, &trace );
 
 	// Update the sniper dot.
-	if ( m_hSniperDot )
+	if ( m_hRailgunDot )
 	{
 		CBaseEntity *pEntity = NULL;
 		if ( trace.DidHitNonWorldEntity() )
@@ -604,7 +604,7 @@ void CTFSniperRifle::UpdateSniperDot( void )
 			}
 		}
 
-		m_hSniperDot->Update( pEntity, trace.endpos, trace.plane.normal );
+		m_hRailgunDot->Update( pEntity, trace.endpos, trace.plane.normal );
 	}
 
 #endif
@@ -613,13 +613,13 @@ void CTFSniperRifle::UpdateSniperDot( void )
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-bool CTFSniperRifle::CanFireCriticalShot( bool bIsHeadshot )
+bool CTFRailgun::CanFireCriticalShot( bool bIsHeadshot )
 {
 	// can only fire a crit shot if this is a headshot
 	if ( !bIsHeadshot )
 		return false;
 
-	CTFPlayer *pPlayer = GetTFPlayerOwner();
+/*	CTFPlayer *pPlayer = GetTFPlayerOwner();
 	if ( pPlayer )
 	{
 		// no crits if they're not zoomed
@@ -629,12 +629,12 @@ bool CTFSniperRifle::CanFireCriticalShot( bool bIsHeadshot )
 		}
 
 		// no crits for 0.2 seconds after starting to zoom
-		if ( ( gpGlobals->curtime - pPlayer->GetFOVTime() ) < TF_WEAPON_SNIPERRIFLE_NO_CRIT_AFTER_ZOOM_TIME )
+		if ( ( gpGlobals->curtime - pPlayer->GetFOVTime() ) < TF_WEAPON_RAILGUN_NO_CRIT_AFTER_ZOOM_TIME )
 		{
 			return false;
 		}
 	}
-
+*/
 	return true;
 }
 
@@ -646,21 +646,21 @@ bool CTFSniperRifle::CanFireCriticalShot( bool bIsHeadshot )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-float CTFSniperRifle::GetHUDDamagePerc( void )
+float CTFRailgun::GetHUDDamagePerc( void )
 {
-	return (m_flChargedDamage / TF_WEAPON_SNIPERRIFLE_DAMAGE_MAX);
+	return (m_flChargedDamage / TF_WEAPON_RAILGUN_DAMAGE_MAX);
 }
 
 //-----------------------------------------------------------------------------
 // Returns the sniper chargeup from 0 to 1
 //-----------------------------------------------------------------------------
-class CProxySniperRifleCharge : public CResultProxy
+class CProxyRailgunCharge : public CResultProxy
 {
 public:
 	void OnBind( void *pC_BaseEntity );
 };
 
-void CProxySniperRifleCharge::OnBind( void *pC_BaseEntity )
+void CProxyRailgunCharge::OnBind( void *pC_BaseEntity )
 {
 	Assert( m_pResult );
 
@@ -673,7 +673,7 @@ void CProxySniperRifleCharge::OnBind( void *pC_BaseEntity )
 
 	if ( pPlayer )
 	{
-		CTFSniperRifle *pWeapon = assert_cast<CTFSniperRifle*>(pPlayer->GetActiveTFWeapon());
+		CTFRailgun *pWeapon = assert_cast<CTFRailgun*>(pPlayer->GetActiveTFWeapon());
 		if ( pWeapon )
 		{
 			float flChargeValue = ( ( 1.0 - pWeapon->GetHUDDamagePerc() ) * 0.8 ) + 0.6;
@@ -710,7 +710,7 @@ void CProxySniperRifleCharge::OnBind( void *pC_BaseEntity )
 	}
 }
 
-EXPOSE_INTERFACE( CProxySniperRifleCharge, IMaterialProxy, "SniperRifleCharge" IMATERIAL_PROXY_INTERFACE_VERSION );
+EXPOSE_INTERFACE( CProxyRailgunCharge, IMaterialProxy, "RailgunCharge" IMATERIAL_PROXY_INTERFACE_VERSION );
 #endif
 
 //=============================================================================
@@ -718,9 +718,9 @@ EXPOSE_INTERFACE( CProxySniperRifleCharge, IMaterialProxy, "SniperRifleCharge" I
 // Laser Dot functions.
 //
 
-IMPLEMENT_NETWORKCLASS_ALIASED( SniperDot, DT_SniperDot )
+IMPLEMENT_NETWORKCLASS_ALIASED( RailgunDot, DT_RailgunDot )
 
-BEGIN_NETWORK_TABLE( CSniperDot, DT_SniperDot )
+BEGIN_NETWORK_TABLE( CRailgunDot, DT_RailgunDot )
 #ifdef CLIENT_DLL
 	RecvPropFloat( RECVINFO( m_flChargeStartTime ) ),
 #else
@@ -728,9 +728,9 @@ BEGIN_NETWORK_TABLE( CSniperDot, DT_SniperDot )
 #endif
 END_NETWORK_TABLE()
 
-LINK_ENTITY_TO_CLASS( env_sniperdot, CSniperDot );
+LINK_ENTITY_TO_CLASS( env_railgunrot, CRailgunDot );
 
-BEGIN_DATADESC( CSniperDot )
+BEGIN_DATADESC( CRailgunDot )
 DEFINE_FIELD( m_vecSurfaceNormal,	FIELD_VECTOR ),
 DEFINE_FIELD( m_hTargetEnt,			FIELD_EHANDLE ),
 END_DATADESC()
@@ -738,7 +738,7 @@ END_DATADESC()
 //-----------------------------------------------------------------------------
 // Purpose: Constructor.
 //-----------------------------------------------------------------------------
-CSniperDot::CSniperDot( void )
+CRailgunDot::CRailgunDot( void )
 {
 	m_vecSurfaceNormal.Init();
 	m_hTargetEnt = NULL;
@@ -753,16 +753,16 @@ CSniperDot::CSniperDot( void )
 //-----------------------------------------------------------------------------
 // Purpose: Destructor.
 //-----------------------------------------------------------------------------
-CSniperDot::~CSniperDot( void )
+CRailgunDot::~CRailgunDot( void )
 {
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: 
 // Input  : &origin - 
-// Output : CSniperDot
+// Output : CRailgunDot
 //-----------------------------------------------------------------------------
-CSniperDot *CSniperDot::Create( const Vector &origin, CBaseEntity *pOwner, bool bVisibleDot )
+CRailgunDot *CRailgunDot::Create( const Vector &origin, CBaseEntity *pOwner, bool bVisibleDot )
 {
 // Client specific.
 #ifdef CLIENT_DLL
@@ -773,7 +773,7 @@ CSniperDot *CSniperDot::Create( const Vector &origin, CBaseEntity *pOwner, bool 
 #else
 
 	// Create the sniper dot entity.
-	CSniperDot *pDot = static_cast<CSniperDot*>( CBaseEntity::Create( "env_sniperdot", origin, QAngle( 0.0f, 0.0f, 0.0f ) ) );
+	CRailgunDot *pDot = static_cast<CRailgunDot*>( CBaseEntity::Create( "env_railgundot", origin, QAngle( 0.0f, 0.0f, 0.0f ) ) );
 	if ( !pDot )
 		return NULL;
 
@@ -797,7 +797,7 @@ CSniperDot *CSniperDot::Create( const Vector &origin, CBaseEntity *pOwner, bool 
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CSniperDot::Update( CBaseEntity *pTarget, const Vector &vecOrigin, const Vector &vecNormal )
+void CRailgunDot::Update( CBaseEntity *pTarget, const Vector &vecOrigin, const Vector &vecNormal )
 {
 	SetAbsOrigin( vecOrigin );
 	m_vecSurfaceNormal = vecNormal;
@@ -814,7 +814,7 @@ void CSniperDot::Update( CBaseEntity *pTarget, const Vector &vecOrigin, const Ve
 // Purpose: 
 // TFTODO: Make the sniper dot get brighter the more damage it will do.
 //-----------------------------------------------------------------------------
-int CSniperDot::DrawModel( int flags )
+int CRailgunDot::DrawModel( int flags )
 {
 	// Get the owning player.
 	C_TFPlayer *pPlayer = ToTFPlayer( GetOwnerEntity() );
@@ -870,7 +870,7 @@ int CSniperDot::DrawModel( int flags )
 	pRenderContext->Bind( m_hSpriteMaterial, this );
 
 	float flLifeTime = gpGlobals->curtime - m_flChargeStartTime;
-	float flStrength = RemapValClamped( flLifeTime, 0.0, TF_WEAPON_SNIPERRIFLE_DAMAGE_MAX / TF_WEAPON_SNIPERRIFLE_CHARGE_PER_SEC, 0.1, 1.0 );
+	float flStrength = RemapValClamped( flLifeTime, 0.0, TF_WEAPON_RAILGUN_DAMAGE_MAX / TF_WEAPON_RAILGUN_CHARGE_PER_SEC, 0.1, 1.0 );
 
 	color32 innercolor = { 255, 255, 255, 255 };
 	color32 outercolor = { 255, 255, 255, 128 };
@@ -885,7 +885,7 @@ int CSniperDot::DrawModel( int flags )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-bool CSniperDot::ShouldDraw( void )			
+bool CRailgunDot::ShouldDraw( void )			
 {
 	if ( IsEffectActive( EF_NODRAW ) )
 		return false;
@@ -900,7 +900,7 @@ bool CSniperDot::ShouldDraw( void )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CSniperDot::OnDataChanged( DataUpdateType_t updateType )
+void CRailgunDot::OnDataChanged( DataUpdateType_t updateType )
 {
 	if ( updateType == DATA_UPDATE_CREATED )
 	{

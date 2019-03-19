@@ -222,6 +222,10 @@ void FX_FireBullets( int iPlayer, const Vector &vecOrigin, const QAngle &vecAngl
 	{
 		fireInfo.m_iTracerFreq = 2;
 	}
+	if ( iWeapon == TF_WEAPON_RAILGUN )
+	{
+		fireInfo.m_iTracerFreq = 1;
+	}
 
 	// Reset multi-damage structures.
 	ClearMultiDamage();

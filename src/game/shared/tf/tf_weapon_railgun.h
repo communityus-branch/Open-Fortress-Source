@@ -3,8 +3,8 @@
 // Purpose: TF Sniper Rifle
 //
 //=============================================================================//
-#ifndef TF_WEAPON_SNIPERRIFLE_H
-#define TF_WEAPON_SNIPERRIFLE_H
+#ifndef TF_WEAPON_RAILGUN_H
+#define TF_WEAPON_RAILGUN_H
 #ifdef _WIN32
 #pragma once
 #endif
@@ -13,27 +13,29 @@
 #include "Sprite.h"
 
 #if defined( CLIENT_DLL )
-#define CTFSniperRifle C_TFSniperRifle
-#define CSniperDot C_SniperDot
+#define CTFRailgun C_TFRailgun
+#define CRailgunDot C_RailgunDot
 #endif
 
 //=============================================================================
 //
 // Sniper Rifle Laser Dot class.
 //
-class CSniperDot : public CBaseEntity
+
+
+class CRailgunDot : public CBaseEntity
 {
 public:
 
-	DECLARE_CLASS( CSniperDot, CBaseEntity );
+	DECLARE_CLASS( CRailgunDot, CBaseEntity );
 	DECLARE_NETWORKCLASS();
 	DECLARE_DATADESC();
 
 	// Creation/Destruction.
-	CSniperDot( void );
-	~CSniperDot( void );
+	CRailgunDot( void );
+	~CRailgunDot( void );
 
-	static CSniperDot *Create( const Vector &origin, CBaseEntity *pOwner = NULL, bool bVisibleDot = true );
+	static CRailgunDot *Create( const Vector &origin, CBaseEntity *pOwner = NULL, bool bVisibleDot = true );
 	void		ResetChargeTime( void ) { m_flChargeStartTime = gpGlobals->curtime; }
 
 	// Attributes.
@@ -71,18 +73,18 @@ protected:
 //
 // Sniper Rifle class.
 //
-class CTFSniperRifle : public CTFWeaponBaseGun
+class CTFRailgun: public CTFWeaponBaseGun
 {
 public:
 
-	DECLARE_CLASS( CTFSniperRifle, CTFWeaponBaseGun );
+	DECLARE_CLASS( CTFRailgun, CTFWeaponBaseGun );
 	DECLARE_NETWORKCLASS(); 
 	DECLARE_PREDICTABLE();
 
-	CTFSniperRifle();
-	~CTFSniperRifle();
+	CTFRailgun();
+	~CTFRailgun();
 
-	virtual int	GetWeaponID( void ) const			{ return TF_WEAPON_SNIPERRIFLE; }
+	virtual int	GetWeaponID( void ) const			{ return TF_WEAPON_RAILGUN; }
 
 	virtual void Spawn();
 	virtual void Precache();
@@ -110,9 +112,9 @@ public:
 
 private:
 
-	void CreateSniperDot( void );
-	void DestroySniperDot( void );
-	void UpdateSniperDot( void );
+	void CreateRailgunDot( void );
+	void DestroyRailgunDot( void );
+	void UpdateRailgunDot( void );
 
 private:
 	// Auto-rezooming handling
@@ -129,7 +131,7 @@ private:
 	CNetworkVar( float,	m_flChargedDamage );
 
 #ifdef GAME_DLL
-	CHandle<CSniperDot>		m_hSniperDot;
+	CHandle<CRailgunDot>		m_hRailgunDot;
 #endif
 
 	// Handles rezooming after the post-fire unzoom
@@ -137,7 +139,7 @@ private:
 	float m_flRezoomTime;
 	bool m_bRezoomAfterShot;
 
-	CTFSniperRifle( const CTFSniperRifle & );
+	CTFRailgun( const CTFRailgun & );
 };
 
-#endif // TF_WEAPON_SNIPERRIFLE_H
+#endif // TF_WEAPON_RAILGUN_H
