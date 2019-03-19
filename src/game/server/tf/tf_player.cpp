@@ -39,6 +39,7 @@
 #include "sceneentity.h"
 #include "fmtstr.h"
 #include "tf_weapon_sniperrifle.h"
+#include "tf_weapon_railgun.h"
 #include "tf_weapon_minigun.h"
 #include "trigger_area_capture.h"
 #include "triggers.h"
@@ -1071,13 +1072,14 @@ void CTFPlayer::ManageBuilderWeapons( TFPlayerClassData_t *pData )
 //-----------------------------------------------------------------------------
 void CTFPlayer::ManageRegularWeapons( TFPlayerClassData_t *pData )
 {
+	int iFirstValidWeapon=0;
 	for ( int iWeapon = 0; iWeapon < TF_PLAYER_WEAPON_COUNT; ++iWeapon )
 	{
 		if ( pData->m_aWeapons[iWeapon] != TF_WEAPON_NONE )
 		{
 			int iWeaponID = pData->m_aWeapons[iWeapon];
 			const char *pszWeaponName = WeaponIdToClassname( iWeaponID );
-
+			
 			CTFWeaponBase *pWeapon = (CTFWeaponBase *)GetWeapon( iWeapon );
 
 			//If we already have a weapon in this slot but is not the same type then nuke it (changed classes)
@@ -1123,11 +1125,15 @@ void CTFPlayer::ManageRegularWeapons( TFPlayerClassData_t *pData )
 		}
 	}
 // add just merc now
-	if ( m_bRegenerating == false )
+while( GetActiveWeapon() == NULL )
 	{
-		SetActiveWeapon( NULL );
-		Weapon_Switch( Weapon_GetSlot( 1 ) );
-		Weapon_SetLast( Weapon_GetSlot( 0 ) );
+		if ( m_bRegenerating == false )
+		{
+			SetActiveWeapon( NULL );
+			Weapon_Switch( Weapon_GetSlot( iFirstValidWeapon ) );
+			Weapon_SetLast( Weapon_GetSlot( iFirstValidWeapon++ ) );
+		}
+		iFirstValidWeapon++;
 	}
 }
 
@@ -5564,7 +5570,7 @@ void CTFPlayer::ModifyOrAppendCriteria( AI_CriteriaSet& criteriaSet )
 			break;
 		}
 
-		if ( pActiveWeapon->GetWeaponID() == TF_WEAPON_SNIPERRIFLE )
+		if ( pActiveWeapon->GetWeaponID() == TF_WEAPON_SNIPERRIFLE || pActiveWeapon->GetWeaponID() == TF_WEAPON_RAILGUN )
 		{
 			CTFSniperRifle *pRifle = dynamic_cast<CTFSniperRifle*>(pActiveWeapon);
 			if ( pRifle && pRifle->IsZoomed() )

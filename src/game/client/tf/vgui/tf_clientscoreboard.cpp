@@ -29,6 +29,7 @@
 #include "tf_clientscoreboard.h"
 #include "tf_gamestats_shared.h"
 #include "tf_hud_statpanel.h"
+#include "tf_gamerules.h"
 #include "c_playerresource.h"
 #include "c_tf_playerresource.h"
 #include "c_tf_team.h"
@@ -57,6 +58,7 @@ CTFClientScoreBoardDialog::CTFClientScoreBoardDialog( IViewPort *pViewPort ) : C
 
 	m_pPlayerListBlue = new SectionedListPanel( this, "BluePlayerList" );
 	m_pPlayerListRed = new SectionedListPanel( this, "RedPlayerList" );
+	m_pPlayerListMercenary = new SectionedListPanel( this, "MercenaryPlayerList" );
 	m_pLabelPlayerName = new CTFLabel( this, "PlayerNameLabel", "" );
 	m_pImagePanelHorizLine = new ImagePanel( this, "HorizontalLine" );
 	m_pClassImage = new CTFClassImage( this, "ClassImage" );
@@ -93,8 +95,6 @@ void CTFClientScoreBoardDialog::ApplySchemeSettings( vgui::IScheme *pScheme )
 {
 	BaseClass::ApplySchemeSettings( pScheme );
 
-	LoadControlSettings("Resource/UI/scoreboard.res");
-
 	if ( m_pImageList )
 	{
 		m_iImageDead = m_pImageList->AddImage( scheme()->GetImage( "../hud/leaderboard_dead", true ) );
@@ -111,6 +111,7 @@ void CTFClientScoreBoardDialog::ApplySchemeSettings( vgui::IScheme *pScheme )
 
 	SetPlayerListImages( m_pPlayerListBlue );
 	SetPlayerListImages( m_pPlayerListRed );
+	SetPlayerListImages( m_pPlayerListMercenary );
 
 	SetBgColor( Color( 0, 0, 0, 0) );
 	SetBorder( NULL );
@@ -126,6 +127,15 @@ void CTFClientScoreBoardDialog::ShowPanel( bool bShow )
 {
 	// Catch the case where we call ShowPanel before ApplySchemeSettings, eg when
 	// going from windowed <-> fullscreen
+	
+	if ( TFGameRules()->IsDMGamemode() )
+    {
+        LoadControlSettings("Resource/UI/scoreboarddm.res");
+        m_pPlayerListBlue->SetVisible( false );
+    }
+    else
+        LoadControlSettings("Resource/UI/scoreboard.res");
+	
 	if ( m_pImageList == NULL )
 	{
 		InvalidateLayout( true, true );
@@ -173,6 +183,7 @@ void CTFClientScoreBoardDialog::Reset()
 {
 	InitPlayerList( m_pPlayerListBlue );
 	InitPlayerList( m_pPlayerListRed );
+	InitPlayerList( m_pPlayerListMercenary );
 }
 
 //-----------------------------------------------------------------------------
@@ -327,6 +338,7 @@ void CTFClientScoreBoardDialog::UpdatePlayerList()
 
 	m_pPlayerListRed->RemoveAll();
 	m_pPlayerListBlue->RemoveAll();
+	m_pPlayerListMercenary->RemoveAll();
 
 	C_TF_PlayerResource *tf_PR = dynamic_cast<C_TF_PlayerResource *>( g_PR );
 	if ( !tf_PR )
@@ -471,6 +483,10 @@ void CTFClientScoreBoardDialog::UpdatePlayerList()
 		else if ( m_pPlayerListRed->GetItemCount() > 0 )
 		{
 			m_pPlayerListRed->SetSelectedItem( 0 );
+		}
+		else if ( m_pPlayerListMercenary->GetItemCount() > 0 )
+		{
+			m_pPlayerListMercenary->SetSelectedItem( 0 );
 		}
 	}
 }
@@ -682,7 +698,7 @@ bool CTFClientScoreBoardDialog::ShouldShowAsSpectator( int iPlayerIndex )
 	{
 		// either spectating or unassigned team should show in spectator list
 		int iTeam = tf_PR->GetTeam( iPlayerIndex );
-		if ( TEAM_SPECTATOR == iTeam /* || TEAM_UNASSIGNED == iTeam */ ) //stickynote
+		if ( TEAM_SPECTATOR == iTeam || TEAM_UNASSIGNED == iTeam  ) //stickynote
 			return true;
 	}
 	return false;
@@ -728,7 +744,11 @@ SectionedListPanel *CTFClientScoreBoardDialog::GetSelectedPlayerList( void )
 	{
 		pList = m_pPlayerListRed;
 	}
-
+	else if ( m_pPlayerListMercenary->GetSelectedItem() >= 0 )
+	{
+		pList = m_pPlayerListMercenary;
+	}
+	
 	return pList;
 }
 
