@@ -1072,7 +1072,6 @@ void CTFPlayer::ManageBuilderWeapons( TFPlayerClassData_t *pData )
 //-----------------------------------------------------------------------------
 void CTFPlayer::ManageRegularWeapons( TFPlayerClassData_t *pData )
 {
-	int iFirstValidWeapon=0;
 	for ( int iWeapon = 0; iWeapon < TF_PLAYER_WEAPON_COUNT; ++iWeapon )
 	{
 		if ( pData->m_aWeapons[iWeapon] != TF_WEAPON_NONE )
@@ -1125,15 +1124,15 @@ void CTFPlayer::ManageRegularWeapons( TFPlayerClassData_t *pData )
 		}
 	}
 // add just merc now
-while( GetActiveWeapon() == NULL )
+	for ( int iWeapon = 0; iWeapon < TF_PLAYER_WEAPON_COUNT; ++iWeapon )
 	{
+		if( GetActiveWeapon() != NULL ) break;
 		if ( m_bRegenerating == false )
 		{
 			SetActiveWeapon( NULL );
-			Weapon_Switch( Weapon_GetSlot( iFirstValidWeapon ) );
-			Weapon_SetLast( Weapon_GetSlot( iFirstValidWeapon++ ) );
+			Weapon_Switch( Weapon_GetSlot( iWeapon ) );
+			Weapon_SetLast( Weapon_GetSlot( iWeapon++ ) );
 		}
-		iFirstValidWeapon++;
 	}
 }
 
