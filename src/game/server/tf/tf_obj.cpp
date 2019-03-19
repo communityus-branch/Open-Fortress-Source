@@ -719,7 +719,9 @@ void CBaseObject::StartPlacement( CTFPlayer *pPlayer )
 	m_vecBuildMaxs -= GetAbsOrigin();
 
 	// Set the skin
-	m_nSkin = ( GetTeamNumber() == TF_TEAM_RED ) ? 0 : 1;
+	if( GetTeamNumber() == TF_TEAM_RED ) m_nSkin = 0;
+	else if( GetTeamNumber() == TF_TEAM_BLUE ) m_nSkin = 1;
+	else m_nSkin = 2;
 }
 
 //-----------------------------------------------------------------------------

@@ -68,6 +68,8 @@ extern ConVar	tf_spy_invis_time;
 extern ConVar	tf_spy_invis_unstealth_time;
 extern ConVar	tf_stalematechangeclasstime;
 
+extern ConVar	ofd_instagib;
+
 EHANDLE g_pLastSpawnPoints[TF_TEAM_COUNT];
 
 ConVar tf_playerstatetransitions( "tf_playerstatetransitions", "-2", FCVAR_CHEAT | FCVAR_DEVELOPMENTONLY, "tf_playerstatetransitions <ent index or -1 for all>. Show player state transitions." );
@@ -1089,7 +1091,7 @@ void CTFPlayer::ManageRegularWeapons( TFPlayerClassData_t *pData )
 			}
 
 			pWeapon = (CTFWeaponBase *)Weapon_OwnsThisID( iWeaponID );
-
+			
 			if ( pWeapon )
 			{
 				pWeapon->ChangeTeam( GetTeamNumber() );
@@ -1103,7 +1105,6 @@ void CTFPlayer::ManageRegularWeapons( TFPlayerClassData_t *pData )
 			else
 			{
 				pWeapon = (CTFWeaponBase *)GiveNamedItem( pszWeaponName );
-
 				if ( pWeapon )
 				{
 					pWeapon->DefaultTouch( this );
@@ -1123,7 +1124,7 @@ void CTFPlayer::ManageRegularWeapons( TFPlayerClassData_t *pData )
 			}
 		}
 	}
-// add just merc now
+
 	for ( int iWeapon = 0; iWeapon < TF_PLAYER_WEAPON_COUNT; ++iWeapon )
 	{
 		if( GetActiveWeapon() != NULL ) break;
@@ -1131,7 +1132,7 @@ void CTFPlayer::ManageRegularWeapons( TFPlayerClassData_t *pData )
 		{
 			SetActiveWeapon( NULL );
 			Weapon_Switch( Weapon_GetSlot( iWeapon ) );
-			Weapon_SetLast( Weapon_GetSlot( iWeapon++ ) );
+			Weapon_SetLast( Weapon_GetSlot( iWeapon++) );
 		}
 	}
 }
@@ -3091,6 +3092,8 @@ bool CTFPlayer::ShouldGib( const CTakeDamageInfo &info )
 	// Check to see if we should allow players to gib.
 	if ( !tf_playergib.GetBool() )
 		return false;
+	if ( tf_playergib.GetInt()== 2 || ofd_instagib.GetBool() == 1 )
+		return true;
 
 	if ( ( ( info.GetDamageType() & DMG_BLAST ) != 0 ) || ( ( info.GetDamageType() & DMG_HALF_FALLOFF ) != 0 ) )
 		return true;

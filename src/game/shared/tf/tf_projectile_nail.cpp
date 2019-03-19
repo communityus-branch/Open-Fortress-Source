@@ -84,7 +84,7 @@ const char *GetSyringeTrailParticleName( int iTeamNumber, bool bCritical )
 	}
 	else
 	{
-		return ( bCritical ? "nailtrails_medic_red_crit" : "nailtrails_medic_red" );
+		return ( bCritical ? "nailtrails_medic_mercenary_crit" : "nailtrails_medic_mercenary" );
 	}
 }
 
@@ -100,7 +100,9 @@ void ClientsideProjectileSyringeCallback( const CEffectData &data )
 		C_LocalTempEntity *pSyringe = ClientsideProjectileCallback( data, SYRINGE_GRAVITY );
 		if ( pSyringe )
 		{
-			pSyringe->m_nSkin = ( pPlayer->GetTeamNumber() == TF_TEAM_RED ) ? 0 : 1;
+			if ( pPlayer->GetTeamNumber() == TF_TEAM_RED ) pSyringe->m_nSkin = 0;
+			else if  (pPlayer->GetTeamNumber() == TF_TEAM_BLUE ) pSyringe->m_nSkin = 1;
+			else pSyringe->m_nSkin = 2;
 			bool bCritical = ( ( data.m_nDamageType & DMG_CRITICAL ) != 0 );
 			pSyringe->AddParticleEffect( GetSyringeTrailParticleName( pPlayer->GetTeamNumber(), bCritical ) );
 			pSyringe->AddEffects( EF_NOSHADOW );

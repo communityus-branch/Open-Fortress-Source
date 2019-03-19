@@ -578,7 +578,7 @@ void CTFGameRules::Activate()
 
 	of_bunnyhop.SetValue(0);
 	of_crouchjump.SetValue(0);
-	mp_disable_respawn_times.SetValue(1);
+	mp_disable_respawn_times.SetValue(0);
 
 	m_iBirthdayMode = BIRTHDAY_RECALCULATE;
 
@@ -601,7 +601,7 @@ void CTFGameRules::Activate()
 	    of_gamemode_dm.SetValue(1);
 		of_bunnyhop.SetValue(1);
 		of_crouchjump.SetValue(1);
-		mp_disable_respawn_times.SetValue(0);
+		mp_disable_respawn_times.SetValue(1);
 		ConColorMsg(Color(77, 116, 85, 255), "[TFGameRules] Executing server DM gamemode config file\n", NULL);
 		engine->ServerCommand("exec config_dm.cfg \n");
 		engine->ServerExecute();
