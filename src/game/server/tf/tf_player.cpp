@@ -1389,19 +1389,32 @@ void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 		}
 
 		ChangeTeam( iTeam );
-	if ( ofd_forceclass.GetBool() == 0 && TFGameRules()->IsDMGamemode() )
+		if (TFGameRules()->IsDMGamemode() )
 		{
-			if ( iTeam == TF_TEAM_RED ) {
-				ShowViewPortPanel( PANEL_CLASS_RED );
-			}
-			else if ( iTeam == TF_TEAM_BLUE ) {
-				ShowViewPortPanel( PANEL_CLASS_BLUE );
-			}
-			else if ( iTeam == TF_TEAM_MERCENARY ) {
-				ShowViewPortPanel( PANEL_CLASS_MERCENARY );
-			}
+			if( ofd_forceclass.GetBool() == 0)
+				if ( iTeam == TF_TEAM_RED ) {
+					ShowViewPortPanel( PANEL_CLASS_RED );
+				}
+				else if ( iTeam == TF_TEAM_BLUE ) {
+					ShowViewPortPanel( PANEL_CLASS_BLUE );
+				}
+				else if ( iTeam == TF_TEAM_MERCENARY ) {
+					ShowViewPortPanel( PANEL_CLASS_MERCENARY );
+				}
 		}
-	}
+		else
+		{
+				if ( iTeam == TF_TEAM_RED ) {
+					ShowViewPortPanel( PANEL_CLASS_RED );
+				}
+				else if ( iTeam == TF_TEAM_BLUE ) {
+					ShowViewPortPanel( PANEL_CLASS_BLUE );
+				}
+				else if ( iTeam == TF_TEAM_MERCENARY ) {
+					ShowViewPortPanel( PANEL_CLASS_MERCENARY );
+				}
+		}
+	}	
 }
 
 //-----------------------------------------------------------------------------
