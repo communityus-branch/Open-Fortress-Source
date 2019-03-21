@@ -121,7 +121,7 @@ enum
 
 	// Add any new classes after Engineer
 	TF_CLASS_MERCENARY,
-	TF_CLASS_CIVILIAN,		// Civilians are a special class. It is not a player class.
+	TF_CLASS_CIVILIAN,		// Civilians are a special class. It is not a player class.	
 	TF_CLASS_COUNT_ALL,
 
 	TF_CLASS_RANDOM

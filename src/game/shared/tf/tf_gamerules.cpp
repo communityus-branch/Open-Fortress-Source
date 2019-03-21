@@ -71,8 +71,8 @@ static int g_TauntCamAchievements[] =
 	0,		// TF_CLASS_SPY,
 	0,		// TF_CLASS_ENGINEER,
 
-	0,		// TF_CLASS_CIVILIAN,
 	0,		// TF_CLASS_MERCENARY,
+	0,		// TF_CLASS_CIVILIAN,
 	0,		// TF_CLASS_COUNT_ALL,
 };
 
@@ -81,6 +81,7 @@ extern ConVar sv_turbophysics;
 extern ConVar of_bunnyhop;
 extern ConVar of_crouchjump;
 extern ConVar mp_disable_respawn_times;
+extern ConVar fraglimit;
 
 ConVar tf_caplinear( "tf_caplinear", "1", FCVAR_REPLICATED | FCVAR_DEVELOPMENTONLY, "If set to 1, teams must capture control points linearly." );
 ConVar tf_stalematechangeclasstime( "tf_stalematechangeclasstime", "20", FCVAR_REPLICATED | FCVAR_DEVELOPMENTONLY, "Amount of time that players are allowed to change class in stalemates." );
@@ -580,6 +581,7 @@ void CTFGameRules::Activate()
 	of_crouchjump.SetValue(0);
 	mp_disable_respawn_times.SetValue(0);
 
+
 	m_iBirthdayMode = BIRTHDAY_RECALCULATE;
 
 	m_nGameType.Set(TF_GAMETYPE_UNDEFINED);
@@ -601,6 +603,7 @@ void CTFGameRules::Activate()
 	    of_gamemode_dm.SetValue(1);
 		of_bunnyhop.SetValue(1);
 		of_crouchjump.SetValue(1);
+		if ( fraglimit.GetFloat()==0 ) fraglimit.SetValue( 50 );
 		mp_disable_respawn_times.SetValue(1);
 		ConColorMsg(Color(77, 116, 85, 255), "[TFGameRules] Executing server DM gamemode config file\n", NULL);
 		engine->ServerCommand("exec config_dm.cfg \n");
@@ -1282,9 +1285,47 @@ void CTFGameRules::RadiusDamage( const CTakeDamageInfo &info, const Vector &vecS
 						return;
 				}
 			}
+			
 			if ( TFGameRules()->IsDMGamemode() && CountActivePlayers() > 0)
 			{
 				
+				float flFragLimit = fraglimit.GetFloat();
+	
+//				if ( GetMapRemainingTime() < 0 )
+//				{
+//					GoToIntermission();
+//					return;
+//				}
+
+				if ( flFragLimit )
+				{
+/*					if( IsTeamplay() == true )
+					{
+						CTeam *pCombine = g_Teams[TEAM_COMBINE];
+						CTeam *pRebels = g_Teams[TEAM_REBELS];
+
+						if ( pCombine->GetScore() >= flFragLimit || pRebels->GetScore() >= flFragLimit )
+						{
+							GoToIntermission();
+							return;
+						}
+					}
+*/
+//					else
+	//				{
+						// check if any player is over the frag limit
+						for ( int i = 1; i <= gpGlobals->maxClients; i++ )
+						{
+							CBasePlayer *pPlayer = UTIL_PlayerByIndex( i );
+
+							if ( pPlayer && pPlayer->FragCount() >= flFragLimit )
+							{
+								GoToIntermission();
+								return;
+							}
+						}
+//					}
+				}				
 			}
 		}
 

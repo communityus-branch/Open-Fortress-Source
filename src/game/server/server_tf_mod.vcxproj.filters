@@ -1586,6 +1586,9 @@
     <ClInclude Include="tf\entity_tfstart.h">
       <Filter>Source Files\TF</Filter>
     </ClInclude>
+    <ClInclude Include="tf\entity_weapon_spawner.h">
+      <Filter>Source Files\TF</Filter>
+    </ClInclude>
     <ClInclude Include="tf\func_capture_zone.h">
       <Filter>Source Files\TF</Filter>
     </ClInclude>
@@ -3110,6 +3113,9 @@
       <Filter>Source Files\TF</Filter>
     </ClCompile>
     <ClCompile Include="tf\entity_tfstart.cpp">
+      <Filter>Source Files\TF</Filter>
+    </ClCompile>
+    <ClCompile Include="tf\entity_weapon_spawner.cpp">
       <Filter>Source Files\TF</Filter>
     </ClCompile>
     <ClCompile Include="tf\func_capture_zone.cpp">

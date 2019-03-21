@@ -23,6 +23,8 @@ DECLARE_HUDELEMENT( CSecondaryTargetID );
 
 using namespace vgui;
 
+ConVar of_showtargetid( "of_showtargetid", "1", FCVAR_REPLICATED | FCVAR_CLIENTDLL , "Whether  or not TargetID draws" );
+
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
@@ -116,7 +118,9 @@ bool CTargetID::ShouldDraw( void )
 {
 	if ( !CHudElement::ShouldDraw() )
 		return false;
-
+	if ( of_showtargetid.GetBool() != 1 )
+		return false;
+	
 	C_TFPlayer *pLocalTFPlayer = C_TFPlayer::GetLocalTFPlayer();
 	if ( !pLocalTFPlayer )
 		return false;

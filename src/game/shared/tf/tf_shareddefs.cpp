@@ -62,7 +62,7 @@ const char *g_aPlayerClassNames_NonLocalized[] =
 	"Spy",
 	"Engineer",
 	"Mercenary",
-	"Civilian"
+	"Civilian",
 };
 
 //-----------------------------------------------------------------------------

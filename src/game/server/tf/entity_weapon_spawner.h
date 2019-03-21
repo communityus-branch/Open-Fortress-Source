@@ -21,18 +21,15 @@ class CWeaponSpawner : public CTFPowerup
 {
 public:
 	DECLARE_CLASS( CWeaponSpawner, CTFPowerup );
-	DECLARE_DATADESC();
-	DECLARE_SERVERCLASS();
-	
-	CWeaponSpawner();
 
 	void	Spawn( void );
 	void	Precache( void );
-	virtual bool KeyValue( const char *szKeyName, const char *szValue );
 	bool	MyTouch( CBasePlayer *pPlayer );
 
 	powerupsize_t	GetPowerupSize( void ) { return POWERUP_FULL; }
-	virtual const char *GetPowerupModel( void ) { return "models/items/ammopack_large.mdl"; }
+	string_t m_iszWeaponName;
+	string_t m_iszWeaponModel=MAKE_STRING( "models/weapons/w_models/w_scattergun.mdl" );
+	DECLARE_DATADESC();
 };
 
 #endif // ENTITY_WEAPON_SPAWNER_H

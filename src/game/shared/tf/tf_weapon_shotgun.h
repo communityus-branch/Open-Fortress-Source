@@ -97,5 +97,4 @@ public:
 
 	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_SHOTGUN_PYRO; }
 };
-
 #endif // TF_WEAPON_SHOTGUN_H

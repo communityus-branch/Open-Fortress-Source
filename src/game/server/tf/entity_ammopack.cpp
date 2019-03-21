@@ -23,6 +23,27 @@ LINK_ENTITY_TO_CLASS( item_ammopack_full, CAmmoPack );
 LINK_ENTITY_TO_CLASS( item_ammopack_small, CAmmoPackSmall );
 LINK_ENTITY_TO_CLASS( item_ammopack_medium, CAmmoPackMedium );
 
+BEGIN_DATADESC( CAmmoPack )
+
+// Inputs.
+DEFINE_KEYFIELD( m_iszModel, FIELD_STRING, "powerup_model" ),
+
+END_DATADESC()
+
+BEGIN_DATADESC( CAmmoPackSmall )
+
+// Inputs.
+DEFINE_KEYFIELD( m_iszModel, FIELD_STRING, "powerup_model" ),
+
+END_DATADESC()
+
+BEGIN_DATADESC( CAmmoPackMedium )
+
+// Inputs.
+DEFINE_KEYFIELD( m_iszModel, FIELD_STRING, "powerup_model" ),
+
+END_DATADESC()
+
 //=============================================================================
 //
 // CTF AmmoPack functions.
@@ -34,7 +55,8 @@ LINK_ENTITY_TO_CLASS( item_ammopack_medium, CAmmoPackMedium );
 void CAmmoPack::Spawn( void )
 {
 	Precache();
-	SetModel( GetPowerupModel() );
+	if (m_iszModel==MAKE_STRING( "" )) SetModel( GetPowerupModel() );
+	else SetModel( STRING(m_iszModel) );
 
 	BaseClass::Spawn();
 }
@@ -44,7 +66,8 @@ void CAmmoPack::Spawn( void )
 //-----------------------------------------------------------------------------
 void CAmmoPack::Precache( void )
 {
-	PrecacheModel( GetPowerupModel() );
+	if (m_iszModel==MAKE_STRING( "" )) PrecacheModel( GetPowerupModel() );
+	else PrecacheModel( STRING(m_iszModel) );	
 	PrecacheScriptSound( TF_AMMOPACK_PICKUP_SOUND );
 }
 

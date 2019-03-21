@@ -27,8 +27,9 @@ public:
 	bool	MyTouch( CBasePlayer *pPlayer );
 
 	powerupsize_t	GetPowerupSize( void ) { return POWERUP_FULL; }
-
+	string_t m_iszModel=MAKE_STRING( "" );
 	virtual const char *GetPowerupModel( void ) { return "models/items/ammopack_large.mdl"; }
+	DECLARE_DATADESC();
 };
 
 class CAmmoPackSmall : public CAmmoPack
@@ -36,8 +37,9 @@ class CAmmoPackSmall : public CAmmoPack
 public:
 	DECLARE_CLASS( CAmmoPackSmall, CAmmoPack );
 	powerupsize_t	GetPowerupSize( void ) { return POWERUP_SMALL; }
-
+	string_t m_iszModel=MAKE_STRING( "" );
 	virtual const char *GetPowerupModel( void ) { return "models/items/ammopack_small.mdl"; }
+	DECLARE_DATADESC();
 };
 
 class CAmmoPackMedium : public CAmmoPack
@@ -45,8 +47,9 @@ class CAmmoPackMedium : public CAmmoPack
 public:
 	DECLARE_CLASS( CAmmoPackMedium, CAmmoPack );
 	powerupsize_t	GetPowerupSize( void ) { return POWERUP_MEDIUM; }
-
 	virtual const char *GetPowerupModel( void ) { return "models/items/ammopack_medium.mdl"; }
+	string_t m_iszModel=MAKE_STRING( "" );
+	DECLARE_DATADESC();
 };
 
 #endif // ENTITY_AMMOPACK_H

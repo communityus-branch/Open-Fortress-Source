@@ -24,6 +24,27 @@ LINK_ENTITY_TO_CLASS( item_healthkit_full, CHealthKit );
 LINK_ENTITY_TO_CLASS( item_healthkit_small, CHealthKitSmall );
 LINK_ENTITY_TO_CLASS( item_healthkit_medium, CHealthKitMedium );
 
+BEGIN_DATADESC( CHealthKit )
+
+// Inputs.
+DEFINE_KEYFIELD( m_iszModel, FIELD_STRING, "powerup_model" ),
+
+END_DATADESC()
+
+BEGIN_DATADESC( CHealthKitSmall )
+
+// Inputs.
+DEFINE_KEYFIELD( m_iszModel, FIELD_STRING, "powerup_model" ),
+
+END_DATADESC()
+
+BEGIN_DATADESC( CHealthKitMedium )
+
+// Inputs.
+DEFINE_KEYFIELD( m_iszModel, FIELD_STRING, "powerup_model" ),
+
+END_DATADESC()
+
 //=============================================================================
 //
 // CTF HealthKit functions.
@@ -35,7 +56,8 @@ LINK_ENTITY_TO_CLASS( item_healthkit_medium, CHealthKitMedium );
 void CHealthKit::Spawn( void )
 {
 	Precache();
-	SetModel( GetPowerupModel() );
+	if (m_iszModel==MAKE_STRING( "" )) SetModel( GetPowerupModel() );
+	else SetModel( STRING(m_iszModel) );
 
 	BaseClass::Spawn();
 }
@@ -45,7 +67,8 @@ void CHealthKit::Spawn( void )
 //-----------------------------------------------------------------------------
 void CHealthKit::Precache( void )
 {
-	PrecacheModel( GetPowerupModel() );
+	if (m_iszModel==MAKE_STRING( "" )) PrecacheModel( GetPowerupModel() );
+	else PrecacheModel( STRING(m_iszModel) );	
 	PrecacheScriptSound( TF_HEALTHKIT_PICKUP_SOUND );
 }
 

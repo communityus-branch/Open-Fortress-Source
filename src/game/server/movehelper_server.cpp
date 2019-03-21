@@ -32,6 +32,7 @@
 #include "tier0/memdbgon.h"
 
 extern IPhysicsCollision *physcollision;
+ConVar of_falldamage( "of_falldamage", "1", FCVAR_NOTIFY | FCVAR_REPLICATED , "Whether or not the player takes fall damage." );
 
 
 //-----------------------------------------------------------------------------
@@ -360,7 +361,7 @@ void CMoveHelperServer::Con_NPrintf( int idx, char const* pFormat, ...)
 bool CMoveHelperServer::PlayerFallingDamage( void )
 {
 	float flFallDamage = g_pGameRules->FlPlayerFallDamage( m_pHostPlayer );	
-	if ( flFallDamage > 0 )
+	if ( flFallDamage > 0 && of_falldamage.GetBool() == 1 )
 	{
 		m_pHostPlayer->TakeDamage( CTakeDamageInfo( GetContainingEntity(INDEXENT(0)), GetContainingEntity(INDEXENT(0)), flFallDamage, DMG_FALL ) ); 
 		StartSound( m_pHostPlayer->GetAbsOrigin(), "Player.FallDamage" );

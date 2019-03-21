@@ -732,6 +732,7 @@
     <ClInclude Include="tf\entity_intermission.h" />
     <ClInclude Include="tf\entity_roundwin.h" />
     <ClInclude Include="tf\entity_tfstart.h" />
+    <ClInclude Include="tf\entity_weapon_spawner.h" />
     <ClInclude Include="tf\func_capture_zone.h" />
     <ClInclude Include="tf\func_changeclass.h" />
     <ClInclude Include="tf\func_no_build.h" />
@@ -1329,6 +1330,7 @@
     <ClCompile Include="tf\entity_intermission.cpp" />
     <ClCompile Include="tf\entity_roundwin.cpp" />
     <ClCompile Include="tf\entity_tfstart.cpp" />
+    <ClCompile Include="tf\entity_weapon_spawner.cpp" />
     <ClCompile Include="tf\func_capture_zone.cpp" />
     <ClCompile Include="tf\func_changeclass.cpp" />
     <ClCompile Include="tf\func_no_build.cpp" />
