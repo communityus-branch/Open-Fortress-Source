@@ -189,11 +189,10 @@ void C_ObjectTeleporter::StartChargedEffects()
 	if ( GetType() == OBJ_TELEPORTER_ENTRANCE )
 	{
 		char szEffect[128];
-		char pcfName[128];
-		if ( GetTeamNumber() == TF_TEAM_RED ) char pcfName= "red";
-		else if ( GetTeamNumber() == TF_TEAM_BLUE ) char pcfName= "blue";
-		else char pcfName= "mercenary";
-		Q_snprintf( szEffect, sizeof(szEffect), "teleporter_%s_charged", pcfName );
+		if ( GetTeamNumber() == TF_TEAM_RED ) Q_snprintf( szEffect, sizeof(szEffect), "teleporter_%s_charged", "red" );
+		else if ( GetTeamNumber() == TF_TEAM_BLUE )Q_snprintf( szEffect, sizeof(szEffect), "teleporter_%s_charged", "blue" );
+		else Q_snprintf( szEffect, sizeof(szEffect), "teleporter_%s_charged", "mercenary" );
+		
 
 		Assert( m_pChargedEffect == NULL );
 		m_pChargedEffect = ParticleProp()->Create( szEffect, PATTACH_ABSORIGIN );
@@ -203,18 +202,22 @@ void C_ObjectTeleporter::StartChargedEffects()
 void C_ObjectTeleporter::StartActiveEffects()
 {
 	char szEffect[128];
-
-	Q_snprintf( szEffect, sizeof(szEffect), "teleporter_%s_%s", 
-		( GetTeamNumber() == TF_TEAM_RED ) ? "red" : "blue",
+		if ( GetTeamNumber() == TF_TEAM_RED ) 	Q_snprintf( szEffect, sizeof(szEffect), "teleporter_%s_%s", "red",
 		( GetType() == OBJ_TELEPORTER_ENTRANCE ) ? "entrance" : "exit" );
+		else if ( GetTeamNumber() == TF_TEAM_BLUE )	Q_snprintf( szEffect, sizeof(szEffect), "teleporter_%s_%s", "blue",
+		( GetType() == OBJ_TELEPORTER_ENTRANCE ) ? "entrance" : "exit" );
+		else Q_snprintf( szEffect, sizeof(szEffect), "teleporter_%s_%s", "mercenary",
+		( GetType() == OBJ_TELEPORTER_ENTRANCE ) ? "entrance" : "exit" );
+
 
 	Assert( m_pDirectionEffect == NULL );
 	m_pDirectionEffect = ParticleProp()->Create( szEffect, PATTACH_ABSORIGIN );
 
 	// arm glow effects
-	Q_snprintf( szEffect, sizeof(szEffect), "teleporter_arms_circle_%s",
-		( GetTeamNumber() == TF_TEAM_RED ) ? "red" : "blue" );
-
+		if ( GetTeamNumber() == TF_TEAM_RED ) Q_snprintf( szEffect, sizeof(szEffect), "teleporter_arms_circle_%s", "red" );
+		else if ( GetTeamNumber() == TF_TEAM_BLUE )Q_snprintf( szEffect, sizeof(szEffect), "teleporter_arms_circle_%s", "blue" );
+		else Q_snprintf( szEffect, sizeof(szEffect), "teleporter_arms_circle_%s", "mercenary" );
+		
 	Assert( m_pChargedLeftArmEffect == NULL );
 	m_pChargedLeftArmEffect = ParticleProp()->Create( szEffect, PATTACH_POINT_FOLLOW, 1 );
 

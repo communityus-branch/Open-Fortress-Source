@@ -858,7 +858,7 @@ void CTFPlayerShared::OnAddCritBoosted( void )
 void CTFPlayerShared::OnRemoveCritBoosted( void )
 {
 #ifdef CLIENT_DLL
-	m_pOuter->EmitSound( "Mercenary.PainCrticialDeath01" );
+	m_pOuter->EmitSound( "Mercenary.NegativeVocalization01" );
 #endif
 }
 
