@@ -61,8 +61,8 @@ ConVar tf_spy_cloak_no_attack_time( "tf_spy_cloak_no_attack_time", "2.0", FCVAR_
 
 ConVar tf_damage_disablespread( "tf_damage_disablespread", "1", FCVAR_NOTIFY | FCVAR_REPLICATED, "Toggles the random damage spread applied to all player damage." );
 
-ConVar ofd_forceclass( "ofd_forceclass", "1", FCVAR_REPLICATED , "Force players to be Mercenary in DM." );
-ConVar ofd_forceteam( "ofd_forceteam", "1", FCVAR_REPLICATED , "Force players on the Mercenary team in DM." );
+ConVar ofd_forceclass( "ofd_forceclass", "1", FCVAR_REPLICATED | FCVAR_NOTIFY , "Force players to be Mercenary in DM." );
+ConVar ofd_forceteam( "ofd_forceteam", "1", FCVAR_REPLICATED | FCVAR_NOTIFY, "Force players on the Mercenary team in DM." );
 
 #define TF_SPY_STEALTH_BLINKTIME   0.3f
 #define TF_SPY_STEALTH_BLINKSCALE  0.85f
@@ -428,7 +428,9 @@ void CTFPlayerShared::OnConditionAdded( int nCond )
 			}
 		}
 		break;
-
+	case TF_COND_CRITBOOSTED:
+		OnAddCritBoosted();
+		break;
 	default:
 		break;
 	}
@@ -476,7 +478,9 @@ void CTFPlayerShared::OnConditionRemoved( int nCond )
 	case TF_COND_TELEPORTED:
 		OnRemoveTeleported();
 		break;
-
+	case TF_COND_CRITBOOSTED:
+		OnRemoveCritBoosted();
+		break;
 	default:
 		break;
 	}
@@ -740,6 +744,13 @@ void CTFPlayerShared::ConditionGameRulesThink( void )
 			RemoveCond( TF_COND_STEALTHED_BLINK );
 		}
 	}
+	
+	if ( InCond( TF_COND_CRITBOOSTED )  )
+	{
+
+
+
+	}
 #endif
 }
 
@@ -837,6 +848,19 @@ void CTFPlayerShared::OnDisguiseChanged( void )
 	RecalcDisguiseWeapon();
 }
 #endif
+
+void CTFPlayerShared::OnAddCritBoosted( void )
+{
+#ifdef CLIENT_DLL
+	m_pOuter->EmitSound( "Mercenary.LaughEvil01" );
+#endif
+}
+void CTFPlayerShared::OnRemoveCritBoosted( void )
+{
+#ifdef CLIENT_DLL
+	m_pOuter->EmitSound( "Mercenary.PainCrticialDeath01" );
+#endif
+}
 
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -2207,7 +2231,6 @@ int CTFPlayer::CanBuild( int iObjectType )
 
 	// Find out how much the object should cost
 	int iCost = CalculateObjectCost( iObjectType );
-
 	// Make sure we have enough resources
 	if ( GetBuildResources() < iCost )
 	{

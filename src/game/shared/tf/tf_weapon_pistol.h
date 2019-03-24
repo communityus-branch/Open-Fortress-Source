@@ -14,6 +14,7 @@
 #ifdef CLIENT_DLL
 #define CTFPistol C_TFPistol
 #define CTFPistol_Scout C_TFPistol_Scout
+#define CTFPistol_Mercenary C_TFPistol_Mercenary
 #endif
 
 // We allow the pistol to fire as fast as the player can click.
@@ -63,6 +64,15 @@ public:
 	DECLARE_PREDICTABLE();
 
 	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_PISTOL_SCOUT; }
+};
+class CTFPistol_Mercenary : public CTFPistol
+{
+public:
+	DECLARE_CLASS( CTFPistol_Mercenary, CTFPistol );
+	DECLARE_NETWORKCLASS(); 
+	DECLARE_PREDICTABLE();
+
+	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_PISTOL_MERCENARY; }
 };
 
 #endif // TF_WEAPON_PISTOL_H

@@ -10,6 +10,8 @@
 #include "takedamageinfo.h"
 #include "tf_gamerules.h"
 
+extern ConVar of_infiniteammo;
+
 //-----------------------------------------------------------------------------
 // Teams.
 //-----------------------------------------------------------------------------
@@ -148,6 +150,8 @@ const char *g_aWeaponNames[] =
 	"TF_WEAPON_DISPENSER",
 	"TF_WEAPON_INVIS",
 	"TF_WEAPON_RAILGUN",
+	"TF_WEAPON_SUPERSHOTGUN",
+	"TF_WEAPON_PISTOL_MERCENARY",
 
 	"TF_WEAPON_COUNT",	// end marker, do not add below here
 };
@@ -166,7 +170,7 @@ int g_aWeaponDamageTypes[] =
 	DMG_CLUB,		// TF_WEAPON_WRENCH,
 	DMG_SLASH,		// TF_WEAPON_BONESAW,
 	DMG_BUCKSHOT | DMG_USEDISTANCEMOD,	// TF_WEAPON_SHOTGUN_PRIMARY,
-	DMG_BUCKSHOT | DMG_USEDISTANCEMOD,	// TF_WEAPON_SHOTGUN_SOLDIER,
+	DMG_BUCKSHOT | DMG_USEDISTANCEMOD ,	// TF_WEAPON_SHOTGUN_SOLDIER,
 	DMG_BUCKSHOT | DMG_USEDISTANCEMOD,	// TF_WEAPON_SHOTGUN_HWG,
 	DMG_BUCKSHOT | DMG_USEDISTANCEMOD,	// TF_WEAPON_SHOTGUN_PYRO,
 	DMG_BUCKSHOT | DMG_USEDISTANCEMOD,  // TF_WEAPON_SCATTERGUN,
@@ -209,6 +213,8 @@ int g_aWeaponDamageTypes[] =
 	DMG_GENERIC,	// TF_WEAPON_DISPENSER
 	DMG_GENERIC,	// TF_WEAPON_INVIS
 	DMG_BULLET | DMG_USE_HITLOCATIONS,	// TF_WEAPON_RAILGUN,
+	DMG_BLAST, //TF_WEAPON_SUPERSHOTGUN
+	DMG_BULLET,	// TF_WEAPON_PISTOL_MERCENARY,
 
 	// This is a special entry that must match with TF_WEAPON_COUNT
 	// to protect against updating the weapon list without updating this list
@@ -549,7 +555,11 @@ int CalculateObjectCost( int iObjectType )
 	{
 		return 0;
 	}
-
+	
+	if ( of_infiniteammo.GetBool() == 1 )
+	{
+		return 0;
+	}
 	int iCost = GetObjectInfo( iObjectType )->m_Cost;
 
 	return iCost;

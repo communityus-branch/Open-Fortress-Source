@@ -29,6 +29,7 @@ BEGIN_DATADESC( CTFPowerup )
 
 // Keyfields.
 DEFINE_KEYFIELD( m_bDisabled, FIELD_BOOLEAN, "StartDisabled" ),
+DEFINE_KEYFIELD( fl_RespawnTime, FIELD_FLOAT, "respawntime" ),
 
 // Inputs.
 DEFINE_INPUTFUNC( FIELD_VOID, "Enable", InputEnable ),
@@ -89,7 +90,10 @@ CBaseEntity* CTFPowerup::Respawn( void )
 	CBaseEntity *pReturn = BaseClass::Respawn();
 
 	// Override the respawn time
-	SetNextThink( gpGlobals->curtime + GetRespawnDelay() );
+	if ( fl_RespawnTime < 0 )
+		SetNextThink( gpGlobals->curtime + GetRespawnDelay() );
+	else
+		SetNextThink( gpGlobals->curtime + fl_RespawnTime );
 
 	return pReturn;
 }

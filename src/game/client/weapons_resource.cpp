@@ -175,6 +175,16 @@ void WeaponsResource::LoadWeaponSprites( WEAPON_FILE_INFO_HANDLE hWeaponFileInfo
 				pWeaponInfo->iconActive->Precache();
 			}
 		}
+		
+		p = FindHudTextureInDict( tempList, "weapon_s" );
+		if ( p )
+		{
+			pWeaponInfo->iconActive = gHUD.AddUnsearchableHudIconToList( *p );
+			if ( pWeaponInfo->iconActive )
+			{
+				pWeaponInfo->iconActive->Precache();
+			}
+		}
 
 		p = FindHudTextureInDict( tempList, "weapon_small" );
 		if ( p )

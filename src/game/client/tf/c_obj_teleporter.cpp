@@ -189,9 +189,11 @@ void C_ObjectTeleporter::StartChargedEffects()
 	if ( GetType() == OBJ_TELEPORTER_ENTRANCE )
 	{
 		char szEffect[128];
-
-		Q_snprintf( szEffect, sizeof(szEffect), "teleporter_%s_charged", 
-			( GetTeamNumber() == TF_TEAM_RED ) ? "red" : "blue" );
+		char pcfName[128];
+		if ( GetTeamNumber() == TF_TEAM_RED ) char pcfName= "red";
+		else if ( GetTeamNumber() == TF_TEAM_BLUE ) char pcfName= "blue";
+		else char pcfName= "mercenary";
+		Q_snprintf( szEffect, sizeof(szEffect), "teleporter_%s_charged", pcfName );
 
 		Assert( m_pChargedEffect == NULL );
 		m_pChargedEffect = ParticleProp()->Create( szEffect, PATTACH_ABSORIGIN );

@@ -23,7 +23,7 @@ DECLARE_HUDELEMENT( CSecondaryTargetID );
 
 using namespace vgui;
 
-ConVar of_showtargetid( "of_showtargetid", "1", FCVAR_REPLICATED | FCVAR_CLIENTDLL , "Whether  or not TargetID draws" );
+ConVar of_showtargetid( "of_showtargetid", "1", FCVAR_CLIENTDLL | FCVAR_ARCHIVE | FCVAR_USERINFO , "Whether  or not TargetID draws" );
 
 //-----------------------------------------------------------------------------
 // Purpose: 

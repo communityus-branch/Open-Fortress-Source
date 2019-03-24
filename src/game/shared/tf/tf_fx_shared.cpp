@@ -17,6 +17,8 @@
 #include "ilagcompensationmanager.h"
 #endif
 
+extern ConVar ofd_instagib;
+
 // Client specific.
 #ifdef CLIENT_DLL
 
@@ -192,7 +194,9 @@ void FX_FireBullets( int iPlayer, const Vector &vecOrigin, const QAngle &vecAngl
 	fireInfo.m_vecSrc = vecOrigin;
 	if ( flDamage < 0.0f )
 	{
-		fireInfo.m_flDamage = pWeaponInfo->GetWeaponData( iMode ).m_nDamage;
+		
+		if ( ofd_instagib.GetBool() == 0 ) fireInfo.m_flDamage = pWeaponInfo->GetWeaponData( iMode ).m_nDamage;
+		else fireInfo.m_flDamage = pWeaponInfo->GetWeaponData( iMode ).m_nInstagibDamage;
 	}
 	else
 	{

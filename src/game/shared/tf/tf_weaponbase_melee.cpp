@@ -19,6 +19,8 @@
 #include "c_tf_player.h"
 #endif
 
+extern ConVar ofd_instagib;
+
 //=============================================================================
 //
 // TFWeaponBase Melee tables.
@@ -372,7 +374,8 @@ void CTFWeaponBaseMelee::Smack( void )
 //-----------------------------------------------------------------------------
 float CTFWeaponBaseMelee::GetMeleeDamage( CBaseEntity *pTarget, int &iCustomDamage )
 {
-	return static_cast<float>( m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_nDamage );
+	if ( ofd_instagib.GetBool() == 0 ) return static_cast<float>( m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_nDamage );
+	else return static_cast<float>( m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_nInstagibDamage );
 }
 
 void CTFWeaponBaseMelee::OnEntityHit( CBaseEntity *pEntity )

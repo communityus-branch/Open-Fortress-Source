@@ -303,6 +303,8 @@ enum
 	TF_WEAPON_DISPENSER,
 	TF_WEAPON_INVIS,
 	TF_WEAPON_RAILGUN,
+	TF_WEAPON_SUPERSHOTGUN,
+	TF_WEAPON_PISTOL_MERCENARY,
 
 	TF_WEAPON_COUNT
 };
@@ -369,6 +371,7 @@ enum
 	TF_COND_INVULNERABLE_WEARINGOFF,
 	TF_COND_STEALTHED_BLINK,
 	TF_COND_SELECTED_TO_TELEPORT,
+	TF_COND_CRITBOOSTED,
 
 	// The following conditions all expire faster when the player is being healed
 	// If you add a new condition that shouldn't have this behavior, add it before this section.

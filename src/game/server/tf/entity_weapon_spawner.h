@@ -27,7 +27,7 @@ public:
 	bool	MyTouch( CBasePlayer *pPlayer );
 
 	powerupsize_t	GetPowerupSize( void ) { return POWERUP_FULL; }
-	string_t m_iszWeaponName;
+	string_t m_iszWeaponName=MAKE_STRING( "tf_weapon_scattergun" );
 	string_t m_iszWeaponModel=MAKE_STRING( "models/weapons/w_models/w_scattergun.mdl" );
 	DECLARE_DATADESC();
 };

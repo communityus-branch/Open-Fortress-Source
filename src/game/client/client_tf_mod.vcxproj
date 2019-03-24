@@ -220,6 +220,7 @@
   <ItemGroup>
     <Library Include="..\..\lib\public\bitmap.lib" />
     <Library Include="..\..\lib\public\choreoobjects.lib" />
+    <Library Include="..\..\lib\public\discord-rpc.lib" />
     <Library Include="..\..\lib\public\dmxloader.lib" />
     <Library Include="..\..\lib\common\libcurl.lib" />
     <Library Include="..\..\lib\public\libprotobuf.lib" />

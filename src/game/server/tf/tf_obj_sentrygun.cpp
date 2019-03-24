@@ -20,6 +20,7 @@
 #include "tier0/memdbgon.h"
 
 extern bool IsInCommentaryMode();
+extern ConVar of_infiniteammo;
 
 // Ground placed version
 #define SENTRY_MODEL_PLACEMENT			"models/buildables/sentry1_blueprint.mdl"
@@ -488,7 +489,10 @@ bool CObjectSentrygun::OnWrenchHit( CTFPlayer *pPlayer )
 
 		if ( tf_cheapobjects.GetBool() == false )
 		{
-			pPlayer->RemoveAmmo( iAmountToAdd, TF_AMMO_METAL );
+		
+			if ( of_infiniteammo.GetBool() != 1 )
+				pPlayer->RemoveAmmo( iAmountToAdd, TF_AMMO_METAL );
+		
 		}
 		m_iUpgradeMetal += iAmountToAdd;
 
@@ -523,7 +527,9 @@ bool CObjectSentrygun::OnWrenchHit( CTFPlayer *pPlayer )
 
 			iAmountToAdd = min( ( m_iMaxAmmoShells - m_iAmmoShells ), iAmountToAdd );
 
-			pPlayer->RemoveAmmo( iAmountToAdd * tf_sentrygun_metal_per_shell.GetInt(), TF_AMMO_METAL );
+			if ( of_infiniteammo.GetBool() != 1 )
+				pPlayer->RemoveAmmo( iAmountToAdd * tf_sentrygun_metal_per_shell.GetInt(), TF_AMMO_METAL );
+			
 			m_iAmmoShells += iAmountToAdd;
 
 			if ( iAmountToAdd > 0 )
@@ -542,7 +548,8 @@ bool CObjectSentrygun::OnWrenchHit( CTFPlayer *pPlayer )
 			int iAmountToAdd = min( ( SENTRYGUN_ADD_ROCKETS ), iMaxRocketsPlayerCanAfford );
 			iAmountToAdd = min( ( m_iMaxAmmoRockets - m_iAmmoRockets ), iAmountToAdd );
 
-			pPlayer->RemoveAmmo( iAmountToAdd * tf_sentrygun_metal_per_rocket.GetFloat(), TF_AMMO_METAL );
+			if ( of_infiniteammo.GetBool() != 1 )
+				pPlayer->RemoveAmmo( iAmountToAdd * tf_sentrygun_metal_per_rocket.GetFloat(), TF_AMMO_METAL );
 			m_iAmmoRockets += iAmountToAdd;
 
 			if ( iAmountToAdd > 0 )
@@ -637,7 +644,7 @@ bool CObjectSentrygun::FindTarget()
 
 	// Loop through players within 1100 units (sentry range).
 	Vector vecSentryOrigin = EyePosition();
-
+	
 	// Find the opposing team list.
 	CTFPlayer *pPlayer = ToTFPlayer( GetOwner() );
 	if ( !pPlayer )

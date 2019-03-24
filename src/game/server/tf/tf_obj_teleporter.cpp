@@ -316,22 +316,30 @@ void CObjectTeleporter::Precache()
 
 	PrecacheParticleSystem( "teleporter_red_charged" );
 	PrecacheParticleSystem( "teleporter_blue_charged" );
+	PrecacheParticleSystem( "teleporter_mercenary_charged" );
 	PrecacheParticleSystem( "teleporter_red_entrance" );
 	PrecacheParticleSystem( "teleporter_blue_entrance" );
+	PrecacheParticleSystem( "teleporter_mercenary_entrance" );
 	PrecacheParticleSystem( "teleporter_red_exit" );
 	PrecacheParticleSystem( "teleporter_blue_exit" );
+	PrecacheParticleSystem( "teleporter_mercenary_exit" );
 	PrecacheParticleSystem( "teleporter_arms_circle_red" );
 	PrecacheParticleSystem( "teleporter_arms_circle_blue" );
+	PrecacheParticleSystem( "teleporter_arms_circle_mercenary" );
 	PrecacheParticleSystem( "tpdamage_1" );
 	PrecacheParticleSystem( "tpdamage_2" );
 	PrecacheParticleSystem( "tpdamage_3" );
 	PrecacheParticleSystem( "tpdamage_4" );
 	PrecacheParticleSystem( "teleported_red" );
 	PrecacheParticleSystem( "player_sparkles_red" );
+	PrecacheParticleSystem( "teleported_mercenary" );
+	PrecacheParticleSystem( "player_sparkles_mercenary" );
 	PrecacheParticleSystem( "teleported_blue" );
 	PrecacheParticleSystem( "player_sparkles_blue" );
+	PrecacheParticleSystem( "player_sparkles_mercenary" );
 	PrecacheParticleSystem( "teleportedin_red" );
 	PrecacheParticleSystem( "teleportedin_blue" );
+	PrecacheParticleSystem( "teleportedin_mercenary" );
 }
 
 //-----------------------------------------------------------------------------

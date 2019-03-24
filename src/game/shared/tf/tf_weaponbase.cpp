@@ -38,6 +38,7 @@ extern CTFWeaponInfo *GetTFWeaponInfo( int iWeapon );
 #endif
 
 ConVar tf_weapon_criticals( "tf_weapon_criticals", "0", FCVAR_NOTIFY | FCVAR_REPLICATED, "Whether or not random crits are enabled." );
+ConVar of_infiniteammo( "of_infiniteammo", "0", FCVAR_NOTIFY | FCVAR_REPLICATED, "Whether or not reloading is disabled" );
 extern ConVar tf_useparticletracers;
 
 //=============================================================================
@@ -466,7 +467,11 @@ void CTFWeaponBase::CalcIsAttackCritical( void)
 		RandomSeed( m_iCurrentSeed );
 	}
 	
-	if ( ( TFGameRules()->State_Get() == GR_STATE_TEAM_WIN ) && ( TFGameRules()->GetWinningTeam() == pPlayer->GetTeamNumber() ) )
+	if ( pPlayer->m_Shared.InCond( TF_COND_CRITBOOSTED ) )
+	{
+		m_bCurrentAttackIsCrit = true;
+	}	
+	else if ( ( TFGameRules()->State_Get() == GR_STATE_TEAM_WIN ) && ( TFGameRules()->GetWinningTeam() == pPlayer->GetTeamNumber() ) )
 	{
 		m_bCurrentAttackIsCrit = true;
 	}
@@ -632,7 +637,8 @@ bool CTFWeaponBase::ReloadSingly( void )
 				}
 				else
 				{
-					SetReloadTimer( SequenceDuration() );
+					//SetReloadTimer( SequenceDuration() );
+					SetReloadTimer( GetTFWpnData().m_WeaponData[TF_WEAPON_PRIMARY_MODE].m_flTimeReload );
 				}
 			}
 			else
@@ -660,7 +666,8 @@ bool CTFWeaponBase::ReloadSingly( void )
 			if ( pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) > 0 && !m_bReloadedThroughAnimEvent )
 			{
 				m_iClip1 = min( ( m_iClip1 + 1 ), GetMaxClip1() );
-				pPlayer->RemoveAmmo( 1, m_iPrimaryAmmoType );
+				if ( of_infiniteammo.GetBool() != 1 ) 
+					pPlayer->RemoveAmmo( 1, m_iPrimaryAmmoType );
 			}
 
 			if ( Clip1() == GetMaxClip1() || pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) <= 0 )
@@ -778,7 +785,9 @@ bool CTFWeaponBase::ReloadsAll( void )
 			// If we have ammo, remove ammo and add it to clip
 			if ( pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) > 0 && !m_bReloadedThroughAnimEvent )
 			{
-				pPlayer->RemoveAmmo( GetMaxClip1() - m_iClip1 , m_iPrimaryAmmoType );
+				if( of_infiniteammo.GetBool() != 1 )
+					pPlayer->RemoveAmmo( GetMaxClip1() - m_iClip1 , m_iPrimaryAmmoType );
+				
 				m_iClip1 =  GetMaxClip1();
 			}
 			
@@ -838,7 +847,8 @@ void CTFWeaponBase::Operator_HandleAnimEvent( animevent_t *pEvent, CBaseCombatCh
 			if ( pOperator->GetAmmoCount( m_iPrimaryAmmoType ) > 0 && !m_bReloadedThroughAnimEvent )
 			{
 				m_iClip1 = min( ( m_iClip1 + 1 ), GetMaxClip1() );
-				pOperator->RemoveAmmo( 1, m_iPrimaryAmmoType );
+				if ( of_infiniteammo.GetBool () != 1 )
+					pOperator->RemoveAmmo( 1, m_iPrimaryAmmoType );
 			}
 
 			m_bReloadedThroughAnimEvent = true;
@@ -898,7 +908,12 @@ bool CTFWeaponBase::DefaultReload( int iClipSize1, int iClipSize2, int iActivity
 	// First, see if we have a reload animation
 	if ( SendWeaponAnim( iActivity ) )
 	{
-		flReloadTime = SequenceDuration();
+//		flReloadTime = SequenceDuration();
+		flReloadTime = GetTFWpnData().m_WeaponData[TF_WEAPON_PRIMARY_MODE].m_flTimeReload;  
+		if ( bReloadSecondary )
+		{
+			flReloadTime = GetTFWpnData().m_WeaponData[TF_WEAPON_SECONDARY_MODE].m_flTimeReload;  
+		}
 	}
 	else
 	{
@@ -2245,7 +2260,8 @@ bool CTFWeaponBase::OnFireEvent( C_BaseViewModel *pViewModel, const Vector& orig
 		if ( pPlayer && pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) > 0 && !m_bReloadedThroughAnimEvent )
 		{
 			m_iClip1 = min( ( m_iClip1 + 1 ), GetMaxClip1() );
-			pPlayer->RemoveAmmo( 1, m_iPrimaryAmmoType );
+			if( of_infiniteammo.GetBool() != 1 )
+				pPlayer->RemoveAmmo( 1, m_iPrimaryAmmoType );
 		}
 
 		m_bReloadedThroughAnimEvent = true;

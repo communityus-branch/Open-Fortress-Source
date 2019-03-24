@@ -29,6 +29,8 @@
 
 #endif
 
+extern ConVar ofd_instagib;
+
 //=============================================================================
 //
 // TFWeaponBase Gun tables.
@@ -49,6 +51,9 @@ DEFINE_THINKFUNC( ZoomOut ),
 DEFINE_THINKFUNC( ZoomIn ),
 END_DATADESC()
 #endif
+
+ConVar of_noreload( "of_noreload", "0", FCVAR_NOTIFY | FCVAR_REPLICATED, "Whether or not reloading is disabled" );
+extern ConVar of_infiniteammo;
 
 //=============================================================================
 //
@@ -198,17 +203,27 @@ CBaseEntity *CTFWeaponBaseGun::FireProjectile( CTFPlayer *pPlayer )
 
 	if ( m_iClip1 != -1 )
 	{
-		m_iClip1 -= m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_iAmmoPerShot;
+		if ( of_noreload.GetBool() == 0 )
+		{
+			m_iClip1 -= m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_iAmmoPerShot;
+		}
+		else
+		{
+			if ( of_infiniteammo.GetBool() != 1 ) 
+					pPlayer->RemoveAmmo( 1, m_iPrimaryAmmoType );
+		}
 	}
 	else
 	{
 		if ( m_iWeaponMode == TF_WEAPON_PRIMARY_MODE )
 		{
-			pPlayer->RemoveAmmo( m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_iAmmoPerShot, m_iPrimaryAmmoType );
+			if ( of_infiniteammo.GetBool() != 1 ) 
+				pPlayer->RemoveAmmo( m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_iAmmoPerShot, m_iPrimaryAmmoType );
 		}
 		else
 		{
-			pPlayer->RemoveAmmo( m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_iAmmoPerShot, m_iSecondaryAmmoType );
+			if ( of_infiniteammo.GetBool() != 1 ) 
+				pPlayer->RemoveAmmo( m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_iAmmoPerShot, m_iSecondaryAmmoType );
 		}
 	}
 
@@ -468,7 +483,8 @@ float CTFWeaponBaseGun::GetWeaponSpread( void )
 //-----------------------------------------------------------------------------
 float CTFWeaponBaseGun::GetProjectileDamage( void )
 {
-	return (float)m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_nDamage;
+	if ( ofd_instagib.GetBool() == 0 ) return (float)m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_nDamage;
+	else return (float)m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_nInstagibDamage;
 }
 
 //-----------------------------------------------------------------------------

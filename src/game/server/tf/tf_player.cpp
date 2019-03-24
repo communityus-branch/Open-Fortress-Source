@@ -69,6 +69,7 @@ extern ConVar	tf_spy_invis_unstealth_time;
 extern ConVar	tf_stalematechangeclasstime;
 
 extern ConVar	ofd_instagib;
+extern ConVar	of_infiniteammo;
 
 EHANDLE g_pLastSpawnPoints[TF_TEAM_COUNT];
 
@@ -87,6 +88,7 @@ ConVar tf_damage_lineardist( "tf_damage_lineardist", "0", FCVAR_DEVELOPMENTONLY 
 ConVar tf_damage_range( "tf_damage_range", "0.5", FCVAR_DEVELOPMENTONLY );
 
 ConVar tf_max_voice_speak_delay( "tf_max_voice_speak_delay", "1.5", FCVAR_REPLICATED , "Max time after a voice command until player can do another one" );
+ConVar tdc( "tdc", "0", FCVAR_REPLICATED | FCVAR_HIDDEN , "The Nintendo shitcube" );
 
 extern ConVar ofd_forceclass;
 extern ConVar ofd_forceteam;
@@ -1074,57 +1076,93 @@ void CTFPlayer::ManageBuilderWeapons( TFPlayerClassData_t *pData )
 //-----------------------------------------------------------------------------
 void CTFPlayer::ManageRegularWeapons( TFPlayerClassData_t *pData )
 {
-	for ( int iWeapon = 0; iWeapon < TF_PLAYER_WEAPON_COUNT; ++iWeapon )
-	{
-		if ( pData->m_aWeapons[iWeapon] != TF_WEAPON_NONE )
+	CTFWeaponBase *pWeapon = (CTFWeaponBase *)GetWeapon( 0 );
+	if( ofd_instagib.GetBool() == 0 )
+		for ( int iWeapon = 0; iWeapon < TF_PLAYER_WEAPON_COUNT; ++iWeapon )
 		{
-			int iWeaponID = pData->m_aWeapons[iWeapon];
-			const char *pszWeaponName = WeaponIdToClassname( iWeaponID );
-			
-			CTFWeaponBase *pWeapon = (CTFWeaponBase *)GetWeapon( iWeapon );
-
-			//If we already have a weapon in this slot but is not the same type then nuke it (changed classes)
-			if ( pWeapon && pWeapon->GetWeaponID() != iWeaponID )
+			if ( pData->m_aWeapons[iWeapon] != TF_WEAPON_NONE )
 			{
-				Weapon_Detach( pWeapon );
-				UTIL_Remove( pWeapon );
-			}
-
-			pWeapon = (CTFWeaponBase *)Weapon_OwnsThisID( iWeaponID );
+				int iWeaponID = pData->m_aWeapons[iWeapon];
+				const char *pszWeaponName = WeaponIdToClassname( iWeaponID );
 			
-			if ( pWeapon )
-			{
-				pWeapon->ChangeTeam( GetTeamNumber() );
-				pWeapon->GiveDefaultAmmo();
-	
-				if ( m_bRegenerating == false )
+				pWeapon = (CTFWeaponBase *)GetWeapon( iWeapon );
+
+				//If we already have a weapon in this slot but is not the same type then nuke it (changed classes)
+				if ( pWeapon && pWeapon->GetWeaponID() != iWeaponID )
 				{
-					pWeapon->WeaponReset();
+					Weapon_Detach( pWeapon );
+					UTIL_Remove( pWeapon );
+				}
+
+				pWeapon = (CTFWeaponBase *)Weapon_OwnsThisID( iWeaponID );
+			
+				if ( pWeapon )
+				{
+					pWeapon->ChangeTeam( GetTeamNumber() );
+					pWeapon->GiveDefaultAmmo();
+	
+					if ( m_bRegenerating == false )
+					{
+						pWeapon->WeaponReset();
+					}
+				}
+				else
+				{
+					pWeapon = (CTFWeaponBase *)GiveNamedItem( pszWeaponName );
+					if ( pWeapon )
+					{
+						pWeapon->DefaultTouch( this );
+					}
 				}
 			}
 			else
 			{
-				pWeapon = (CTFWeaponBase *)GiveNamedItem( pszWeaponName );
-				if ( pWeapon )
+				//I shouldn't have any weapons in this slot, so get rid of it
+				CTFWeaponBase *pCarriedWeapon = (CTFWeaponBase *)GetWeapon( iWeapon );
+
+				//Don't nuke builders since they will be nuked if we don't need them later.
+				if ( pCarriedWeapon && pCarriedWeapon->GetWeaponID() != TF_WEAPON_BUILDER )
 				{
-					pWeapon->DefaultTouch( this );
+					Weapon_Detach( pCarriedWeapon );
+					UTIL_Remove( pCarriedWeapon );
 				}
 			}
 		}
-		else
+	else
+	{
+		for ( int iWeapon = 0; iWeapon < TF_PLAYER_WEAPON_COUNT; ++iWeapon )
 		{
-			//I shouldn't have any weapons in this slot, so get rid of it
-			CTFWeaponBase *pCarriedWeapon = (CTFWeaponBase *)GetWeapon( iWeapon );
-
-			//Don't nuke builders since they will be nuked if we don't need them later.
-			if ( pCarriedWeapon && pCarriedWeapon->GetWeaponID() != TF_WEAPON_BUILDER )
-			{
-				Weapon_Detach( pCarriedWeapon );
-				UTIL_Remove( pCarriedWeapon );
-			}
-		}
+			
+				pWeapon = (CTFWeaponBase *)GetWeapon( iWeapon );
+				
+					if ( pWeapon && pWeapon->GetWeaponID() != TF_WEAPON_RAILGUN )
+					{
+						Weapon_Detach( pWeapon );
+						UTIL_Remove( pWeapon );
+					}
+					if ( pWeapon && pWeapon->GetWeaponID() != TF_WEAPON_CROWBAR && ofd_instagib.GetInt() > 1 )
+					{
+						Weapon_Detach( pWeapon );
+						UTIL_Remove( pWeapon );
+					}
+					else 
+					{
+						pWeapon = (CTFWeaponBase *)GiveNamedItem( "tf_weapon_railgun" );
+						if ( pWeapon )
+						{
+							pWeapon->DefaultTouch( this );
+						}
+						if ( ofd_instagib.GetInt() > 1 )
+						{
+							pWeapon = (CTFWeaponBase *)GiveNamedItem( "tf_weapon_crowbar" );
+							if ( pWeapon )
+							{
+								pWeapon->DefaultTouch( this );
+							}
+						}
+					}
+		}	
 	}
-
 	for ( int iWeapon = 0; iWeapon < TF_PLAYER_WEAPON_COUNT; ++iWeapon )
 	{
 		if( GetActiveWeapon() != NULL ) break;
@@ -2254,7 +2292,7 @@ void CTFPlayer::TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, 
 
 	CTakeDamageInfo info_modified = info;
 
-	if ( info_modified.GetDamageType() & DMG_USE_HITLOCATIONS )
+	if ( info_modified.GetDamageType() & DMG_USE_HITLOCATIONS || tdc.GetBool()== 1 )
 	{
 		switch ( ptr->hitgroup )
 		{
@@ -2672,7 +2710,7 @@ int CTFPlayer::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 								// Rocket launcher only has half the bonus of the other weapons at short range
 								flRandomDamage *= 0.5;
 							}
-							else if ( pWeapon->GetWeaponID() == TF_WEAPON_SCATTERGUN )
+							else if ( pWeapon->GetWeaponID() == TF_WEAPON_SCATTERGUN || pWeapon->GetWeaponID() == TF_WEAPON_SUPERSHOTGUN )
 							{
 								// Scattergun gets 50% bonus of other weapons at short range
 								flRandomDamage *= 1.5;
@@ -4364,7 +4402,8 @@ bool CTFPlayer::IsBuilding( void )
 
 void CTFPlayer::RemoveBuildResources( int iAmount )
 {
-	RemoveAmmo( iAmount, TF_AMMO_METAL );
+	if ( of_infiniteammo.GetBool() != 1 )
+		RemoveAmmo( iAmount, TF_AMMO_METAL );
 }
 
 void CTFPlayer::AddBuildResources( int iAmount )

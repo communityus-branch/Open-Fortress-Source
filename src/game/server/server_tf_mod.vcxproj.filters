@@ -39,6 +39,9 @@
     <Library Include="..\..\lib\public\choreoobjects.lib">
       <Filter>Link Libraries</Filter>
     </Library>
+    <Library Include="..\..\lib\public\discord-rpc.lib">
+      <Filter>Link Libraries</Filter>
+    </Library>
     <Library Include="..\..\lib\public\dmxloader.lib">
       <Filter>Link Libraries</Filter>
     </Library>
@@ -1571,6 +1574,9 @@
     <ClInclude Include="..\..\game\shared\tf\entity_capture_flag.h">
       <Filter>Source Files\TF</Filter>
     </ClInclude>
+    <ClInclude Include="tf\entity_condpowerup.h">
+      <Filter>Source Files\TF</Filter>
+    </ClInclude>
     <ClInclude Include="tf\entity_forcerespawn.h">
       <Filter>Source Files\TF</Filter>
     </ClInclude>
@@ -3095,6 +3101,9 @@
       <Filter>Source Files\TF</Filter>
     </ClCompile>
     <ClCompile Include="..\..\game\shared\tf\entity_capture_flag.cpp">
+      <Filter>Source Files\TF</Filter>
+    </ClCompile>
+    <ClCompile Include="tf\entity_condpowerup.cpp">
       <Filter>Source Files\TF</Filter>
     </ClCompile>
     <ClCompile Include="tf\entity_forcerespawn.cpp">

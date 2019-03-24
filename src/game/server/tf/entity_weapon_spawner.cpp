@@ -5,14 +5,17 @@
 //=============================================================================//
 
 #include "cbase.h"
-#include "items.h"
-#include "tf_gamerules.h"
-#include "tf_shareddefs.h"
 #include "tf_player.h"
+#include "tf_weaponbase.h"
+#include "tf_shareddefs.h"
+#include "tf_weapon_builder.h"
+#include "tf_gamerules.h"
 #include "tf_team.h"
 #include "engine/IEngineSound.h"
 #include "entity_weapon_spawner.h"
-#include "takedamageinfo.h"
+#include "tf_weaponbase.h"
+
+#include "tier0/memdbgon.h"
 
 //=============================================================================
 //
@@ -20,8 +23,6 @@
 //
 
 #define TF_WEAPON_PICKUP_SOUND		"AmmoPack.Touch"
-#define TF_WEAPON_MODEL				"models/weapons/w_models/w_scattergun.mdl"
-#define TF_WEAPON_NAME				"tf_weapon_scattergun"
 
 //-----------------------------------------------------------------------------
 // Purpose: Spawn function for the ammopack
@@ -66,7 +67,15 @@ bool CWeaponSpawner::MyTouch( CBasePlayer *pPlayer )
 		CTFPlayer *pTFPlayer = ToTFPlayer( pPlayer );
 		if ( !pTFPlayer )
 			return false;
+		
 //		CTFWeaponBase *pWeapon = ToTFPlayer( pPlayer )->GetActiveTFWeapon();
+//		CTFWeaponBase *pSpawnedWeapon = GiveNamedItem( STRING(m_iszWeaponName) );
+//		if ( pWeapon && pWeapon->GetWeaponID() != pSpawnedWeapon->GetWeaponID()  )
+//		{
+//			UTIL_Remove( pWeapon );
+//		}
+		
+		
 		bSuccess = true;
 
 		// did we give them anything?

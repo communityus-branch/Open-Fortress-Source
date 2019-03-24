@@ -270,6 +270,7 @@ void CCaptureFlag::Activate( void )
 
 	m_iOriginalTeam = GetTeamNumber();
 	m_nSkin = ( GetTeamNumber() == TEAM_UNASSIGNED ) ? 2 : (GetTeamNumber() - 2);
+	
 }
 #endif
 

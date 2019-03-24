@@ -215,6 +215,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Library Include="..\..\lib\public\choreoobjects.lib" />
+    <Library Include="..\..\lib\public\discord-rpc.lib" />
     <Library Include="..\..\lib\public\dmxloader.lib" />
     <Library Include="..\..\lib\public\libprotobuf.lib" />
     <Library Include="..\..\lib\public\mathlib.lib" />
@@ -727,6 +728,7 @@
     <ClInclude Include="tf\entity_ammopack.h" />
     <ClInclude Include="tf\entity_armor.h" />
     <ClInclude Include="..\..\game\shared\tf\entity_capture_flag.h" />
+    <ClInclude Include="tf\entity_condpowerup.h" />
     <ClInclude Include="tf\entity_forcerespawn.h" />
     <ClInclude Include="tf\entity_healthkit.h" />
     <ClInclude Include="tf\entity_intermission.h" />
@@ -1324,6 +1326,7 @@
     <ClCompile Include="tf\entity_ammopack.cpp" />
     <ClCompile Include="tf\entity_armor.cpp" />
     <ClCompile Include="..\..\game\shared\tf\entity_capture_flag.cpp" />
+    <ClCompile Include="tf\entity_condpowerup.cpp" />
     <ClCompile Include="tf\entity_forcerespawn.cpp" />
     <ClCompile Include="tf\entity_game_text_tf.cpp" />
     <ClCompile Include="tf\entity_healthkit.cpp" />

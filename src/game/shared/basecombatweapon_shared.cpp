@@ -52,6 +52,7 @@
 #define HIDEWEAPON_THINK_CONTEXT			"BaseCombatWeapon_HideThink"
 
 extern bool UTIL_ItemCanBeTouchedByPlayer( CBaseEntity *pItem, CBasePlayer *pPlayer );
+extern ConVar of_infiniteammo;
 
 #if defined ( TF_CLIENT_DLL ) || defined ( TF_DLL )
 #ifdef _DEBUG
@@ -1731,7 +1732,10 @@ void CBaseCombatWeapon::ItemPostFrame( void )
 				// reload clip2 if empty
 				if (m_iClip2 < 1)
 				{
-					pOwner->RemoveAmmo( 1, m_iSecondaryAmmoType );
+					if ( of_infiniteammo.GetBool() != 1 ) 
+						pOwner->RemoveAmmo( 1, m_iSecondaryAmmoType );
+					
+					
 					m_iClip2 = m_iClip2 + 1;
 				}
 			}
@@ -2164,7 +2168,8 @@ void CBaseCombatWeapon::CheckReload( void )
 			{
 				// Add them to the clip
 				m_iClip1 += 1;
-				pOwner->RemoveAmmo( 1, m_iPrimaryAmmoType );
+				if ( of_infiniteammo.GetBool() != 1 ) 
+					pOwner->RemoveAmmo( 1, m_iPrimaryAmmoType );
 
 				Reload();
 				return;
@@ -2204,7 +2209,8 @@ void CBaseCombatWeapon::CheckReload( void )
 			{
 				// Add them to the clip
 				m_iClip1 = GetMaxClip1();
-				pOwner->RemoveAmmo( GetMaxClip1() , m_iPrimaryAmmoType );
+				if ( of_infiniteammo.GetBool() != 1 ) 
+					pOwner->RemoveAmmo( GetMaxClip1() , m_iPrimaryAmmoType );
 
 				Reload();
 				return;
@@ -2245,7 +2251,8 @@ void CBaseCombatWeapon::FinishReload( void )
 		{
 			int primary	= MIN( GetMaxClip1() - m_iClip1, pOwner->GetAmmoCount(m_iPrimaryAmmoType));	
 			m_iClip1 += primary;
-			pOwner->RemoveAmmo( primary, m_iPrimaryAmmoType);
+			if ( of_infiniteammo.GetBool() != 1 ) 
+				pOwner->RemoveAmmo( primary, m_iPrimaryAmmoType);
 		}
 
 		// If I use secondary clips, reload secondary
@@ -2253,7 +2260,8 @@ void CBaseCombatWeapon::FinishReload( void )
 		{
 			int secondary = MIN( GetMaxClip2() - m_iClip2, pOwner->GetAmmoCount(m_iSecondaryAmmoType));
 			m_iClip2 += secondary;
-			pOwner->RemoveAmmo( secondary, m_iSecondaryAmmoType );
+			if ( of_infiniteammo.GetBool() != 1 ) 
+				pOwner->RemoveAmmo( secondary, m_iSecondaryAmmoType );
 		}
 
 		if ( m_bReloadsSingly )
@@ -2382,7 +2390,8 @@ void CBaseCombatWeapon::PrimaryAttack( void )
 	else
 	{
 		info.m_iShots = MIN( info.m_iShots, pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) );
-		pPlayer->RemoveAmmo( info.m_iShots, m_iPrimaryAmmoType );
+		if ( of_infiniteammo.GetBool() != 1 ) 
+			pPlayer->RemoveAmmo( info.m_iShots, m_iPrimaryAmmoType );
 	}
 
 	info.m_flDistance = MAX_TRACE_LENGTH;

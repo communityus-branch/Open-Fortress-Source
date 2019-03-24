@@ -38,7 +38,7 @@ void ToolFramework_RecordMaterialParams( IMaterial *pMaterial );
 #define SNIPER_DOT_SPRITE_RED		"effects/sniperdot_red.vmt"
 #define SNIPER_DOT_SPRITE_BLUE		"effects/sniperdot_blue.vmt"
 
-ConVar ofd_instagib( "ofd_instagib", "0", FCVAR_REPLICATED, "Enable instagib." );
+ConVar ofd_instagib( "ofd_instagib", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "Enable instagib." );
 
 //=============================================================================
 //

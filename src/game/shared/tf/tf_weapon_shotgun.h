@@ -18,6 +18,7 @@
 #define CTFShotgun_HWG C_TFShotgun_HWG
 #define CTFShotgun_Pyro C_TFShotgun_Pyro
 #define CTFScatterGun C_TFScatterGun
+#define CTFSuperShotgun C_TFSuperShotgun
 #endif
 
 // Reload Modes
@@ -65,6 +66,16 @@ public:
 	DECLARE_PREDICTABLE();
 
 	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_SCATTERGUN; }
+};
+
+class CTFSuperShotgun : public CTFShotgun
+{
+public:
+	DECLARE_CLASS( CTFSuperShotgun, CTFShotgun );
+	DECLARE_NETWORKCLASS(); 
+	DECLARE_PREDICTABLE();
+
+	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_SUPERSHOTGUN; }
 };
 
 class CTFShotgun_Soldier : public CTFShotgun

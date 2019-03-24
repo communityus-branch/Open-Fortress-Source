@@ -45,6 +45,7 @@ public:
 	void			SetDisabled( bool bDisabled );
 
 	virtual float	GetRespawnDelay( void ) { return g_pGameRules->FlItemRespawnTime( this ); }
+	float fl_RespawnTime=-1;
 
 	// Input handlers
 	void			InputEnable( inputdata_t &inputdata );

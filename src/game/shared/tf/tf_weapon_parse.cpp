@@ -12,6 +12,7 @@
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
+
 FileWeaponInfo_t *CreateWeaponInfo()
 {
 	return new CTFWeaponInfo;
@@ -66,6 +67,7 @@ void CTFWeaponInfo::Parse( KeyValues *pKeyValuesData, const char *szWeaponName )
 
 	// Primary fire mode.
 	m_WeaponData[TF_WEAPON_PRIMARY_MODE].m_nDamage				= pKeyValuesData->GetInt( "Damage", 0 );
+	m_WeaponData[TF_WEAPON_PRIMARY_MODE].m_nInstagibDamage		= pKeyValuesData->GetInt( "InstagibDamage", 0 );
 	m_WeaponData[TF_WEAPON_PRIMARY_MODE].m_flRange				= pKeyValuesData->GetFloat( "Range", 8192.0f );
 	m_WeaponData[TF_WEAPON_PRIMARY_MODE].m_nBulletsPerShot		= pKeyValuesData->GetInt( "BulletsPerShot", 0 );
 	m_WeaponData[TF_WEAPON_PRIMARY_MODE].m_flSpread				= pKeyValuesData->GetFloat( "Spread", 0.0f );

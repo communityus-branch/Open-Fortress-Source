@@ -36,6 +36,7 @@ extern bool IsInCommentaryMode( void );
 
 extern ConVar spec_freeze_time;
 extern ConVar spec_freeze_traveltime;
+extern ConVar of_disable_waitingforplayers;
 
 #ifdef CLIENT_DLL
 void RecvProxy_TeamplayRoundState( const CRecvProxyData *pData, void *pStruct, void *pOut )
@@ -643,6 +644,24 @@ void CTeamplayRoundBasedRules::CheckWaitingForPlayers( void )
 	if ( IsLoadingBugBaitReport() || gpGlobals->eLoadType == MapLoad_Background )
 		return;
 
+	if( of_disable_waitingforplayers.GetBool() )
+	{
+		// Cancel the wait period and manually Resume() the timer if 
+		// it's not supposed to start paused at the beginning of a round.
+		// We must do this before SetInWaitingForPlayers() is called because it will
+		// restore the timer in the HUD and set the handle to NULL
+		if ( m_hPreviousActiveTimer.Get() )
+		{
+			CTeamRoundTimer *pTimer = dynamic_cast<CTeamRoundTimer*>( m_hPreviousActiveTimer.Get() );
+			if ( pTimer && !pTimer->StartPaused() )
+			{
+				pTimer->ResumeTimer();
+			}
+		}
+
+		SetInWaitingForPlayers( false );
+	}	
+	
 	if( mp_waitingforplayers_restart.GetBool() )
 	{
 		if( m_bInWaitingForPlayers )

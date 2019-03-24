@@ -21,6 +21,7 @@
 struct WeaponData_t
 {
 	int		m_nDamage;
+	int		m_nInstagibDamage;
 	int		m_nBulletsPerShot;
 	float	m_flRange;
 	float	m_flSpread;
@@ -40,6 +41,7 @@ struct WeaponData_t
 	void Init( void )
 	{
 		m_nDamage = 0;
+		m_nInstagibDamage = 9999;
 		m_nBulletsPerShot = 0;
 		m_flRange = 0.0f;
 		m_flSpread = 0.0f;
