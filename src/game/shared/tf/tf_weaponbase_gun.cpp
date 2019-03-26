@@ -203,7 +203,7 @@ CBaseEntity *CTFWeaponBaseGun::FireProjectile( CTFPlayer *pPlayer )
 
 	if ( m_iClip1 != -1 )
 	{
-		if ( of_noreload.GetBool() == 0 )
+		if ( of_noreload.GetBool() == 0 || pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) <= 0 )
 		{
 			m_iClip1 -= m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_iAmmoPerShot;
 		}
@@ -212,6 +212,7 @@ CBaseEntity *CTFWeaponBaseGun::FireProjectile( CTFPlayer *pPlayer )
 			if ( of_infiniteammo.GetBool() != 1 ) 
 					pPlayer->RemoveAmmo( 1, m_iPrimaryAmmoType );
 		}
+		
 	}
 	else
 	{
@@ -483,7 +484,7 @@ float CTFWeaponBaseGun::GetWeaponSpread( void )
 //-----------------------------------------------------------------------------
 float CTFWeaponBaseGun::GetProjectileDamage( void )
 {
-	if ( ofd_instagib.GetBool() == 0 ) return (float)m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_nDamage;
+	if ( ofd_instagib.GetInt() == 0 ) return (float)m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_nDamage;
 	else return (float)m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_nInstagibDamage;
 }
 

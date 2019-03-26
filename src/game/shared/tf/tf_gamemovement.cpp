@@ -39,6 +39,7 @@ ConVar  tf_clamp_back_speed_min( "tf_clamp_back_speed_min", "100", FCVAR_REPLICA
 ConVar 	of_bunnyhop( "of_bunnyhop", "0", FCVAR_NOTIFY | FCVAR_REPLICATED , "Allows enables/disables bunnyhoping." );
 ConVar 	of_crouchjump( "of_crouchjump", "0", FCVAR_NOTIFY | FCVAR_REPLICATED , "Allows enables/disables crouch jumping." );
 ConVar 	of_bunnyhop_max_speed_factor( "of_bunnyhop_max_speed_factor", "1.2", FCVAR_NOTIFY | FCVAR_REPLICATED , "Max Speed achievable with bunnyhoping." );
+ConVar 	ofd_jumpsound( "ofd_jumpsound", "0", FCVAR_CLIENTDLL | FCVAR_ARCHIVE | FCVAR_USERINFO , "Hough" );
 
 #define TF_MAX_SPEED   400
 
@@ -457,6 +458,8 @@ bool CTFGameMovement::CheckJumpButton()
 
 	// Flag that we jumped and don't jump again until it is released.
 	mv->m_nOldButtons |= IN_JUMP;
+	if ( ofd_jumpsound.GetBool() == 1 )
+		m_pTFPlayer->EmitSound( "Mercenary.Jumpsound" );
 	return true;
 }
 

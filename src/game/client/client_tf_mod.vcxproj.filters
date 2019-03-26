@@ -3487,6 +3487,9 @@
     <ClCompile Include="tf\c_baseobject.cpp">
       <Filter>Source Files\TF</Filter>
     </ClCompile>
+    <ClCompile Include="tf\c_entity_weapon_spawner.cpp">
+      <Filter>Source Files\TF</Filter>
+    </ClCompile>
     <ClCompile Include="tf\c_func_capture_zone.cpp">
       <Filter>Source Files\TF</Filter>
     </ClCompile>

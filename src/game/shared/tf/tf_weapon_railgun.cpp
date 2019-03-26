@@ -38,7 +38,7 @@ void ToolFramework_RecordMaterialParams( IMaterial *pMaterial );
 #define SNIPER_DOT_SPRITE_RED		"effects/sniperdot_red.vmt"
 #define SNIPER_DOT_SPRITE_BLUE		"effects/sniperdot_blue.vmt"
 
-ConVar ofd_instagib( "ofd_instagib", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "Enable instagib." );
+ConVar ofd_instagib( "ofd_instagib", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "Enable instagib.", true, 0, true, 2  );
 
 //=============================================================================
 //
@@ -303,7 +303,7 @@ void CTFRailgun::ItemPostFrame( void )
 		// Don't start charging in the time just after a shot before we unzoom to play rack anim.
 		if ( pPlayer->m_Shared.InCond( TF_COND_AIMING ) && !m_bRezoomAfterShot )
 		{
-			if ( ofd_instagib.GetBool()==1 ) m_flChargedDamage = min( m_flChargedDamage + gpGlobals->frametime * TF_WEAPON_RAILGUN_CHARGE_PER_SEC, TF_WEAPON_RAILGUN_DAMAGE_INSTAGIB );
+			if ( ofd_instagib.GetInt()==1 ) m_flChargedDamage = min( m_flChargedDamage + gpGlobals->frametime * TF_WEAPON_RAILGUN_CHARGE_PER_SEC, TF_WEAPON_RAILGUN_DAMAGE_INSTAGIB );
 			else m_flChargedDamage = min( m_flChargedDamage + gpGlobals->frametime * TF_WEAPON_RAILGUN_CHARGE_PER_SEC, TF_WEAPON_RAILGUN_DAMAGE_MAX );
 		}
 		else
@@ -516,7 +516,7 @@ void CTFRailgun::SetRezoom( bool bRezoom, float flDelay )
 float CTFRailgun::GetProjectileDamage( void )
 {
 	// Uncharged? Min damage.
-	if ( ofd_instagib.GetBool()==1 ) return max( m_flChargedDamage, TF_WEAPON_RAILGUN_DAMAGE_INSTAGIB );
+	if ( ofd_instagib.GetInt()==1 ) return max( m_flChargedDamage, TF_WEAPON_RAILGUN_DAMAGE_INSTAGIB );
 	else return max( m_flChargedDamage, TF_WEAPON_RAILGUN_DAMAGE_MIN );
 }
 
@@ -653,7 +653,7 @@ bool CTFRailgun::CanFireCriticalShot( bool bIsHeadshot )
 //-----------------------------------------------------------------------------
 float CTFRailgun::GetHUDDamagePerc( void )
 {
-	if ( ofd_instagib.GetBool()==1 ) return ( m_flChargedDamage / TF_WEAPON_RAILGUN_DAMAGE_INSTAGIB );
+	if ( ofd_instagib.GetInt()==1 ) return ( m_flChargedDamage / TF_WEAPON_RAILGUN_DAMAGE_INSTAGIB );
 	else return ( m_flChargedDamage / TF_WEAPON_RAILGUN_DAMAGE_MAX );
 }
 
@@ -877,7 +877,7 @@ int CRailgunDot::DrawModel( int flags )
 
 	float flLifeTime = gpGlobals->curtime - m_flChargeStartTime;
 	float flStrength = RemapValClamped( flLifeTime, 0.0, TF_WEAPON_RAILGUN_DAMAGE_INSTAGIB / TF_WEAPON_RAILGUN_CHARGE_PER_SEC, 0.1, 1.0 );
-	if ( ofd_instagib.GetBool()==1 ) flStrength = RemapValClamped( flLifeTime, 0.0, TF_WEAPON_RAILGUN_DAMAGE_INSTAGIB / TF_WEAPON_RAILGUN_CHARGE_PER_SEC, 0.1, 1.0 );
+	if ( ofd_instagib.GetInt()==1 ) flStrength = RemapValClamped( flLifeTime, 0.0, TF_WEAPON_RAILGUN_DAMAGE_INSTAGIB / TF_WEAPON_RAILGUN_CHARGE_PER_SEC, 0.1, 1.0 );
 	else flStrength = RemapValClamped( flLifeTime, 0.0, TF_WEAPON_RAILGUN_DAMAGE_MAX / TF_WEAPON_RAILGUN_CHARGE_PER_SEC, 0.1, 1.0 );
 	
 	color32 innercolor = { 255, 255, 255, 255 };

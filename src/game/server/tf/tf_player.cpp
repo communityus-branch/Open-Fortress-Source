@@ -680,7 +680,11 @@ void CTFPlayer::PrecachePlayerModels( void )
 			}
 		}
 	}
-	
+//	const char *pszArmModel = GetPlayerClassData(i)->m_szArmModelName;
+//	if ( pszArmModel && pszArmModel[0] )
+//	{
+//		PrecacheModel( pszArmModel );
+//	}	
 	if ( TFGameRules() && TFGameRules()->IsBirthday() )
 	{
 		for ( i = 1; i < ARRAYSIZE(g_pszBDayGibs); i++ )
@@ -953,10 +957,9 @@ void CTFPlayer::InitClass( void )
 void CTFPlayer::CreateViewModel( int iViewModel )
 {
 	Assert( iViewModel >= 0 && iViewModel < MAX_VIEWMODELS );
-
 	if ( GetViewModel( iViewModel ) )
 		return;
-
+	
 	CTFViewModel *pViewModel = ( CTFViewModel * )CreateEntityByName( "tf_viewmodel" );
 	if ( pViewModel )
 	{
@@ -1077,7 +1080,7 @@ void CTFPlayer::ManageBuilderWeapons( TFPlayerClassData_t *pData )
 void CTFPlayer::ManageRegularWeapons( TFPlayerClassData_t *pData )
 {
 	CTFWeaponBase *pWeapon = (CTFWeaponBase *)GetWeapon( 0 );
-	if( ofd_instagib.GetBool() == 0 )
+	if( ofd_instagib.GetInt() == 0 )
 		for ( int iWeapon = 0; iWeapon < TF_PLAYER_WEAPON_COUNT; ++iWeapon )
 		{
 			if ( pData->m_aWeapons[iWeapon] != TF_WEAPON_NONE )
@@ -1134,16 +1137,22 @@ void CTFPlayer::ManageRegularWeapons( TFPlayerClassData_t *pData )
 		{
 			
 				pWeapon = (CTFWeaponBase *)GetWeapon( iWeapon );
-				
+					
 					if ( pWeapon && pWeapon->GetWeaponID() != TF_WEAPON_RAILGUN )
 					{
-						Weapon_Detach( pWeapon );
-						UTIL_Remove( pWeapon );
-					}
-					if ( pWeapon && pWeapon->GetWeaponID() != TF_WEAPON_CROWBAR && ofd_instagib.GetInt() > 1 )
-					{
-						Weapon_Detach( pWeapon );
-						UTIL_Remove( pWeapon );
+						if ( ofd_instagib.GetInt() == 1 )
+						{
+							if ( pWeapon && pWeapon->GetWeaponID() != TF_WEAPON_CROWBAR )
+							{
+								Weapon_Detach( pWeapon );
+								UTIL_Remove( pWeapon );
+							}
+						}
+						else
+						{
+							Weapon_Detach( pWeapon );
+							UTIL_Remove( pWeapon );
+						}
 					}
 					else 
 					{
@@ -1152,7 +1161,7 @@ void CTFPlayer::ManageRegularWeapons( TFPlayerClassData_t *pData )
 						{
 							pWeapon->DefaultTouch( this );
 						}
-						if ( ofd_instagib.GetInt() > 1 )
+						if ( ofd_instagib.GetInt() == 1 )
 						{
 							pWeapon = (CTFWeaponBase *)GiveNamedItem( "tf_weapon_crowbar" );
 							if ( pWeapon )
@@ -3130,7 +3139,7 @@ bool CTFPlayer::ShouldGib( const CTakeDamageInfo &info )
 	// Check to see if we should allow players to gib.
 	if ( !tf_playergib.GetBool() )
 		return false;
-	if ( tf_playergib.GetInt()== 2 || ofd_instagib.GetBool() == 1 )
+	if ( tf_playergib.GetInt()== 2 || ofd_instagib.GetInt() == 1 )
 		return true;
 
 	if ( ( ( info.GetDamageType() & DMG_BLAST ) != 0 ) || ( ( info.GetDamageType() & DMG_HALF_FALLOFF ) != 0 ) )
@@ -3603,8 +3612,13 @@ void CTFPlayer::DropAmmoPack( void )
 
 		pAmmoPack->SetInitialVelocity( vecImpulse );
 
-		pAmmoPack->m_nSkin = ( GetTeamNumber() == TF_TEAM_RED ) ? 0 : 1;
-
+		if ( GetTeamNumber() == TF_TEAM_RED )
+			pAmmoPack->m_nSkin = 0;
+		else if ( GetTeamNumber() == TF_TEAM_BLUE)
+			pAmmoPack->m_nSkin = 1;
+		else
+			pAmmoPack->m_nSkin = 2;
+		
 		// Give the ammo pack some health, so that trains can destroy it.
 		pAmmoPack->SetCollisionGroup( COLLISION_GROUP_DEBRIS );
 		pAmmoPack->m_takedamage = DAMAGE_YES;		

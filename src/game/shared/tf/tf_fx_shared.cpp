@@ -195,7 +195,7 @@ void FX_FireBullets( int iPlayer, const Vector &vecOrigin, const QAngle &vecAngl
 	if ( flDamage < 0.0f )
 	{
 		
-		if ( ofd_instagib.GetBool() == 0 ) fireInfo.m_flDamage = pWeaponInfo->GetWeaponData( iMode ).m_nDamage;
+		if ( ofd_instagib.GetInt() == 0 ) fireInfo.m_flDamage = pWeaponInfo->GetWeaponData( iMode ).m_nDamage;
 		else fireInfo.m_flDamage = pWeaponInfo->GetWeaponData( iMode ).m_nInstagibDamage;
 	}
 	else

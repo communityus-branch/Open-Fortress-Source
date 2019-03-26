@@ -196,7 +196,7 @@ void CTFWeaponBaseGrenadeProj::InitGrenade( const Vector &velocity, const Angula
 	SetFriction( 0.2f/*BaseClass::GetGrenadeFriction()*/ );
 	SetElasticity( 0.4f/*BaseClass::GetGrenadeElasticity()*/ );
 
-	if ( ofd_instagib.GetBool() == 0)  SetDamage( weaponInfo.GetWeaponData( TF_WEAPON_PRIMARY_MODE ).m_nDamage );
+	if ( ofd_instagib.GetInt() == 0)  SetDamage( weaponInfo.GetWeaponData( TF_WEAPON_PRIMARY_MODE ).m_nDamage );
 	else SetDamage( weaponInfo.GetWeaponData( TF_WEAPON_PRIMARY_MODE ).m_nInstagibDamage );
 	
 	SetDamageRadius( weaponInfo.m_flDamageRadius );
