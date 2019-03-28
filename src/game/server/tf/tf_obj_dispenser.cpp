@@ -235,9 +235,13 @@ void CObjectDispenser::GetControlPanelInfo( int nPanelIndex, const char *&pPanel
 		{
 			pPanelName = "screen_obj_dispenser_red";
 		}
-		else
+		else if ( GetTeamNumber() == TF_TEAM_BLUE )
 		{
 			pPanelName = "screen_obj_dispenser_blue";
+		}
+		else
+		{
+			pPanelName = "screen_obj_dispenser_mercenary";
 		}
 	}
 	else
@@ -266,6 +270,7 @@ void CObjectDispenser::Precache()
 
 	PrecacheVGuiScreen( "screen_obj_dispenser_blue" );
 	PrecacheVGuiScreen( "screen_obj_dispenser_red" );
+	PrecacheVGuiScreen( "screen_obj_dispenser_mercenary" );
 
 	PrecacheScriptSound( "Building_Dispenser.Idle" );
 	PrecacheScriptSound( "Building_Dispenser.GenerateMetal" );
@@ -273,6 +278,7 @@ void CObjectDispenser::Precache()
 
 	PrecacheParticleSystem( "dispenser_heal_red" );
 	PrecacheParticleSystem( "dispenser_heal_blue" );
+	PrecacheParticleSystem( "dispenser_heal_mercenary" );
 }
 
 //-----------------------------------------------------------------------------

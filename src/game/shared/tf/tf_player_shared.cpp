@@ -63,6 +63,7 @@ ConVar tf_damage_disablespread( "tf_damage_disablespread", "1", FCVAR_NOTIFY | F
 
 ConVar ofd_forceclass( "ofd_forceclass", "1", FCVAR_REPLICATED | FCVAR_NOTIFY , "Force players to be Mercenary in DM." );
 ConVar ofd_forceteam( "ofd_forceteam", "1", FCVAR_REPLICATED | FCVAR_NOTIFY, "Force players on the Mercenary team in DM." );
+extern ConVar of_infiniteammo;
 
 #define TF_SPY_STEALTH_BLINKTIME   0.3f
 #define TF_SPY_STEALTH_BLINKSCALE  0.85f
@@ -812,7 +813,13 @@ void CTFPlayerShared::OnAddDisguising( void )
 
 	if ( !m_pOuter->IsLocalPlayer() && ( !InCond( TF_COND_STEALTHED ) || !m_pOuter->IsEnemyPlayer() ) )
 	{
-		const char *pEffectName = ( m_pOuter->GetTeamNumber() == TF_TEAM_RED ) ? "spy_start_disguise_red" : "spy_start_disguise_blue";
+		const char *pEffectName;
+		if ( m_pOuter->GetTeamNumber() == TF_TEAM_RED )
+			pEffectName = "spy_start_disguise_red";
+		else if ( m_pOuter->GetTeamNumber() == TF_TEAM_BLUE )
+			pEffectName = "spy_start_disguise_blue";
+		else
+			pEffectName = "spy_start_disguise_mercenary";
 		m_pOuter->m_pDisguisingEffect = m_pOuter->ParticleProp()->Create( pEffectName, PATTACH_ABSORIGIN_FOLLOW );
 		m_pOuter->m_flDisguiseEffectStartTime = gpGlobals->curtime;
 	}
@@ -1106,8 +1113,14 @@ void CTFPlayerShared::OnAddBurning( void )
 #ifdef CLIENT_DLL
 	// Start the burning effect
 	if ( !m_pOuter->m_pBurningEffect )
-	{
-		const char *pEffectName = ( m_pOuter->GetTeamNumber() == TF_TEAM_RED ) ? "burningplayer_red" : "burningplayer_blue";
+	{	
+		const char *pEffectName;
+		if ( m_pOuter->GetTeamNumber() == TF_TEAM_RED )
+			pEffectName = "burningplayer_red";
+		else if ( m_pOuter->GetTeamNumber() == TF_TEAM_BLUE )
+			pEffectName = "burningplayer_blue";
+		else
+			pEffectName = "burningplayer_mercenary";
 		m_pOuter->m_pBurningEffect = m_pOuter->ParticleProp()->Create( pEffectName, PATTACH_ABSORIGIN_FOLLOW );
 
 		m_pOuter->m_flBurnEffectStartTime = gpGlobals->curtime;
@@ -2232,9 +2245,9 @@ int CTFPlayer::CanBuild( int iObjectType )
 	// Find out how much the object should cost
 	int iCost = CalculateObjectCost( iObjectType );
 	// Make sure we have enough resources
-	if ( GetBuildResources() < iCost )
+	if ( GetBuildResources() < iCost && of_infiniteammo.GetBool() == 0 )
 	{
-		return CB_NEED_RESOURCES;
+			return CB_NEED_RESOURCES;
 	}
 
 	return CB_CAN_BUILD;
@@ -2394,7 +2407,7 @@ bool CTFPlayer::CanAttack( void )
 
 	Assert( pRules );
 
-	if ( m_Shared.GetStealthNoAttackExpireTime() > gpGlobals->curtime || m_Shared.InCond( TF_COND_STEALTHED ) )
+	if ( m_Shared.GetStealthNoAttackExpireTime() > gpGlobals->curtime || ( m_Shared.InCond( TF_COND_STEALTHED ) && TFGameRules()->IsDMGamemode() == false ) )
 	{
 #ifdef CLIENT_DLL
 		HintMessage( HINT_CANNOT_ATTACK_WHILE_CLOAKED, true, true );

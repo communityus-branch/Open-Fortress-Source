@@ -53,6 +53,7 @@ public:
 	void			InputToggle( inputdata_t &inputdata );
 
 	virtual powerupsize_t	GetPowerupSize( void ) { return POWERUP_FULL; }
+	string_t m_iszSpawnSound=MAKE_STRING( "Item.Materialize" );
 
 private:
 	bool			m_bDisabled;

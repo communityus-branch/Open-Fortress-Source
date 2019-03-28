@@ -16,7 +16,7 @@
 
 #include "tier0/memdbgon.h"
 
-#define TF_WEAPON_PICKUP_SOUND		"AmmoPack.Touch"
+//#define TF_WEAPON_PICKUP_SOUND		"AmmoPack.Touch"
 
 extern ConVar ofd_instagib;
 
@@ -30,6 +30,7 @@ BEGIN_DATADESC( CWeaponSpawner )
 // Inputs.
 	DEFINE_KEYFIELD( m_iszWeaponName, FIELD_STRING, "weaponname" ),
 	DEFINE_KEYFIELD( m_iszWeaponModel, FIELD_STRING, "powerup_model" ),
+	DEFINE_KEYFIELD( m_iszPickupSound, FIELD_STRING, "pickup_sound" ),
 //	DEFINE_KEYFIELD( m_bSpin, FIELD_BOOLEAN, "spin" ),
 
 END_DATADESC()
@@ -51,7 +52,7 @@ void CWeaponSpawner::Spawn( void )
 void CWeaponSpawner::Precache( void )
 {
 	PrecacheModel( STRING(m_iszWeaponModel) );
-	PrecacheScriptSound( TF_WEAPON_PICKUP_SOUND );
+	PrecacheScriptSound( STRING( m_iszPickupSound) );
 }
 
 //-----------------------------------------------------------------------------
@@ -87,14 +88,14 @@ bool CWeaponSpawner::MyTouch( CBasePlayer *pPlayer )
 				if ( pPlayer->GiveAmmo( ceil(iMaxPrimary * 0.5), TF_AMMO_PRIMARY, true ) )
 				{
 					CSingleUserRecipientFilter filter( pPlayer );
-					EmitSound( filter, entindex(), TF_WEAPON_PICKUP_SOUND );
+					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
 					return bSuccess;
 				}
 				int iMaxSecondary = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_SECONDARY];
 				if (  pPlayer->GiveAmmo( ceil(iMaxSecondary * 0.5), TF_AMMO_SECONDARY, true ) )
 				{
 					CSingleUserRecipientFilter filter( pPlayer );
-					EmitSound( filter, entindex(), TF_WEAPON_PICKUP_SOUND );
+					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
 					return bSuccess;
 				}
 				bSuccess=false;
@@ -105,7 +106,7 @@ bool CWeaponSpawner::MyTouch( CBasePlayer *pPlayer )
 		{
 		
 			CSingleUserRecipientFilter filter( pPlayer );
-			EmitSound( filter, entindex(), TF_WEAPON_PICKUP_SOUND );
+			EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
 
 			pWeapon->GiveTo( pPlayer );
 		}

@@ -360,6 +360,17 @@ bool CTFGameMovement::CheckJumpButton()
 
 	// Check to see if the player is a scout.
 	bool bScout = m_pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_SCOUT );
+	bool bSoldier = m_pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_SOLDIER );
+	bool bPyro = m_pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_PYRO );
+	bool bDemo = m_pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_DEMOMAN );
+	bool bHeavy = m_pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_HEAVYWEAPONS );
+	bool bEngi = m_pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_ENGINEER );
+	bool bMedic = m_pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_MEDIC );
+	bool bSniper = m_pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_SNIPER );
+	bool bSpy = m_pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_SPY );
+	bool bCivilian = m_pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_CIVILIAN );
+	bool bMercenary = m_pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_MERCENARY );
+	
 	bool bAirDash = false;
 	bool bOnGround = ( player->GetGroundEntity() != NULL );
 
@@ -458,7 +469,27 @@ bool CTFGameMovement::CheckJumpButton()
 
 	// Flag that we jumped and don't jump again until it is released.
 	mv->m_nOldButtons |= IN_JUMP;
-	if ( ofd_jumpsound.GetBool() == 1 )
+	if ( bScout )
+		m_pTFPlayer->EmitSound( "Scout.Jumpsound" );
+	else if ( bSoldier )
+		m_pTFPlayer->EmitSound( "Soldier.Jumpsound" );
+	else if ( bPyro )	
+		m_pTFPlayer->EmitSound( "Pyro.Jumpsound" );
+	else if ( bDemo )
+		m_pTFPlayer->EmitSound( "Demoman.Jumpsound" );
+	else if ( bHeavy )
+		m_pTFPlayer->EmitSound( "Heavy.Jumpsound" );
+	else if ( bEngi )
+		m_pTFPlayer->EmitSound( "Engineer.Jumpsound" );
+	else if ( bMedic )
+		m_pTFPlayer->EmitSound( "Medic.Jumpsound" );
+	else if ( bSniper )
+		m_pTFPlayer->EmitSound( "Sniper.Jumpsound" );
+	else if ( bSpy )
+		m_pTFPlayer->EmitSound( "Spy.Jumpsound" );	
+	else if ( bCivilian )
+		m_pTFPlayer->EmitSound( "Civilian.Jumpsound" );
+	else if ( bMercenary )
 		m_pTFPlayer->EmitSound( "Mercenary.Jumpsound" );
 	return true;
 }

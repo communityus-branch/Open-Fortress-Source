@@ -815,6 +815,7 @@
     <ClInclude Include="vgui_avatarimage.h" />
     <ClInclude Include="viewdebug.h" />
     <ClInclude Include="viewpostprocess.h" />
+    <ClInclude Include="worldlight.h" />
     <ClInclude Include="game_controls\basemodel_panel.h" />
     <ClInclude Include="game_controls\basemodelpanel.h" />
     <ClInclude Include="..\..\game\shared\weapon_ifmbase.h" />
@@ -1372,6 +1373,7 @@
     <ClCompile Include="weapon_selection.cpp" />
     <ClCompile Include="weapons_resource.cpp" />
     <ClCompile Include="WorldDimsProxy.cpp" />
+    <ClCompile Include="worldlight.cpp" />
     <ClCompile Include="game_controls\basemodel_panel.cpp" />
     <ClCompile Include="game_controls\basemodelpanel.cpp" />
     <ClCompile Include="game_controls\baseviewport.cpp" />

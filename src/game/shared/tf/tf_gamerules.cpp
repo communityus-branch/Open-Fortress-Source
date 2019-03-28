@@ -473,7 +473,7 @@ CTFGameRules::CTFGameRules()
 	InitPlayerClasses();
 
 	// Set turbo physics on.  Do it here for now.
-	sv_turbophysics.SetValue( 1 );
+	sv_turbophysics.SetValue( 0 );
 
 	// Initialize the team manager here, etc...
 

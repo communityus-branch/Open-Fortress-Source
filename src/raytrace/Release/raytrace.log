@@ -1,5 +1,5 @@
-﻿Build started 26.3.2019. 23:54:59.
-     1>Project "E:\Making gaems\Open-Fortress-Source\src\raytrace\raytrace.vcxproj" on node 5 (Build target(s)).
+﻿Build started 28.3.2019. 22:25:03.
+     1>Project "E:\Making gaems\Open-Fortress-Source\src\raytrace\raytrace.vcxproj" on node 4 (Build target(s)).
      1>PreBuildEvent:
          if EXIST ..\lib\public\.\raytrace.lib ( for /f "delims=" %%A in ('attrib "..\lib\public\.\raytrace.lib"') do set valveTmpIsReadOnly="%%A"
          ) else ( if not EXIST ..\lib\public\. mkdir ..\lib\public\. )
@@ -21,4 +21,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.74
+Time Elapsed 00:00:01.05

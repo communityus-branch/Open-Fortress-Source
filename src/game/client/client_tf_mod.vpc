@@ -45,6 +45,8 @@ $Project "Client (TF)"
 		$File	"voice_menu.cpp"
 		$File	"glow_outline_effect.cpp"
 		$File	"glow_outline_effect.h"
+		$File	"worldlight.cpp"
+		$File	"worldlight.h"
 
 		$Folder	"TF"
 		{

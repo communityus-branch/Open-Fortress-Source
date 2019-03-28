@@ -30,6 +30,7 @@ BEGIN_DATADESC( CTFPowerup )
 // Keyfields.
 DEFINE_KEYFIELD( m_bDisabled, FIELD_BOOLEAN, "StartDisabled" ),
 DEFINE_KEYFIELD( fl_RespawnTime, FIELD_FLOAT, "respawntime" ),
+DEFINE_KEYFIELD( m_iszSpawnSound, FIELD_STRING, "spawn_sound" ),
 
 // Inputs.
 DEFINE_INPUTFUNC( FIELD_VOID, "Enable", InputEnable ),
@@ -70,7 +71,7 @@ void CTFPowerup::Spawn( void )
 	VPhysicsDestroyObject();
 	SetMoveType( MOVETYPE_NONE );
 	SetSolidFlags( FSOLID_NOT_SOLID | FSOLID_TRIGGER );
-
+	PrecacheScriptSound( STRING( m_iszSpawnSound ) );
 	if ( m_bDisabled )
 	{
 		SetDisabled( true );
@@ -106,7 +107,7 @@ void CTFPowerup::Materialize( void )
 	if ( !m_bDisabled && IsEffectActive( EF_NODRAW ) )
 	{
 		// changing from invisible state to visible.
-		EmitSound( "Item.Materialize" );
+		EmitSound( STRING( m_iszSpawnSound ) );
 		RemoveEffects( EF_NODRAW );
 	}
 

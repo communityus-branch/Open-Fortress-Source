@@ -79,4 +79,12 @@ public:
 	CDispenserControlPanel_Red( vgui::Panel *parent, const char *panelName ) : CDispenserControlPanel( parent, panelName ) {}
 };
 
+class CDispenserControlPanel_Mercenary : public CDispenserControlPanel
+{
+	DECLARE_CLASS( CDispenserControlPanel_Mercenary, CDispenserControlPanel );
+
+public:
+	CDispenserControlPanel_Mercenary( vgui::Panel *parent, const char *panelName ) : CDispenserControlPanel( parent, panelName ) {}
+};
+
 #endif	//C_OBJ_DISPENSER_H
