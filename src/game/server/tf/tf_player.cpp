@@ -2965,6 +2965,7 @@ int CTFPlayer::OnTakeDamage_Alive( const CTakeDamageInfo &info )
 	// Do the damage.
 	m_bitsDamageType |= info.GetDamageType();
 
+	int iOldHealth = m_iHealth;
 	bool bIgniting = false;
 
 	if ( m_takedamage != DAMAGE_EVENTS_ONLY )
@@ -3032,28 +3033,24 @@ int CTFPlayer::OnTakeDamage_Alive( const CTakeDamageInfo &info )
 	{
 		m_Shared.Burn( ToTFPlayer( pAttacker ) );
 	}
-
+	
 	// Fire a global game event - "player_hurt"
 	IGameEvent * event = gameeventmanager->CreateEvent( "player_hurt" );
 	if ( event )
 	{
 		event->SetInt( "userid", GetUserID() );
 		event->SetInt( "health", max( 0, m_iHealth ) );
+		event->SetInt( "damageamount", ( iOldHealth - m_iHealth ) );
+		event->SetBool( "crit", ( info.GetDamageType() & DMG_CRITICAL ) != 0 );
 
 		// HLTV event priority, not transmitted
 		event->SetInt( "priority", 5 );	
 
-		// Hurt by another player.
-		if ( pAttacker->IsPlayer() )
-		{
-			CBasePlayer *pPlayer = ToBasePlayer( pAttacker );
-			event->SetInt( "attacker", pPlayer->GetUserID() );
-		}
-		// Hurt by world.
-		else
-		{
-			event->SetInt( "attacker", 0 );
-		}
+		CBasePlayer *pPlayer = ToBasePlayer( pAttacker );
+		event->SetInt( "attacker", pPlayer ? pPlayer->GetUserID() : 0 );
+
+		event->SetInt( "victim_index", entindex() );
+		event->SetInt( "attacker_index", pAttacker->entindex() );
 
         gameeventmanager->FireEvent( event );
 	}
