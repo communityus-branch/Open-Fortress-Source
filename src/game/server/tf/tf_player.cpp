@@ -1406,14 +1406,21 @@ int CTFPlayer::GetAutoTeam( void )
 //-----------------------------------------------------------------------------
 void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 {
-	if ( TFGameRules()->IsDMGamemode() && stricmp(pTeamName, "spectate") != 0)
+	if ( TFGameRules()->IsDMGamemode() && stricmp(pTeamName, "spectate") != 0 )
 	{
+		if ( TFGameRules()->IsTeamplay() ) 
+		{
+			if (ofd_forceclass.GetBool() == 1) SetDesiredPlayerClassIndex(TF_CLASS_MERCENARY);
+		}
+		else 
+		{
+			if (ofd_forceteam.GetBool() == 1) ChangeTeam(TF_TEAM_MERCENARY);
+			if (ofd_forceclass.GetBool() == 1) SetDesiredPlayerClassIndex(TF_CLASS_MERCENARY);
+
+			if (ofd_forceteam.GetBool() == 1) return;
+		}
 		
-		if( ofd_forceteam.GetBool() == 1) ChangeTeam(TF_TEAM_MERCENARY);
-		if( ofd_forceclass.GetBool() == 1) SetDesiredPlayerClassIndex(TF_CLASS_MERCENARY);
-		
-		if( ofd_forceteam.GetBool() == 1 ) return;
-	}	
+	}
 
 	int iTeam = TF_TEAM_RED;
 	if ( stricmp( pTeamName, "auto" ) == 0 )

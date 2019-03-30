@@ -128,7 +128,7 @@ void CTFClientScoreBoardDialog::ShowPanel( bool bShow )
 	// Catch the case where we call ShowPanel before ApplySchemeSettings, eg when
 	// going from windowed <-> fullscreen
 	
-	if ( TFGameRules()->IsDMGamemode() )
+	if ( TFGameRules()->IsDMGamemode() && !TFGameRules()->IsTeamplay() )
     {
         LoadControlSettings("Resource/UI/scoreboarddm.res");
         m_pPlayerListBlue->SetVisible( false );

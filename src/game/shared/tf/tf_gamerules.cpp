@@ -89,6 +89,7 @@ ConVar tf_birthday( "tf_birthday", "0", FCVAR_NOTIFY | FCVAR_REPLICATED );
 
 // Open Fortress Convars
 ConVar of_gamemode_dm("of_gamemode_dm", "0", FCVAR_NOTIFY | FCVAR_REPLICATED | FCVAR_DEVELOPMENTONLY);
+ConVar mp_teamplay( "mp_teamplay", "0", FCVAR_NOTIFY | FCVAR_REPLICATED, "Turns on tdm mode" );
 
 #ifdef GAME_DLL
 // TF overrides the default value of this convar
@@ -599,15 +600,27 @@ void CTFGameRules::Activate()
 
 	if (gEntList.FindEntityByClassname(NULL, "of_logic_dm") || !Q_strncmp(STRING(gpGlobals->mapname), "dm_", 3) )
 	{
-		m_nGameType.Set(TF_GAMETYPE_DM);
-	    of_gamemode_dm.SetValue(1);
+		if (mp_teamplay.GetBool())
+		{
+			m_nGameType.Set(TF_GAMETYPE_TDM);
+			ConColorMsg(Color(77, 116, 85, 255), "[TFGameRules] Executing server TDM gamemode config file\n", NULL);
+			engine->ServerCommand("exec config_tdm.cfg \n");
+			engine->ServerExecute();
+		}
+		else 
+		{
+			m_nGameType.Set(TF_GAMETYPE_DM);
+			ConColorMsg(Color(77, 116, 85, 255), "[TFGameRules] Executing server DM gamemode config file\n", NULL);
+			engine->ServerCommand("exec config_dm.cfg \n");
+			engine->ServerExecute();
+		}
+
+		of_gamemode_dm.SetValue(1);
 		of_bunnyhop.SetValue(1);
 		of_crouchjump.SetValue(1);
-		if ( fraglimit.GetFloat()==0 ) fraglimit.SetValue( 50 );
+		if ( fraglimit.GetFloat() == 0 ) fraglimit.SetValue( 50 );
 		mp_disable_respawn_times.SetValue(1);
-		ConColorMsg(Color(77, 116, 85, 255), "[TFGameRules] Executing server DM gamemode config file\n", NULL);
-		engine->ServerCommand("exec config_dm.cfg \n");
-		engine->ServerExecute();
+
 		return;
 	}
 }
@@ -1286,46 +1299,37 @@ void CTFGameRules::RadiusDamage( const CTakeDamageInfo &info, const Vector &vecS
 				}
 			}
 			
-			if ( TFGameRules()->IsDMGamemode() && CountActivePlayers() > 0)
+			if ( TFGameRules()->IsDMGamemode() && CountActivePlayers() > 0 )
 			{
-				
 				float flFragLimit = fraglimit.GetFloat();
-	
-//				if ( GetMapRemainingTime() < 0 )
-//				{
-//					GoToIntermission();
-//					return;
-//				}
-
-				if ( flFragLimit )
+				
+				if ( TFGameRules()->IsTeamplay() && flFragLimit )
 				{
-/*					if( IsTeamplay() == true )
+					if ( TFTeamMgr()->GetTeam(TF_TEAM_RED)->GetScore() >= flFragLimit )
 					{
-						CTeam *pCombine = g_Teams[TEAM_COMBINE];
-						CTeam *pRebels = g_Teams[TEAM_REBELS];
+						SendTeamScoresEvent();
+						GoToIntermission();
+					}
+					else if (TFTeamMgr()->GetTeam(TF_TEAM_BLUE)->GetScore() >= flFragLimit)
+					{
+						SendTeamScoresEvent();
+						GoToIntermission();
+					}
+				}
+				else if (flFragLimit)
+				{
+					// check if any player is over the frag limit
+					for ( int i = 1; i <= gpGlobals->maxClients; i++ )
+					{
+						CBasePlayer *pPlayer = UTIL_PlayerByIndex( i );
 
-						if ( pCombine->GetScore() >= flFragLimit || pRebels->GetScore() >= flFragLimit )
+						if ( pPlayer && pPlayer->FragCount() >= flFragLimit )
 						{
 							GoToIntermission();
 							return;
 						}
 					}
-*/
-//					else
-	//				{
-						// check if any player is over the frag limit
-						for ( int i = 1; i <= gpGlobals->maxClients; i++ )
-						{
-							CBasePlayer *pPlayer = UTIL_PlayerByIndex( i );
-
-							if ( pPlayer && pPlayer->FragCount() >= flFragLimit )
-							{
-								GoToIntermission();
-								return;
-							}
-						}
-//					}
-				}				
+				}
 			}
 		}
 
@@ -1944,6 +1948,11 @@ void CTFGameRules::PlayerKilled( CBasePlayer *pVictim, const CTakeDamageInfo &in
 		if ( pAssister )
 		{
 			CalcDominationAndRevenge( pAssister, pTFPlayerVictim, true, &iDeathFlags );
+		}
+
+		if (IsTeamplay() && pTFPlayerScorer->IsEnemy(pTFPlayerVictim))
+		{
+			TFTeamMgr()->AddTeamScore( pTFPlayerScorer->GetTeamNumber(), 1 );
 		}
 	}
 	pTFPlayerVictim->SetDeathFlags( iDeathFlags );	

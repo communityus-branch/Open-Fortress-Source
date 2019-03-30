@@ -317,6 +317,7 @@ public:
 
 	bool ShouldAnnouceAchievement( void );
 
+	bool	IsEnemy(const CBaseEntity *pEntity) const;
 public:
 
 	CTFPlayerShared m_Shared;
