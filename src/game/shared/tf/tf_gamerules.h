@@ -322,7 +322,8 @@ public:
 	bool m_bControlSpawnsPerTeam[ MAX_TEAMS ][ MAX_CONTROL_POINTS ];
 	int	 m_iPreviousRoundWinners;
 
-	virtual bool	IsDMGamemode(void) { return GetGameType() == TF_GAMETYPE_DM; }
+	virtual bool	IsDMGamemode(void) { return GetGameType() == TF_GAMETYPE_DM || GetGameType() == TF_GAMETYPE_TDM; }
+	virtual bool	IsTeamplay(void) { return GetGameType() == TF_GAMETYPE_TDM; }
 
 	int		m_iBirthdayMode;
 };

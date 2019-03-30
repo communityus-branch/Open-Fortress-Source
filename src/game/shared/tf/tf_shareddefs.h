@@ -151,6 +151,7 @@ enum
 	TF_GAMETYPE_CTF,
 	TF_GAMETYPE_CP,
 	TF_GAMETYPE_DM,
+	TF_GAMETYPE_TDM
 };
 extern const char *g_aGameTypeNames[];	// localized gametype names
 

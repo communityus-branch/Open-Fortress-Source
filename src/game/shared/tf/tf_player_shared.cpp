@@ -2564,3 +2564,10 @@ CTFWeaponBase *CTFPlayer::Weapon_GetWeaponByType( int iType )
 
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: Check if another player can be damaged
+//-----------------------------------------------------------------------------
+bool CTFPlayer::IsEnemy(const CBaseEntity *pEntity) const
+{
+	return (pEntity->GetTeamNumber() != GetTeamNumber() );
+}
