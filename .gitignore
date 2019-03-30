@@ -54,12 +54,12 @@ config.cfg
 *.tmp
 
 # library files
-code/src/lib/public/mathlib.lib
-code/src/lib/public/linux32/mathlib.a
-code/src/lib/public/raytrace.lib
-code/src/lib/public/tier1.lib
-code/src/lib/public/linux32/mathlib.a
-code/src/lib/public/vgui_controls.lib
+src/lib/public/mathlib.lib
+src/lib/public/linux32/mathlib.a
+src/lib/public/raytrace.lib
+src/lib/public/tier1.lib
+src/lib/public/linux32/mathlib.a
+src/lib/public/vgui_controls.lib
 
 # misc files
 fgdlib.lib
@@ -70,12 +70,12 @@ code/src/utils/sapi51/Samples/VB/TTSAppVB/ttsapp.RES
 *.lib
 *.pdb
 *.sentinel
-code/game/tf/bin/game_shader_dx9.dll
-code/game/tf/bin/game_shader_dx9*.so*
-code/src/game/server/Release_tf_mod/vc120.pdb
-code/src/game/client/Release_tf_mod/vc120.pdb
-code/src/game/server/Release_tf_mod/
-code/src/game/client/Release_tf_mod/
+game/tf/bin/game_shader_dx9.dll
+game/tf/bin/game_shader_dx9*.so*
+src/game/server/Release_tf_mod/vc120.pdb
+src/game/client/Release_tf_mod/vc120.pdb
+src/game/server/Release_tf_mod/
+src/game/client/Release_tf_mod/
 *.opendb
 *.db
 *.db-wal
