@@ -68,7 +68,7 @@ void CAmmoPack::Precache( void )
 {
 	if (m_iszModel==MAKE_STRING( "" )) PrecacheModel( GetPowerupModel() );
 	else PrecacheModel( STRING(m_iszModel) );	
-	PrecacheScriptSound( TF_AMMOPACK_PICKUP_SOUND );
+	PrecacheScriptSound( STRING(m_iszPickupSound) );
 }
 
 //-----------------------------------------------------------------------------
@@ -106,7 +106,7 @@ bool CAmmoPack::MyTouch( CBasePlayer *pPlayer )
 		if ( bSuccess )
 		{
 			CSingleUserRecipientFilter filter( pPlayer );
-			EmitSound( filter, entindex(), TF_AMMOPACK_PICKUP_SOUND );
+			EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
 		}
 	}
 

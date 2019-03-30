@@ -1603,9 +1603,12 @@ CBaseEntity *CTFGameRules::GetPlayerSpawnSpot( CBasePlayer *pPlayer )
 //-----------------------------------------------------------------------------
 bool CTFGameRules::IsSpawnPointValid( CBaseEntity *pSpot, CBasePlayer *pPlayer, bool bIgnorePlayers )
 {
-	// Check the team.
-	if ( pSpot->GetTeamNumber() != pPlayer->GetTeamNumber() )
-		return false;
+    // Check the team.
+    if ( pSpot->GetTeamNumber() != pPlayer->GetTeamNumber() )
+    {
+        if ( (mp_teamplay.GetBool() && pSpot->GetTeamNumber() != TF_TEAM_MERCENARY) || !mp_teamplay.GetBool() )
+                return false;
+    }
 
 	if ( !pSpot->IsTriggered( pPlayer ) )
 		return false;

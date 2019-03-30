@@ -17,7 +17,7 @@
 // CTF AmmoPack defines.
 //
 
-#define TF_WEAPON_PICKUP_SOUND		"AmmoPack.Touch"
+//#define TF_WEAPON_PICKUP_SOUND		"AmmoPack.Touch"
 
 //-----------------------------------------------------------------------------
 // Purpose: Spawn function for the ammopack
@@ -49,7 +49,7 @@ void CCondPowerup::Spawn( void )
 void CCondPowerup::Precache( void )
 {
 	PrecacheModel( STRING( m_iszPowerupModel ) );
-	PrecacheScriptSound( TF_WEAPON_PICKUP_SOUND );
+	PrecacheScriptSound( STRING( m_iszPickupSound) );
 }
 
 //-----------------------------------------------------------------------------
@@ -69,8 +69,8 @@ bool CCondPowerup::MyTouch( CBasePlayer *pPlayer )
 		// did we give them anything?
 		if ( bSuccess )
 		{
-		
 			pTFPlayer->m_Shared.AddCond( m_bCondition , m_bCondDuration );
+			EmitSound( STRING(m_iszPickupSound) );
 		}
 	}
 	return bSuccess;

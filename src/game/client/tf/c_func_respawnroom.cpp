@@ -88,7 +88,12 @@ bool C_FuncRespawnRoomVisualizer::ShouldCollide( int collisionGroup, int content
 			if ( !(contentsMask & CONTENTS_REDTEAM) )
 				return false;
 			break;
+		case TF_TEAM_MERCENARY:
+			if ( !(contentsMask & CONTENTS_MERCENARYTEAM) )
+				return false;
+			break;
 		}
+		
 
 		return true;
 	}

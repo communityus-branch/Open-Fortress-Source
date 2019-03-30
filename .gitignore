@@ -54,12 +54,8 @@ config.cfg
 *.tmp
 
 # library files
-src/lib/public/mathlib.lib
 src/lib/public/linux32/mathlib.a
-src/lib/public/raytrace.lib
-src/lib/public/tier1.lib
 src/lib/public/linux32/mathlib.a
-src/lib/public/vgui_controls.lib
 
 # misc files
 fgdlib.lib
