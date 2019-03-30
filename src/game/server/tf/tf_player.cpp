@@ -787,11 +787,12 @@ void CTFPlayer::Spawn()
 	// Create our off hand viewmodel if necessary
 	CreateViewModel( 1 );
 	// Make sure it has no model set, in case it had one before
-	//	GetViewModel(1)->SetModel( "" );
-	
+	GetViewModel(1)->SetModel( "" );
+
 	CreateHandModel();
 	PrecacheModel( GetPlayerClass()->GetArmModelName() );
-	GetViewModel(1)->SetModel( GetPlayerClass()->GetArmModelName() );
+	GetViewModel(1)->SetModel( GetPlayerClass()->GetArmModelName() );	
+	
 	// Kind of lame, but CBasePlayer::Spawn resets a lot of the state that we initially want on.
 	// So if we're in the welcome state, call its enter function to reset 
 	if ( m_Shared.InState( TF_STATE_WELCOME ) )
@@ -996,10 +997,14 @@ void CTFPlayer::CreateHandModel(int index, int iOtherVm)
 	CBaseViewModel *vm = (CBaseViewModel *)CreateEntityByName("hand_viewmodel");
 	if (vm)
 	{
-		vm->SetAbsOrigin(GetAbsOrigin());
+		vm->SetAbsOrigin( GetAbsOrigin() );
 		vm->SetOwner(this);
 		vm->SetIndex(index);
 		DispatchSpawn(vm);
+		vm->SetParent( this );
+		vm->AddEffects(EF_BONEMERGE);
+		vm->SetLocalOrigin( GetAbsOrigin() );
+	
 		vm->FollowEntity(GetViewModel(iOtherVm), true);
 		m_hViewModel.Set(index, vm);
 	}

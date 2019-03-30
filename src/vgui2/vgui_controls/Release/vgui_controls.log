@@ -1,4 +1,4 @@
-﻿Build started 30.3.2019. 15:03:56.
+﻿Build started 30.3.2019. 16:21:43.
      1>Project "E:\Making gaems\Open-Fortress-Source\src\vgui2\vgui_controls\vgui_controls.vcxproj" on node 4 (Build target(s)).
      1>PreBuildEvent:
          if EXIST ..\..\lib\public\.\vgui_controls.lib ( for /f "delims=" %%A in ('attrib "..\..\lib\public\.\vgui_controls.lib"') do set valveTmpIsReadOnly="%%A"
@@ -21,4 +21,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.69
+Time Elapsed 00:00:00.70
