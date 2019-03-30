@@ -59,6 +59,12 @@ CTFViewModel::~CTFViewModel()
 // TODO:  Turning this off by setting interp 0.0 instead of 0.1 for now since we have a timing bug to resolve
 ConVar cl_wpn_sway_interp( "cl_wpn_sway_interp", "0.0", FCVAR_CLIENTDLL );
 ConVar cl_wpn_sway_scale( "cl_wpn_sway_scale", "5.0", FCVAR_CLIENTDLL );
+ConVar viewmodel_offset_x( "viewmodel_offset_x", "0", FCVAR_ARCHIVE );
+ConVar viewmodel_offset_y( "viewmodel_offset_y", "0", FCVAR_ARCHIVE );
+ConVar viewmodel_offset_z( "viewmodel_offset_z", "0", FCVAR_ARCHIVE );
+ConVar viewmodel_angle_x( "viewmodel_angle_x", "0", FCVAR_ARCHIVE );
+ConVar viewmodel_angle_y( "viewmodel_angle_y", "0", FCVAR_ARCHIVE );
+ConVar viewmodel_angle_z( "viewmodel_angle_z", "0", FCVAR_ARCHIVE );
 #endif
 
 //-----------------------------------------------------------------------------
@@ -136,9 +142,13 @@ void CTFViewModel::CalcViewModelView( CBasePlayer *owner, const Vector& eyePosit
 
 	m_vLoweredWeaponOffset.x = Approach( bLowered ? cl_gunlowerangle.GetFloat() : 0, m_vLoweredWeaponOffset.x, cl_gunlowerspeed.GetFloat() );
 	vecLoweredAngles.x += m_vLoweredWeaponOffset.x;
-
-	vecNewAngles += vecLoweredAngles;
-
+	Vector	forward, right, up;
+	QAngle 	x, y, z;
+	AngleVectors(eyeAngles, &forward, &right, &up);
+	
+	vecNewAngles += x*viewmodel_angle_x.GetFloat() + y*viewmodel_angle_y.GetFloat() + z*viewmodel_angle_z.GetFloat();;
+	vecNewOrigin += forward*viewmodel_offset_x.GetFloat() + right*viewmodel_offset_y.GetFloat() + up*viewmodel_offset_z.GetFloat();
+	
 	BaseClass::CalcViewModelView( owner, vecNewOrigin, vecNewAngles );
 
 #endif

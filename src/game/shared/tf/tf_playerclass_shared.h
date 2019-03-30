@@ -62,7 +62,7 @@ struct TFPlayerClassData_t
 
 	TFPlayerClassData_t();
 	const char *GetModelName() const;
-//	const char *GetArmModelName() const;
+	const char *GetArmModelName() const;
 	void Parse( const char *pszClassName );
 
 private:
@@ -92,7 +92,7 @@ public:
 
 	const char	*GetName( void ) const							{ return GetPlayerClassData( m_iClass )->m_szClassName; }
 	const char	*GetModelName( void ) const						{ return GetPlayerClassData( m_iClass )->GetModelName(); }		
-//	const char	*GetArmModelName( void ) const					{ return GetPlayerClassData( m_iClass )->GetArmModelName(); }		
+	const char	*GetArmModelName( void ) const					{ return GetPlayerClassData( m_iClass )->GetArmModelName(); }		
 	float		GetMaxSpeed( void )								{ return GetPlayerClassData( m_iClass )->m_flMaxSpeed; }
 	int			GetMaxHealth( void )							{ return GetPlayerClassData( m_iClass )->m_nMaxHealth; }
 	int			GetMaxArmor( void )								{ return GetPlayerClassData( m_iClass )->m_nMaxArmor; }

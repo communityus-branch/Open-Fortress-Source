@@ -52,7 +52,7 @@ TFPlayerClassData_t::TFPlayerClassData_t()
 	m_szClassName[0] = '\0';
 	m_szModelName[0] = '\0';
 	m_szHWMModelName[0] = '\0';
-//	m_szArmModelName[0] = '\0';
+	m_szArmModelName[0] = '\0';
 	m_szLocalizableName[0] = '\0';
 	m_flMaxSpeed = 0.0f;
 	m_nMaxHealth = 0;
@@ -136,6 +136,15 @@ const char *TFPlayerClassData_t::GetModelName() const
 #endif
 }
 
+const char *TFPlayerClassData_t::GetArmModelName() const
+{
+#ifdef CLIENT_DLL
+	return m_szArmModelName;
+#else
+	return m_szArmModelName;
+#endif
+}
+
 //-----------------------------------------------------------------------------
 // Purpose: Loads up class.txt @modelsetc
 //-----------------------------------------------------------------------------
@@ -215,7 +224,7 @@ void InitPlayerClasses( void )
 	Assert( pClassData );
 	Q_strncpy( pClassData->m_szClassName, "undefined", TF_NAME_LENGTH );
 	Q_strncpy( pClassData->m_szModelName, "models/player/scout.mdl", TF_NAME_LENGTH );	// Undefined players still need a model
-//	Q_strncpy( pClassData->m_szArmModelName, "models/weapons/c_models/c_scout_arms.mdl", TF_NAME_LENGTH );	// Undefined players still need a Arm model
+	Q_strncpy( pClassData->m_szArmModelName, "models/weapons/c_models/c_scout_arms.mdl", TF_NAME_LENGTH );	// Undefined players still need a Arm model
 	Q_strncpy( pClassData->m_szLocalizableName, "undefined", TF_NAME_LENGTH );
 
 	// Initialize the classes.

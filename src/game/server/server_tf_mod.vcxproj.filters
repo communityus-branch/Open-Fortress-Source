@@ -3145,6 +3145,9 @@
     <ClCompile Include="tf\func_respawnroom.cpp">
       <Filter>Source Files\TF</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\game\shared\tf\handviewmodel_shared.cpp">
+      <Filter>Source Files\TF</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\game\shared\Multiplayer\multiplayer_animstate.cpp">
       <Filter>Source Files\TF</Filter>
     </ClCompile>

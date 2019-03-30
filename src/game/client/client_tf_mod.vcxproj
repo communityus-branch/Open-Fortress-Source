@@ -1481,6 +1481,7 @@
     <ClCompile Include="tf\c_tf_team.cpp" />
     <ClCompile Include="tf\clientmode_tf.cpp" />
     <ClCompile Include="..\..\game\shared\tf\entity_capture_flag.cpp" />
+    <ClCompile Include="..\..\game\shared\tf\handviewmodel_shared.cpp" />
     <ClCompile Include="..\..\game\shared\Multiplayer\multiplayer_animstate.cpp" />
     <ClCompile Include="tf\teammaterialproxy.cpp" />
     <ClCompile Include="tf\tf_fx_blood.cpp" />
@@ -1503,6 +1504,7 @@
     <ClCompile Include="tf\tf_hud_building_status.cpp" />
     <ClCompile Include="tf\tf_hud_chat.cpp" />
     <ClCompile Include="tf\tf_hud_cloakmeter.cpp" />
+    <ClCompile Include="tf\tf_hud_damageaccount_panel.cpp" />
     <ClCompile Include="tf\tf_hud_damageindicator.cpp" />
     <ClCompile Include="tf\tf_hud_deathnotice.cpp" />
     <ClCompile Include="tf\tf_hud_demomancharge.cpp" />

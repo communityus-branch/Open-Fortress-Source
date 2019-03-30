@@ -87,6 +87,7 @@ public:
 	virtual void		ResetScores( void );
 
 	void				CreateViewModel( int iViewModel = 0 );
+	virtual void	    CreateHandModel( int viewmodelindex = 1, int iOtherVm = 0 );
 	CBaseViewModel		*GetOffHandViewModel();
 	void				SendOffHandViewModelActivity( Activity activity );
 

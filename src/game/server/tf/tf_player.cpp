@@ -50,6 +50,7 @@
 #include "steam/steam_api.h"
 #include "cdll_int.h"
 #include "tf_weaponbase.h"
+#include "tf_playerclass_shared.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -88,7 +89,9 @@ ConVar tf_damage_lineardist( "tf_damage_lineardist", "0", FCVAR_DEVELOPMENTONLY 
 ConVar tf_damage_range( "tf_damage_range", "0.5", FCVAR_DEVELOPMENTONLY );
 
 ConVar tf_max_voice_speak_delay( "tf_max_voice_speak_delay", "1.5", FCVAR_REPLICATED , "Max time after a voice command until player can do another one" );
-ConVar tdc( "tdc", "0", FCVAR_REPLICATED | FCVAR_HIDDEN , "The Nintendo shitcube" );
+ConVar of_headshots( "of_headshots", "0", FCVAR_REPLICATED | FCVAR_NOTIFY , "Makes ever non projectile weapon headshot." );
+ConVar of_forcespawnprotect( "of_forcespawnprotect", "0", FCVAR_REPLICATED | FCVAR_NOTIFY , "How long the spawn protection lasts." );
+ConVar ofd_spawnprotecttime( "ofd_spawnprotecttime", "3", FCVAR_REPLICATED | FCVAR_NOTIFY , "How long the spawn protection lasts." );
 
 extern ConVar ofd_forceclass;
 extern ConVar ofd_forceteam;
@@ -679,6 +682,11 @@ void CTFPlayer::PrecachePlayerModels( void )
 				PrecacheModel( pszHWMModel );
 			}
 		}
+		const char *pszArmModel = GetPlayerClassData( i )->m_szArmModelName;
+		if ( pszArmModel && pszArmModel[0] )
+		{
+			PrecacheModel( pszArmModel );
+		}
 	}
 //	const char *pszArmModel = GetPlayerClassData(i)->m_szArmModelName;
 //	if ( pszArmModel && pszArmModel[0] )
@@ -779,8 +787,11 @@ void CTFPlayer::Spawn()
 	// Create our off hand viewmodel if necessary
 	CreateViewModel( 1 );
 	// Make sure it has no model set, in case it had one before
-	GetViewModel(1)->SetModel( "" );
-
+	//	GetViewModel(1)->SetModel( "" );
+	
+	CreateHandModel();
+	PrecacheModel( GetPlayerClass()->GetArmModelName() );
+	GetViewModel(1)->SetModel( GetPlayerClass()->GetArmModelName() );
 	// Kind of lame, but CBasePlayer::Spawn resets a lot of the state that we initially want on.
 	// So if we're in the welcome state, call its enter function to reset 
 	if ( m_Shared.InState( TF_STATE_WELCOME ) )
@@ -837,7 +848,10 @@ void CTFPlayer::Spawn()
 		{
 			m_Shared.AddCond( TF_COND_HEALTH_BUFF );
 		}
-
+		if ( TFGameRules()->IsDMGamemode() || of_forcespawnprotect.GetBool() == 1 )
+		{
+			m_Shared.AddCond( TF_COND_INVULNERABLE , ofd_spawnprotecttime.GetFloat() );
+		}
 		if ( !m_bSeenRoundInfo )
 		{
 			TFGameRules()->ShowRoundInfoPanel( this );
@@ -969,6 +983,25 @@ void CTFPlayer::CreateViewModel( int iViewModel )
 		DispatchSpawn( pViewModel );
 		pViewModel->FollowEntity( this, false );
 		m_hViewModel.Set( iViewModel, pViewModel );
+	}
+}
+
+void CTFPlayer::CreateHandModel(int index, int iOtherVm)
+{
+	Assert(index >= 0 && index < MAX_VIEWMODELS && iOtherVm >= 0 && iOtherVm < MAX_VIEWMODELS );
+
+	if (GetViewModel(index))
+		return;
+
+	CBaseViewModel *vm = (CBaseViewModel *)CreateEntityByName("hand_viewmodel");
+	if (vm)
+	{
+		vm->SetAbsOrigin(GetAbsOrigin());
+		vm->SetOwner(this);
+		vm->SetIndex(index);
+		DispatchSpawn(vm);
+		vm->FollowEntity(GetViewModel(iOtherVm), true);
+		m_hViewModel.Set(index, vm);
 	}
 }
 
@@ -2301,7 +2334,7 @@ void CTFPlayer::TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, 
 
 	CTakeDamageInfo info_modified = info;
 
-	if ( info_modified.GetDamageType() & DMG_USE_HITLOCATIONS || tdc.GetBool()== 1 )
+	if ( info_modified.GetDamageType() & DMG_USE_HITLOCATIONS || of_headshots.GetBool()== 1 )
 	{
 		switch ( ptr->hitgroup )
 		{
@@ -3033,7 +3066,7 @@ int CTFPlayer::OnTakeDamage_Alive( const CTakeDamageInfo &info )
 	{
 		m_Shared.Burn( ToTFPlayer( pAttacker ) );
 	}
-	
+
 	// Fire a global game event - "player_hurt"
 	IGameEvent * event = gameeventmanager->CreateEvent( "player_hurt" );
 	if ( event )
@@ -3042,7 +3075,7 @@ int CTFPlayer::OnTakeDamage_Alive( const CTakeDamageInfo &info )
 		event->SetInt( "health", max( 0, m_iHealth ) );
 		event->SetInt( "damageamount", ( iOldHealth - m_iHealth ) );
 		event->SetBool( "crit", ( info.GetDamageType() & DMG_CRITICAL ) != 0 );
-
+		
 		// HLTV event priority, not transmitted
 		event->SetInt( "priority", 5 );	
 
