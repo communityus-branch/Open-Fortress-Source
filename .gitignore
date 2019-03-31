@@ -59,7 +59,7 @@ src/lib/public/linux32/mathlib.a
 
 # misc files
 fgdlib.lib
-code/src/utils/sapi51/Samples/VB/TTSAppVB/ttsapp.RES
+src/utils/sapi51/Samples/VB/TTSAppVB/ttsapp.RES
 
 *.vcd
 *.pdb
