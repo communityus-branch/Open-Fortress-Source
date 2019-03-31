@@ -6380,8 +6380,8 @@ bool CTFPlayer::ShouldAnnouceAchievement( void )
 void CTFPlayer::UpdatePlayerColor ( void )
 {
 	Vector vecNewColor;
-	vecNewColor.x = V_atoi( engine->GetClientConVarValue( entindex(), "tf2c_setmerccolor_r" ) ) / 255.0f;
-	vecNewColor.y = V_atoi( engine->GetClientConVarValue( entindex(), "tf2c_setmerccolor_g" ) ) / 255.0f;
-	vecNewColor.z = V_atoi( engine->GetClientConVarValue( entindex(), "tf2c_setmerccolor_b" ) ) / 255.0f;
+	vecNewColor.x = V_atoi( engine->GetClientConVarValue( entindex(), "ofd_color_r" ) ) / 255.0f;
+	vecNewColor.y = V_atoi( engine->GetClientConVarValue( entindex(), "ofd_color_g" ) ) / 255.0f;
+	vecNewColor.z = V_atoi( engine->GetClientConVarValue( entindex(), "ofd_color_b" ) ) / 255.0f;
 	m_vecPlayerColor = vecNewColor;
 }

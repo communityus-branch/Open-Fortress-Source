@@ -932,13 +932,15 @@ public:
 	{
 		Assert( m_pResult );
 
-
+		if ( !pC_BaseEntity )
+		{
 			float r = floorf( ofd_color_r.GetFloat() ) / 255.0f;
 			float g = floorf( ofd_color_g.GetFloat() ) / 255.0f;
 			float b = floorf( ofd_color_b.GetFloat() ) / 255.0f;
 
 			m_pResult->SetVecValue( r, g, b );
 			return;
+		}
 
 		C_BaseEntity *pEntity = BindArgToEntity( pC_BaseEntity );
 		if ( !pEntity )
@@ -1022,6 +1024,7 @@ IMPLEMENT_CLIENTCLASS_DT( C_TFPlayer, DT_TFPlayer, CTFPlayer )
 	RecvPropEHandle( RECVINFO( m_hRagdoll ) ),
 	RecvPropDataTable( RECVINFO_DT( m_PlayerClass ), 0, &REFERENCE_RECV_TABLE( DT_TFPlayerClassShared ) ),
 	RecvPropDataTable( RECVINFO_DT( m_Shared ), 0, &REFERENCE_RECV_TABLE( DT_TFPlayerShared ) ),
+
 	RecvPropEHandle( RECVINFO(m_hItem ) ),
 	
 	RecvPropVector( RECVINFO( m_vecPlayerColor ) ),
