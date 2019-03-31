@@ -81,6 +81,8 @@ ConVar tf_playergib_maxspeed( "tf_playergib_maxspeed", "400", FCVAR_CHEAT | FCVA
 ConVar cl_autorezoom( "cl_autorezoom", "1", FCVAR_USERINFO | FCVAR_ARCHIVE, "When set to 1, sniper rifle will re-zoom after firing a zoomed shot." );
 
 ConVar of_muzzlelight("of_muzzlelight", "0", FCVAR_ARCHIVE, "Enable dynamic lights for muzzleflashes, projectiles and the flamethrower");
+ConVar of_idleview("of_idleview", "0", FCVAR_ARCHIVE, "Enables/Disables idle shake.");
+
 ConVar ofd_color_r( "ofd_color_r", "0", FCVAR_ARCHIVE | FCVAR_USERINFO, "Sets merc color's red channel value", true, 0, true, 255 );
 ConVar ofd_color_g( "ofd_color_g", "0", FCVAR_ARCHIVE | FCVAR_USERINFO, "Sets merc color's green channel value", true, 0, true, 255 );
 ConVar ofd_color_b( "ofd_color_b", "0", FCVAR_ARCHIVE | FCVAR_USERINFO, "Sets merc color's blue channel value", true, 0, true, 255 );
@@ -3676,10 +3678,10 @@ void C_TFPlayer::CalcPlayerView(Vector& eyeOrigin, QAngle& eyeAngles, float& fov
 
 	Vector Velocity;
 	EstimateAbsVelocity(Velocity);
-	if ( m_Shared.InCond ( TF_COND_AIMING ) )
+	if ( m_Shared.InCond ( TF_COND_AIMING ) || !of_idleview.GetBool() )
 		IdleScale = 0.0;
 	
-	if (Velocity.Length() == 0 && !m_Shared.InCond( TF_COND_AIMING ) )
+	if (Velocity.Length() == 0 && !m_Shared.InCond( TF_COND_AIMING ) && of_idleview.GetBool() )
 	{
 		IdleScale += gpGlobals->frametime * 0.05;
 		if (IdleScale > 1.0)
@@ -3714,9 +3716,9 @@ void C_TFPlayer::CalcViewRoll( QAngle& eyeAngles )
 	}
 }
 
-ConVar cl_hl1_bobcycle("cl_hl1_bobcycle", "0.8", FCVAR_USERINFO | FCVAR_ARCHIVE );
-ConVar cl_hl1_bob("cl_hl1_bob", "0.01", FCVAR_USERINFO | FCVAR_ARCHIVE );
-ConVar cl_hl1_bobup("cl_hl1_bobup", "0.5", FCVAR_USERINFO | FCVAR_ARCHIVE );
+ConVar of_viewbobcycle("of_viewbobcycle", "0.8", FCVAR_USERINFO | FCVAR_ARCHIVE );
+ConVar of_viewbob("of_viewbob", "0.01", FCVAR_USERINFO | FCVAR_ARCHIVE );
+ConVar of_viewbobup("of_viewbobup", "0.5", FCVAR_USERINFO | FCVAR_ARCHIVE );
 
 void C_TFPlayer::CalcViewBob( Vector& eyeOrigin )
 {
@@ -3732,18 +3734,18 @@ void C_TFPlayer::CalcViewBob( Vector& eyeOrigin )
 	BobLastTime = gpGlobals->curtime;
 	BobTime += gpGlobals->frametime;
 
-	Cycle = BobTime - (int)(BobTime / cl_hl1_bobcycle.GetFloat()) * cl_hl1_bobcycle.GetFloat();
-	Cycle /= cl_hl1_bobcycle.GetFloat();
+	Cycle = BobTime - (int)(BobTime / of_viewbobcycle.GetFloat()) * of_viewbobcycle.GetFloat();
+	Cycle /= of_viewbobcycle.GetFloat();
 
-	if (Cycle < cl_hl1_bobup.GetFloat())
-		Cycle = M_PI * Cycle / cl_hl1_bobup.GetFloat();
+	if (Cycle < of_viewbobup.GetFloat())
+		Cycle = M_PI * Cycle / of_viewbobup.GetFloat();
 	else
-		Cycle = M_PI + M_PI * (Cycle - cl_hl1_bobup.GetFloat()) / (1.0 - cl_hl1_bobup.GetFloat());
+		Cycle = M_PI + M_PI * (Cycle - of_viewbobup.GetFloat()) / (1.0 - of_viewbobup.GetFloat());
 
 	EstimateAbsVelocity(Velocity);
 	Velocity.z = 0;
 
-	ViewBob = sqrt(Velocity.x * Velocity.x + Velocity.y * Velocity.y) * cl_hl1_bob.GetFloat();
+	ViewBob = sqrt(Velocity.x * Velocity.x + Velocity.y * Velocity.y) * of_viewbob.GetFloat();
 	ViewBob = ViewBob * 0.3 + ViewBob * 0.7 * sin(Cycle);
 	ViewBob = min(ViewBob, 4);
 	ViewBob = max(ViewBob, -7);
