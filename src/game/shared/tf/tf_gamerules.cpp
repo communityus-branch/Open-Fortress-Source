@@ -1301,32 +1301,29 @@ void CTFGameRules::RadiusDamage( const CTakeDamageInfo &info, const Vector &vecS
 			
 			if ( TFGameRules()->IsDMGamemode() && CountActivePlayers() > 0 )
 			{
-				float flFragLimit = fraglimit.GetFloat();
+				int iFragLimit = fraglimit.GetInt();
 				
-				if ( TFGameRules()->IsTeamplay() && flFragLimit )
+				if (iFragLimit > 0) 
 				{
-					if ( TFTeamMgr()->GetTeam(TF_TEAM_RED)->GetScore() >= flFragLimit )
+					if ( TFGameRules()->IsTeamplay() )
 					{
-						SendTeamScoresEvent();
-						GoToIntermission();
-					}
-					else if (TFTeamMgr()->GetTeam(TF_TEAM_BLUE)->GetScore() >= flFragLimit)
-					{
-						SendTeamScoresEvent();
-						GoToIntermission();
-					}
-				}
-				else if (flFragLimit)
-				{
-					// check if any player is over the frag limit
-					for ( int i = 1; i <= gpGlobals->maxClients; i++ )
-					{
-						CBasePlayer *pPlayer = UTIL_PlayerByIndex( i );
-
-						if ( pPlayer && pPlayer->FragCount() >= flFragLimit )
+						if ( TFTeamMgr()->GetTeam(TF_TEAM_RED)->GetScore() >= iFragLimit || TFTeamMgr()->GetTeam(TF_TEAM_BLUE)->GetScore() >= iFragLimit )
 						{
+							SendTeamScoresEvent();
 							GoToIntermission();
-							return;
+						}
+					}
+					else
+					{
+						// check if any player is over the frag limit
+						for (int i = 1; i <= gpGlobals->maxClients; i++)
+						{
+							CBasePlayer *pPlayer = UTIL_PlayerByIndex(i);
+
+							if (pPlayer && pPlayer->FragCount() >= iFragLimit)
+							{
+								GoToIntermission();
+							}
 						}
 					}
 				}
