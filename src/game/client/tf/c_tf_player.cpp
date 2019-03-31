@@ -51,6 +51,7 @@
 #include "tf_weapon_pipebomblauncher.h"
 #include "tf_hud_mediccallers.h"
 #include "in_main.h"
+#include "basemodelpanel.h"
 #include "c_team.h"
 #include "collisionutils.h"
 // for spy material proxy
@@ -67,6 +68,8 @@
 #include "iviewrender.h"				//for view->
 
 #include "cam_thirdperson.h"
+#include "tf_hud_chat.h"
+#include "iclientmode.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -78,6 +81,9 @@ ConVar tf_playergib_maxspeed( "tf_playergib_maxspeed", "400", FCVAR_CHEAT | FCVA
 ConVar cl_autorezoom( "cl_autorezoom", "1", FCVAR_USERINFO | FCVAR_ARCHIVE, "When set to 1, sniper rifle will re-zoom after firing a zoomed shot." );
 
 ConVar of_muzzlelight("of_muzzlelight", "0", FCVAR_ARCHIVE, "Enable dynamic lights for muzzleflashes, projectiles and the flamethrower");
+ConVar ofd_color_r( "ofd_color_r", "0", FCVAR_ARCHIVE | FCVAR_USERINFO, "Sets merc color's red channel value", true, 0, true, 255 );
+ConVar ofd_color_g( "ofd_color_g", "0", FCVAR_ARCHIVE | FCVAR_USERINFO, "Sets merc color's green channel value", true, 0, true, 255 );
+ConVar ofd_color_b( "ofd_color_b", "0", FCVAR_ARCHIVE | FCVAR_USERINFO, "Sets merc color's blue channel value", true, 0, true, 255 );
 
 #define BDAY_HAT_MODEL		"models/effects/bday_hat.mdl"
 
@@ -194,7 +200,8 @@ public:
 	float GetBurnStartTime() { return m_flBurnEffectStartTime; }
 
 	virtual void SetupWeights( const matrix3x4_t *pBoneToWorld, int nFlexWeightCount, float *pFlexWeights, float *pFlexDelayedWeights );
-
+//	virtual C_BaseEntity *GetItemTintColorOwner( void );
+	
 private:
 	
 	C_TFRagdoll( const C_TFRagdoll & ) {}
@@ -916,6 +923,48 @@ public:
 
 EXPOSE_INTERFACE( CProxyBurnLevel, IMaterialProxy, "BurnLevel" IMATERIAL_PROXY_INTERFACE_VERSION );
 
+class CProxyItemTintColor : public CResultProxy
+{
+public:
+	void OnBind( void *pC_BaseEntity )
+	{
+		Assert( m_pResult );
+
+
+			float r = floorf( ofd_color_r.GetFloat() ) / 255.0f;
+			float g = floorf( ofd_color_g.GetFloat() ) / 255.0f;
+			float b = floorf( ofd_color_b.GetFloat() ) / 255.0f;
+
+			m_pResult->SetVecValue( r, g, b );
+			return;
+
+		C_BaseEntity *pEntity = BindArgToEntity( pC_BaseEntity );
+		if ( !pEntity )
+			return;
+
+		if ( TFGameRules() && TFGameRules()->IsDMGamemode() )
+		{
+			Vector vecColor = pEntity->GetItemTintColor();
+
+			if ( vecColor == vec3_origin )
+			{
+				C_BaseEntity *pOwner = pEntity->GetItemTintColorOwner();
+				if ( pOwner )
+				{
+					vecColor = pOwner->GetItemTintColor();
+				}
+			}
+
+			m_pResult->SetVecValue( vecColor.x, vecColor.y, vecColor.z );
+			return;
+		}
+
+		m_pResult->SetVecValue( 1, 1, 1 );
+	}
+};
+
+EXPOSE_INTERFACE( CProxyItemTintColor, IMaterialProxy, "ItemTintColor" IMATERIAL_PROXY_INTERFACE_VERSION );
+
 //-----------------------------------------------------------------------------
 // Purpose: RecvProxy that converts the Player's object UtlVector to entindexes
 //-----------------------------------------------------------------------------
@@ -972,6 +1021,8 @@ IMPLEMENT_CLIENTCLASS_DT( C_TFPlayer, DT_TFPlayer, CTFPlayer )
 	RecvPropDataTable( RECVINFO_DT( m_PlayerClass ), 0, &REFERENCE_RECV_TABLE( DT_TFPlayerClassShared ) ),
 	RecvPropDataTable( RECVINFO_DT( m_Shared ), 0, &REFERENCE_RECV_TABLE( DT_TFPlayerShared ) ),
 	RecvPropEHandle( RECVINFO(m_hItem ) ),
+	
+	RecvPropVector( RECVINFO( m_vecPlayerColor ) ),
 
 	RecvPropDataTable( "tflocaldata", 0, 0, &REFERENCE_RECV_TABLE(DT_TFLocalPlayerExclusive) ),
 	RecvPropDataTable( "tfnonlocaldata", 0, 0, &REFERENCE_RECV_TABLE(DT_TFNonLocalPlayerExclusive) ),
@@ -3614,7 +3665,6 @@ void C_TFPlayer::CalcVehicleView(IClientVehicle* pVehicle, Vector& eyeOrigin, QA
 				if (IdleScale < 0.0)
 					IdleScale = 0.0;
 			}
-
 			CalcViewIdle(eyeAngles);
 		}
 	}
@@ -3626,8 +3676,10 @@ void C_TFPlayer::CalcPlayerView(Vector& eyeOrigin, QAngle& eyeAngles, float& fov
 
 	Vector Velocity;
 	EstimateAbsVelocity(Velocity);
-
-	if (Velocity.Length() == 0)
+	if ( m_Shared.InCond ( TF_COND_AIMING ) )
+		IdleScale = 0.0;
+	
+	if (Velocity.Length() == 0 && !m_Shared.InCond( TF_COND_AIMING ) )
 	{
 		IdleScale += gpGlobals->frametime * 0.05;
 		if (IdleScale > 1.0)
@@ -3671,7 +3723,7 @@ void C_TFPlayer::CalcViewBob( Vector& eyeOrigin )
 	float Cycle;
 	Vector Velocity;
 
-	if (GetGroundEntity() == nullptr || gpGlobals->curtime == BobLastTime)
+	if (GetGroundEntity() == nullptr || gpGlobals->curtime == BobLastTime ||  m_Shared.InCond ( TF_COND_AIMING ) )
 	{
 		eyeOrigin.z += ViewBob;
 		return;
@@ -3699,12 +3751,12 @@ void C_TFPlayer::CalcViewBob( Vector& eyeOrigin )
 	eyeOrigin.z += ViewBob;
 }
 
-ConVar cl_hl1_iyaw_cycle("cl_hl1_iyaw_cycle", "2.0", FCVAR_USERINFO | FCVAR_ARCHIVE | FCVAR_DEVELOPMENTONLY );
-ConVar cl_hl1_iroll_cycle("cl_hl1_iroll_cycle", "0.5", FCVAR_USERINFO | FCVAR_ARCHIVE | FCVAR_DEVELOPMENTONLY );
-ConVar cl_hl1_ipitch_cycle("cl_hl1_ipitch_cycle", "1.0", FCVAR_USERINFO | FCVAR_ARCHIVE | FCVAR_DEVELOPMENTONLY );
-ConVar cl_hl1_iyaw_level("cl_hl1_iyaw_level", "0.3", FCVAR_USERINFO | FCVAR_ARCHIVE | FCVAR_DEVELOPMENTONLY );
-ConVar cl_hl1_iroll_level("cl_hl1_iroll_level", "0.1", FCVAR_USERINFO | FCVAR_ARCHIVE | FCVAR_DEVELOPMENTONLY );
-ConVar cl_hl1_ipitch_level("cl_hl1_ipitch_level", "0.3", FCVAR_USERINFO | FCVAR_ARCHIVE | FCVAR_DEVELOPMENTONLY );
+ConVar cl_hl1_iyaw_cycle("cl_hl1_iyaw_cycle", "2.0", FCVAR_USERINFO | FCVAR_ARCHIVE );
+ConVar cl_hl1_iroll_cycle("cl_hl1_iroll_cycle", "0.5", FCVAR_USERINFO | FCVAR_ARCHIVE );
+ConVar cl_hl1_ipitch_cycle("cl_hl1_ipitch_cycle", "1.0", FCVAR_USERINFO | FCVAR_ARCHIVE );
+ConVar cl_hl1_iyaw_level("cl_hl1_iyaw_level", "0.3", FCVAR_USERINFO | FCVAR_ARCHIVE );
+ConVar cl_hl1_iroll_level("cl_hl1_iroll_level", "0.1", FCVAR_USERINFO | FCVAR_ARCHIVE );
+ConVar cl_hl1_ipitch_level("cl_hl1_ipitch_level", "0.3", FCVAR_USERINFO | FCVAR_ARCHIVE );
 
 void C_TFPlayer::CalcViewIdle(QAngle& eyeAngles)
 {

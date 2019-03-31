@@ -318,8 +318,10 @@ public:
 	bool ShouldAnnouceAchievement( void );
 
 	bool	IsEnemy(const CBaseEntity *pEntity) const;
+	void UpdatePlayerColor( void );
+	
 public:
-
+	CNetworkVector( m_vecPlayerColor );
 	CTFPlayerShared m_Shared;
 
 	int	    item_list;			// Used to keep track of which goalitems are 

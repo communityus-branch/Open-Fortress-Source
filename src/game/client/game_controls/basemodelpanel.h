@@ -27,6 +27,11 @@ public:
 	DECLARE_CLASS( CModelPanelModel, C_BaseFlex );
 
 	virtual bool IsMenuModel() const{ return true; }
+	
+	virtual const Vector &GetItemTintColor( void ) { return m_vecModelColor; }
+	void SetModelColor( const Vector &vecColor ) { m_vecModelColor = vecColor; }
+private:
+	Vector m_vecModelColor;
 };
 
 //-----------------------------------------------------------------------------

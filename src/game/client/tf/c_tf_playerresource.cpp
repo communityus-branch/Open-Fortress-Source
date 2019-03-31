@@ -18,6 +18,7 @@ IMPLEMENT_CLIENTCLASS_DT( C_TF_PlayerResource, DT_TFPlayerResource, CTFPlayerRes
 	RecvPropArray3( RECVINFO_ARRAY( m_iTotalScore ), RecvPropInt( RECVINFO( m_iTotalScore[0] ) ) ),
 	RecvPropArray3( RECVINFO_ARRAY( m_iMaxHealth ), RecvPropInt( RECVINFO( m_iMaxHealth[0] ) ) ),
 	RecvPropArray3( RECVINFO_ARRAY( m_iPlayerClass ), RecvPropInt( RECVINFO( m_iPlayerClass[0] ) ) ),
+	RecvPropArray3( RECVINFO_ARRAY( m_vecColors ), RecvPropVector( RECVINFO( m_vecColors[0] ) ) ),
 END_RECV_TABLE()
 
 
@@ -38,6 +39,20 @@ C_TF_PlayerResource::C_TF_PlayerResource()
 //-----------------------------------------------------------------------------
 C_TF_PlayerResource::~C_TF_PlayerResource()
 {
+}
+const Vector &C_TF_PlayerResource::GetPlayerColorVector( int iIndex )
+{
+	if ( !IsConnected( iIndex ) )
+	{
+		static Vector White( 1, 1, 1 );
+		return White;
+	}
+	return m_vecColors[iIndex];
+}
+Color C_TF_PlayerResource::GetPlayerColor( int iIndex )
+{
+	const Vector &vecColor = GetPlayerColorVector( iIndex );
+	return Color( vecColor.x * 255.0f, vecColor.y * 255.0f, vecColor.z * 255.0f, 255 );
 }
 
 //-----------------------------------------------------------------------------

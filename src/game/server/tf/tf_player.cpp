@@ -306,6 +306,8 @@ IMPLEMENT_SERVERCLASS_ST( CTFPlayer, DT_TFPlayer )
 
 	SendPropEHandle(SENDINFO(m_hItem)),
 
+	SendPropVector( SENDINFO( m_vecPlayerColor ) ),
+	
 	// Ragdoll.
 	SendPropEHandle( SENDINFO( m_hRagdoll ) ),
 
@@ -382,6 +384,8 @@ CTFPlayer::CTFPlayer()
 
 	m_vecLastDeathPosition = Vector( FLT_MAX, FLT_MAX, FLT_MAX );
 
+	m_vecPlayerColor.Init( 1.0f, 1.0f, 1.0f );
+	
 	SetDesiredPlayerClassIndex( TF_CLASS_UNDEFINED );
 
 	SetContextThink( &CTFPlayer::TFPlayerThink, gpGlobals->curtime, "TFPlayerThink" );
@@ -896,6 +900,11 @@ void CTFPlayer::Spawn()
 	m_bIsIdle = false;
 	m_flPowerPlayTime = 0.0;
 
+	if ( TFGameRules()->IsDMGamemode() )
+	{
+		UpdatePlayerColor();
+	}
+	
 	// This makes the surrounding box always the same size as the standing collision box
 	// helps with parts of the hitboxes that extend out of the crouching hitbox, eg with the
 	// heavyweapons guy
@@ -964,6 +973,11 @@ void CTFPlayer::InitClass( void )
 
 	// Give default items for class.
 	GiveDefaultItems();
+
+	if ( TFGameRules()->IsDMGamemode() )
+	{
+		UpdatePlayerColor();
+	}	
 }
 
 //-----------------------------------------------------------------------------
@@ -6361,4 +6375,13 @@ bool CTFPlayer::ShouldAnnouceAchievement( void )
 	}
 
 	return true; 
+}
+
+void CTFPlayer::UpdatePlayerColor ( void )
+{
+	Vector vecNewColor;
+	vecNewColor.x = V_atoi( engine->GetClientConVarValue( entindex(), "tf2c_setmerccolor_r" ) ) / 255.0f;
+	vecNewColor.y = V_atoi( engine->GetClientConVarValue( entindex(), "tf2c_setmerccolor_g" ) ) / 255.0f;
+	vecNewColor.z = V_atoi( engine->GetClientConVarValue( entindex(), "tf2c_setmerccolor_b" ) ) / 255.0f;
+	m_vecPlayerColor = vecNewColor;
 }

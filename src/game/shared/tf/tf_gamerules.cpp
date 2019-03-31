@@ -600,7 +600,7 @@ void CTFGameRules::Activate()
 
 	if (gEntList.FindEntityByClassname(NULL, "of_logic_dm") || !Q_strncmp(STRING(gpGlobals->mapname), "dm_", 3) )
 	{
-		if (mp_teamplay.GetBool())
+		if (mp_teamplay.GetBool() || gEntList.FindEntityByClassname(NULL, "of_logic_tdm") )
 		{
 			m_nGameType.Set(TF_GAMETYPE_TDM);
 			ConColorMsg(Color(77, 116, 85, 255), "[TFGameRules] Executing server TDM gamemode config file\n", NULL);

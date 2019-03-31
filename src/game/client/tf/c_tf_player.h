@@ -27,6 +27,9 @@ class C_BaseObject;
 
 extern ConVar tf_medigun_autoheal;
 extern ConVar cl_autorezoom;
+extern ConVar ofd_color_r;
+extern ConVar ofd_color_g;
+extern ConVar ofd_color_b;
 
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -229,6 +232,8 @@ public:
 	bool ShouldShowNemesisIcon();
 
 	virtual	IMaterial *GetHeadLabelMaterial( void );
+	
+	virtual const Vector &GetItemTintColor( void ) { return m_vecPlayerColor; }
 
 protected:
 
@@ -249,6 +254,10 @@ private:
 	QAngle				m_angTauntPredViewAngles;
 	QAngle				m_angTauntEngViewAngles;
 
+public:
+
+	Vector				m_vecPlayerColor;	
+	
 private:
 
 	C_TFPlayerClass		m_PlayerClass;

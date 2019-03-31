@@ -17,6 +17,7 @@ IMPLEMENT_SERVERCLASS_ST( CTFPlayerResource, DT_TFPlayerResource )
 	SendPropArray3( SENDINFO_ARRAY3( m_iTotalScore ), SendPropInt( SENDINFO_ARRAY( m_iTotalScore ), 12, SPROP_UNSIGNED ) ),
 	SendPropArray3( SENDINFO_ARRAY3( m_iMaxHealth ), SendPropInt( SENDINFO_ARRAY( m_iMaxHealth ), 10, SPROP_UNSIGNED ) ),
 	SendPropArray3( SENDINFO_ARRAY3( m_iPlayerClass ), SendPropInt( SENDINFO_ARRAY( m_iPlayerClass ), 5, SPROP_UNSIGNED ) ),
+	SendPropArray3( SENDINFO_ARRAY3( m_vecColors ), SendPropVector( SENDINFO_ARRAY3( m_vecColors ), 12, SPROP_COORD ) ),
 END_SEND_TABLE()
 
 LINK_ENTITY_TO_CLASS( tf_player_manager, CTFPlayerResource );
@@ -48,6 +49,8 @@ void CTFPlayerResource::UpdatePlayerData( void )
 			m_iPlayerClass.Set( i, pPlayer->GetPlayerClass()->GetClassIndex() );
 				int iTotalScore = CTFGameRules::CalcPlayerScore( &pPlayerStats->statsAccumulated );
 				m_iTotalScore.Set( i, iTotalScore );
+				
+				m_vecColors.Set( i, pPlayer->m_vecPlayerColor );
 			}					
 		}
 	}
@@ -62,6 +65,7 @@ void CTFPlayerResource::Spawn( void )
 		m_iTotalScore.Set( i, 0 );
 		m_iMaxHealth.Set( i, TF_HEALTH_UNDEFINED );
 		m_iPlayerClass.Set( i, TF_CLASS_UNDEFINED );
+		m_vecColors.Set( i, Vector( 0.0, 0.0, 0.0 ) );
 	}
 
 	BaseClass::Spawn();
@@ -80,4 +84,9 @@ int CTFPlayerResource::GetTotalScore( int iIndex )
 	}
 
 	return 0;
+}
+
+Color CTFPlayerResource::GetPlayerColor( int iIndex )
+{
+	return Color( m_vecColors[iIndex].x * 255.0, m_vecColors[iIndex].y * 255.0, m_vecColors[iIndex].z * 255.0, 255 );
 }
