@@ -12,6 +12,10 @@
 #include "tf_weapon_parse.h"
 #include "c_basetempentity.h"
 #include "tier0/vprof.h"
+#include "dlight.h"
+#include "iefx.h"
+
+extern ConVar of_muzzlelight;
 
 //--------------------------------------------------------------------------------------------------------------
 CTFWeaponInfo *GetTFWeaponInfo( int iWeapon )
@@ -36,45 +40,45 @@ CTFWeaponInfo *GetTFWeaponInfo( int iWeapon )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void TFExplosionCallback( const Vector &vecOrigin, const Vector &vecNormal, int iWeaponID, ClientEntityHandle_t hEntity )
+void TFExplosionCallback(const Vector &vecOrigin, const Vector &vecNormal, int iWeaponID, ClientEntityHandle_t hEntity)
 {
 	// Get the weapon information.
 	CTFWeaponInfo *pWeaponInfo = NULL;
-	switch( iWeaponID )
+	switch (iWeaponID)
 	{
 	case TF_WEAPON_GRENADE_PIPEBOMB:
 	case TF_WEAPON_GRENADE_DEMOMAN:
-		pWeaponInfo = GetTFWeaponInfo( TF_WEAPON_PIPEBOMBLAUNCHER );
+		pWeaponInfo = GetTFWeaponInfo(TF_WEAPON_PIPEBOMBLAUNCHER);
 		break;
 	default:
-		pWeaponInfo = GetTFWeaponInfo( iWeaponID );
+		pWeaponInfo = GetTFWeaponInfo(iWeaponID);
 		break;
 	}
 
 	bool bIsPlayer = false;
-	if ( hEntity.Get() )
+	if (hEntity.Get())
 	{
-		C_BaseEntity *pEntity = C_BaseEntity::Instance( hEntity );
-		if ( pEntity && pEntity->IsPlayer() )
+		C_BaseEntity *pEntity = C_BaseEntity::Instance(hEntity);
+		if (pEntity && pEntity->IsPlayer())
 		{
 			bIsPlayer = true;
 		}
 	}
 
 	// Calculate the angles, given the normal.
-	bool bIsWater = ( UTIL_PointContents( vecOrigin ) & CONTENTS_WATER );
+	bool bIsWater = (UTIL_PointContents(vecOrigin) & CONTENTS_WATER);
 	bool bInAir = false;
-	QAngle angExplosion( 0.0f, 0.0f, 0.0f );
+	QAngle angExplosion(0.0f, 0.0f, 0.0f);
 
 	// Cannot use zeros here because we are sending the normal at a smaller bit size.
-	if ( fabs( vecNormal.x ) < 0.05f && fabs( vecNormal.y ) < 0.05f && fabs( vecNormal.z ) < 0.05f )
+	if (fabs(vecNormal.x) < 0.05f && fabs(vecNormal.y) < 0.05f && fabs(vecNormal.z) < 0.05f)
 	{
 		bInAir = true;
 		angExplosion.Init();
 	}
 	else
 	{
-		VectorAngles( vecNormal, angExplosion );
+		VectorAngles(vecNormal, angExplosion);
 		bInAir = false;
 	}
 
@@ -82,28 +86,28 @@ void TFExplosionCallback( const Vector &vecOrigin, const Vector &vecNormal, int 
 	char *pszEffect = "explosion";
 	char *pszSound = "BaseExplosionEffect.Sound";
 
-	if ( pWeaponInfo )
+	if (pWeaponInfo)
 	{
 		// Explosions.
-		if ( bIsWater )
+		if (bIsWater)
 		{
-			if ( Q_strlen( pWeaponInfo->m_szExplosionWaterEffect ) > 0 )
+			if (Q_strlen(pWeaponInfo->m_szExplosionWaterEffect) > 0)
 			{
 				pszEffect = pWeaponInfo->m_szExplosionWaterEffect;
 			}
 		}
 		else
 		{
-			if ( bIsPlayer || bInAir )
+			if (bIsPlayer || bInAir)
 			{
-				if ( Q_strlen( pWeaponInfo->m_szExplosionPlayerEffect ) > 0 )
+				if (Q_strlen(pWeaponInfo->m_szExplosionPlayerEffect) > 0)
 				{
 					pszEffect = pWeaponInfo->m_szExplosionPlayerEffect;
 				}
 			}
 			else
 			{
-				if ( Q_strlen( pWeaponInfo->m_szExplosionEffect ) > 0 )
+				if (Q_strlen(pWeaponInfo->m_szExplosionEffect) > 0)
 				{
 					pszEffect = pWeaponInfo->m_szExplosionEffect;
 				}
@@ -111,16 +115,39 @@ void TFExplosionCallback( const Vector &vecOrigin, const Vector &vecNormal, int 
 		}
 
 		// Sound.
-		if ( Q_strlen( pWeaponInfo->m_szExplosionSound ) > 0 )
+		if (Q_strlen(pWeaponInfo->m_szExplosionSound) > 0)
 		{
 			pszSound = pWeaponInfo->m_szExplosionSound;
 		}
 	}
-	
-	CLocalPlayerFilter filter;
-	C_BaseEntity::EmitSound( filter, SOUND_FROM_WORLD, pszSound, &vecOrigin );
 
-	DispatchParticleEffect( pszEffect, vecOrigin, angExplosion );
+	CLocalPlayerFilter filter;
+	C_BaseEntity::EmitSound(filter, SOUND_FROM_WORLD, pszSound, &vecOrigin);
+
+	if (of_muzzlelight.GetBool())
+	{
+		dlight_t *dl = effects->CL_AllocDlight(LIGHT_INDEX_TE_DYNAMIC);
+		dl->origin = vecOrigin;
+		dl->color.r = 255;
+		dl->color.g = 250;
+		dl->color.b = 140;
+		dl->decay = 200;
+		dl->radius = 512.f;
+		dl->die = gpGlobals->curtime + 0.1f;
+	}
+	else
+	{
+		dlight_t *dl = effects->CL_AllocDlight(LIGHT_INDEX_TE_DYNAMIC);
+		dl->origin = vecOrigin;
+		dl->color.r = 255;
+		dl->color.g = 220;
+		dl->color.b = 128;
+		dl->decay = 200;
+		dl->radius = 340.f;
+		dl->die = gpGlobals->curtime + 0.1f;
+	}
+
+	DispatchParticleEffect(pszEffect, vecOrigin, angExplosion);
 }
 
 //-----------------------------------------------------------------------------

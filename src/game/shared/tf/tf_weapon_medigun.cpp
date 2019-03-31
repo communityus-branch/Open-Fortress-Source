@@ -18,6 +18,9 @@
 #include "particles_simple.h"
 #include "c_tf_player.h"
 #include "soundenvelope.h"
+#include "iefx.h"
+#include "dlight.h"
+#include "tempent.h"
 #else
 #include "ndebugoverlay.h"
 #include "tf_player.h"
@@ -46,6 +49,8 @@ ConVar tf_medigun_lagcomp(  "tf_medigun_lagcomp", "1", FCVAR_DEVELOPMENTONLY );
 #endif
 
 static const char *s_pszMedigunHealTargetThink = "MedigunHealTargetThink";
+
+extern ConVar of_muzzlelight;
 
 #ifdef CLIENT_DLL
 //-----------------------------------------------------------------------------
@@ -1139,6 +1144,37 @@ void CWeaponMedigun::UpdateEffects( void )
 	// Loops through the healing targets, and make sure we have an effect for each of them
 	if ( m_hHealingTarget )
 	{
+		// Handle the dynamic light
+		if (of_muzzlelight.GetBool())
+		{
+			dlight_t *dl = effects->CL_AllocDlight(LIGHT_INDEX_TE_DYNAMIC + index);
+			dl->origin = pFiringPlayer->Weapon_ShootPosition();;
+			switch (GetTFPlayerOwner()->GetTeamNumber())
+			{
+			case TF_TEAM_RED:
+				dl->color.r = 255;
+				dl->color.g = 80;
+				dl->color.b = 10;
+				break;
+
+			case TF_TEAM_BLUE:
+				dl->color.r = 10;
+				dl->color.g = 80;
+				dl->color.b = 255;
+				break;
+
+			case TF_TEAM_MERCENARY:
+				dl->color.r = 128;
+				dl->color.g = 0;
+				dl->color.b = 128;
+				break;
+			}
+			dl->die = gpGlobals->curtime + 0.01f;
+			dl->radius = 128.f;
+			dl->decay = 512.0f;
+			dl->style = 1;
+		}
+
 		if ( m_hHealingTargetEffect.pTarget == m_hHealingTarget )
 			return;
 

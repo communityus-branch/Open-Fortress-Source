@@ -77,6 +77,8 @@ ConVar tf_playergib_maxspeed( "tf_playergib_maxspeed", "400", FCVAR_CHEAT | FCVA
 
 ConVar cl_autorezoom( "cl_autorezoom", "1", FCVAR_USERINFO | FCVAR_ARCHIVE, "When set to 1, sniper rifle will re-zoom after firing a zoomed shot." );
 
+ConVar of_muzzlelight("of_muzzlelight", "0", FCVAR_ARCHIVE, "Enable dynamic lights for muzzleflashes, projectiles and the flamethrower");
+
 #define BDAY_HAT_MODEL		"models/effects/bday_hat.mdl"
 
 IMaterial	*g_pHeadLabelMaterial[2] = { NULL, NULL }; 
@@ -3585,3 +3587,128 @@ static void cc_tf_debugsentrydmg()
 	}
 }
 static ConCommand tf_debugsentrydamage( "tf_debugsentrydamage", cc_tf_debugsentrydmg, "", FCVAR_DEVELOPMENTONLY );
+
+//-----------------------------------------------------------------------------
+// Purpose: HL1's view bob, roll and idle effects.
+//-----------------------------------------------------------------------------
+void C_TFPlayer::CalcVehicleView(IClientVehicle* pVehicle, Vector& eyeOrigin, QAngle& eyeAngles, float& zNear, float& zFar, float& fov)
+{
+	BaseClass::CalcVehicleView(pVehicle, eyeOrigin, eyeAngles, zNear, zFar, fov);
+
+	if (pVehicle != nullptr)
+	{
+		if (pVehicle->GetVehicleEnt() != nullptr)
+		{
+			Vector Velocity;
+			pVehicle->GetVehicleEnt()->EstimateAbsVelocity(Velocity);
+
+			if (Velocity.Length() == 0)
+			{
+				IdleScale += gpGlobals->frametime * 0.05;
+				if (IdleScale > 1.0)
+					IdleScale = 1.0;
+			}
+			else
+			{
+				IdleScale -= gpGlobals->frametime;
+				if (IdleScale < 0.0)
+					IdleScale = 0.0;
+			}
+
+			CalcViewIdle(eyeAngles);
+		}
+	}
+}
+
+void C_TFPlayer::CalcPlayerView(Vector& eyeOrigin, QAngle& eyeAngles, float& fov)
+{
+	BaseClass::CalcPlayerView(eyeOrigin, eyeAngles, fov);
+
+	Vector Velocity;
+	EstimateAbsVelocity(Velocity);
+
+	if (Velocity.Length() == 0)
+	{
+		IdleScale += gpGlobals->frametime * 0.05;
+		if (IdleScale > 1.0)
+			IdleScale = 1.0;
+	}
+	else
+	{
+		IdleScale -= gpGlobals->frametime;
+		if (IdleScale < 0.0)
+			IdleScale = 0.0;
+	}
+
+	CalcViewBob(eyeOrigin);
+	CalcViewIdle(eyeAngles);
+}
+
+ConVar cl_hl1_rollspeed("cl_hl1_rollspeed", "300.0", FCVAR_USERINFO | FCVAR_ARCHIVE ); // 300.0
+ConVar cl_hl1_rollangle("cl_hl1_rollangle", "0.65", FCVAR_USERINFO | FCVAR_ARCHIVE ); // 0.65
+
+void C_TFPlayer::CalcViewRoll( QAngle& eyeAngles )
+{
+	if (GetMoveType() == MOVETYPE_NOCLIP)
+		return;
+
+	float Side = CalcRoll(GetAbsAngles(), GetAbsVelocity(), cl_hl1_rollangle.GetFloat(), cl_hl1_rollspeed.GetFloat()) * 4.0;
+	eyeAngles[ROLL] += Side;
+
+	if (GetHealth() <= 0)
+	{
+		eyeAngles[ROLL] = 80;
+		return;
+	}
+}
+
+ConVar cl_hl1_bobcycle("cl_hl1_bobcycle", "0.8", FCVAR_USERINFO | FCVAR_ARCHIVE );
+ConVar cl_hl1_bob("cl_hl1_bob", "0.01", FCVAR_USERINFO | FCVAR_ARCHIVE );
+ConVar cl_hl1_bobup("cl_hl1_bobup", "0.5", FCVAR_USERINFO | FCVAR_ARCHIVE );
+
+void C_TFPlayer::CalcViewBob( Vector& eyeOrigin )
+{
+	float Cycle;
+	Vector Velocity;
+
+	if (GetGroundEntity() == nullptr || gpGlobals->curtime == BobLastTime)
+	{
+		eyeOrigin.z += ViewBob;
+		return;
+	}
+
+	BobLastTime = gpGlobals->curtime;
+	BobTime += gpGlobals->frametime;
+
+	Cycle = BobTime - (int)(BobTime / cl_hl1_bobcycle.GetFloat()) * cl_hl1_bobcycle.GetFloat();
+	Cycle /= cl_hl1_bobcycle.GetFloat();
+
+	if (Cycle < cl_hl1_bobup.GetFloat())
+		Cycle = M_PI * Cycle / cl_hl1_bobup.GetFloat();
+	else
+		Cycle = M_PI + M_PI * (Cycle - cl_hl1_bobup.GetFloat()) / (1.0 - cl_hl1_bobup.GetFloat());
+
+	EstimateAbsVelocity(Velocity);
+	Velocity.z = 0;
+
+	ViewBob = sqrt(Velocity.x * Velocity.x + Velocity.y * Velocity.y) * cl_hl1_bob.GetFloat();
+	ViewBob = ViewBob * 0.3 + ViewBob * 0.7 * sin(Cycle);
+	ViewBob = min(ViewBob, 4);
+	ViewBob = max(ViewBob, -7);
+
+	eyeOrigin.z += ViewBob;
+}
+
+ConVar cl_hl1_iyaw_cycle("cl_hl1_iyaw_cycle", "2.0", FCVAR_USERINFO | FCVAR_ARCHIVE | FCVAR_DEVELOPMENTONLY );
+ConVar cl_hl1_iroll_cycle("cl_hl1_iroll_cycle", "0.5", FCVAR_USERINFO | FCVAR_ARCHIVE | FCVAR_DEVELOPMENTONLY );
+ConVar cl_hl1_ipitch_cycle("cl_hl1_ipitch_cycle", "1.0", FCVAR_USERINFO | FCVAR_ARCHIVE | FCVAR_DEVELOPMENTONLY );
+ConVar cl_hl1_iyaw_level("cl_hl1_iyaw_level", "0.3", FCVAR_USERINFO | FCVAR_ARCHIVE | FCVAR_DEVELOPMENTONLY );
+ConVar cl_hl1_iroll_level("cl_hl1_iroll_level", "0.1", FCVAR_USERINFO | FCVAR_ARCHIVE | FCVAR_DEVELOPMENTONLY );
+ConVar cl_hl1_ipitch_level("cl_hl1_ipitch_level", "0.3", FCVAR_USERINFO | FCVAR_ARCHIVE | FCVAR_DEVELOPMENTONLY );
+
+void C_TFPlayer::CalcViewIdle(QAngle& eyeAngles)
+{
+	eyeAngles[ROLL] += IdleScale * sin(gpGlobals->curtime * cl_hl1_iroll_cycle.GetFloat()) * cl_hl1_iroll_level.GetFloat();
+	eyeAngles[PITCH] += IdleScale * sin(gpGlobals->curtime * cl_hl1_ipitch_cycle.GetFloat()) * cl_hl1_ipitch_level.GetFloat();
+	eyeAngles[YAW] += IdleScale * sin(gpGlobals->curtime * cl_hl1_iyaw_cycle.GetFloat()) * cl_hl1_iyaw_level.GetFloat();
+}

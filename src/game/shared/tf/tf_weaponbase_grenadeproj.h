@@ -63,6 +63,8 @@ public:
 	float					m_flSpawnTime;
 	bool					m_bCritical;
 
+	virtual void			CreateLightEffects(void);
+
 	// Server specific.
 #else
 

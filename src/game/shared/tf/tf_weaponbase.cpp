@@ -37,6 +37,10 @@
 extern CTFWeaponInfo *GetTFWeaponInfo( int iWeapon );
 #endif
 
+#ifdef CLIENT_DLL
+extern ConVar of_muzzlelight;
+#endif
+
 ConVar tf_weapon_criticals( "tf_weapon_criticals", "0", FCVAR_NOTIFY | FCVAR_REPLICATED, "Whether or not random crits are enabled." );
 ConVar of_infiniteammo( "of_infiniteammo", "0", FCVAR_NOTIFY | FCVAR_REPLICATED, "Whether or not reloading is disabled" );
 extern ConVar tf_useparticletracers;
@@ -1424,12 +1428,12 @@ void TE_DynamicLight( IRecipientFilter& filter, float delay,
 //
 // TFWeaponBase functions (Client specific).
 //
-void CTFWeaponBase::CreateMuzzleFlashEffects( C_BaseEntity *pAttachEnt, int nIndex )
+void CTFWeaponBase::CreateMuzzleFlashEffects(C_BaseEntity *pAttachEnt, int nIndex)
 {
 	Vector vecOrigin;
 	QAngle angAngles;
 
-	int iMuzzleFlashAttachment = pAttachEnt->LookupAttachment( "muzzle" );
+	int iMuzzleFlashAttachment = pAttachEnt->LookupAttachment("muzzle");
 
 	const char *pszMuzzleFlashEffect = NULL;
 	const char *pszMuzzleFlashModel = GetMuzzleFlashModel();
@@ -1437,8 +1441,8 @@ void CTFWeaponBase::CreateMuzzleFlashEffects( C_BaseEntity *pAttachEnt, int nInd
 
 	// Pick the right muzzleflash (3rd / 1st person)
 	CBasePlayer *pLocalPlayer = C_BasePlayer::GetLocalPlayer();
-	if ( pLocalPlayer && (GetOwnerEntity() == pLocalPlayer || 
-		(pLocalPlayer->GetObserverMode() == OBS_MODE_IN_EYE && pLocalPlayer->GetObserverTarget() == GetOwnerEntity())) )
+	if (pLocalPlayer && (GetOwnerEntity() == pLocalPlayer ||
+		(pLocalPlayer->GetObserverMode() == OBS_MODE_IN_EYE && pLocalPlayer->GetObserverTarget() == GetOwnerEntity())))
 	{
 		pszMuzzleFlashEffect = GetMuzzleFlashEffectName_1st();
 	}
@@ -1448,15 +1452,16 @@ void CTFWeaponBase::CreateMuzzleFlashEffects( C_BaseEntity *pAttachEnt, int nInd
 	}
 
 	// If we have an attachment, then stick a light on it.
-	if ( iMuzzleFlashAttachment > 0 && (pszMuzzleFlashEffect || pszMuzzleFlashModel || pszMuzzleFlashParticleEffect ) )
+	if (iMuzzleFlashAttachment > 0 && (pszMuzzleFlashEffect || pszMuzzleFlashModel || pszMuzzleFlashParticleEffect))
 	{
-		pAttachEnt->GetAttachment( iMuzzleFlashAttachment, vecOrigin, angAngles );
+		pAttachEnt->GetAttachment(iMuzzleFlashAttachment, vecOrigin, angAngles);
 
 		// Muzzleflash light
-/*
-		CLocalPlayerFilter filter;
-		TE_DynamicLight( filter, 0.0f, &vecOrigin, 255, 192, 64, 5, 70.0f, 0.05f, 70.0f / 0.05f, LIGHT_INDEX_MUZZLEFLASH );
-*/
+		if (of_muzzlelight.GetBool())
+		{
+			CLocalPlayerFilter filter;
+			TE_DynamicLight(filter, 0.0f, &vecOrigin, 255, 192, 64, 5, 70.0f, 0.05f, 70.0f / 0.05f, LIGHT_INDEX_MUZZLEFLASH);
+		}
 
 		if ( pszMuzzleFlashEffect )
 		{

@@ -10,6 +10,10 @@
 // Client specific.
 #ifdef CLIENT_DLL
 #include "c_tf_player.h"
+#include "iefx.h"
+#include "dlight.h"
+#include "tempent.h"
+#include "c_te_legacytempents.h"
 // Server specific.
 #else
 #include "soundent.h"
@@ -23,6 +27,10 @@
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
+
+#ifdef CLIENT_DLL
+extern ConVar of_muzzlelight;
+#endif
 
 extern ConVar sv_gravity;
 extern ConVar ofd_instagib;
@@ -154,6 +162,66 @@ void CTFWeaponBaseGrenadeProj::OnDataChanged( DataUpdateType_t type )
 		// Add the current sample.
 		vCurOrigin = GetLocalOrigin();
 		interpolator.AddToHead( changeTime, &vCurOrigin, false );
+
+		if (of_muzzlelight.GetBool())
+		{
+			AddEffects(EF_DIMLIGHT);
+		}
+		else
+		{
+			RemoveEffects(EF_DIMLIGHT);
+		}
+
+		CreateLightEffects();
+	}
+}
+
+void CTFWeaponBaseGrenadeProj::CreateLightEffects(void)
+{
+	// Handle the dynamic light
+	if (of_muzzlelight.GetBool())
+	{
+		dlight_t *dl;
+		if (IsEffectActive(EF_DIMLIGHT))
+		{
+			dl = effects->CL_AllocDlight(LIGHT_INDEX_TE_DYNAMIC + index);
+			dl->origin = GetAbsOrigin();
+			switch (GetTeamNumber())
+			{
+			case TF_TEAM_RED:
+				if (!m_bCritical) {
+					dl->color.r = 255; dl->color.g = 30; dl->color.b = 10; dl->style = 0;
+				}
+				else {
+					dl->color.r = 255; dl->color.g = 10; dl->color.b = 10; dl->style = 1;
+				}
+				break;
+
+			case TF_TEAM_BLUE:
+				if (!m_bCritical) {
+					dl->color.r = 10; dl->color.g = 30; dl->color.b = 255; dl->style = 0;
+				}
+				else {
+					dl->color.r = 10; dl->color.g = 10; dl->color.b = 255; dl->style = 1;
+				}
+				break;
+
+			    case TF_TEAM_MERCENARY:
+				if (!m_bCritical) {
+					dl->color.r = 128; dl->color.g = 0; dl->color.b = 128; dl->style = 0;
+				}
+				else {
+					dl->color.r = 128; dl->color.g = 0; dl->color.b = 128; dl->style = 1;
+				}
+				break;
+			}
+			dl->die = gpGlobals->curtime + 0.01f;
+			dl->radius = 256.0f;
+			dl->decay = 512.0f;
+			dl->die = gpGlobals->curtime + 0.001;
+
+			tempents->RocketFlare(GetAbsOrigin());
+		}
 	}
 }
 

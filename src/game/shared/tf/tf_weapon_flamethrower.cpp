@@ -15,6 +15,8 @@
 	#include "vstdlib/random.h"
 	#include "engine/IEngineSound.h"
 	#include "soundenvelope.h"
+    #include "dlight.h"
+    #include "iefx.h"
 
 #else
 
@@ -78,6 +80,10 @@ BEGIN_DATADESC( CTFFlameThrower )
 END_DATADESC()
 
 extern ConVar ofd_instagib;
+
+#ifdef CLIENT_DLL
+extern ConVar of_muzzlelight;
+#endif
 
 // ------------------------------------------------------------------------------------------------ //
 // CTFFlameThrower implementation.
@@ -313,6 +319,34 @@ void CTFFlameThrower::PrimaryAttack()
 		if ( m_iParticleWaterLevel == WL_Eyes || pOwner->GetWaterLevel() == WL_Eyes )
 		{
 			RestartParticleEffect();
+		}
+	}
+#endif
+
+#ifdef CLIENT_DLL
+	// Handle the flamethrower light
+	if (of_muzzlelight.GetBool())
+	{
+		dlight_t *dl = effects->CL_AllocDlight(LIGHT_INDEX_TE_DYNAMIC + index);
+		dl->origin = vecMuzzlePos;
+		dl->die = gpGlobals->curtime + 0.01f;
+		if (m_bCritFire)
+		{
+			dl->color.r = 255;
+			dl->color.g = 110;
+			dl->color.b = 10;
+			dl->radius = 400.f;
+			dl->decay = 512.0f;
+			dl->style = 1;
+		}
+		else
+		{
+			dl->color.r = 255;
+			dl->color.g = 100;
+			dl->color.b = 10;
+			dl->radius = 340.f;
+			dl->decay = 512.0f;
+			dl->style = 1;
 		}
 	}
 #endif
