@@ -30,6 +30,7 @@ BEGIN_DATADESC( CCondPowerup )
 DEFINE_KEYFIELD( m_bCondition, FIELD_INTEGER, "condID" ),
 DEFINE_KEYFIELD( m_bCondDuration, FIELD_FLOAT, "duration" ),
 DEFINE_KEYFIELD( m_iszPowerupModel, FIELD_STRING, "powerup_model" ),
+DEFINE_KEYFIELD( m_iszPickupSound, FIELD_STRING, "pickup_sound" ),
 
 END_DATADESC()
 

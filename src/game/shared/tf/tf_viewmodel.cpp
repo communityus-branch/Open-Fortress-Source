@@ -143,10 +143,10 @@ void CTFViewModel::CalcViewModelView( CBasePlayer *owner, const Vector& eyePosit
 	m_vLoweredWeaponOffset.x = Approach( bLowered ? cl_gunlowerangle.GetFloat() : 0, m_vLoweredWeaponOffset.x, cl_gunlowerspeed.GetFloat() );
 	vecLoweredAngles.x += m_vLoweredWeaponOffset.x;
 	Vector	forward, right, up;
-	QAngle 	x, y, z;
+	QAngle 	con(viewmodel_angle_x.GetFloat(), viewmodel_angle_y.GetFloat(), viewmodel_angle_z.GetFloat());
 	AngleVectors(eyeAngles, &forward, &right, &up);
 	
-	vecNewAngles += x*viewmodel_angle_x.GetFloat() + y*viewmodel_angle_y.GetFloat() + z*viewmodel_angle_z.GetFloat();;
+	vecNewAngles += con;
 	vecNewOrigin += forward*viewmodel_offset_x.GetFloat() + right*viewmodel_offset_y.GetFloat() + up*viewmodel_offset_z.GetFloat();
 	
 	BaseClass::CalcViewModelView( owner, vecNewOrigin, vecNewAngles );
