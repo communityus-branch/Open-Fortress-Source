@@ -324,7 +324,8 @@ public:
 
 	virtual bool	IsDMGamemode(void) { return GetGameType() == TF_GAMETYPE_DM || GetGameType() == TF_GAMETYPE_TDM; }
 	virtual bool	IsTeamplay(void) { return GetGameType() == TF_GAMETYPE_TDM; }
-
+	virtual bool	IsESCGamemode(void) { return GetGameType() == TF_GAMETYPE_ESC; }
+	int TF_HUNTED_COUNT;
 	int		m_iBirthdayMode;
 };
 

@@ -91,7 +91,10 @@ ConVar tf_damage_range( "tf_damage_range", "0.5", FCVAR_DEVELOPMENTONLY );
 ConVar tf_max_voice_speak_delay( "tf_max_voice_speak_delay", "1.5", FCVAR_REPLICATED , "Max time after a voice command until player can do another one" );
 ConVar of_headshots( "of_headshots", "0", FCVAR_REPLICATED | FCVAR_NOTIFY , "Makes ever non projectile weapon headshot." );
 ConVar of_forcespawnprotect( "of_forcespawnprotect", "0", FCVAR_REPLICATED | FCVAR_NOTIFY , "How long the spawn protection lasts." );
+
 ConVar ofd_spawnprotecttime( "ofd_spawnprotecttime", "3", FCVAR_REPLICATED | FCVAR_NOTIFY , "How long the spawn protection lasts." );
+
+ConVar ofe_huntedcount( "ofe_huntedcount", "1", FCVAR_REPLICATED | FCVAR_NOTIFY , "How many Hunted there is." );
 
 extern ConVar ofd_forceclass;
 extern ConVar ofd_forceteam;
@@ -1437,7 +1440,10 @@ void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 		}
 		
 	}
-
+	
+	if ( TFGameRules()->IsESCGamemode() && GetPlayerClass()->IsClass( TF_CLASS_CIVILIAN ) && GetTeamNumber() == TF_TEAM_RED )
+		return;
+	
 	int iTeam = TEAM_INVALID;
 	if ( stricmp( pTeamName, "auto" ) == 0 )
 	{
@@ -1477,7 +1483,7 @@ void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 			return;
 		}
 		
-		if ( /* GetTeamNumber() != TEAM_UNASSIGNED  && */ !IsDead() ) //stickynote
+		if (  GetTeamNumber() != TEAM_UNASSIGNED  && !IsDead() ) //stickynote
 		{
 			CommitSuicide( false, true );
 		}
@@ -1522,14 +1528,29 @@ void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 		}
 		else
 		{
-				if ( iTeam == TF_TEAM_RED ) {
-					ShowViewPortPanel( PANEL_CLASS_RED );
+				if ( iTeam == TF_TEAM_RED ) 
+				{
+					if ( TFGameRules()->IsESCGamemode() && TFGameRules()->TF_HUNTED_COUNT < ofe_huntedcount.GetInt() )
+						{
+							SetDesiredPlayerClassIndex( TF_CLASS_CIVILIAN );
+							TFGameRules()->TF_HUNTED_COUNT++;
+							ChangeTeam(TF_TEAM_RED);
+						}
+					else
+						ShowViewPortPanel( PANEL_CLASS_RED );
 				}
 				else if ( iTeam == TF_TEAM_BLUE ) {
+					if ( TFGameRules()->IsESCGamemode() )
+						{
+							SetDesiredPlayerClassIndex( TF_CLASS_SNIPER );
+							ChangeTeam(TF_TEAM_BLUE);
+						}
+					else
 					ShowViewPortPanel( PANEL_CLASS_BLUE );
 				}
 				else if ( iTeam == TF_TEAM_MERCENARY ) {
-					ShowViewPortPanel( PANEL_CLASS_MERCENARY );
+					if ( !TFGameRules()->IsESCGamemode() )
+						ShowViewPortPanel( PANEL_CLASS_MERCENARY );
 				}
 		}
 	}	
@@ -1700,7 +1721,23 @@ void CTFPlayer::HandleCommand_JoinClass( const char *pClassName )
 
 	if (TFGameRules()->IsDMGamemode() && ofd_forceclass.GetBool()== 1 )
 		return;
+	
+	if ( TFGameRules()->IsESCGamemode() )
+	{
+		if ( GetPlayerClass()->IsClass( TF_CLASS_CIVILIAN ) && GetTeamNumber()== TF_TEAM_RED )
+		return;
 
+		if ( GetPlayerClass()->IsClass( TF_CLASS_SNIPER ) && GetTeamNumber()== TF_TEAM_BLUE )
+		return;
+	
+		if ( TFGameRules()->TF_HUNTED_COUNT < ofe_huntedcount.GetInt() && GetTeamNumber() == TF_TEAM_RED )
+		{
+			TFGameRules()->TF_HUNTED_COUNT++;
+			SetDesiredPlayerClassIndex(TF_CLASS_CIVILIAN);
+			return;
+		}
+	}
+	
 	// In case we don't get the class menu message before the spawn timer
 	// comes up, fake that we've closed the menu.
 	SetClassMenuOpen( false );
@@ -1735,6 +1772,10 @@ void CTFPlayer::HandleCommand_JoinClass( const char *pClassName )
 				break;
 			}
 		}
+		
+		if ( i == TF_CLASS_CIVILIAN && TFGameRules()->IsESCGamemode() )
+			return;
+		
 		if ( i > TF_LAST_NORMAL_CLASS )
 		{
 			Warning( "HandleCommand_JoinClass( %s ) - invalid class name.\n", pClassName );
@@ -3803,6 +3844,8 @@ void CTFPlayer::DisplayLocalItemStatus( CTFGoal *pGoal )
 // Called when the player disconnects from the server.
 void CTFPlayer::TeamFortress_ClientDisconnected( void )
 {
+	if ( GetPlayerClass()->IsClass ( TF_CLASS_CIVILIAN ) )
+		TFGameRules()->TF_HUNTED_COUNT--;
 	TeamFortress_RemoveEverythingFromWorld();
 	RemoveNemesisRelationships();
 
