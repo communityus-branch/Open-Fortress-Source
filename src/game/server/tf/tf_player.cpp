@@ -102,6 +102,8 @@ extern ConVar tf_damage_disablespread;
 extern ConVar tf_gravetalk;
 extern ConVar tf_spectalk;
 
+ConVar ofd_teamplay_collision("ofd_teamplay_collision", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "Enable collission with teammates in tdm modes");
+
 // -------------------------------------------------------------------------------- //
 // Player animation event. Sent to the client when a player fires, jumps, reloads, etc..
 // -------------------------------------------------------------------------------- //
@@ -1436,7 +1438,7 @@ void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 		
 	}
 
-	int iTeam = TF_TEAM_RED;
+	int iTeam = TEAM_INVALID;
 	if ( stricmp( pTeamName, "auto" ) == 0 )
 	{
 		iTeam = GetAutoTeam();
@@ -1447,7 +1449,10 @@ void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 	}
 	else
 	{
-		for ( int i = 0; i < TF_TEAM_COUNT ; ++i )
+		if ( !stricmp(pTeamName, g_aTeamNames[TF_TEAM_MERCENARY] ) && (TFGameRules()->IsTeamplay() || !TFGameRules()->IsDMGamemode() ) )
+			return;
+
+		for ( int i = TEAM_SPECTATOR; i < TF_TEAM_COUNT; ++i )
 		{
 			if ( stricmp( pTeamName, g_aTeamNames[i] ) == 0 )
 			{
@@ -1455,6 +1460,12 @@ void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 				break;
 			}
 		}
+	}
+
+	if ( iTeam == TEAM_INVALID )
+	{
+		ClientPrint( this, HUD_PRINTCONSOLE, UTIL_VarArgs("Invalid team \"%s\".", pTeamName ) );
+		return;
 	}
 
 	if ( iTeam == TEAM_SPECTATOR )
@@ -2946,10 +2957,13 @@ bool CTFPlayer::ShouldCollide( int collisionGroup, int contentsMask ) const
 	if ( ( ( collisionGroup == COLLISION_GROUP_PLAYER_MOVEMENT ) && tf_avoidteammates.GetBool() ) ||
 		collisionGroup == TFCOLLISION_GROUP_ROCKETS )
 	{
-		if (TFGameRules() && TFGameRules()->IsDMGamemode() && ofd_forceteam.GetBool() == 1)
+		if (TFGameRules() && TFGameRules()->IsDMGamemode() && ofd_forceteam.GetBool() == 1 && !TFGameRules()->IsTeamplay())
 		{
 			return BaseClass::ShouldCollide(collisionGroup, contentsMask);
 		}
+		
+		if ( ofd_teamplay_collision.GetBool() && TFGameRules()->IsTeamplay() )
+			return true;
 
 		switch( GetTeamNumber() )
 		{
