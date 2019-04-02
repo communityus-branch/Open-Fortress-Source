@@ -25,15 +25,21 @@ extern ConVar ofd_instagib;
 //-----------------------------------------------------------------------------
 
 
-BEGIN_DATADESC( CWeaponSpawner )
+BEGIN_DATADESC(CWeaponSpawner)
 
 // Inputs.
-	DEFINE_KEYFIELD( m_iszWeaponName, FIELD_STRING, "weaponname" ),
-	DEFINE_KEYFIELD( m_iszWeaponModel, FIELD_STRING, "powerup_model" ),
-	DEFINE_KEYFIELD( m_iszPickupSound, FIELD_STRING, "pickup_sound" ),
-//	DEFINE_KEYFIELD( m_bSpin, FIELD_BOOLEAN, "spin" ),
+DEFINE_KEYFIELD(m_iszWeaponName, FIELD_STRING, "weaponname"),
+DEFINE_KEYFIELD(m_iszWeaponModel, FIELD_STRING, "powerup_model"),
+DEFINE_KEYFIELD(m_iszPickupSound, FIELD_STRING, "pickup_sound"),
+DEFINE_KEYFIELD( m_bDisableSpin, FIELD_BOOLEAN, "disable_spin"),
+DEFINE_KEYFIELD(m_bDisableShowOutline, FIELD_BOOLEAN, "disable_glow"),
 
 END_DATADESC()
+
+IMPLEMENT_SERVERCLASS_ST(CWeaponSpawner, DT_WeaponSpawner)
+	SendPropBool( SENDINFO( m_bDisableSpin ) ),
+	SendPropBool( SENDINFO( m_bDisableShowOutline ) ),
+END_SEND_TABLE()
 
 LINK_ENTITY_TO_CLASS( dm_weapon_spawner, CWeaponSpawner );
 
@@ -43,6 +49,7 @@ void CWeaponSpawner::Spawn( void )
 	if ( ofd_instagib.GetInt() <= 0 ) {
 	Precache();
 	SetModel( STRING(m_iszWeaponModel) );
+	SetTransmitState(FL_EDICT_ALWAYS);
 	BaseClass::Spawn();
 	}
 }

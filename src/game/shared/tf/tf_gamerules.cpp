@@ -3423,6 +3423,36 @@ bool CTFGameRules::ShouldShowTeamGoal( void )
 	return false;
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+Vector CTFGameRules::GetTeamGlowColor( int nTeam )
+{
+	float r, g, b;
+	switch (nTeam)
+	{
+	case TF_TEAM_BLUE:
+		r = 0.49f; g = 0.66f; b = 0.77f;
+		break;
+
+	case TF_TEAM_RED:
+		r = 0.74f; g = 0.23f; b = 0.23f;
+		break;
+
+	case TF_TEAM_MERCENARY: //The team used in dm should use the color of the player for glow color
+		r = ofd_color_r.GetFloat() / 255.0f;
+		g = ofd_color_g.GetFloat() / 255.0f;
+		b = ofd_color_b.GetFloat() / 255.0f;
+		break;
+
+	default:
+		r = 0.76f; g = 0.76f; b = 0.76f;
+		break;
+	}
+
+	return Vector(r, g, b);
+}
+
 #endif
 
 #ifdef GAME_DLL

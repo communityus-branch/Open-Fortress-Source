@@ -21,6 +21,8 @@ class CWeaponSpawner : public CTFPowerup
 {
 public:
 	DECLARE_CLASS( CWeaponSpawner, CTFPowerup );
+	DECLARE_DATADESC();
+	DECLARE_SERVERCLASS();
 
 	void	Spawn( void );
 	void	Precache( void );
@@ -30,7 +32,9 @@ public:
 	string_t m_iszWeaponName=MAKE_STRING( "tf_weapon_scattergun" );
 	string_t m_iszWeaponModel=MAKE_STRING( "models/weapons/w_models/w_scattergun.mdl" );
 	string_t m_iszPickupSound=MAKE_STRING( "AmmoPack.Touch" );
-	DECLARE_DATADESC();
+
+	CNetworkVar( bool, m_bDisableSpin );
+	CNetworkVar( bool, m_bDisableShowOutline );
 };
 
 #endif // ENTITY_WEAPON_SPAWNER_H
