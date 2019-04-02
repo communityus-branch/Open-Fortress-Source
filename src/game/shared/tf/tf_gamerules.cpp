@@ -93,7 +93,7 @@ ConVar mp_teamplay( "mp_teamplay", "0", FCVAR_NOTIFY | FCVAR_REPLICATED, "Turns 
 
 #ifdef GAME_DLL
 // TF overrides the default value of this convar
-ConVar mp_waitingforplayers_time( "mp_waitingforplayers_time", (IsX360()?"15":"30"), FCVAR_GAMEDLL | FCVAR_DEVELOPMENTONLY, "WaitingForPlayers time length in seconds" );
+ConVar mp_waitingforplayers_time( "mp_waitingforplayers_time", (IsX360()?"15":"30"), FCVAR_GAMEDLL, "WaitingForPlayers time length in seconds" );
 ConVar tf_gravetalk( "tf_gravetalk", "1", FCVAR_NOTIFY, "Allows living players to hear dead players using text/voice chat." );
 ConVar tf_spectalk( "tf_spectalk", "1", FCVAR_NOTIFY, "Allows living players to hear spectators using text chat." );
 #endif
@@ -354,6 +354,35 @@ void CTFLogicDM::Spawn(void)
 {
 	BaseClass::Spawn();
 }
+
+class CTFLogicTDM : public CBaseEntity
+{
+public:
+	DECLARE_CLASS(CTFLogicTDM, CBaseEntity);
+	void	Spawn(void);
+};
+
+LINK_ENTITY_TO_CLASS(of_logic_tdm, CTFLogicTDM);
+
+void CTFLogicTDM::Spawn(void)
+{
+	BaseClass::Spawn();
+}
+
+class CTFLogicESC : public CBaseEntity
+{
+public:
+	DECLARE_CLASS(CTFLogicESC, CBaseEntity);
+	void	Spawn(void);
+};
+
+LINK_ENTITY_TO_CLASS(of_logic_esc, CTFLogicESC);
+
+void CTFLogicESC::Spawn(void)
+{
+	BaseClass::Spawn();
+}
+
 
 // (We clamp ammo ourselves elsewhere).
 ConVar ammo_max( "ammo_max", "5000", FCVAR_REPLICATED );
@@ -623,6 +652,17 @@ void CTFGameRules::Activate()
 
 		return;
 	}
+	
+	if (gEntList.FindEntityByClassname(NULL, "of_logic_esc") || !Q_strncmp(STRING(gpGlobals->mapname), "esc_", 4) )
+	{
+		TF_HUNTED_COUNT = 0;
+		m_nGameType.Set(TF_GAMETYPE_ESC);
+		ConColorMsg(Color(77, 116, 85, 255), "[TFGameRules] Executing server Escort gamemode config file\n", NULL);
+		engine->ServerCommand("exec config_esc.cfg \n");
+		engine->ServerExecute();
+		return;
+	}
+	
 }
 
 //-----------------------------------------------------------------------------
@@ -793,6 +833,7 @@ void CTFGameRules::SetupOnRoundStart( void )
 	{
 		m_iNumCaps[i] = 0;
 	}
+	TF_HUNTED_COUNT = 0;
 
 	// Let all entities know that a new round is starting
 	CBaseEntity *pEnt = gEntList.FirstEnt();

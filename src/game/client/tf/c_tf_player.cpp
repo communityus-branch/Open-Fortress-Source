@@ -202,12 +202,16 @@ public:
 	float GetBurnStartTime() { return m_flBurnEffectStartTime; }
 
 	virtual void SetupWeights( const matrix3x4_t *pBoneToWorld, int nFlexWeightCount, float *pFlexWeights, float *pFlexDelayedWeights );
-//	virtual C_BaseEntity *GetItemTintColorOwner( void );
+
+	virtual C_BaseEntity *GetItemTintColorOwner( void )
+	{
+		EHANDLE hPlayer = GetPlayerHandle();
+		return hPlayer.Get();
+	}
 	
 private:
 	
 	C_TFRagdoll( const C_TFRagdoll & ) {}
-
 	void Interp_Copy( C_BaseAnimatingOverlay *pSourceEntity );
 
 	void CreateTFRagdoll();
@@ -941,7 +945,6 @@ public:
 			m_pResult->SetVecValue( r, g, b );
 			return;
 		}
-
 		C_BaseEntity *pEntity = BindArgToEntity( pC_BaseEntity );
 		if ( !pEntity )
 			return;
