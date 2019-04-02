@@ -83,9 +83,9 @@ ConVar cl_autorezoom( "cl_autorezoom", "1", FCVAR_USERINFO | FCVAR_ARCHIVE, "Whe
 ConVar of_muzzlelight("of_muzzlelight", "0", FCVAR_ARCHIVE, "Enable dynamic lights for muzzleflashes, projectiles and the flamethrower");
 ConVar of_idleview("of_idleview", "0", FCVAR_ARCHIVE, "Enables/Disables idle shake.");
 
-ConVar ofd_color_r( "ofd_color_r", "0", FCVAR_ARCHIVE | FCVAR_USERINFO, "Sets merc color's red channel value", true, 0, true, 255 );
-ConVar ofd_color_g( "ofd_color_g", "0", FCVAR_ARCHIVE | FCVAR_USERINFO, "Sets merc color's green channel value", true, 0, true, 255 );
-ConVar ofd_color_b( "ofd_color_b", "0", FCVAR_ARCHIVE | FCVAR_USERINFO, "Sets merc color's blue channel value", true, 0, true, 255 );
+ConVar ofd_color_r( "ofd_color_r", "0", FCVAR_ARCHIVE | FCVAR_USERINFO, "Sets merc color's red channel value", true, -1, true, 255 );
+ConVar ofd_color_g( "ofd_color_g", "0", FCVAR_ARCHIVE | FCVAR_USERINFO, "Sets merc color's green channel value", true, -1, true, 255 );
+ConVar ofd_color_b( "ofd_color_b", "0", FCVAR_ARCHIVE | FCVAR_USERINFO, "Sets merc color's blue channel value", true, -1, true, 255 );
 
 #define BDAY_HAT_MODEL		"models/effects/bday_hat.mdl"
 
@@ -938,6 +938,15 @@ public:
 
 		if ( !pC_BaseEntity )
 		{
+			if ( ofd_color_r.GetFloat() < 0 || ofd_color_g.GetFloat() < 0 || ofd_color_b.GetFloat() < 0 )
+			{
+				float r = RandomFloat( 0.0f, 1.0f );
+				float g = RandomFloat( 0.0f, 1.0f );
+				float b = RandomFloat( 0.0f, 1.0f );
+				
+				m_pResult->SetVecValue( r, g, b );
+				return;
+			}
 			float r = floorf( ofd_color_r.GetFloat() ) / 255.0f;
 			float g = floorf( ofd_color_g.GetFloat() ) / 255.0f;
 			float b = floorf( ofd_color_b.GetFloat() ) / 255.0f;
@@ -971,6 +980,15 @@ public:
 };
 
 EXPOSE_INTERFACE( CProxyItemTintColor, IMaterialProxy, "ItemTintColor" IMATERIAL_PROXY_INTERFACE_VERSION );
+
+void CC_OFDColorRandom( void )
+{
+		ofd_color_r.SetValue( -1 );
+		ofd_color_g.SetValue( -1 );
+		ofd_color_b.SetValue( -1 );
+}
+
+static ConCommand ofd_color_random("ofd_color_random", CC_OFDColorRandom, "Make player a random color each time they spawn", FCVAR_CLIENTDLL );
 
 //-----------------------------------------------------------------------------
 // Purpose: RecvProxy that converts the Player's object UtlVector to entindexes

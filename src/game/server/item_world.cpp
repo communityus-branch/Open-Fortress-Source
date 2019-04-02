@@ -461,7 +461,7 @@ void CItem::ItemTouch( CBaseEntity *pOther )
 CBaseEntity* CItem::Respawn( void )
 {
 	SetTouch( NULL );
-	AddEffects( EF_NODRAW );
+//	AddEffects( EF_NODRAW );
 
 	VPhysicsDestroyObject();
 

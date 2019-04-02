@@ -12,7 +12,7 @@
 #include "tf_gamerules.h"
 
 //-----------------------------------------------------------------------------
-// Purpose: Spawn function for the ammopack
+// Purpose: Spawn function for the Weapon Spawner
 //-----------------------------------------------------------------------------
 class C_WeaponSpawner : public C_BaseAnimating
 {

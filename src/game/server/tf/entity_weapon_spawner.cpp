@@ -53,6 +53,7 @@ void CWeaponSpawner::Spawn( void )
 	BaseClass::Spawn();
 	}
 }
+
 //-----------------------------------------------------------------------------
 // Purpose: Precache function for the ammopack
 //-----------------------------------------------------------------------------
@@ -75,12 +76,6 @@ bool CWeaponSpawner::MyTouch( CBasePlayer *pPlayer )
 		if ( !pTFPlayer )
 			return false;
 	
-		
-//		CTFWeaponBase *pSpawnedWeapon = GiveNamedItem( STRING(m_iszWeaponName) );
-//		if ( pWeapon && pWeapon->GetWeaponID() != pSpawnedWeapon->GetWeaponID()  )
-//		{
-//			UTIL_Remove( pWeapon );
-//		}
 		bSuccess = true;
 		CTFWeaponBase *pWeapon = (CTFWeaponBase *)pPlayer->GiveNamedItem( STRING(m_iszWeaponName) );
 		
@@ -89,13 +84,12 @@ bool CWeaponSpawner::MyTouch( CBasePlayer *pPlayer )
 			CTFWeaponBase *pCarriedWeapon = (CTFWeaponBase *)pPlayer->GetWeapon( iWeapon );
 			if ( pCarriedWeapon == pWeapon ) 
 			{
-				
-				
 				int iMaxPrimary = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_PRIMARY];
 				if ( pPlayer->GiveAmmo( ceil(iMaxPrimary * 0.5), TF_AMMO_PRIMARY, true ) )
 				{
 					CSingleUserRecipientFilter filter( pPlayer );
 					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
+					m_nRenderFX = kRenderFxDistort;
 					return bSuccess;
 				}
 				int iMaxSecondary = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_SECONDARY];
@@ -103,6 +97,7 @@ bool CWeaponSpawner::MyTouch( CBasePlayer *pPlayer )
 				{
 					CSingleUserRecipientFilter filter( pPlayer );
 					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
+					m_nRenderFX = kRenderFxDistort;
 					return bSuccess;
 				}
 				bSuccess=false;
@@ -116,6 +111,7 @@ bool CWeaponSpawner::MyTouch( CBasePlayer *pPlayer )
 			EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
 
 			pWeapon->GiveTo( pPlayer );
+			m_nRenderFX = kRenderFxDistort;
 		}
 	}
 	return bSuccess;

@@ -29,6 +29,7 @@ BEGIN_DATADESC( CTFPowerup )
 
 // Keyfields.
 DEFINE_KEYFIELD( m_bDisabled, FIELD_BOOLEAN, "StartDisabled" ),
+DEFINE_KEYFIELD( m_bHide, FIELD_BOOLEAN, "HiddenWhenRespawning" ),
 DEFINE_KEYFIELD( fl_RespawnTime, FIELD_FLOAT, "respawntime" ),
 DEFINE_KEYFIELD( m_iszSpawnSound, FIELD_STRING, "spawn_sound" ),
 
@@ -78,7 +79,6 @@ void CTFPowerup::Spawn( void )
 	}
 
 	m_bRespawning = false;
-
 	ResetSequence( LookupSequence("idle") );
 }
 
@@ -104,13 +104,13 @@ CBaseEntity* CTFPowerup::Respawn( void )
 //-----------------------------------------------------------------------------
 void CTFPowerup::Materialize( void )
 {
-	if ( !m_bDisabled && IsEffectActive( EF_NODRAW ) )
+	if ( !m_bDisabled )
 	{
 		// changing from invisible state to visible.
 		EmitSound( STRING( m_iszSpawnSound ) );
+		m_nRenderFX = kRenderFxNone;
 		RemoveEffects( EF_NODRAW );
 	}
-
 	m_bRespawning = false;
 	SetTouch( &CItem::ItemTouch );
 }
@@ -138,7 +138,8 @@ bool CTFPowerup::ValidTouch( CBasePlayer *pPlayer )
 	{
 		return false;
 	}
-
+	if ( m_bHide )
+		AddEffects( EF_NODRAW );
 	return true;
 }
 
@@ -195,7 +196,6 @@ void CTFPowerup::InputToggle( inputdata_t &inputdata )
 void CTFPowerup::SetDisabled( bool bDisabled )
 {
 	m_bDisabled = bDisabled;
-
 	if ( bDisabled )
 	{
 		AddEffects( EF_NODRAW );

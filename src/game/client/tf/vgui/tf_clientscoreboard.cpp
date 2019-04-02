@@ -209,6 +209,7 @@ void CTFClientScoreBoardDialog::InitPlayerList( SectionedListPanel *pPlayerList 
 	pPlayerList->AddColumnToSection( 0, "status", "", SectionedListPanel::COLUMN_IMAGE | SectionedListPanel::COLUMN_CENTER, m_iStatusWidth );
 	pPlayerList->AddColumnToSection( 0, "nemesis", "", SectionedListPanel::COLUMN_IMAGE, m_iNemesisWidth );
 	pPlayerList->AddColumnToSection( 0, "class", "", 0, m_iClassWidth );
+	pPlayerList->AddColumnToSection( 0, "kills", "#TF_Scoreboard_Kills", SectionedListPanel::COLUMN_RIGHT, m_iKillsWidth );
 	pPlayerList->AddColumnToSection( 0, "score", "#TF_Scoreboard_Score", SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
 	pPlayerList->AddColumnToSection( 0, "ping", "#TF_Scoreboard_Ping", SectionedListPanel::COLUMN_RIGHT, m_iPingWidth );
 }
@@ -252,24 +253,31 @@ void CTFClientScoreBoardDialog::UpdateTeamInfo()
 			// choose dialog variables to set depending on team
 				const char *pDialogVarTeamScore = NULL;
 			const char *pDialogVarTeamPlayerCount = NULL;
-			switch ( teamIndex ) {
-				case TF_TEAM_RED:
-					pDialogVarTeamScore = "redteamscore";
-					pDialogVarTeamPlayerCount = "redteamplayercount";
-					break;
-				case TF_TEAM_BLUE:
-					pDialogVarTeamScore = "blueteamscore";
-					pDialogVarTeamPlayerCount = "blueteamplayercount";
-					break;
-				case TF_TEAM_MERCENARY:
-					pDialogVarTeamScore = "mercenaryteamscore";
-					pDialogVarTeamPlayerCount = "mercenaryteamplayercount";
-					break;
-				default:
-					Assert( false );
-					break;
+			if  ( !TFGameRules()->IsDMGamemode() || TFGameRules()->IsTeamplay() ) 
+			{
+				switch ( teamIndex ) {
+					case TF_TEAM_RED:
+						pDialogVarTeamScore = "redteamscore";
+						pDialogVarTeamPlayerCount = "redteamplayercount";
+						break;
+					case TF_TEAM_BLUE:
+						pDialogVarTeamScore = "blueteamscore";
+						pDialogVarTeamPlayerCount = "blueteamplayercount";
+						break;
+					case TF_TEAM_MERCENARY:
+						pDialogVarTeamScore = "mercenaryteamscore";
+						pDialogVarTeamPlayerCount = "mercenaryteamplayercount";
+						break;
+					default:
+						Assert( false );
+						break;
+				}
 			}
-
+			else
+			{
+				pDialogVarTeamScore = "mercenaryteamscore";
+				pDialogVarTeamPlayerCount = "mercenaryteamplayercount";
+			}
 			// update # of players on each team
 			wchar_t name[64];
 			wchar_t string1[1024];
@@ -373,12 +381,15 @@ void CTFClientScoreBoardDialog::UpdatePlayerList()
 
 			const char *szName = tf_PR->GetPlayerName( playerIndex );
 			int score = tf_PR->GetTotalScore( playerIndex );
+			int kills = tf_PR->GetPlayerScore( playerIndex );
+			
 
 			KeyValues *pKeyValues = new KeyValues( "data" );
 
 			pKeyValues->SetInt( "playerIndex", playerIndex );
 			pKeyValues->SetString( "name", szName );
 			pKeyValues->SetInt( "score", score );
+			pKeyValues->SetInt( "kills", kills );
 
 			// can only see class information if we're on the same team
 			if ( !AreEnemyTeams( g_PR->GetTeam( playerIndex ), localteam ) && !( localteam == TEAM_UNASSIGNED ) )
@@ -652,13 +663,24 @@ bool CTFClientScoreBoardDialog::TFPlayerSortFunc( vgui::SectionedListPanel *list
 	Assert(it1 && it2);
 
 	// first compare score
-	int v1 = it1->GetInt("score");
-	int v2 = it2->GetInt("score");
-	if (v1 > v2)
-		return true;
-	else if (v1 < v2)
-		return false;
-
+	if ( TFGameRules()->IsDMGamemode() )
+	{
+		int v1 = it1->GetInt("kills");
+		int v2 = it2->GetInt("kills");
+		if (v1 > v2)
+			return true;
+		else if (v1 < v2)
+			return false;
+	}
+	else
+	{
+		int v1 = it1->GetInt("score");
+		int v2 = it2->GetInt("score");
+		if (v1 > v2)
+			return true;
+		else if (v1 < v2)
+			return false;
+	}
 	// if score is the same, use player index to get deterministic sort
 	int iPlayerIndex1 = it1->GetInt( "playerIndex" );
 	int iPlayerIndex2 = it2->GetInt( "playerIndex" );

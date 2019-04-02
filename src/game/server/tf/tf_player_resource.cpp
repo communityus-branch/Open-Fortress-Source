@@ -88,5 +88,10 @@ int CTFPlayerResource::GetTotalScore( int iIndex )
 
 Color CTFPlayerResource::GetPlayerColor( int iIndex )
 {
+	if ( m_vecColors[iIndex].x < 0 || m_vecColors[iIndex].y < 0 || m_vecColors[iIndex].z < 0 )
+	{
+		return Color( RandomFloat( 0.0f, 1.0f ) * 255.0, RandomFloat( 0.0f, 1.0f ) * 255.0, RandomFloat( 0.0f, 1.0f ) * 255.0, 255 );
+	}
+	
 	return Color( m_vecColors[iIndex].x * 255.0, m_vecColors[iIndex].y * 255.0, m_vecColors[iIndex].z * 255.0, 255 );
 }

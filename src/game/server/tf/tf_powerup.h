@@ -58,6 +58,7 @@ public:
 private:
 	bool			m_bDisabled;
 	bool			m_bRespawning;
+	bool			m_bHide = 1;
 
 	DECLARE_DATADESC();
 };
