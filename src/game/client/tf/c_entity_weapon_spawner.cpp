@@ -35,6 +35,7 @@ private:
 	void	DestroyGlowEffect(void);
 	bool	m_bDisableSpin;
 	bool	m_bDisableShowOutline;
+	bool	m_bShouldGlow;
 };
 
 // Inputs.
@@ -72,7 +73,26 @@ void C_WeaponSpawner::ClientThink( void )
 		SetAbsAngles(absAngle);
 	}
 	
-	UpdateGlowEffect();
+	bool bShouldGlow = false;
+
+	C_BasePlayer *pPlayer = C_BasePlayer::GetLocalPlayer();
+
+	if ( pPlayer ) 
+	{
+		trace_t tr;
+		UTIL_TraceLine(GetAbsOrigin(), pPlayer->EyePosition(), MASK_OPAQUE, this, COLLISION_GROUP_NONE, &tr);
+		if (tr.fraction == 1.0f)
+		{
+			bShouldGlow = true;
+		}
+	}
+	
+	if (m_bShouldGlow != bShouldGlow)
+	{
+		m_bShouldGlow = bShouldGlow;
+		UpdateGlowEffect();
+	}
+	
 
 	SetNextClientThink(CLIENT_THINK_ALWAYS);
 }
@@ -87,6 +107,9 @@ void C_WeaponSpawner::UpdateGlowEffect( void )
 	
 	if ( !m_bDisableShowOutline )
 		m_pGlowEffect = new CGlowObject(this, TFGameRules()->GetTeamGlowColor(GetLocalPlayerTeam()), 1.0, true, true);
+
+	if ( !m_bShouldGlow )
+		m_pGlowEffect->SetAlpha(0.0f);
 }
 
 void C_WeaponSpawner::DestroyGlowEffect(void)

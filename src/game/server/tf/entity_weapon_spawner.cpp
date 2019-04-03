@@ -49,7 +49,6 @@ void CWeaponSpawner::Spawn( void )
 	if ( ofd_instagib.GetInt() <= 0 ) {
 	Precache();
 	SetModel( STRING(m_iszWeaponModel) );
-	SetTransmitState(FL_EDICT_ALWAYS);
 	BaseClass::Spawn();
 	}
 }
