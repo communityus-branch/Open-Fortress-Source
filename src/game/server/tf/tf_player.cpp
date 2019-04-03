@@ -825,6 +825,7 @@ void CTFPlayer::Spawn()
 		}
 
 		EmitSound( "Player.Spawn" );
+		FireTargets( "game_playerspawn", this, this, USE_TOGGLE, 0 );
 		InitClass();
 		m_Shared.RemoveAllCond( NULL ); // Remove conc'd, burning, rotting, hallucinating, etc.
 

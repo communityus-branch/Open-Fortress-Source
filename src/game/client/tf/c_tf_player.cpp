@@ -3749,7 +3749,7 @@ void C_TFPlayer::CalcViewBob( Vector& eyeOrigin )
 	float Cycle;
 	Vector Velocity;
 
-	if (GetGroundEntity() == nullptr || gpGlobals->curtime == BobLastTime ||  m_Shared.InCond ( TF_COND_AIMING ) )
+	if (GetGroundEntity() == nullptr || gpGlobals->curtime == BobLastTime ||  m_Shared.InCond ( TF_COND_AIMING ) || !of_viewbobcycle.GetBool() )
 	{
 		eyeOrigin.z += ViewBob;
 		return;

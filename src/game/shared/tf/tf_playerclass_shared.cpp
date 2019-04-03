@@ -115,7 +115,37 @@ void TFPlayerClassData_t::Parse( const char *szName )
 		pKV->deleteThis();
 	}
 }
+/*
+class CSetCustomModel : public CBaseEntity
+{
+public:
+	DECLARE_CLASS(CSetCustomModel, CBaseEntity);
+	void	Spawn(void);
+};
 
+BEGIN_DATADESC( CSetCustomModel )
+
+DEFINE_KEYFIELD(m_iszScoutModel, FIELD_STRING, "scoutmodel"),
+DEFINE_KEYFIELD(m_iszSoldierModel, FIELD_STRING, "soldiermodel"),
+DEFINE_KEYFIELD(m_iszPyroModel, FIELD_STRING, "pyromodel"),
+DEFINE_KEYFIELD(m_iszDemoModel, FIELD_STRING, "demomodel"),
+DEFINE_KEYFIELD(m_iszHeavyModel, FIELD_STRING, "heavymodel"),
+DEFINE_KEYFIELD(m_iszEngineerModel, FIELD_STRING, "engineermodel"),
+DEFINE_KEYFIELD(m_iszMedicModel, FIELD_STRING, "medicmodel"),
+DEFINE_KEYFIELD(m_iszSniperModel, FIELD_STRING, "snipermodel"),
+DEFINE_KEYFIELD(m_iszSpyModel, FIELD_STRING, "spymodel"),
+DEFINE_KEYFIELD(m_iszMercenaryModel, FIELD_STRING, "mercenarymodel"),
+DEFINE_KEYFIELD(m_iszCivilianModel, FIELD_STRING, "civilianmodel"),
+
+END_DATADESC()
+
+LINK_ENTITY_TO_CLASS( setcustommodel, CSetCustomModel );
+
+void CSetCustomModel::Spawn(void)
+{
+	BaseClass::Spawn();
+}
+*/
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
@@ -129,7 +159,7 @@ const char *TFPlayerClassData_t::GetModelName() const
 			return m_szHWMModelName;
 		}
 	}
-
+	
 	return m_szModelName;
 #else
 	return m_szModelName;

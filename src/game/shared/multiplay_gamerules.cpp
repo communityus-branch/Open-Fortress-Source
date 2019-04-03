@@ -585,6 +585,9 @@ ConVarRef suitcharger( "sk_suitcharger" );
 	//=========================================================
 	bool CMultiplayRules::ClientConnected( edict_t *pEntity, const char *pszName, const char *pszAddress, char *reject, int maxrejectlen )
 	{
+		CBasePlayer *pPlayer = (CBasePlayer *)CBaseEntity::Instance( pEntity );
+		if( pPlayer )
+			FireTargets( "game_playerjoin", pPlayer, pPlayer, USE_TOGGLE, 0 );
 		GetVoiceGameMgr()->ClientConnected( pEntity );
 		return true;
 	}

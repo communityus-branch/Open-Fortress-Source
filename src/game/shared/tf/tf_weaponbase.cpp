@@ -1041,11 +1041,10 @@ void CTFWeaponBase::ItemBusyFrame( void )
 		{
 			if ( pPlayer->m_nButtons & IN_ATTACK )
 			{
-				if ( ( m_iReloadMode != TF_RELOAD_START ) && Clip1() > 0 )
+				if (( m_bInReload || (ReloadsSingly() && m_iReloadMode!=TF_RELOAD_START)) && Clip1() > 0 )
 				{
-					m_iReloadMode.Set( TF_RELOAD_START );
-					m_bInReload = false;
-
+					AbortReload();
+					
 					pPlayer->m_flNextAttack = gpGlobals->curtime;
 					m_flNextPrimaryAttack = gpGlobals->curtime;
 

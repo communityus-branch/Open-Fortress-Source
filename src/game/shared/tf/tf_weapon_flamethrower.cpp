@@ -854,7 +854,7 @@ void CTFFlameEntity::FlameThink( void )
 		{
 			CBasePlayer *pPlayer = pTeam->GetPlayer( iPlayer );
 			// Is this player connected, alive, and an enemy?
-			if ( pPlayer && pPlayer->IsConnected() && pPlayer->IsAlive() )
+			if ( pPlayer && pPlayer->IsConnected() && pPlayer->IsAlive() && pPlayer != pAttacker )
 			{
 				CheckCollision( pPlayer, &bHitWorld );
 				if ( bHitWorld )
@@ -921,7 +921,7 @@ void CTFFlameEntity::CheckCollision( CBaseEntity *pOther, bool *pbHitWorld )
 	int iIndex = m_hEntitiesBurnt.Find( pOther );
 	if ( iIndex != m_hEntitiesBurnt.InvalidIndex() )
 		return;
-
+	
 	// Do a bounding box check against the entity
 	Vector vecMins, vecMaxs;
 	pOther->GetCollideable()->WorldSpaceSurroundingBounds( &vecMins, &vecMaxs );
@@ -996,7 +996,7 @@ void CTFFlameEntity::OnCollide( CBaseEntity *pOther )
 	CBaseEntity *pAttacker = m_hAttacker;
 	if ( !pAttacker )
 		return;
-
+	
 	CTakeDamageInfo info( GetOwnerEntity(), pAttacker, flDamage, m_iDmgType, TF_DMG_CUSTOM_BURNING );
 	info.SetReportedPosition( pAttacker->GetAbsOrigin() );
 
