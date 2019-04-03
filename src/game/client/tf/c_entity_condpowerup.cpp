@@ -27,7 +27,6 @@ public:
 
 private:
 
-	QAngle absAngle;
 	~C_CondPowerup();
 
 private:
@@ -36,7 +35,7 @@ private:
 	void	UpdateGlowEffect( void );
 	void	DestroyGlowEffect( void );
 	bool	m_bDisableShowOutline;
-	bool	m_bShouldGlow;
+	int		iTeamNum;
 };
 
 // Inputs.
@@ -47,44 +46,34 @@ RecvPropBool( RECVINFO( m_bDisableShowOutline ) ),
 END_RECV_TABLE()
 
 //-----------------------------------------------------------------------------
-// Purpose: Set initial angles 
+// Purpose: Set initial team 
 //-----------------------------------------------------------------------------
 void C_CondPowerup::Spawn( void )
 {
 	BaseClass::Spawn();
-
+	iTeamNum = TEAM_INVALID;
+	
 	UpdateGlowEffect();
-
+	
 	ClientThink();
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Update angles every think
+// Purpose: Update glow every think
 //-----------------------------------------------------------------------------
 void C_CondPowerup::ClientThink( void )
 {
-	bool bShouldGlow = false;
-
 	C_BasePlayer *pPlayer = C_BasePlayer::GetLocalPlayer();
-
-	if ( pPlayer )
+	
+	// If old team does not equal new team then update glow with new glow color
+	if ( pPlayer && pPlayer->GetTeamNumber() != iTeamNum )
 	{
-		trace_t tr;
-		UTIL_TraceLine( GetAbsOrigin(), pPlayer->EyePosition(), MASK_OPAQUE, this, COLLISION_GROUP_NONE, &tr );
-		if ( tr.fraction == 1.0f )
-		{
-			bShouldGlow = true;
-		}
-	}
-
-	if ( m_bShouldGlow != bShouldGlow )
-	{
-		m_bShouldGlow = bShouldGlow;
+		iTeamNum = pPlayer->GetTeamNumber();
 		UpdateGlowEffect();
+		DevMsg("Updated glow effect on powerup spawner \n");
 	}
 
-
-	SetNextClientThink( CLIENT_THINK_ALWAYS );
+	SetNextClientThink(CLIENT_THINK_ALWAYS);
 }
 
 
@@ -97,9 +86,6 @@ void C_CondPowerup::UpdateGlowEffect( void )
 
 	if ( !m_bDisableShowOutline )
 		m_pGlowEffect = new CGlowObject( this, TFGameRules()->GetTeamGlowColor(GetLocalPlayerTeam()), 1.0, true, true );
-
-	if ( !m_bShouldGlow )
-		m_pGlowEffect->SetAlpha( 0.0f );
 }
 
 void C_CondPowerup::DestroyGlowEffect( void )

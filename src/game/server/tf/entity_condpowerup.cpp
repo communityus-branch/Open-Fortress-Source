@@ -38,6 +38,8 @@ void CCondPowerup::Spawn( void )
 {
 	Precache();
 	SetModel( STRING( m_iszPowerupModel ) );
+	
+	SetTransmitState( FL_EDICT_ALWAYS );
 
 	BaseClass::Spawn();
 }

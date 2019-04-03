@@ -36,6 +36,7 @@ private:
 	bool	m_bDisableSpin;
 	bool	m_bDisableShowOutline;
 	bool	m_bShouldGlow;
+	int		iTeamNum;
 };
 
 // Inputs.
@@ -53,6 +54,7 @@ void C_WeaponSpawner::Spawn( void )
 {
 	BaseClass::Spawn();
 	absAngle = GetAbsAngles();
+	iTeamNum = TEAM_INVALID;
 
 	UpdateGlowEffect();
 
@@ -87,9 +89,10 @@ void C_WeaponSpawner::ClientThink( void )
 		}
 	}
 	
-	if ( m_bShouldGlow != bShouldGlow )
+	if ( m_bShouldGlow != bShouldGlow || ( pPlayer && iTeamNum != pPlayer->GetTeamNumber() ) )
 	{
 		m_bShouldGlow = bShouldGlow;
+		iTeamNum = pPlayer->GetTeamNumber();
 		UpdateGlowEffect();
 	}
 	
