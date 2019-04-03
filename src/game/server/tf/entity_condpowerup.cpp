@@ -1,6 +1,6 @@
 //====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======//
 //
-// Purpose: CTF AmmoPack.
+// Purpose: Deathmatch Powerup Spawner.
 //
 //=============================================================================//
 
@@ -12,15 +12,8 @@
 
 #include "tier0/memdbgon.h"
 
-//=============================================================================
-//
-// CTF AmmoPack defines.
-//
-
-//#define TF_WEAPON_PICKUP_SOUND		"AmmoPack.Touch"
-
 //-----------------------------------------------------------------------------
-// Purpose: Spawn function for the ammopack
+// Purpose: Spawn function for the powerupspawner
 //-----------------------------------------------------------------------------
 
 
@@ -31,30 +24,35 @@ DEFINE_KEYFIELD( m_bCondition, FIELD_INTEGER, "condID" ),
 DEFINE_KEYFIELD( m_bCondDuration, FIELD_FLOAT, "duration" ),
 DEFINE_KEYFIELD( m_iszPowerupModel, FIELD_STRING, "powerup_model" ),
 DEFINE_KEYFIELD( m_iszPickupSound, FIELD_STRING, "pickup_sound" ),
+DEFINE_KEYFIELD( m_bDisableShowOutline, FIELD_BOOLEAN, "disable_glow" ),
 
 END_DATADESC()
+
+IMPLEMENT_SERVERCLASS_ST( CCondPowerup, DT_CondPowerup )
+SendPropBool( SENDINFO( m_bDisableShowOutline ) ),
+END_SEND_TABLE()
 
 LINK_ENTITY_TO_CLASS( dm_powerup_spawner, CCondPowerup );
 
 void CCondPowerup::Spawn( void )
 {
 	Precache();
-	SetModel( STRING(m_iszPowerupModel) );
+	SetModel( STRING( m_iszPowerupModel ) );
 
 	BaseClass::Spawn();
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Precache function for the ammopack
+// Purpose: Precache function for the powerupspawner
 //-----------------------------------------------------------------------------
 void CCondPowerup::Precache( void )
 {
 	PrecacheModel( STRING( m_iszPowerupModel ) );
-	PrecacheScriptSound( STRING( m_iszPickupSound) );
+	PrecacheScriptSound( STRING( m_iszPickupSound ) );
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: MyTouch function for the ammopack
+// Purpose: MyTouch function for the powerupspawner
 //-----------------------------------------------------------------------------
 bool CCondPowerup::MyTouch( CBasePlayer *pPlayer )
 {
@@ -71,7 +69,7 @@ bool CCondPowerup::MyTouch( CBasePlayer *pPlayer )
 		if ( bSuccess )
 		{
 			pTFPlayer->m_Shared.AddCond( m_bCondition , m_bCondDuration );
-			EmitSound( STRING(m_iszPickupSound) );
+			EmitSound( STRING( m_iszPickupSound ) );
 		}
 	}
 	return bSuccess;

@@ -21,6 +21,8 @@ class CCondPowerup : public CTFPowerup
 {
 public:
 	DECLARE_CLASS( CCondPowerup, CTFPowerup );
+	DECLARE_SERVERCLASS();
+	DECLARE_DATADESC();
 
 	void	Spawn( void );
 	void	Precache( void );
@@ -31,7 +33,8 @@ public:
 	float m_bCondDuration=5;
 	string_t m_iszPowerupModel=MAKE_STRING( "models/pickups/pickup_powerup_uber.mdl" );
 	string_t m_iszPickupSound=MAKE_STRING( "AmmoPack.Touch" );
-	DECLARE_DATADESC();
+
+	CNetworkVar(bool, m_bDisableShowOutline);
 };
 
 #endif // ENTITY_WEAPON_SPAWNER_H

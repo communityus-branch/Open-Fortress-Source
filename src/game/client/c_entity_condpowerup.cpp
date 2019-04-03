@@ -1,6 +1,8 @@
+#include "cbase.h"
+#include "c_tf_player.h"
 //====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======//
 //
-// Purpose: Deathmatch weapon spawner
+// Purpose: Powerup spawner
 //
 //=============================================================================//
 
@@ -12,12 +14,12 @@
 #include "tf_gamerules.h"
 
 //-----------------------------------------------------------------------------
-// Purpose: Spawn function for the Weapon Spawner
+// Purpose: Spawn function for the Powerup Spawner
 //-----------------------------------------------------------------------------
-class C_WeaponSpawner : public C_BaseAnimating
+class C_CondPowerup : public C_BaseAnimating
 {
 public:
-	DECLARE_CLASS( C_WeaponSpawner, C_BaseAnimating );
+	DECLARE_CLASS( C_CondPowerup, C_BaseAnimating );
 	DECLARE_CLIENTCLASS();
 
 	void	ClientThink( void );
@@ -26,33 +28,30 @@ public:
 private:
 
 	QAngle absAngle;
-	~C_WeaponSpawner();
+	~C_CondPowerup();
 
-	private:
+private:
 
 	CGlowObject		   *m_pGlowEffect;
 	void	UpdateGlowEffect( void );
-	void	DestroyGlowEffect(void);
-	bool	m_bDisableSpin;
+	void	DestroyGlowEffect( void );
 	bool	m_bDisableShowOutline;
 	bool	m_bShouldGlow;
 };
 
 // Inputs.
-LINK_ENTITY_TO_CLASS( dm_weapon_spawner, C_WeaponSpawner );
+LINK_ENTITY_TO_CLASS( dm_powerup_spawner, C_CondPowerup );
 
-IMPLEMENT_CLIENTCLASS_DT( C_WeaponSpawner, DT_WeaponSpawner, CWeaponSpawner )
-RecvPropBool( RECVINFO( m_bDisableSpin ) ),
+IMPLEMENT_CLIENTCLASS_DT( C_CondPowerup, DT_CondPowerup, CCondPowerup )
 RecvPropBool( RECVINFO( m_bDisableShowOutline ) ),
 END_RECV_TABLE()
 
 //-----------------------------------------------------------------------------
 // Purpose: Set initial angles 
 //-----------------------------------------------------------------------------
-void C_WeaponSpawner::Spawn( void )
+void C_CondPowerup::Spawn( void )
 {
 	BaseClass::Spawn();
-	absAngle = GetAbsAngles();
 
 	UpdateGlowEffect();
 
@@ -62,22 +61,13 @@ void C_WeaponSpawner::Spawn( void )
 //-----------------------------------------------------------------------------
 // Purpose: Update angles every think
 //-----------------------------------------------------------------------------
-void C_WeaponSpawner::ClientThink( void )
-{	
-	if ( !m_bDisableSpin )
-	{
-		absAngle.y += 90 * gpGlobals->frametime;
-		if ( absAngle.y >= 360 )
-			absAngle.y -= 360;
-
-		SetAbsAngles( absAngle );
-	}
-	
+void C_CondPowerup::ClientThink( void )
+{
 	bool bShouldGlow = false;
 
 	C_BasePlayer *pPlayer = C_BasePlayer::GetLocalPlayer();
 
-	if ( pPlayer ) 
+	if ( pPlayer )
 	{
 		trace_t tr;
 		UTIL_TraceLine( GetAbsOrigin(), pPlayer->EyePosition(), MASK_OPAQUE, this, COLLISION_GROUP_NONE, &tr );
@@ -86,13 +76,13 @@ void C_WeaponSpawner::ClientThink( void )
 			bShouldGlow = true;
 		}
 	}
-	
+
 	if ( m_bShouldGlow != bShouldGlow )
 	{
 		m_bShouldGlow = bShouldGlow;
 		UpdateGlowEffect();
 	}
-	
+
 
 	SetNextClientThink( CLIENT_THINK_ALWAYS );
 }
@@ -101,10 +91,10 @@ void C_WeaponSpawner::ClientThink( void )
 //-----------------------------------------------------------------------------
 // Purpose: Update glow effect
 //-----------------------------------------------------------------------------
-void C_WeaponSpawner::UpdateGlowEffect( void )
+void C_CondPowerup::UpdateGlowEffect( void )
 {
 	DestroyGlowEffect();
-	
+
 	if ( !m_bDisableShowOutline )
 		m_pGlowEffect = new CGlowObject( this, TFGameRules()->GetTeamGlowColor(GetLocalPlayerTeam()), 1.0, true, true );
 
@@ -112,7 +102,7 @@ void C_WeaponSpawner::UpdateGlowEffect( void )
 		m_pGlowEffect->SetAlpha( 0.0f );
 }
 
-void C_WeaponSpawner::DestroyGlowEffect(void)
+void C_CondPowerup::DestroyGlowEffect( void )
 {
 	if ( m_pGlowEffect )
 	{
@@ -121,7 +111,7 @@ void C_WeaponSpawner::DestroyGlowEffect(void)
 	}
 }
 
-C_WeaponSpawner::~C_WeaponSpawner()
+C_CondPowerup::~C_CondPowerup()
 {
 	DestroyGlowEffect();
 }
