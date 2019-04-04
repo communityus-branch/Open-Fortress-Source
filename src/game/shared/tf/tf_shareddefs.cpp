@@ -229,6 +229,7 @@ const char *g_szProjectileNames[] =
 	"projectile_pipe",
 	"projectile_pipe_remote",
 	"projectile_syringe",
+	"projectile_nail",
 };
 
 // these map to the projectiles named in g_szProjectileNames

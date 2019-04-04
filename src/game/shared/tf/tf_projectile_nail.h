@@ -33,4 +33,25 @@ public:
 	static float	GetInitialVelocity( void ) { return 1000.0; }
 };
 
+//-----------------------------------------------------------------------------
+// Purpose: Nailgun projectile 
+//-----------------------------------------------------------------------------
+class CTFProjectile_Nail : public CTFBaseProjectile
+{
+	DECLARE_CLASS(CTFProjectile_Nail, CTFBaseProjectile);
+
+public:
+
+	CTFProjectile_Nail();
+	~CTFProjectile_Nail();
+
+	// Creation.
+	static CTFProjectile_Nail *Create(const Vector &vecOrigin, const QAngle &vecAngles, CBaseEntity *pOwner = NULL, CBaseEntity *pScorer = NULL, bool bCritical = false);
+
+	virtual const char *GetProjectileModelName(void);
+	virtual float GetGravity(void);
+
+	static float	GetInitialVelocity(void) { return 1000.0; }
+};
+
 #endif	//TF_PROJECTILE_NAIL_H
