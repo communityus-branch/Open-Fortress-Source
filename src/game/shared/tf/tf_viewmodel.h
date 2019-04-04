@@ -51,6 +51,8 @@ public:
 	BobState_t	&GetBobState() { return m_BobState; }
 
 	virtual int DrawModel( int flags );
+	
+	virtual C_BaseEntity	*GetItemTintColorOwner( void ) { return GetOwner(); }
 #endif
 
 private:

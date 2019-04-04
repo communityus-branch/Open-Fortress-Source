@@ -1180,7 +1180,7 @@ if (!g_bTextMode)
 	discordPresence.state = "In-Game";
 	discordPresence.details = "Main Menu";
 	discordPresence.startTimestamp = startTimestamp;
-	discordPresence.largeImageKey = "ModImageHere";
+	discordPresence.largeImageKey = "ico";
 	Discord_UpdatePresence(&discordPresence);
 }
 
@@ -1733,7 +1733,7 @@ if (!g_bTextMode)
 	discordPresence.state = "In-Game";
 	sprintf(buffer, "Map: %s", pMapName);
 	discordPresence.details = buffer;
-	discordPresence.largeImageKey = "ModImageHere";
+	discordPresence.largeImageKey = "ico";
 	Discord_UpdatePresence(&discordPresence);
 }
 

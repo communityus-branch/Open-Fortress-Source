@@ -144,6 +144,7 @@ public:
 	void	RecalcDisguiseWeapon( void );
 	int		GetDisguiseWeaponModelIndex( void ) { return m_iDisguiseWeaponModelIndex; }
 	CTFWeaponInfo *GetDisguiseWeaponInfo( void );
+	bool	UpdateParticleColor( CNewParticleEffect *pParticle );
 #endif
 
 #ifdef GAME_DLL

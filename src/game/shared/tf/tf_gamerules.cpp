@@ -3481,9 +3481,20 @@ Vector CTFGameRules::GetTeamGlowColor( int nTeam )
 		break;
 
 	case TF_TEAM_MERCENARY: //The team used in dm should use the color of the player for glow color
-		r = ofd_color_r.GetFloat() / 255.0f;
-		g = ofd_color_g.GetFloat() / 255.0f;
-		b = ofd_color_b.GetFloat() / 255.0f;
+		r = ofd_color_r.GetFloat();
+		g = ofd_color_g.GetFloat();
+		b = ofd_color_b.GetFloat();
+		if ( r < TF_GLOW_COLOR_CLAMP && g < TF_GLOW_COLOR_CLAMP && b < TF_GLOW_COLOR_CLAMP )
+		{
+			float maxi = max(max(r, g), b);
+			maxi = TF_GLOW_COLOR_CLAMP - maxi;
+			r += maxi;
+			g += maxi;
+			b += maxi;
+		}
+		r = r / 255.0f;
+		g = g / 255.0f;
+		b = b / 255.0f;	
 		break;
 
 	default:

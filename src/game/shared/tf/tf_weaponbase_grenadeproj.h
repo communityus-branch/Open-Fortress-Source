@@ -48,6 +48,8 @@ public:
 
 	void				SetCritical( bool bCritical ) { m_bCritical = bCritical; }
 	virtual int			GetDamageType();
+	
+	
 
 private:
 
@@ -64,6 +66,8 @@ public:
 	bool					m_bCritical;
 
 	virtual void			CreateLightEffects(void);
+	
+	virtual C_BaseEntity	*GetItemTintColorOwner( void ) { return GetThrower(); }
 
 	// Server specific.
 #else

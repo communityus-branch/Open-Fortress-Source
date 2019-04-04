@@ -181,6 +181,7 @@ void CTFWeaponBaseGrenadeProj::CreateLightEffects(void)
 	// Handle the dynamic light
 	if (of_muzzlelight.GetBool())
 	{
+		C_TFPlayer *pPlayer = ToTFPlayer( GetThrower() );
 		dlight_t *dl;
 		if (IsEffectActive(EF_DIMLIGHT))
 		{
@@ -211,13 +212,24 @@ void CTFWeaponBaseGrenadeProj::CreateLightEffects(void)
 					break;
 					
 				case TF_TEAM_MERCENARY:
+					float r = pPlayer->m_vecPlayerColor.x * 255;
+					float g = pPlayer->m_vecPlayerColor.y * 255;
+					float b = pPlayer->m_vecPlayerColor.z * 255;
+					if ( r < TF_LIGHT_COLOR_CLAMP && g < TF_LIGHT_COLOR_CLAMP && b < TF_LIGHT_COLOR_CLAMP )
+					{
+						float maxi = max(max(r, g), b);
+						maxi = TF_LIGHT_COLOR_CLAMP - maxi;
+						r += maxi;
+						g += maxi;
+						b += maxi;
+					}
 					if (!m_bCritical) 
 					{
-						dl->color.r = 10; dl->color.g = 30; dl->color.b = 255; dl->style = 0;
+						dl->color.r = r; dl->color.g = g ; dl->color.b = b ; dl->style = 0;
 					}
 					else 
 					{
-						dl->color.r = 10; dl->color.g = 10; dl->color.b = 255; dl->style = 1;
+						dl->color.r = r; dl->color.g = g; dl->color.b = b; dl->style = 1;
 					}
 					break;
 			}
@@ -274,8 +286,8 @@ void CTFWeaponBaseGrenadeProj::InitGrenade( const Vector &velocity, const Angula
 	else SetDamage( weaponInfo.GetWeaponData( TF_WEAPON_PRIMARY_MODE ).m_nInstagibDamage );
 	
 	SetDamageRadius( weaponInfo.m_flDamageRadius );
-	if ( pOwner->GetTeamNumber() == 4) ChangeTeam(77);
-	else ChangeTeam( pOwner->GetTeamNumber()  );
+
+	ChangeTeam( pOwner->GetTeamNumber() );
 	
 
 	IPhysicsObject *pPhysicsObject = VPhysicsGetObject();
@@ -306,9 +318,15 @@ void CTFWeaponBaseGrenadeProj::Spawn( void )
 	SetCollisionGroup( TF_COLLISIONGROUP_GRENADES );
 
 	// Don't collide with players on the owner's team for the first bit of our life
-	m_flCollideWithTeammatesTime = gpGlobals->curtime + 0.25;
-	m_bCollideWithTeammates = false;
-
+	if ( GetTeamNumber() == TF_TEAM_MERCENARY )
+	{
+		m_bCollideWithTeammates = true;
+	}
+	else
+	{
+		m_flCollideWithTeammatesTime = gpGlobals->curtime + 0.25;
+		m_bCollideWithTeammates = false;
+	}
 	VPhysicsInitNormal( SOLID_BBOX, 0, false );
 
 	m_takedamage = DAMAGE_EVENTS_ONLY;
@@ -705,7 +723,7 @@ void CTFWeaponBaseGrenadeProj::VPhysicsUpdate( IPhysicsObject *pPhysics )
 
 	bool bHitEnemy = false;
 
-	if ( tr.m_pEnt && tr.m_pEnt->GetTeamNumber() != GetTeamNumber() )
+	if ( ( tr.m_pEnt && tr.m_pEnt->GetTeamNumber() != GetTeamNumber() ) || ( tr.m_pEnt && tr.m_pEnt->GetTeamNumber() == TF_TEAM_MERCENARY ) )
 	{
 		bHitEnemy = true;
 	}

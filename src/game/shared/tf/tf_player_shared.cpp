@@ -1489,6 +1489,12 @@ CTFWeaponInfo *CTFPlayerShared::GetDisguiseWeaponInfo( void )
 	return m_pDisguiseWeaponInfo;
 }
 
+bool CTFPlayerShared::UpdateParticleColor( CNewParticleEffect *pParticle )
+{
+	pParticle->SetControlPoint( CUSTOM_COLOR_CP1, m_pOuter->m_vecPlayerColor );
+	return true;
+}
+
 #endif
 
 #ifdef GAME_DLL

@@ -2831,11 +2831,16 @@ int CTFPlayer::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 								// Rocket launcher only has half the bonus of the other weapons at short range
 								flRandomDamage *= 0.5;
 							}
-							else if ( pWeapon->GetWeaponID() == TF_WEAPON_SCATTERGUN || pWeapon->GetWeaponID() == TF_WEAPON_SUPERSHOTGUN )
+							else if ( pWeapon->GetWeaponID() == TF_WEAPON_SCATTERGUN )
 							{
 								// Scattergun gets 50% bonus of other weapons at short range
 								flRandomDamage *= 1.5;
 							}
+							else if ( pWeapon->GetWeaponID() == TF_WEAPON_SUPERSHOTGUN )
+							{
+								// Scattergun gets 50% bonus of other weapons at short range
+								flRandomDamage *= 2;
+							}							
 						}
 					}
 				}

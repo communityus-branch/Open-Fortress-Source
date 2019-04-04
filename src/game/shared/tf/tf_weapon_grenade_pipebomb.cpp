@@ -13,9 +13,12 @@
 
 // Client specific.
 #ifdef CLIENT_DLL
-#include "c_tf_player.h"
-#include "IEffects.h"
-// Server specific.
+// for spy material proxy
+#include "proxyentity.h"
+#include "materialsystem/imaterial.h"
+#include "materialsystem/imaterialvar.h"
+#include "prediction.h"
+
 #else
 #include "tf_player.h"
 #include "items.h"
@@ -25,6 +28,7 @@
 #include "IEffects.h"
 #include "props.h"
 #include "func_respawnroom.h"
+
 #endif
 
 #define TF_WEAPON_PIPEBOMB_TIMER		3.0f //Seconds
@@ -176,8 +180,12 @@ void CTFGrenadePipebombProjectile::OnDataChanged(DataUpdateType_t updateType)
 	if ( updateType == DATA_UPDATE_CREATED )
 	{
 		m_flCreationTime = gpGlobals->curtime;
-		ParticleProp()->Create( GetTrailParticleName(), PATTACH_ABSORIGIN_FOLLOW );
+		CNewParticleEffect *pParticle = ParticleProp()->Create( GetTrailParticleName(), PATTACH_ABSORIGIN_FOLLOW );
+		
+		C_TFPlayer *pPlayer = ToTFPlayer( GetThrower() );
 		m_bPulsed = false;
+
+		pPlayer->m_Shared.UpdateParticleColor( pParticle );
 
 		CTFPipebombLauncher *pLauncher = dynamic_cast<CTFPipebombLauncher*>( m_hLauncher.Get() );
 
@@ -458,7 +466,7 @@ void CTFGrenadePipebombProjectile::PipebombTouch( CBaseEntity *pOther )
 		return;
 
 	// Blow up if we hit an enemy we can damage
-	if ( pOther->GetTeamNumber() && pOther->GetTeamNumber() != GetTeamNumber() && pOther->m_takedamage != DAMAGE_NO )
+	if ( ( pOther->GetTeamNumber() && pOther->GetTeamNumber() != GetTeamNumber() && pOther->m_takedamage != DAMAGE_NO ) || ( pOther->GetTeamNumber() && pOther->GetTeamNumber() == TF_TEAM_MERCENARY && pOther->m_takedamage != DAMAGE_NO ) )
 	{
 		// Check to see if this is a respawn room.
 		if ( !pOther->IsPlayer() )
