@@ -36,6 +36,7 @@ private:
 	bool	m_bDisableSpin;
 	bool	m_bDisableShowOutline;
 	bool	m_bShouldGlow;
+	bool	m_bRespawning;
 	int		iTeamNum;
 };
 
@@ -45,6 +46,7 @@ LINK_ENTITY_TO_CLASS( dm_weapon_spawner, C_WeaponSpawner );
 IMPLEMENT_CLIENTCLASS_DT( C_WeaponSpawner, DT_WeaponSpawner, CWeaponSpawner )
 RecvPropBool( RECVINFO( m_bDisableSpin ) ),
 RecvPropBool( RECVINFO( m_bDisableShowOutline ) ),
+RecvPropBool( RECVINFO( m_bRespawning ) ),
 END_RECV_TABLE()
 
 //-----------------------------------------------------------------------------
@@ -78,8 +80,8 @@ void C_WeaponSpawner::ClientThink( void )
 	bool bShouldGlow = false;
 
 	C_BasePlayer *pPlayer = C_BasePlayer::GetLocalPlayer();
-
-	if ( pPlayer ) 
+	
+	if ( pPlayer && !m_bRespawning ) 
 	{
 		trace_t tr;
 		UTIL_TraceLine( GetAbsOrigin(), pPlayer->EyePosition(), MASK_OPAQUE, this, COLLISION_GROUP_NONE, &tr );

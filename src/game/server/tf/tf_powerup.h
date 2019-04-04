@@ -55,9 +55,10 @@ public:
 	virtual powerupsize_t	GetPowerupSize( void ) { return POWERUP_FULL; }
 	string_t m_iszSpawnSound=MAKE_STRING( "Item.Materialize" );
 
+	CNetworkVarForDerived( bool, m_bRespawning );
+
 private:
 	bool			m_bDisabled;
-	bool			m_bRespawning;
 	bool			m_bHide = 1;
 
 	DECLARE_DATADESC();

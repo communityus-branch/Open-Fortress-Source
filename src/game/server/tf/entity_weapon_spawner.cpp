@@ -36,9 +36,10 @@ DEFINE_KEYFIELD(m_bDisableShowOutline, FIELD_BOOLEAN, "disable_glow"),
 
 END_DATADESC()
 
-IMPLEMENT_SERVERCLASS_ST(CWeaponSpawner, DT_WeaponSpawner)
+IMPLEMENT_SERVERCLASS_ST( CWeaponSpawner, DT_WeaponSpawner )
 	SendPropBool( SENDINFO( m_bDisableSpin ) ),
 	SendPropBool( SENDINFO( m_bDisableShowOutline ) ),
+	SendPropBool( SENDINFO( m_bRespawning ) ),
 END_SEND_TABLE()
 
 LINK_ENTITY_TO_CLASS( dm_weapon_spawner, CWeaponSpawner );

@@ -35,6 +35,8 @@ public:
 
 	CNetworkVar( bool, m_bDisableSpin );
 	CNetworkVar( bool, m_bDisableShowOutline );
+	
+	IMPLEMENT_NETWORK_VAR_FOR_DERIVED( m_bRespawning );
 };
 
 #endif // ENTITY_WEAPON_SPAWNER_H
