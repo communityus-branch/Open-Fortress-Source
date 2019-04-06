@@ -1,6 +1,6 @@
 @echo off
 
-devtools\bin\vpc.exe /ofd +gamedlls /mksln jaykinbacon.sln /2013
+devtools\bin\vpc.exe /ofd +gamedlls /mksln openfortress.sln /2013
 
 if errorlevel 1 (
 	pause
