@@ -619,6 +619,26 @@ void CTFPlayer::PostThink()
     m_PlayerAnimState->Update( m_angEyeAngles[YAW], m_angEyeAngles[PITCH] );
 }
 
+
+const char *g_aPlayerFirstPersonArms[] =
+{
+	"models/error.mdl", //undefined
+
+	"models/weapons/c_models/c_scout_arms.mdl", //scout
+	"models/weapons/c_models/c_sniper_arms.mdl", //sniper
+	"models/weapons/c_models/c_soldier_arms.mdl", //soldier
+	"models/weapons/c_models/c_demo_arms.mdl", //demoman
+	"models/weapons/c_models/c_medic_arms.mdl", //medic
+	"models/weapons/c_models/c_heavy_arms.mdl", //heavy
+	"models/weapons/c_models/c_pyro_arms.mdl", //pyro
+	"models/weapons/c_models/c_spy_arms.mdl", //spy
+	"models/weapons/c_models/c_engineer_arms.mdl", //engie
+
+
+	"models/weapons/c_models/c_merc_arms.mdl", //merc
+	"models/weapons/c_models/c_soldier_arms.mdl", //vip
+};
+
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
@@ -663,7 +683,14 @@ void CTFPlayer::Precache()
 	PrecacheParticleSystem( "blood_impact_red_01" );
 	PrecacheParticleSystem( "water_playerdive" );
 	PrecacheParticleSystem( "water_playeremerge" );
-					 
+				
+	//Precache arm models
+	int nHeads = ARRAYSIZE( g_aPlayerFirstPersonArms );
+	int i;	
+
+	for ( i = 0; i < nHeads; ++i )
+	   	 PrecacheModel( g_aPlayerFirstPersonArms[i] );
+
 	BaseClass::Precache();
 }
 
@@ -793,14 +820,8 @@ void CTFPlayer::Spawn()
 	SetMoveType( MOVETYPE_WALK );
 	BaseClass::Spawn();
 
-	// Create our off hand viewmodel if necessary
-	CreateViewModel( 1 );
-	// Make sure it has no model set, in case it had one before
-	GetViewModel(1)->SetModel( "" );
-
-	CreateHandModel();
-	PrecacheModel( GetPlayerClass()->GetArmModelName() );
-	GetViewModel(1)->SetModel( GetPlayerClass()->GetArmModelName() );	
+	DestroyViewModels();
+	CreateViewModel();
 	
 	// Kind of lame, but CBasePlayer::Spawn resets a lot of the state that we initially want on.
 	// So if we're in the welcome state, call its enter function to reset 
@@ -1004,6 +1025,23 @@ void CTFPlayer::CreateViewModel( int iViewModel )
 		DispatchSpawn( pViewModel );
 		pViewModel->FollowEntity( this, false );
 		m_hViewModel.Set( iViewModel, pViewModel );
+
+		CTFViewModel* vmhands = static_cast<CTFViewModel*>(CreateEntityByName("hand_viewmodel"));
+        if ( vmhands )
+        {
+            vmhands->SetAbsOrigin( GetAbsOrigin() );
+            vmhands->SetOwner( this );
+			vmhands->SetParent( this );
+            vmhands->SetIndex( iViewModel+2 );
+			DispatchSpawn(vmhands);
+			vmhands->m_nSkin = m_nSkin;
+			vmhands->SetLocalOrigin(vec3_origin);
+            vmhands->FollowEntity( pViewModel );
+			vmhands->AddEffects(EF_BONEMERGE);
+			vmhands->SetModel(g_aPlayerFirstPersonArms[GetDesiredPlayerClassIndex()]);
+            m_hViewModel.Set( iViewModel+2, vmhands );
+        }
+
 	}
 }
 
@@ -3502,6 +3540,8 @@ void CTFPlayer::Event_Killed( const CTakeDamageInfo &info )
 			}		
 		}
 	}
+
+	DestroyViewModels();
 }
 
 //-----------------------------------------------------------------------------
@@ -4489,6 +4529,25 @@ void CTFPlayer::CheatImpulseCommands( int iImpulse )
 				GiveAmmo( 1000, TF_AMMO_SECONDARY );
 				GiveAmmo( 1000, TF_AMMO_METAL );
 				TakeHealth( 999, DMG_GENERIC );
+
+				GiveNamedItem("tf_weapon_crowbar");
+				GiveNamedItem("tf_weapon_flamethrower");
+				GiveNamedItem("tf_weapon_grenadelauncher");
+				GiveNamedItem("tf_weapon_knife");
+				GiveNamedItem("tf_weapon_minigun");
+				GiveNamedItem("tf_weapon_nailgun");
+				GiveNamedItem("tf_weapon_original");
+				GiveNamedItem("tf_weapon_pipebomblauncher");
+				GiveNamedItem("tf_weapon_pistol_mercenary");
+				GiveNamedItem("tf_weapon_railgun");
+				GiveNamedItem("tf_weapon_revolver");
+				GiveNamedItem("tf_weapon_rocketlauncher");
+				GiveNamedItem("tf_weapon_scattergun");
+				GiveNamedItem("tf_weapon_shotgun_soldier");
+				GiveNamedItem("tf_weapon_smg");
+				GiveNamedItem("tf_weapon_sniperrifle");
+				GiveNamedItem("tf_weapon_supershotgun");
+				GiveNamedItem("tf_weapon_syringegun_medic");
 
 				gEvilImpulse101 = false;
 			}

@@ -132,6 +132,7 @@ enum
 	TF_CLASS_RANDOM
 };
 
+extern const char *g_aPlayerFirstPersonArms[];
 extern const char *g_aPlayerClassNames[];				// localized class names
 extern const char *g_aPlayerClassNames_NonLocalized[];	// non-localized class names
 

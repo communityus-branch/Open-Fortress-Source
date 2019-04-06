@@ -1,0 +1,4 @@
+#!/bin/bash
+
+devtools/bin/vpc /ofd +dedicated /mksln game_dedicated /f
+

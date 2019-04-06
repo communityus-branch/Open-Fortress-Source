@@ -526,6 +526,7 @@ public:
 	bool				PlayerHasPowerplay( void );
 	void				PowerplayThink( void );
 	float				m_flPowerPlayTime;
+	void				SetHandsModel( const char* model );
 };
 
 //-----------------------------------------------------------------------------

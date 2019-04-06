@@ -47,6 +47,9 @@ public:
 	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_SHOTGUN_PRIMARY; }
 	virtual void	PrimaryAttack();
 
+	virtual acttable_t *ActivityList( int &iActivityCount );
+	static acttable_t m_acttableShotgun[];
+
 protected:
 
 	void		Fire( CTFPlayer *pPlayer );

@@ -1,2 +1,24 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+#* text eol=crlf
+
+creategameprojects text
+createallprojects text
+vpc text
+vpc_all text
+vpc_game text
+vpc_game_linux text
+vpc_game_linux_force text
+vpc_game_osx32 text
+vpc_game_osx32_force text
+vpc_all.bat text
+vpc_game.bat text
+vpc_game_force.bat text
+vpc_gamedlls.bat text
+*.sh text
+
+vpc_linux binary
+vpc_osx binary
+
+*.exe binary
+*.lib binary
+protoc binary
+ccache binary

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+devtools/bin/vpc /ofd +everything /mksln everything
+
