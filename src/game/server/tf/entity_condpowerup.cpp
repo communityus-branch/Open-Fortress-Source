@@ -30,6 +30,7 @@ END_DATADESC()
 
 IMPLEMENT_SERVERCLASS_ST( CCondPowerup, DT_CondPowerup )
 SendPropBool( SENDINFO( m_bDisableShowOutline ) ),
+SendPropBool( SENDINFO( m_bRespawning) ),
 END_SEND_TABLE()
 
 LINK_ENTITY_TO_CLASS( dm_powerup_spawner, CCondPowerup );
@@ -67,13 +68,9 @@ bool CCondPowerup::MyTouch( CBasePlayer *pPlayer )
 		
 		bSuccess = true;
 
-		// did we give them anything?
-		if ( bSuccess )
-		{
-			pTFPlayer->m_Shared.AddCond( m_bCondition , m_bCondDuration );
-			EmitSound( STRING( m_iszPickupSound ) );
-		}
+		pTFPlayer->m_Shared.AddCond( m_bCondition , m_bCondDuration );
+		EmitSound( STRING( m_iszPickupSound ) );
+		m_nRenderFX = kRenderFxDistort;
 	}
 	return bSuccess;
-
 }
