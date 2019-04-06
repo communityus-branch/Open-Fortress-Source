@@ -183,7 +183,7 @@ void CTFWeaponBaseGrenadeProj::CreateLightEffects(void)
 	{
 		C_TFPlayer *pPlayer = ToTFPlayer( GetThrower() );
 		dlight_t *dl;
-		if (IsEffectActive(EF_DIMLIGHT))
+		if ( IsEffectActive(EF_DIMLIGHT) )
 		{
 			dl = effects->CL_AllocDlight(LIGHT_INDEX_TE_DYNAMIC + index);
 			dl->origin = GetAbsOrigin();
@@ -199,7 +199,6 @@ void CTFWeaponBaseGrenadeProj::CreateLightEffects(void)
 						dl->color.r = 255; dl->color.g = 10; dl->color.b = 10; dl->style = 1;
 					}
 					break;
-
 				case TF_TEAM_BLUE:
 					if (!m_bCritical) 
 					{
@@ -210,7 +209,6 @@ void CTFWeaponBaseGrenadeProj::CreateLightEffects(void)
 						dl->color.r = 10; dl->color.g = 10; dl->color.b = 255; dl->style = 1;
 					}
 					break;
-					
 				case TF_TEAM_MERCENARY:
 					float r = pPlayer->m_vecPlayerColor.x * 255;
 					float g = pPlayer->m_vecPlayerColor.y * 255;

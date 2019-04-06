@@ -721,11 +721,33 @@ void CTFFlameThrower::RestartParticleEffect( void )
 	{
 		if ( m_bCritFire )
 		{
-			pszParticleEffect = ( pOwner->GetTeamNumber() == TF_TEAM_BLUE ? "flamethrower_crit_blue" : "flamethrower_crit_red" );//add more teams
+			switch ( pOwner->GetTeamNumber() )
+			{
+				case TF_TEAM_RED:
+					pszParticleEffect = "flamethrower_crit_red";
+					break;
+				case TF_TEAM_BLUE:
+					pszParticleEffect = "flamethrower_crit_blue";
+					break;
+				default:
+					pszParticleEffect = "flamethrower_crit_mercenary";
+					break;
+			}
 		}
 		else 
 		{
-			pszParticleEffect = ( pOwner->GetTeamNumber() == TF_TEAM_BLUE ? "flamethrower_blue" : "flamethrower" );
+			switch ( pOwner->GetTeamNumber() )
+			{
+				case TF_TEAM_RED:
+					pszParticleEffect = "flamethrower_red";
+					break;
+				case TF_TEAM_BLUE:
+					pszParticleEffect = "flamethrower_blue";
+					break;
+				default:
+					pszParticleEffect = "flamethrower_mercenary";
+					break;
+			}
 		}		
 	}
 
@@ -736,13 +758,13 @@ void CTFFlameThrower::RestartParticleEffect( void )
 		if ( pLocalPlayer->GetViewModel() )
 		{
 			pLocalPlayer->GetViewModel()->ParticleProp()->StopEmission();
-			pLocalPlayer->GetViewModel()->ParticleProp()->Create( pszParticleEffect, PATTACH_POINT_FOLLOW, "muzzle" );
+			pOwner->m_Shared.UpdateParticleColor ( pLocalPlayer->GetViewModel()->ParticleProp()->Create( pszParticleEffect, PATTACH_POINT_FOLLOW, "muzzle" ) );
 		}
 	}
 	else
 	{
 		ParticleProp()->StopEmission();
-		ParticleProp()->Create( pszParticleEffect, PATTACH_POINT_FOLLOW, "muzzle" );
+		pOwner->m_Shared.UpdateParticleColor ( ParticleProp()->Create( pszParticleEffect, PATTACH_POINT_FOLLOW, "muzzle" ) );
 	}
 	m_bFlameEffects = true;
 }

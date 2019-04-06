@@ -35,6 +35,8 @@ public:
 	string_t m_iszPickupSound=MAKE_STRING( "AmmoPack.Touch" );
 
 	CNetworkVar(bool, m_bDisableShowOutline);
+
+	IMPLEMENT_NETWORK_VAR_FOR_DERIVED( m_bRespawning );
 };
 
 #endif // ENTITY_WEAPON_SPAWNER_H

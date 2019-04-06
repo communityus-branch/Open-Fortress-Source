@@ -202,32 +202,32 @@ void CTFGrenadePipebombProjectile::OnDataChanged(DataUpdateType_t updateType)
 
 				if ( m_iType == TF_GL_MODE_REMOTE_DETONATE )
 				{
-					ParticleProp()->Create( "critical_grenade_blue", PATTACH_ABSORIGIN_FOLLOW );
+					pPlayer->m_Shared.UpdateParticleColor( ParticleProp()->Create( "critical_grenade_blue", PATTACH_ABSORIGIN_FOLLOW ) );
 				}
 				else
 				{
-					ParticleProp()->Create( "critical_pipe_blue", PATTACH_ABSORIGIN_FOLLOW );
+					pPlayer->m_Shared.UpdateParticleColor( ParticleProp()->Create( "critical_pipe_blue", PATTACH_ABSORIGIN_FOLLOW ) );
 				}
 				break;
 			case TF_TEAM_RED:
 				if ( m_iType == TF_GL_MODE_REMOTE_DETONATE )
 				{
-					ParticleProp()->Create( "critical_grenade_red", PATTACH_ABSORIGIN_FOLLOW );
+					pPlayer->m_Shared.UpdateParticleColor( ParticleProp()->Create( "critical_grenade_red", PATTACH_ABSORIGIN_FOLLOW ) );
 				}
 				else
 				{
-					ParticleProp()->Create( "critical_pipe_red", PATTACH_ABSORIGIN_FOLLOW );
+					pPlayer->m_Shared.UpdateParticleColor( ParticleProp()->Create( "critical_pipe_red", PATTACH_ABSORIGIN_FOLLOW ) );
 				}
 				break;
 			case TF_TEAM_MERCENARY:
 
 				if ( m_iType == TF_GL_MODE_REMOTE_DETONATE )
 				{
-					ParticleProp()->Create( "critical_grenade_mercenary", PATTACH_ABSORIGIN_FOLLOW );
+					pPlayer->m_Shared.UpdateParticleColor( ParticleProp()->Create( "critical_grenade_mercenary", PATTACH_ABSORIGIN_FOLLOW ) );
 				}
 				else
 				{
-					ParticleProp()->Create( "critical_pipe_mercenary", PATTACH_ABSORIGIN_FOLLOW );
+					pPlayer->m_Shared.UpdateParticleColor( ParticleProp()->Create( "critical_pipe_mercenary", PATTACH_ABSORIGIN_FOLLOW ) );
 				}
 				break;
 			default:

@@ -35,7 +35,9 @@ private:
 	void	UpdateGlowEffect( void );
 	void	DestroyGlowEffect( void );
 	bool	m_bDisableShowOutline;
+	bool	m_bRespawning;
 	int		iTeamNum;
+	bool	m_bShouldGlow;
 };
 
 // Inputs.
@@ -43,6 +45,7 @@ LINK_ENTITY_TO_CLASS( dm_powerup_spawner, C_CondPowerup );
 
 IMPLEMENT_CLIENTCLASS_DT( C_CondPowerup, DT_CondPowerup, CCondPowerup )
 RecvPropBool( RECVINFO( m_bDisableShowOutline ) ),
+RecvPropBool( RECVINFO( m_bRespawning ) ),
 END_RECV_TABLE()
 
 //-----------------------------------------------------------------------------
@@ -52,7 +55,8 @@ void C_CondPowerup::Spawn( void )
 {
 	BaseClass::Spawn();
 	iTeamNum = TEAM_INVALID;
-	
+	m_bShouldGlow = false;
+
 	UpdateGlowEffect();
 	
 	ClientThink();
@@ -64,11 +68,21 @@ void C_CondPowerup::Spawn( void )
 void C_CondPowerup::ClientThink( void )
 {
 	C_BasePlayer *pPlayer = C_BasePlayer::GetLocalPlayer();
-	
+
 	// If old team does not equal new team then update glow with new glow color
-	if ( pPlayer && pPlayer->GetTeamNumber() != iTeamNum )
+	if (pPlayer &&  pPlayer->GetTeamNumber() != iTeamNum)
 	{
 		iTeamNum = pPlayer->GetTeamNumber();
+		UpdateGlowEffect();
+		DevMsg("Updated glow effect on powerup spawner \n");
+	}
+
+	bool bShouldGlow = !m_bRespawning;
+
+	//if the shouldglow changed update the glow
+	if ( bShouldGlow != m_bShouldGlow ) 
+	{
+		m_bShouldGlow = bShouldGlow;
 		UpdateGlowEffect();
 		DevMsg("Updated glow effect on powerup spawner \n");
 	}
@@ -86,6 +100,9 @@ void C_CondPowerup::UpdateGlowEffect( void )
 
 	if ( !m_bDisableShowOutline )
 		m_pGlowEffect = new CGlowObject( this, TFGameRules()->GetTeamGlowColor(GetLocalPlayerTeam()), 1.0, true, true );
+
+	if ( !m_bShouldGlow )
+		m_pGlowEffect->SetAlpha( 0.0f );
 }
 
 void C_CondPowerup::DestroyGlowEffect( void )
