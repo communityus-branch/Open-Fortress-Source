@@ -104,7 +104,9 @@ void ClientsideProjectileSyringeCallback( const CEffectData &data )
 			else if  (pPlayer->GetTeamNumber() == TF_TEAM_BLUE ) pSyringe->m_nSkin = 1;
 			else pSyringe->m_nSkin = 2;
 			bool bCritical = ( ( data.m_nDamageType & DMG_CRITICAL ) != 0 );
-			pSyringe->AddParticleEffect( GetSyringeTrailParticleName( pPlayer->GetTeamNumber(), bCritical ) );
+
+			
+			pPlayer->m_Shared.UpdateParticleColor( pSyringe->AddParticleEffect( GetSyringeTrailParticleName( pPlayer->GetTeamNumber(), bCritical ) ) );
 			pSyringe->AddEffects( EF_NOSHADOW );
 			pSyringe->flags |= FTENT_USEFASTCOLLISIONS;
 		}
@@ -211,7 +213,7 @@ void ClientsideProjectileNailCallback(const CEffectData &data)
 				break;
 			}
 			bool bCritical = ((data.m_nDamageType & DMG_CRITICAL) != 0);
-			pNail->AddParticleEffect(GetNailTrailParticleName(pPlayer->GetTeamNumber(), bCritical));
+			pPlayer->m_Shared.UpdateParticleColor( pNail->AddParticleEffect(GetNailTrailParticleName(pPlayer->GetTeamNumber(), bCritical)) );
 			pNail->AddEffects(EF_NOSHADOW);
 			pNail->flags |= FTENT_USEFASTCOLLISIONS;
 		}

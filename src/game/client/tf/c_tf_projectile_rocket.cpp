@@ -65,7 +65,7 @@ void C_TFProjectile_Rocket::CreateRocketTrails(void)
 	{
 		ParticleProp()->Create(GetTrailParticleName(), PATTACH_POINT_FOLLOW, "trail");
 	}
-
+	C_TFPlayer *pPlayer = ToTFPlayer( GetOwnerEntity() );
 	if (m_bCritical)
 	{
 		switch (GetTeamNumber())
@@ -77,7 +77,7 @@ void C_TFProjectile_Rocket::CreateRocketTrails(void)
 			ParticleProp()->Create("critical_rocket_red", PATTACH_ABSORIGIN_FOLLOW);
 			break;
 		case TF_TEAM_MERCENARY:
-			ParticleProp()->Create("critical_rocket_mercenary", PATTACH_ABSORIGIN_FOLLOW);
+			pPlayer->m_Shared.UpdateParticleColor (ParticleProp()->Create("critical_rocket_mercenary", PATTACH_ABSORIGIN_FOLLOW) );
 			break;
 		default:
 			break;
@@ -87,6 +87,7 @@ void C_TFProjectile_Rocket::CreateRocketTrails(void)
 
 void C_TFProjectile_Rocket::CreateLightEffects(void)
 {
+	C_TFPlayer *pPlayer = ToTFPlayer( GetOwnerEntity() );
 	// Handle the dynamic light
 	if (of_muzzlelight.GetBool())
 	{
@@ -125,7 +126,18 @@ void C_TFProjectile_Rocket::CreateLightEffects(void)
 					dl->color.r = 255; dl->color.g = 100; dl->color.b = 10;
 				}
 				else {
-					dl->color.r = 10; dl->color.g = 10; dl->color.b = 255;
+					float r = pPlayer->m_vecPlayerColor.x * 255;
+					float g = pPlayer->m_vecPlayerColor.y * 255;
+					float b = pPlayer->m_vecPlayerColor.z * 255;
+					if ( r < TF_LIGHT_COLOR_CLAMP && g < TF_LIGHT_COLOR_CLAMP && b < TF_LIGHT_COLOR_CLAMP )
+					{
+						float maxi = max(max(r, g), b);
+						maxi = TF_LIGHT_COLOR_CLAMP - maxi;
+						r += maxi;
+						g += maxi;
+						b += maxi;
+					}
+					dl->color.r = r; dl->color.g = g ; dl->color.b = b;
 				}
 				break;
 			}
