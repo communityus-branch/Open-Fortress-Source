@@ -3472,7 +3472,7 @@ void C_BaseEntity::ComputeFxBlend( void )
 			{
 				SetRenderColorA( 180 );
 				if ( dist <= 100 )
-					blend = m_clrRender->a;
+					blend = m_clrRender->a * 0.75f;
 				else
 					blend = (int) ((1.0 - (dist - 100) * (1.0 / 400.0)) * m_clrRender->a);
 				blend += random->RandomInt(-32,31);
