@@ -18,6 +18,7 @@ $Project "client"
 {
 	"game\client\client_hl2mp.vpc"		[($WIN32||$POSIX) && $HL2MP]
 	"game\client\client_tf_mod.vpc"		[($WIN32||$POSIX) && $TF_MOD]
+	"game\client\client_ofd.vpc"		[($WIN32||$POSIX) && $OFD]
 }
 
 $Project "fgdlib"
@@ -44,6 +45,7 @@ $Project "server"
 {
 	"game\server\server_hl2mp.vpc"		[($WIN32||$POSIX) && $HL2MP]
 	"game\server\server_tf_mod.vpc"		[($WIN32||$POSIX) && $TF_MOD]
+	"game\server\server_ofd.vpc"		[($WIN32||$POSIX) && $OFD]
 }
 
 $Project "mathlib"
