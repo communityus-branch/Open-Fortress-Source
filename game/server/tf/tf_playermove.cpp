@@ -63,7 +63,7 @@ void CTFPlayerMove::SetupMove( CBasePlayer *player, CUserCmd *ucmd, IMoveHelper 
 	if ( pTFPlayer )
 	{
 		// Check to see if we are a crouched, heavy, firing his weapons and zero out movement.
-		if ( pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_HEAVYWEAPONS ) )
+		if ( pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_HEAVYWEAPONS ) && ( pTFPlayer->GetActiveTFWeapon()->GetWeaponID() == TF_WEAPON_MINIGUN ) )
 		{
 			if ( ( pTFPlayer->GetFlags() & FL_DUCKING ) && ( pTFPlayer->m_Shared.InCond( TF_COND_AIMING ) ) )
 			{

@@ -152,6 +152,9 @@ const char *g_aWeaponNames[] =
 	"TF_WEAPON_RAILGUN",
 	"TF_WEAPON_SUPERSHOTGUN",
 	"TF_WEAPON_PISTOL_MERCENARY",
+	"TF_WEAPON_REVOLVER_MERCENARY",
+	"TF_WEAPON_GATLINGGUN",
+	"TF_WEAPON_PISTOL_AKIMBO",
 
 	"TF_WEAPON_COUNT",	// end marker, do not add below here
 };
@@ -215,7 +218,10 @@ int g_aWeaponDamageTypes[] =
 	DMG_BULLET | DMG_USE_HITLOCATIONS,	// TF_WEAPON_RAILGUN,
 	DMG_BLAST, //TF_WEAPON_SUPERSHOTGUN
 	DMG_BULLET,	// TF_WEAPON_PISTOL_MERCENARY,
-
+	DMG_BULLET,	// TF_WEAPON_REVOLVER_MERCENARY,
+	DMG_BULLET | DMG_USEDISTANCEMOD,		// TF_WEAPON_GATLINGGUN,
+	DMG_BULLET,	// TF_WEAPON_PISTOL_AKIMBO,
+	
 	// This is a special entry that must match with TF_WEAPON_COUNT
 	// to protect against updating the weapon list without updating this list
 	TF_DMG_SENTINEL_VALUE

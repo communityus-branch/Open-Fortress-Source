@@ -17,6 +17,7 @@
 // Client specific.
 #ifdef CLIENT_DLL
 #define CTFMinigun C_TFMinigun
+#define CTFGatlingGun C_TFGatlingGun
 #endif
 
 enum MinigunState_t
@@ -136,6 +137,16 @@ private:
 	CNewParticleEffect *m_pMuzzleEffect;
 	int					m_iMuzzleAttachment;
 #endif
+};
+
+class CTFGatlingGun : public CTFMinigun
+{
+public:
+	DECLARE_CLASS( CTFGatlingGun, CTFMinigun );
+	DECLARE_NETWORKCLASS(); 
+	DECLARE_PREDICTABLE();
+
+	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_GATLINGGUN; }
 };
 
 #endif // TF_WEAPON_MINIGUN_H

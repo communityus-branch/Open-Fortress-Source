@@ -229,7 +229,7 @@ extern const char *g_aAmmoNames[];
 //-----------------------------------------------------------------------------
 // Weapons.
 //-----------------------------------------------------------------------------
-#define TF_PLAYER_WEAPON_COUNT		35
+#define TF_PLAYER_WEAPON_COUNT		38
 #define TF_PLAYER_GRENADE_COUNT		2
 #define TF_PLAYER_BUILDABLE_COUNT	4
 
@@ -313,6 +313,9 @@ enum
 	TF_WEAPON_RAILGUN,
 	TF_WEAPON_SUPERSHOTGUN,
 	TF_WEAPON_PISTOL_MERCENARY,
+	TF_WEAPON_REVOLVER_MERCENARY,
+	TF_WEAPON_GATLINGGUN,
+	TF_WEAPON_PISTOL_AKIMBO,
 
 	TF_WEAPON_COUNT
 };

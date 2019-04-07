@@ -188,7 +188,7 @@ void CTFPlayerAnimState::DoAnimationEvent( PlayerAnimEvent_t event, int nData )
 				return;
 
 			CTFWeaponBase *pWpn = pPlayer->GetActiveTFWeapon();
-			bool bIsMinigun = ( pWpn && pWpn->GetWeaponID() == TF_WEAPON_MINIGUN );
+			bool bIsMinigun = ( pWpn && ( pWpn->GetWeaponID() == TF_WEAPON_MINIGUN || pWpn->GetWeaponID() == TF_WEAPON_GATLINGGUN ) );
 			bool bIsSniperRifle = ( pWpn && pWpn->GetWeaponID() == TF_WEAPON_SNIPERRIFLE || pWpn && pWpn->GetWeaponID() == TF_WEAPON_RAILGUN );
 
 			// Heavy weapons primary fire.
@@ -278,7 +278,7 @@ void CTFPlayerAnimState::DoAnimationEvent( PlayerAnimEvent_t event, int nData )
 				return;
 
 			CTFWeaponBase *pWpn = pPlayer->GetActiveTFWeapon();
-			bool bIsMinigun  = ( pWpn && pWpn->GetWeaponID() == TF_WEAPON_MINIGUN );
+			bool bIsMinigun  = ( pWpn && ( pWpn->GetWeaponID() == TF_WEAPON_MINIGUN || pWpn->GetWeaponID() == TF_WEAPON_GATLINGGUN ) );
 
 			bool bAutoKillPreFire = false;
 			if ( bIsMinigun )
@@ -313,7 +313,7 @@ void CTFPlayerAnimState::DoAnimationEvent( PlayerAnimEvent_t event, int nData )
 				return;
 
 			CTFWeaponBase *pWpn = pPlayer->GetActiveTFWeapon();
-			bool bIsMinigun  = ( pWpn && pWpn->GetWeaponID() == TF_WEAPON_MINIGUN );
+			bool bIsMinigun  = ( pWpn && ( pWpn->GetWeaponID() == TF_WEAPON_MINIGUN || pWpn->GetWeaponID() == TF_WEAPON_GATLINGGUN ) );
 
 			if ( m_bInSwim && bIsMinigun )
 			{
@@ -426,7 +426,7 @@ bool CTFPlayerAnimState::HandleSwimming( Activity &idealActivity )
 		if ( m_pTFPlayer->m_Shared.InCond( TF_COND_AIMING ) )
 		{
 			CTFWeaponBase *pWpn = m_pTFPlayer->GetActiveTFWeapon();
-			if ( pWpn && pWpn->GetWeaponID() == TF_WEAPON_MINIGUN )
+			if ( pWpn && ( pWpn->GetWeaponID() == TF_WEAPON_MINIGUN || pWpn->GetWeaponID() == TF_WEAPON_GATLINGGUN ) )
 			{
 				idealActivity = ACT_MP_SWIM_DEPLOYED;
 			}
@@ -512,7 +512,7 @@ bool CTFPlayerAnimState::HandleDucking( Activity &idealActivity )
 				CTFPlayer *pPlayer = GetTFPlayer();
 				if ( pPlayer && pPlayer->GetActiveTFWeapon() )
 				{
-					bIsMinigun = ( pPlayer->GetActiveTFWeapon()->GetWeaponID() == TF_WEAPON_MINIGUN );
+					bIsMinigun = ( pPlayer->GetActiveTFWeapon()->GetWeaponID() == TF_WEAPON_MINIGUN || pPlayer->GetActiveTFWeapon()->GetWeaponID() == TF_WEAPON_GATLINGGUN );
 				}
 
 				if ( !bIsMinigun )
@@ -536,7 +536,7 @@ bool CTFPlayerAnimState::HandleJumping( Activity &idealActivity )
 	GetOuterAbsVelocity( vecVelocity );
 
 	// Don't allow a firing heavy to jump or air walk.
-	if ( m_pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_HEAVYWEAPONS ) && m_pTFPlayer->m_Shared.InCond( TF_COND_AIMING ) )
+	if ( m_pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_HEAVYWEAPONS ) && m_pTFPlayer->m_Shared.InCond( TF_COND_AIMING ) && ( m_pTFPlayer->GetActiveTFWeapon()->GetWeaponID() == TF_WEAPON_MINIGUN ) )
 		return false;
 		
 	// Handle air walking before handling jumping - air walking supersedes jump

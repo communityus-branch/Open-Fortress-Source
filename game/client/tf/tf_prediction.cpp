@@ -9,6 +9,7 @@
 #include "c_baseplayer.h"
 #include "igamemovement.h"
 #include "c_tf_player.h"
+#include "tf_weapon_minigun.h"
 
 
 static CMoveData g_MoveData;
@@ -34,7 +35,7 @@ void CTFPrediction::SetupMove( C_BasePlayer *player, CUserCmd *ucmd, IMoveHelper
 	if ( pTFPlayer )
 	{
 		// Check to see if we are a crouched, heavy, firing his weapons and zero out movement.
-		if ( pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_HEAVYWEAPONS ) )
+		if ( ( pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_HEAVYWEAPONS ) ) && ( pTFPlayer->GetActiveTFWeapon()->GetWeaponID() == TF_WEAPON_MINIGUN ) )
 		{
 			if ( ( pTFPlayer->GetFlags() & FL_DUCKING ) && ( pTFPlayer->m_Shared.InCond( TF_COND_AIMING ) ) )
 			{
