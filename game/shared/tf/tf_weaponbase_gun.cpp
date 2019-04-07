@@ -96,7 +96,7 @@ void CTFWeaponBaseGun::PrimaryAttack( void )
 	pPlayer->RemoveDisguise();
 
 	// Minigun has custom handling
-	if ( GetWeaponID() != TF_WEAPON_MINIGUN )
+	if ( GetWeaponID() != TF_WEAPON_MINIGUN && GetWeaponID() != TF_WEAPON_GATLINGGUN )
 	{
 		pPlayer->SpeakWeaponFire();
 	}
@@ -529,7 +529,7 @@ void CTFWeaponBaseGun::DoFireEffects()
 	if ( pPlayer->IsPlayerClass( TF_CLASS_HEAVYWEAPONS ) )
 	{
 		CTFWeaponBase *pWeapon = pPlayer->GetActiveTFWeapon();
-		if ( pWeapon && pWeapon->GetWeaponID() == TF_WEAPON_MINIGUN )
+		if ( pWeapon && ( pWeapon->GetWeaponID() == TF_WEAPON_MINIGUN || pWeapon->GetWeaponID() == TF_WEAPON_GATLINGGUN ) )
 		{
 			bMuzzleFlash = false;
 		}

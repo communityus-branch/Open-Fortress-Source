@@ -15,6 +15,7 @@
 // Client specific.
 #ifdef CLIENT_DLL
 #define CTFRevolver C_TFRevolver
+#define CTFRevolver_Mercenary C_TFRevolver_Mercenary
 #endif
 
 //=============================================================================
@@ -43,6 +44,17 @@ public:
 private:
 
 	CTFRevolver( const CTFRevolver & ) {}
+};
+
+// Scout specific version
+class CTFRevolver_Mercenary : public CTFRevolver
+{
+public:
+	DECLARE_CLASS( CTFRevolver_Mercenary, CTFRevolver );
+	DECLARE_NETWORKCLASS(); 
+	DECLARE_PREDICTABLE();
+
+	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_REVOLVER_MERCENARY; }
 };
 
 #endif // TF_WEAPON_REVOLVER_H

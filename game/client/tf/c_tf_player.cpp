@@ -761,12 +761,22 @@ void CSpyInvisProxy::OnBind( C_BaseEntity *pEnt )
 
 	if ( !pPlayer )
 	{
+		pPlayer = ToTFPlayer( pEnt->GetMoveParent() ); // For when ficool inevidably parents shit to the player again
+	}
+
+	if ( pPlayer )
+	{
+		m_pPercentInvisible->SetFloatValue( pPlayer->GetEffectiveInvisibilityLevel() );
+	}
+	else
+	{
 		m_pPercentInvisible->SetFloatValue( 0.0 );
 		return;
 	}
 
-	m_pPercentInvisible->SetFloatValue( pPlayer->GetEffectiveInvisibilityLevel() );
-
+	if ( !pPlayer )
+		return;	
+	
 	float r, g, b;
 
 	switch( pPlayer->GetTeamNumber() )
@@ -812,8 +822,8 @@ public:
 		C_BaseEntity *pEntity = BindArgToEntity( pC_BaseEntity );
 		if ( !pEntity )
 			return;
-
-		if ( pEntity->IsPlayer()  )
+		
+		if ( pEntity->IsPlayer() )
 		{
 			pPlayer = dynamic_cast< C_TFPlayer* >( pEntity );
 		}
@@ -831,6 +841,10 @@ public:
 				if ( pVM )
 				{
 					pPlayer = (C_TFPlayer*)pVM->GetOwner();
+				}
+				else
+				{
+					pPlayer = ToTFPlayer( pEntity->GetMoveParent() );
 				}
 			}
 		}
@@ -3722,8 +3736,8 @@ void C_TFPlayer::CalcPlayerView(Vector& eyeOrigin, QAngle& eyeAngles, float& fov
 	CalcViewIdle(eyeAngles);
 }
 
-ConVar cl_hl1_rollspeed("cl_hl1_rollspeed", "300.0", FCVAR_USERINFO | FCVAR_ARCHIVE ); // 300.0
-ConVar cl_hl1_rollangle("cl_hl1_rollangle", "0.65", FCVAR_USERINFO | FCVAR_ARCHIVE ); // 0.65
+ConVar cl_hl1_rollspeed("cl_hl1_rollspeed", "600.0", FCVAR_USERINFO | FCVAR_ARCHIVE ); // 300.0
+ConVar cl_hl1_rollangle("cl_hl1_rollangle", "0.15", FCVAR_USERINFO | FCVAR_ARCHIVE ); // 0.65
 
 void C_TFPlayer::CalcViewRoll( QAngle& eyeAngles )
 {
@@ -3742,7 +3756,7 @@ void C_TFPlayer::CalcViewRoll( QAngle& eyeAngles )
 
 ConVar of_viewbobcycle("of_viewbobcycle", "0.8", FCVAR_USERINFO | FCVAR_ARCHIVE );
 ConVar of_viewbob("of_viewbob", "0.01", FCVAR_USERINFO | FCVAR_ARCHIVE );
-ConVar of_viewbobup("of_viewbobup", "0.5", FCVAR_USERINFO | FCVAR_ARCHIVE );
+ConVar of_viewbobup("of_viewbobup", "0.2", FCVAR_USERINFO | FCVAR_ARCHIVE );
 
 void C_TFPlayer::CalcViewBob( Vector& eyeOrigin )
 {

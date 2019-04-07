@@ -1025,24 +1025,24 @@ void CTFPlayer::CreateViewModel( int iViewModel )
 		DispatchSpawn( pViewModel );
 		pViewModel->FollowEntity( this, false );
 		m_hViewModel.Set( iViewModel, pViewModel );
-
-		CTFViewModel* vmhands = static_cast<CTFViewModel*>(CreateEntityByName("hand_viewmodel"));
-        if ( vmhands )
-        {
-            vmhands->SetAbsOrigin( GetAbsOrigin() );
-            vmhands->SetOwner( this );
-			vmhands->SetParent( this );
-            vmhands->SetIndex( iViewModel+2 );
-			DispatchSpawn(vmhands);
-			vmhands->m_nSkin = m_nSkin;
-			vmhands->SetLocalOrigin(vec3_origin);
-            vmhands->FollowEntity( pViewModel );
-			vmhands->AddEffects(EF_BONEMERGE);
-			vmhands->SetModel(g_aPlayerFirstPersonArms[GetDesiredPlayerClassIndex()]);
-            m_hViewModel.Set( iViewModel+2, vmhands );
-        }
-
 	}
+	CTFViewModel* vmhands = static_cast<CTFViewModel*>(CreateEntityByName("hand_viewmodel"));
+	if ( vmhands )
+	{
+		vmhands->SetAbsOrigin( GetAbsOrigin() );
+		vmhands->SetOwner( this );
+		vmhands->SetParent( this );
+		vmhands->SetIndex( iViewModel+2 );
+		DispatchSpawn(vmhands);
+		vmhands->m_nSkin = m_nSkin;
+		vmhands->SetLocalOrigin(vec3_origin);
+		vmhands->FollowEntity( pViewModel );
+		vmhands->AddEffects(EF_BONEMERGE);
+		vmhands->SetModel(g_aPlayerFirstPersonArms[GetDesiredPlayerClassIndex()]);
+		m_hViewModel.Set( iViewModel+2, vmhands );
+	}
+
+
 }
 
 void CTFPlayer::CreateHandModel(int index, int iOtherVm)
@@ -4535,12 +4535,15 @@ void CTFPlayer::CheatImpulseCommands( int iImpulse )
 				GiveNamedItem("tf_weapon_grenadelauncher");
 				GiveNamedItem("tf_weapon_knife");
 				GiveNamedItem("tf_weapon_minigun");
+				GiveNamedItem("tf_weapon_gatlinggun");
 				GiveNamedItem("tf_weapon_nailgun");
 				GiveNamedItem("tf_weapon_original");
 				GiveNamedItem("tf_weapon_pipebomblauncher");
 				GiveNamedItem("tf_weapon_pistol_mercenary");
+				GiveNamedItem("tf_weapon_pistol_akimbo");
 				GiveNamedItem("tf_weapon_railgun");
 				GiveNamedItem("tf_weapon_revolver");
+				GiveNamedItem("tf_weapon_revolver_mercenary");
 				GiveNamedItem("tf_weapon_rocketlauncher");
 				GiveNamedItem("tf_weapon_scattergun");
 				GiveNamedItem("tf_weapon_shotgun_soldier");
@@ -5824,7 +5827,7 @@ void CTFPlayer::ModifyOrAppendCriteria( AI_CriteriaSet& criteriaSet )
 				criteriaSet.AppendCriteria( "sniperzoomed", "1" );
 			}
 		}
-		else if ( pActiveWeapon->GetWeaponID() == TF_WEAPON_MINIGUN )
+		else if ( pActiveWeapon->GetWeaponID() == TF_WEAPON_MINIGUN  ||  pActiveWeapon->GetWeaponID() == TF_WEAPON_GATLINGGUN )
 		{
 			CTFMinigun *pMinigun = dynamic_cast<CTFMinigun*>(pActiveWeapon);
 			if ( pMinigun )

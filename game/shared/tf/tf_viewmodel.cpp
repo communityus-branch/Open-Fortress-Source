@@ -204,7 +204,7 @@ void CTFViewModel::StandardBlendingRules( CStudioHdr *hdr, Vector pos[], Quatern
 	if ( !pWeapon ) 
 		return;
 
-	if ( pWeapon->GetWeaponID() == TF_WEAPON_MINIGUN )
+	if ( pWeapon->GetWeaponID() == TF_WEAPON_MINIGUN || pWeapon->GetWeaponID() == TF_WEAPON_GATLINGGUN )
 	{
 		CTFMinigun *pMinigun = ( CTFMinigun * )pWeapon;
 
@@ -217,7 +217,7 @@ void CTFViewModel::StandardBlendingRules( CStudioHdr *hdr, Vector pos[], Quatern
 			RadianEuler a;
 			QuaternionAngles( q[iBarrelBone], a );
 
-			a.x = pMinigun->GetBarrelRotation();
+			a.z = pMinigun->GetBarrelRotation();
 
 			AngleQuaternion( a, q[iBarrelBone] );
 		}

@@ -49,6 +49,18 @@ END_PREDICTION_DATA()
 LINK_ENTITY_TO_CLASS( tf_weapon_minigun, CTFMinigun );
 PRECACHE_WEAPON_REGISTER( tf_weapon_minigun );
 
+IMPLEMENT_NETWORKCLASS_ALIASED( TFGatlingGun, DT_WeaponGatlingGun )
+
+BEGIN_NETWORK_TABLE( CTFGatlingGun, DT_WeaponGatlingGun )
+END_NETWORK_TABLE()
+
+BEGIN_PREDICTION_DATA( CTFGatlingGun )
+END_PREDICTION_DATA()
+
+LINK_ENTITY_TO_CLASS( tf_weapon_gatlinggun, CTFGatlingGun );
+PRECACHE_WEAPON_REGISTER( tf_weapon_gatlinggun );
+
+
 
 // Server specific.
 #ifndef CLIENT_DLL
@@ -73,8 +85,6 @@ CTFMinigun::CTFMinigun()
 
 
 #ifdef CLIENT_DLL
-	m_pEjectBrassEffect = NULL;
-	m_iEjectBrassAttachment = -1;
 
 	m_pMuzzleEffect = NULL;
 	m_iMuzzleAttachment = -1;
@@ -116,7 +126,6 @@ void CTFMinigun::WeaponReset( void )
 	m_iMinigunSoundCur = -1;
 
 	StopMuzzleEffect();
-	StopBrassEffect();
 #endif
 }
 
@@ -176,11 +185,22 @@ void CTFMinigun::SharedAttack()
 		{
 			// Removed the need for cells to powerup the AC
 			WindUp();
-			m_flNextPrimaryAttack = gpGlobals->curtime + 1.0;
-			m_flNextSecondaryAttack = gpGlobals->curtime + 1.0;
-			m_flTimeWeaponIdle = gpGlobals->curtime + 1.0;
-			m_flStartedFiringAt = -1;
-			pPlayer->DoAnimationEvent( PLAYERANIMEVENT_ATTACK_PRE );
+			if ( GetWeaponID()!= TF_WEAPON_GATLINGGUN )
+			{
+				m_flNextPrimaryAttack = gpGlobals->curtime + 1.0;
+				m_flNextSecondaryAttack = gpGlobals->curtime + 1.0;
+				m_flTimeWeaponIdle = gpGlobals->curtime + 1.0;
+				m_flStartedFiringAt = -1;
+				pPlayer->DoAnimationEvent( PLAYERANIMEVENT_ATTACK_PRE );
+			}
+			else
+			{
+				m_flNextPrimaryAttack = gpGlobals->curtime + 0.5;
+				m_flNextSecondaryAttack = gpGlobals->curtime + 0.5;
+				m_flTimeWeaponIdle = gpGlobals->curtime + 0.5;
+				m_flStartedFiringAt = -1;
+				pPlayer->DoAnimationEvent( PLAYERANIMEVENT_ATTACK_PRE );
+			}
 			break;
 		}
 	case AC_STATE_STARTFIRING:
@@ -323,9 +343,8 @@ void CTFMinigun::WindUp( void )
 	WeaponSoundUpdate();
 #endif
 
-
-	// Update player's speed
-	pPlayer->TeamFortress_SetSpeed();
+	if ( GetWeaponID()!= TF_WEAPON_GATLINGGUN )
+		pPlayer->TeamFortress_SetSpeed();// Update player's speed
 }
 
 //-----------------------------------------------------------------------------
@@ -333,6 +352,10 @@ void CTFMinigun::WindUp( void )
 //-----------------------------------------------------------------------------
 bool CTFMinigun::CanHolster( void ) const
 {
+	
+	if ( GetWeaponID() == TF_WEAPON_GATLINGGUN )
+		return BaseClass::CanHolster();
+	
 	if ( m_iWeaponState > AC_STATE_IDLE )
 		return false;
 
@@ -396,7 +419,8 @@ void CTFMinigun::WindDown( void )
 	m_flTimeWeaponIdle = gpGlobals->curtime + 2.0;
 
 	// Update player's speed
-	pPlayer->TeamFortress_SetSpeed();
+	if ( GetWeaponID()!= TF_WEAPON_GATLINGGUN )
+		pPlayer->TeamFortress_SetSpeed();
 
 #ifdef CLIENT_DLL
 	m_flBarrelTargetVelocity = 0;
@@ -562,7 +586,6 @@ void CTFMinigun::UpdateBarrelMovement()
 void CTFMinigun::OnDataChanged( DataUpdateType_t updateType )
 {
 	// Brass ejection and muzzle flash.
-	HandleBrassEffect();
 	HandleMuzzleEffect();
 
 	BaseClass::OnDataChanged( updateType );
@@ -583,7 +606,6 @@ void CTFMinigun::UpdateOnRemove( void )
 
 	// Force the particle system off.
 	StopMuzzleEffect();
-	StopBrassEffect();
 
 	BaseClass::UpdateOnRemove();
 }
@@ -606,7 +628,6 @@ void CTFMinigun::SetDormant( bool bDormant )
 		if ( !IsDormant() && bDormant && m_iWeaponState != AC_STATE_IDLE )
 		{
 			StopMuzzleEffect();
-			StopBrassEffect();
 		}
 	}
 
@@ -626,29 +647,6 @@ void CTFMinigun::ItemPreFrame( void )
 }
 
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void CTFMinigun::StartBrassEffect()
-{
-	C_BaseEntity *pEffectOwner = GetWeaponForEffect();
-	if ( !pEffectOwner )
-		return;
-
-	// Try and setup the attachment point if it doesn't already exist.
-	// This caching will mess up if we go third person from first - we only do this in taunts and don't fire so we should
-	// be okay for now.
-	if ( m_iEjectBrassAttachment == -1 )
-	{
-		m_iEjectBrassAttachment = pEffectOwner->LookupAttachment( "eject_brass" );
-	}
-
-	// Start the brass ejection, if a system hasn't already been started.
-	if ( m_iEjectBrassAttachment != -1 && m_pEjectBrassEffect == NULL )
-	{
-		m_pEjectBrassEffect = pEffectOwner->ParticleProp()->Create( "eject_minigunbrass", PATTACH_POINT_FOLLOW, m_iEjectBrassAttachment );
-	}
-}
 
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -677,23 +675,6 @@ void CTFMinigun::StartMuzzleEffect()
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CTFMinigun::StopBrassEffect()
-{
-	C_BaseEntity *pEffectOwner = GetWeaponForEffect();
-	if ( !pEffectOwner )
-		return;
-
-	// Stop the brass ejection.
-	if ( m_pEjectBrassEffect )
-	{
-		pEffectOwner->ParticleProp()->StopEmission( m_pEjectBrassEffect );
-		m_pEjectBrassEffect = NULL;
-	}
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 void CTFMinigun::StopMuzzleEffect()
 {
 	C_BaseEntity *pEffectOwner = GetWeaponForEffect();
@@ -705,21 +686,6 @@ void CTFMinigun::StopMuzzleEffect()
 	{
 		pEffectOwner->ParticleProp()->StopEmission( m_pMuzzleEffect );
 		m_pMuzzleEffect = NULL;
-	}
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void CTFMinigun::HandleBrassEffect()
-{
-	if ( m_iWeaponState == AC_STATE_FIRING && m_pEjectBrassEffect == NULL )
-	{
-		StartBrassEffect();
-	}
-	else if ( m_iWeaponState != AC_STATE_FIRING && m_pEjectBrassEffect )
-	{
-		StopBrassEffect();
 	}
 }
 
@@ -753,14 +719,13 @@ float CTFMinigun::GetBarrelRotation( void )
 void CTFMinigun::CreateMove( float flInputSampleTime, CUserCmd *pCmd, const QAngle &vecOldViewAngles )
 {
 	// Prevent jumping while firing
-	if ( m_iWeaponState != AC_STATE_IDLE )
+	if ( m_iWeaponState != AC_STATE_IDLE && GetWeaponID() != TF_WEAPON_GATLINGGUN )
 	{
 		pCmd->buttons &= ~IN_JUMP;
 	}
 
 	BaseClass::CreateMove( flInputSampleTime, pCmd, vecOldViewAngles );
 }
-
 //-----------------------------------------------------------------------------
 // Purpose: Ensures the correct sound (including silence) is playing for 
 //			current weapon state.

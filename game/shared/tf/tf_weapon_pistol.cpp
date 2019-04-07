@@ -77,6 +77,17 @@ END_PREDICTION_DATA()
 
 LINK_ENTITY_TO_CLASS( tf_weapon_pistol_mercenary, CTFPistol_Mercenary );
 PRECACHE_WEAPON_REGISTER( tf_weapon_pistol_mercenary );
+//
+IMPLEMENT_NETWORKCLASS_ALIASED( TFPistol_Akimbo, DT_WeaponPistol_Akimbo )
+
+BEGIN_NETWORK_TABLE( CTFPistol_Akimbo, DT_WeaponPistol_Akimbo )
+END_NETWORK_TABLE()
+
+BEGIN_PREDICTION_DATA( CTFPistol_Akimbo )
+END_PREDICTION_DATA()
+
+LINK_ENTITY_TO_CLASS( tf_weapon_pistol_akimbo, CTFPistol_Akimbo );
+PRECACHE_WEAPON_REGISTER( tf_weapon_pistol_akimbo );
 
 //=============================================================================
 //

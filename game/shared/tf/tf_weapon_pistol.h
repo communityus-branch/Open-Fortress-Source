@@ -15,6 +15,7 @@
 #define CTFPistol C_TFPistol
 #define CTFPistol_Scout C_TFPistol_Scout
 #define CTFPistol_Mercenary C_TFPistol_Mercenary
+#define CTFPistol_Akimbo C_TFPistol_Akimbo
 #endif
 
 // We allow the pistol to fire as fast as the player can click.
@@ -74,5 +75,15 @@ public:
 
 	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_PISTOL_MERCENARY; }
 };
+class CTFPistol_Akimbo : public CTFPistol
+{
+public:
+	DECLARE_CLASS( CTFPistol_Akimbo, CTFPistol );
+	DECLARE_NETWORKCLASS(); 
+	DECLARE_PREDICTABLE();
+
+	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_PISTOL_AKIMBO; }
+};
+
 
 #endif // TF_WEAPON_PISTOL_H
