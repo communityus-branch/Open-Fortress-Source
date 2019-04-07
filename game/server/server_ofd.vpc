@@ -29,6 +29,9 @@ $Project "Server (OFD)"
 	{
 		$Folder	"OPENFORTRESS DLL"
 		{
+			$File	"ofd\ofd_trigger_jump.h"
+			$File	"ofd\ofd_trigger_jump.cpp"
+			$File	"$SRCDIR\game\shared\ofd\ofd_trigger_jump_shared.cpp"
 		}
 		
 		$File	"ai_relationship.cpp"

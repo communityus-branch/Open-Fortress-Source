@@ -30,6 +30,9 @@ $Project "Client (OFD)"
 		$Folder	"OPENFORTRESS DLL"
 		{
 			$File	"ofd\ofd_hud_weaponselection.cpp"
+			$File	"ofd\c_ofd_trigger_jump.h"
+			$File	"ofd\c_ofd_trigger_jump.cpp"
+			$File	"$SRCDIR\game\shared\ofd\ofd_trigger_jump_shared.cpp"
 		}
 		
 		$File	"$SRCDIR\game\shared\basecombatweapon_shared.h"
