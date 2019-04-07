@@ -515,7 +515,7 @@ CStudioHdr *CTFMinigun::OnNewModel( void )
 {
 	CStudioHdr *hdr = BaseClass::OnNewModel();
 
-	m_iBarrelBone = LookupBone( "v_minigun_barrel" );
+	m_iBarrelBone = LookupBone( "barrel" );
 
 	// skip resetting this while recording in the tool
 	// we change the weapon to the worldmodel and back to the viewmodel when recording

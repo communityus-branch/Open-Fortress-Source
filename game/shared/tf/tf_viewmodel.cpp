@@ -217,7 +217,7 @@ void CTFViewModel::StandardBlendingRules( CStudioHdr *hdr, Vector pos[], Quatern
 			RadianEuler a;
 			QuaternionAngles( q[iBarrelBone], a );
 
-			a.x = pMinigun->GetBarrelRotation();
+			a.z = pMinigun->GetBarrelRotation();
 
 			AngleQuaternion( a, q[iBarrelBone] );
 		}
