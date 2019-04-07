@@ -32,6 +32,8 @@ $Project "Server (OFD)"
 			$File	"ofd\ofd_trigger_jump.h"
 			$File	"ofd\ofd_trigger_jump.cpp"
 			$File	"$SRCDIR\game\shared\ofd\ofd_trigger_jump_shared.cpp"
+			$File	"ofd\hl1_ents.h"
+			$File	"ofd\hl1_ents.cpp"
 		}
 		
 		$File	"ai_relationship.cpp"
