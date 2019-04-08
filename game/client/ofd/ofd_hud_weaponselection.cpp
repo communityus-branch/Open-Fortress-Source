@@ -152,13 +152,13 @@ private:
 	CPanelAnimationVar( float, m_flAlphaOverride, "Alpha", "0" );
 	CPanelAnimationVar( float, m_flSelectionAlphaOverride, "SelectionAlpha", "0" );
 
-	CPanelAnimationVar( Color, m_TextColor, "TextColor", "SelectionTextFg" );
-	CPanelAnimationVar( Color, m_NumberColor, "NumberColor", "SelectionNumberFg" );
-	CPanelAnimationVar( Color, m_EmptyBoxColor, "EmptyBoxColor", "SelectionEmptyBoxBg" );
-	CPanelAnimationVar( Color, m_BoxColor, "BoxColor", "SelectionBoxBg" );
-	CPanelAnimationVar( Color, m_SelectedBoxColor, "SelectedBoxColor", "SelectionSelectedBoxBg" );
-	CPanelAnimationVar( Color, m_SelectedFgColor, "SelectedFgColor", "FgColor" );
-	CPanelAnimationVar( Color, m_BrightBoxColor, "SelectedFgColor", "BgColor" );
+	CPanelAnimationVar( Color, m_TextColor, "TextColor", "SelectionTextFg_hl2" );
+	CPanelAnimationVar( Color, m_NumberColor, "NumberColor", "SelectionNumberFg_hl2" );
+	CPanelAnimationVar( Color, m_EmptyBoxColor, "EmptyBoxColor", "SelectionEmptyBoxBg_hl2" );
+	CPanelAnimationVar( Color, m_BoxColor, "BoxColor", "SelectionBoxBg_hl2" );
+	CPanelAnimationVar( Color, m_SelectedBoxColor, "SelectedBoxColor", "SelectionSelectedBoxBg_hl2" );
+	CPanelAnimationVar( Color, m_SelectedFgColor, "SelectedFgColor", "FgColor_hl2" );
+	CPanelAnimationVar( Color, m_BrightBoxColor, "SelectedFgColor", "BgColor_hl2" );
 
 	CPanelAnimationVar( float, m_flWeaponPickupGrowTime, "SelectionGrowTime", "0.1" );
 
