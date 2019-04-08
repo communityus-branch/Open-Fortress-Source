@@ -527,6 +527,7 @@ public:
 	void				PowerplayThink( void );
 	float				m_flPowerPlayTime;
 	void				SetHandsModel( const char* model );
+	void				SetCustomModel( inputdata_t &inputdata );
 };
 
 //-----------------------------------------------------------------------------

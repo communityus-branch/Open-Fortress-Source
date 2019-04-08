@@ -83,6 +83,7 @@ public:
 	DECLARE_PREDICTABLE();
 
 	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_PISTOL_AKIMBO; }
+	bool			PrimaryAttackSwapsActivities( void ){ return true; }
 };
 
 

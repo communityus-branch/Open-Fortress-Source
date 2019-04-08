@@ -879,6 +879,8 @@ void CTFGameRules::SetupOnRoundStart( void )
 #ifdef GAME_DLL
 	m_szMostRecentCappers[0] = 0;
 #endif
+
+	BroadcastSound(0, GetMusicNamePreRound());
 }
 
 //-----------------------------------------------------------------------------
@@ -908,6 +910,8 @@ void CTFGameRules::SetupOnRoundRunning( void )
 		pPlayer->TeamFortress_SetSpeed();
 		pPlayer->SpeakConceptIfAllowed( MP_CONCEPT_ROUND_START );
 	}
+	
+	BroadcastSound(0, GetMusicNameActiveRound());
 }
 
 //-----------------------------------------------------------------------------
@@ -3629,5 +3633,47 @@ const char *CTFGameRules::GetVideoFileForMap( bool bWithExtension /*= true*/ )
 	}
 
 	return strFullpath;
+}
+#endif
+
+#ifdef GAME_DLL
+ConVar rara_testmusic("rara_testmusic", "0", FCVAR_CHEAT | FCVAR_HIDDEN);
+
+const char *CTFGameRules::GetMusicNamePreRound(void)
+{
+	const char *songtest = "Music.PreRound.Test";
+	const char *songbase = "Music.PreRound.";
+	const char *mapname = STRING(gpGlobals->mapname);
+
+	char tempresult[MAX_PATH];
+
+	strcpy(tempresult, songbase);
+	strcat(tempresult, mapname);
+
+	if (rara_testmusic.GetBool())
+		return songtest;
+
+	const char *result = (const char*)tempresult;
+
+	return result;
+}
+
+const char *CTFGameRules::GetMusicNameActiveRound(void)
+{
+	const char *songtest = "Music.StartRound.Test";
+	const char *songbase = "Music.StartRound.";
+	const char *mapname = STRING(gpGlobals->mapname);
+
+	char tempresult[MAX_PATH];
+
+	strcpy(tempresult, songbase);
+	strcat(tempresult, mapname);
+
+	if (rara_testmusic.GetBool())
+		return songtest;
+
+	const char *result = (const char*)tempresult;
+
+	return result;
 }
 #endif

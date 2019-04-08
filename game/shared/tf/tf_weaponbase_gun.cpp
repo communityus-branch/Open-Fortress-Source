@@ -106,7 +106,19 @@ void CTFWeaponBaseGun::PrimaryAttack( void )
 	// Set the weapon mode.
 	m_iWeaponMode = TF_WEAPON_PRIMARY_MODE;
 
-	SendWeaponAnim( ACT_VM_PRIMARYATTACK );
+	if (PrimaryAttackSwapsActivities())
+	{
+		if (!m_bSwapFire)
+			SendWeaponAnim( ACT_VM_PRIMARYATTACK );
+		else
+			SendWeaponAnim( ACT_VM_SECONDARYATTACK );
+
+		m_bSwapFire = !m_bSwapFire;
+	}
+	else
+	{
+		SendWeaponAnim( ACT_VM_PRIMARYATTACK );
+	}
 
 	pPlayer->SetAnimation( PLAYER_ATTACK1 );
 

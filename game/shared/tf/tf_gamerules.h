@@ -328,6 +328,11 @@ public:
 	virtual bool	IsESCGamemode(void) { return GetGameType() == TF_GAMETYPE_ESC; }
 	int TF_HUNTED_COUNT;
 	int		m_iBirthdayMode;
+
+#ifdef GAME_DLL
+	virtual const char *GetMusicNamePreRound( void );
+	virtual const char *GetMusicNameActiveRound( void );
+#endif
 };
 
 //-----------------------------------------------------------------------------

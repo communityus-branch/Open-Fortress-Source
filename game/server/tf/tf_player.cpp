@@ -251,6 +251,7 @@ int SendProxyArrayLength_PlayerObjects( const void *pStruct, int objectID )
 }
 
 BEGIN_DATADESC( CTFPlayer )
+	DEFINE_INPUTFUNC( FIELD_STRING, "setcustommodel", SetCustomModel )
 END_DATADESC()
 extern void SendProxy_Origin( const SendProp *pProp, const void *pStruct, const void *pData, DVariant *pOut, int iElement, int objectID );
 
@@ -689,6 +690,10 @@ void CTFPlayer::Precache()
 	
 	PrecacheScriptSound( "HL2Player.FlashLightOn" );
 	PrecacheScriptSound( "HL2Player.FlashLightOff" );
+
+	PrecacheScriptSound( TFGameRules()->GetMusicNamePreRound() );
+	PrecacheScriptSound( TFGameRules()->GetMusicNameActiveRound() );
+	
 
 	BaseClass::Precache();
 }
@@ -6508,4 +6513,28 @@ void CTFPlayer::UpdatePlayerColor ( void )
 	vecNewColor.y = V_atoi( engine->GetClientConVarValue( entindex(), "ofd_color_g" ) ) / 255.0f;
 	vecNewColor.z = V_atoi( engine->GetClientConVarValue( entindex(), "ofd_color_b" ) ) / 255.0f;
 	m_vecPlayerColor = vecNewColor;
+}
+
+ConVar rara_testcustmodel("rara_testcustmodel","0",FCVAR_CHEAT | FCVAR_HIDDEN);
+
+void CTFPlayer::SetCustomModel(inputdata_t &inputdata)
+{
+	if (inputdata.value.String())
+	{
+		if (rara_testcustmodel.GetBool())
+		{
+			PrecacheModel("models/player/scout.mdl");
+			SetModel("models/player/scout.mdl");
+		}
+		else
+		{
+			PrecacheModel(inputdata.value.String());
+			SetModel(inputdata.value.String());
+		}
+	}
+	else
+	{
+		SetModel(GetPlayerClass()->GetModelName());
+	}
+	DevMsg("CTFPlayer::SetCustomModel - Input successful (NOW DID IT FUCKING WORK OR NOT?)\n");
 }
