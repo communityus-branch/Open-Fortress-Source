@@ -73,7 +73,7 @@ private:
 	CTFWeaponBaseGun( const CTFWeaponBaseGun & );
 
 public:
-	bool			PrimaryAttackSwapsActivities(void) { return true; }
+	virtual bool	PrimaryAttackSwapsActivities(void) { return false; }
 	bool			m_bSwapFire;
 };
 

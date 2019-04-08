@@ -3069,10 +3069,13 @@ bool CTFGameRules::IsBirthday( void )
 //-----------------------------------------------------------------------------
 bool CTFGameRules::ShouldCollide( int collisionGroup0, int collisionGroup1 )
 {
+	// The smaller number is always first
 	if ( collisionGroup0 > collisionGroup1 )
 	{
 		// swap so that lowest is always first
-		V_swap( collisionGroup0, collisionGroup1 );
+		int tmp = collisionGroup0;
+		collisionGroup0 = collisionGroup1;
+		collisionGroup1 = tmp;
 	}
 	
 	//Don't stand on COLLISION_GROUP_WEAPONs
