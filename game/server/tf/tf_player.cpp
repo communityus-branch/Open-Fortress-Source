@@ -585,20 +585,16 @@ int CTFPlayer::FlashlightIsOn( void )
 //-----------------------------------------------------------------------------
 void CTFPlayer::FlashlightTurnOn( void )
 {
-	if( flashlight.GetInt() > 0 && IsAlive() )
-	{
-		AddEffects( EF_DIMLIGHT );
-	}
+	AddEffects( EF_DIMLIGHT );
+	if( IsAlive() ) EmitSound( "HL2Player.FlashLightOn" );
 }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 void CTFPlayer::FlashlightTurnOff( void )
 {
-	if( IsEffectActive(EF_DIMLIGHT) )
-	{
-		RemoveEffects( EF_DIMLIGHT );
-	}	
+	RemoveEffects( EF_DIMLIGHT );
+	if( IsAlive() ) EmitSound( "HL2Player.FlashLightOff" );
 }
 
 
@@ -690,6 +686,9 @@ void CTFPlayer::Precache()
 
 	for ( i = 0; i < nHeads; ++i )
 	   	 PrecacheModel( g_aPlayerFirstPersonArms[i] );
+	
+	PrecacheScriptSound( "HL2Player.FlashLightOn" );
+	PrecacheScriptSound( "HL2Player.FlashLightOff" );
 
 	BaseClass::Precache();
 }

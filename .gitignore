@@ -58,14 +58,17 @@ lib/public/mathlib.lib
 lib/public/tier1.lib
 lib/public/vgui_controls.lib
 lib/public/vgui_controls_editor_2013.lib
+lib/public/raytrace.lib
 lib/osx32/mathlib.a
 lib/osx32/tier1.a
 lib/osx32/vgui_controls.a
 lib/osx32/vgui_controls_editor_2013.a
+lib/osx32/raytrace.a
 lib/public/linux32/mathlib.a
 lib/public/linux32/tier1.a
 lib/public/linux32/vgui_controls.a
 lib/public/linux32/vgui_controls_editor_2013.a
+lib/public/linux32/raytrace.a
 
 # Compiled stuff
 vgui2/vgui_controls/Debug/
