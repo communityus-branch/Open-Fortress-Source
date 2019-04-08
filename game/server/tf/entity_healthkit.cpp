@@ -106,6 +106,7 @@ bool CHealthKit::MyTouch( CBasePlayer *pPlayer )
 			{
 				pTFPlayer->m_Shared.RemoveCond( TF_COND_BURNING );		
 			}
+			AddEffects( EF_NODRAW );
 		}
 	}
 

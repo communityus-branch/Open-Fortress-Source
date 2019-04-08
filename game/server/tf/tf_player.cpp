@@ -1042,7 +1042,7 @@ void CTFPlayer::CreateViewModel( int iViewModel )
 		vmhands->SetLocalOrigin(vec3_origin);
 		vmhands->FollowEntity( pViewModel );
 		vmhands->AddEffects(EF_BONEMERGE);
-		vmhands->SetModel(g_aPlayerFirstPersonArms[GetDesiredPlayerClassIndex()]);
+		vmhands->SetModel( GetPlayerClass()->GetArmModelName() );
 		m_hViewModel.Set( iViewModel+2, vmhands );
 	}
 

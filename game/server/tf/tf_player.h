@@ -294,7 +294,7 @@ public:
 
 	virtual bool CanHearAndReadChatFrom( CBasePlayer *pPlayer );
 
-	const Vector& 	GetClassEyeHeight( void );
+	Vector 	GetClassEyeHeight( void );
 
 	void	UpdateExpression( void );
 	void	ClearExpression( void );

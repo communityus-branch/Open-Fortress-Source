@@ -138,8 +138,6 @@ bool CTFPowerup::ValidTouch( CBasePlayer *pPlayer )
 	{
 		return false;
 	}
-	if ( m_bHide )
-		AddEffects( EF_NODRAW );
 	return true;
 }
 
@@ -158,7 +156,6 @@ void CTFPowerup::InputEnable( inputdata_t &inputdata )
 {
 	SetDisabled( false );
 }
-
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------

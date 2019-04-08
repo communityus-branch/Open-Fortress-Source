@@ -202,6 +202,7 @@ bool CAmmoPack::MyTouch( CBasePlayer *pPlayer )
 		{
 			CSingleUserRecipientFilter filter( pPlayer );
 			EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
+			AddEffects( EF_NODRAW );
 		}
 	}
 

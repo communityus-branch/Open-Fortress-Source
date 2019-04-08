@@ -2509,7 +2509,7 @@ bool CTFPlayer::CanGoInvisible( void )
 //-----------------------------------------------------------------------------
 // Purpose: Return class-specific standing eye height
 //-----------------------------------------------------------------------------
-const Vector& CTFPlayer::GetClassEyeHeight( void )
+Vector CTFPlayer::GetClassEyeHeight( void )
 {
 	CTFPlayerClass *pClass = GetPlayerClass();
 
@@ -2527,7 +2527,7 @@ const Vector& CTFPlayer::GetClassEyeHeight( void )
 	if ( iClassIndex < TF_FIRST_NORMAL_CLASS || iClassIndex > TF_LAST_NORMAL_CLASS )
 		return VEC_VIEW;
 
-	return g_TFClassViewVectors[pClass->GetClassIndex()];
+	return ( g_TFClassViewVectors[pClass->GetClassIndex()] * GetModelScale() );
 }
 
 

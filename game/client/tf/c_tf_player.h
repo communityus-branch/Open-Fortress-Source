@@ -169,7 +169,7 @@ public:
 
 	CUtlVector<EHANDLE>		*GetSpawnedGibs( void ) { return &m_hSpawnedGibs; }
 
-	const Vector& 	GetClassEyeHeight( void );
+	Vector 	GetClassEyeHeight( void );
 
 	void			ForceUpdateObjectHudState( void );
 
