@@ -302,8 +302,11 @@ protected:
 	void PlayWinSong( int team );
 	void PlayStalemateSong( void );
 	void PlaySuddenDeathSong( void );
+
+public:
 	void BroadcastSound( int iTeam, const char *sound );
 
+protected:
 	inline void RespawnTeam( int iTeam ) { RespawnPlayers( false, true, iTeam ); }
 
 	void HideActiveTimer( void );

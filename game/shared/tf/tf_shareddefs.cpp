@@ -172,6 +172,7 @@ const char *g_aWeaponNames[] =
 	"TF_WEAPON_GATLINGGUN",
 	"TF_WEAPON_PISTOL_AKIMBO",
 	"TF_WEAPON_UMBRELLA",
+	"TF_WEAPON_DEAGLE",
 
 	"TF_WEAPON_COUNT",	// end marker, do not add below here
 };
@@ -239,6 +240,7 @@ int g_aWeaponDamageTypes[] =
 	DMG_BULLET | DMG_USEDISTANCEMOD,		// TF_WEAPON_GATLINGGUN,
 	DMG_BULLET,	// TF_WEAPON_PISTOL_AKIMBO,
 	DMG_CLUB,		// TF_WEAPON_UMBRELLA,
+	DMG_BULLET,	// TF_WEAPON_DEAGLE,
 	
 	// This is a special entry that must match with TF_WEAPON_COUNT
 	// to protect against updating the weapon list without updating this list

@@ -942,6 +942,25 @@ void CTFPlayer::Spawn()
 	Vector mins = VEC_HULL_MIN;
 	Vector maxs = VEC_HULL_MAX;
 	CollisionProp()->SetSurroundingBoundsType( USE_SPECIFIED_BOUNDS, &mins, &maxs );
+
+	if (TFGameRules()->State_Get() == GR_STATE_PREGAME || TFGameRules()->State_Get() == GR_STATE_INIT)
+	{
+		for (int i = FIRST_GAME_TEAM; i < GetNumberOfTeams(); i++)
+		{
+			TFGameRules()->BroadcastSound(i, TFGameRules()->GetMusicNamePreRound());
+		}
+
+		Msg("playing round preround music\n");
+	}
+	else
+	{
+		for (int i = FIRST_GAME_TEAM; i < GetNumberOfTeams(); i++)
+		{
+			TFGameRules()->BroadcastSound(i, TFGameRules()->GetMusicNameActiveRound());
+		}
+
+		Msg("playing round active music\n");
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -6519,12 +6538,14 @@ ConVar rara_testcustmodel("rara_testcustmodel","0",FCVAR_CHEAT | FCVAR_HIDDEN);
 
 void CTFPlayer::SetCustomModel(inputdata_t &inputdata)
 {
+	MDLCACHE_CRITICAL_SECTION();
+	InvalidateMdlCache();
 	if (inputdata.value.String())
 	{
 		if (rara_testcustmodel.GetBool())
 		{
-			PrecacheModel("models/player/scout.mdl");
-			SetModel("models/player/scout.mdl");
+			PrecacheModel("models/humans/group01/male_01.mdl");
+			SetModel("models/humans/group01/male_01.mdl");
 		}
 		else
 		{
@@ -6536,5 +6557,6 @@ void CTFPlayer::SetCustomModel(inputdata_t &inputdata)
 	{
 		SetModel(GetPlayerClass()->GetModelName());
 	}
-	DevMsg("CTFPlayer::SetCustomModel - Input successful (NOW DID IT FUCKING WORK OR NOT?)\n");
+	UpdateModel();
+	DevMsg("CTFPlayer::SetCustomModel - Input successful, data input %s\n", inputdata.value.String());
 }

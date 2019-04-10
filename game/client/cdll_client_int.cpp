@@ -923,10 +923,10 @@ static void MountAdditionalContent()
 // Input  : engineFactory - 
 // Output : int
 //-----------------------------------------------------------------------------
-int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physicsFactory, CGlobalVarsBase *pGlobals )
+int CHLClient::Init(CreateInterfaceFn appSystemFactory, CreateInterfaceFn physicsFactory, CGlobalVarsBase *pGlobals)
 {
 	InitCRTMemDebug();
-	MathLib_Init( 2.2f, 2.2f, 0.0f, 2.0f );
+	MathLib_Init(2.2f, 2.2f, 0.0f, 2.0f);
 
 
 #ifdef SIXENSE
@@ -936,9 +936,9 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 	// Hook up global variables
 	gpGlobals = pGlobals;
 
-	ConnectTier1Libraries( &appSystemFactory, 1 );
-	ConnectTier2Libraries( &appSystemFactory, 1 );
-	ConnectTier3Libraries( &appSystemFactory, 1 );
+	ConnectTier1Libraries(&appSystemFactory, 1);
+	ConnectTier2Libraries(&appSystemFactory, 1);
+	ConnectTier3Libraries(&appSystemFactory, 1);
 
 #ifndef NO_STEAM
 	ClientSteamContext().Activate();
@@ -946,63 +946,63 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 
 	// We aren't happy unless we get all of our interfaces.
 	// please don't collapse this into one monolithic boolean expression (impossible to debug)
-	if ( (engine = (IVEngineClient *)appSystemFactory( VENGINE_CLIENT_INTERFACE_VERSION, NULL )) == NULL )
+	if ((engine = (IVEngineClient *)appSystemFactory(VENGINE_CLIENT_INTERFACE_VERSION, NULL)) == NULL)
 		return false;
-	if ( (modelrender = (IVModelRender *)appSystemFactory( VENGINE_HUDMODEL_INTERFACE_VERSION, NULL )) == NULL )
+	if ((modelrender = (IVModelRender *)appSystemFactory(VENGINE_HUDMODEL_INTERFACE_VERSION, NULL)) == NULL)
 		return false;
-	if ( (effects = (IVEfx *)appSystemFactory( VENGINE_EFFECTS_INTERFACE_VERSION, NULL )) == NULL )
+	if ((effects = (IVEfx *)appSystemFactory(VENGINE_EFFECTS_INTERFACE_VERSION, NULL)) == NULL)
 		return false;
-	if ( (enginetrace = (IEngineTrace *)appSystemFactory( INTERFACEVERSION_ENGINETRACE_CLIENT, NULL )) == NULL )
+	if ((enginetrace = (IEngineTrace *)appSystemFactory(INTERFACEVERSION_ENGINETRACE_CLIENT, NULL)) == NULL)
 		return false;
-	if ( (render = (IVRenderView *)appSystemFactory( VENGINE_RENDERVIEW_INTERFACE_VERSION, NULL )) == NULL )
+	if ((render = (IVRenderView *)appSystemFactory(VENGINE_RENDERVIEW_INTERFACE_VERSION, NULL)) == NULL)
 		return false;
-	if ( (debugoverlay = (IVDebugOverlay *)appSystemFactory( VDEBUG_OVERLAY_INTERFACE_VERSION, NULL )) == NULL )
+	if ((debugoverlay = (IVDebugOverlay *)appSystemFactory(VDEBUG_OVERLAY_INTERFACE_VERSION, NULL)) == NULL)
 		return false;
-	if ( (datacache = (IDataCache*)appSystemFactory(DATACACHE_INTERFACE_VERSION, NULL )) == NULL )
+	if ((datacache = (IDataCache*)appSystemFactory(DATACACHE_INTERFACE_VERSION, NULL)) == NULL)
 		return false;
-	if ( !mdlcache )
+	if (!mdlcache)
 		return false;
-	if ( (modelinfo = (IVModelInfoClient *)appSystemFactory(VMODELINFO_CLIENT_INTERFACE_VERSION, NULL )) == NULL )
+	if ((modelinfo = (IVModelInfoClient *)appSystemFactory(VMODELINFO_CLIENT_INTERFACE_VERSION, NULL)) == NULL)
 		return false;
-	if ( (enginevgui = (IEngineVGui *)appSystemFactory(VENGINE_VGUI_VERSION, NULL )) == NULL )
+	if ((enginevgui = (IEngineVGui *)appSystemFactory(VENGINE_VGUI_VERSION, NULL)) == NULL)
 		return false;
-	if ( (networkstringtable = (INetworkStringTableContainer *)appSystemFactory(INTERFACENAME_NETWORKSTRINGTABLECLIENT,NULL)) == NULL )
+	if ((networkstringtable = (INetworkStringTableContainer *)appSystemFactory(INTERFACENAME_NETWORKSTRINGTABLECLIENT, NULL)) == NULL)
 		return false;
-	if ( (partition = (ISpatialPartition *)appSystemFactory(INTERFACEVERSION_SPATIALPARTITION, NULL)) == NULL )
+	if ((partition = (ISpatialPartition *)appSystemFactory(INTERFACEVERSION_SPATIALPARTITION, NULL)) == NULL)
 		return false;
-	if ( (shadowmgr = (IShadowMgr *)appSystemFactory(ENGINE_SHADOWMGR_INTERFACE_VERSION, NULL)) == NULL )
+	if ((shadowmgr = (IShadowMgr *)appSystemFactory(ENGINE_SHADOWMGR_INTERFACE_VERSION, NULL)) == NULL)
 		return false;
-	if ( (staticpropmgr = (IStaticPropMgrClient *)appSystemFactory(INTERFACEVERSION_STATICPROPMGR_CLIENT, NULL)) == NULL )
+	if ((staticpropmgr = (IStaticPropMgrClient *)appSystemFactory(INTERFACEVERSION_STATICPROPMGR_CLIENT, NULL)) == NULL)
 		return false;
-	if ( (enginesound = (IEngineSound *)appSystemFactory(IENGINESOUND_CLIENT_INTERFACE_VERSION, NULL)) == NULL )
+	if ((enginesound = (IEngineSound *)appSystemFactory(IENGINESOUND_CLIENT_INTERFACE_VERSION, NULL)) == NULL)
 		return false;
-	if ( (filesystem = (IFileSystem *)appSystemFactory(FILESYSTEM_INTERFACE_VERSION, NULL)) == NULL )
+	if ((filesystem = (IFileSystem *)appSystemFactory(FILESYSTEM_INTERFACE_VERSION, NULL)) == NULL)
 		return false;
-	if ( (random = (IUniformRandomStream *)appSystemFactory(VENGINE_CLIENT_RANDOM_INTERFACE_VERSION, NULL)) == NULL )
+	if ((random = (IUniformRandomStream *)appSystemFactory(VENGINE_CLIENT_RANDOM_INTERFACE_VERSION, NULL)) == NULL)
 		return false;
-	if ( (gameuifuncs = (IGameUIFuncs * )appSystemFactory( VENGINE_GAMEUIFUNCS_VERSION, NULL )) == NULL )
+	if ((gameuifuncs = (IGameUIFuncs *)appSystemFactory(VENGINE_GAMEUIFUNCS_VERSION, NULL)) == NULL)
 		return false;
-	if ( (gameeventmanager = (IGameEventManager2 *)appSystemFactory(INTERFACEVERSION_GAMEEVENTSMANAGER2,NULL)) == NULL )
+	if ((gameeventmanager = (IGameEventManager2 *)appSystemFactory(INTERFACEVERSION_GAMEEVENTSMANAGER2, NULL)) == NULL)
 		return false;
-	if ( (soundemitterbase = (ISoundEmitterSystemBase *)appSystemFactory(SOUNDEMITTERSYSTEM_INTERFACE_VERSION, NULL)) == NULL )
+	if ((soundemitterbase = (ISoundEmitterSystemBase *)appSystemFactory(SOUNDEMITTERSYSTEM_INTERFACE_VERSION, NULL)) == NULL)
 		return false;
-	if ( (inputsystem = (IInputSystem *)appSystemFactory(INPUTSYSTEM_INTERFACE_VERSION, NULL)) == NULL )
+	if ((inputsystem = (IInputSystem *)appSystemFactory(INPUTSYSTEM_INTERFACE_VERSION, NULL)) == NULL)
 		return false;
-	if ( (scenefilecache = (ISceneFileCache *)appSystemFactory( SCENE_FILE_CACHE_INTERFACE_VERSION, NULL )) == NULL )
+	if ((scenefilecache = (ISceneFileCache *)appSystemFactory(SCENE_FILE_CACHE_INTERFACE_VERSION, NULL)) == NULL)
 		return false;
-	if ( IsX360() && (xboxsystem = (IXboxSystem *)appSystemFactory( XBOXSYSTEM_INTERFACE_VERSION, NULL )) == NULL )
+	if (IsX360() && (xboxsystem = (IXboxSystem *)appSystemFactory(XBOXSYSTEM_INTERFACE_VERSION, NULL)) == NULL)
 		return false;
-	if ( IsX360() && (matchmaking = (IMatchmaking *)appSystemFactory( VENGINE_MATCHMAKING_VERSION, NULL )) == NULL )
+	if (IsX360() && (matchmaking = (IMatchmaking *)appSystemFactory(VENGINE_MATCHMAKING_VERSION, NULL)) == NULL)
 		return false;
 #ifndef _XBOX
-	if ( ( gamestatsuploader = (IUploadGameStats *)appSystemFactory( INTERFACEVERSION_UPLOADGAMESTATS, NULL )) == NULL )
+	if ((gamestatsuploader = (IUploadGameStats *)appSystemFactory(INTERFACEVERSION_UPLOADGAMESTATS, NULL)) == NULL)
 		return false;
 #endif
 
 #if defined( REPLAY_ENABLED )
-	if ( IsPC() && (g_pEngineReplay = (IEngineReplay *)appSystemFactory( ENGINE_REPLAY_INTERFACE_VERSION, NULL )) == NULL )
+	if (IsPC() && (g_pEngineReplay = (IEngineReplay *)appSystemFactory(ENGINE_REPLAY_INTERFACE_VERSION, NULL)) == NULL)
 		return false;
-	if ( IsPC() && (g_pEngineClientReplay = (IEngineClientReplay *)appSystemFactory( ENGINE_REPLAY_CLIENT_INTERFACE_VERSION, NULL )) == NULL )
+	if (IsPC() && (g_pEngineClientReplay = (IEngineClientReplay *)appSystemFactory(ENGINE_REPLAY_CLIENT_INTERFACE_VERSION, NULL)) == NULL)
 		return false;
 #endif
 
@@ -1010,9 +1010,9 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 		return false;
 
 #ifdef WORKSHOP_IMPORT_ENABLED
-	if ( !ConnectDataModel( appSystemFactory ) )
+	if (!ConnectDataModel(appSystemFactory))
 		return false;
-	if ( InitDataModel() != INIT_OK )
+	if (InitDataModel() != INIT_OK)
 		return false;
 	InitFbx();
 #endif
@@ -1023,35 +1023,35 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 	factorylist_t factories;
 	factories.appSystemFactory = appSystemFactory;
 	factories.physicsFactory = physicsFactory;
-	FactoryList_Store( factories );
+	FactoryList_Store(factories);
 
 	// Yes, both the client and game .dlls will try to Connect, the soundemittersystem.dll will handle this gracefully
-	if ( !soundemitterbase->Connect( appSystemFactory ) )
+	if (!soundemitterbase->Connect(appSystemFactory))
 	{
 		return false;
 	}
 
 	MountAdditionalContent();
-	
-	if ( CommandLine()->FindParm( "-textmode" ) )
+
+	if (CommandLine()->FindParm("-textmode"))
 		g_bTextMode = true;
 
-	if ( CommandLine()->FindParm( "-makedevshots" ) )
+	if (CommandLine()->FindParm("-makedevshots"))
 		g_MakingDevShots = true;
 
 	// Not fatal if the material system stub isn't around.
-	materials_stub = (IMaterialSystemStub*)appSystemFactory( MATERIAL_SYSTEM_STUB_INTERFACE_VERSION, NULL );
+	materials_stub = (IMaterialSystemStub*)appSystemFactory(MATERIAL_SYSTEM_STUB_INTERFACE_VERSION, NULL);
 
-	if( !g_pMaterialSystemHardwareConfig )
+	if (!g_pMaterialSystemHardwareConfig)
 		return false;
 
 	// Hook up the gaussian random number generator
-	s_GaussianRandomStream.AttachToStream( random );
+	s_GaussianRandomStream.AttachToStream(random);
 
 	// Initialize the console variables.
-	ConVar_Register( FCVAR_CLIENTDLL );
+	ConVar_Register(FCVAR_CLIENTDLL);
 
-	g_pcv_ThreadMode = g_pCVar->FindVar( "host_thread_mode" );
+	g_pcv_ThreadMode = g_pCVar->FindVar("host_thread_mode");
 
 	if (!Initializer::InitializeAllObjects())
 		return false;
@@ -1060,45 +1060,45 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 		return false;
 
 
-	if (!VGui_Startup( appSystemFactory ))
+	if (!VGui_Startup(appSystemFactory))
 		return false;
 
-	vgui::VGui_InitMatSysInterfacesList( "ClientDLL", &appSystemFactory, 1 );
+	vgui::VGui_InitMatSysInterfacesList("ClientDLL", &appSystemFactory, 1);
 
 	// Add the client systems.	
-	
+
 	// Client Leaf System has to be initialized first, since DetailObjectSystem uses it
-	IGameSystem::Add( GameStringSystem() );
-	IGameSystem::Add( SoundEmitterSystem() );
-	IGameSystem::Add( ToolFrameworkClientSystem() );
-	IGameSystem::Add( ClientLeafSystem() );
-	IGameSystem::Add( DetailObjectSystem() );
-	IGameSystem::Add( ViewportClientSystem() );
-	IGameSystem::Add( ClientEffectPrecacheSystem() );
-	IGameSystem::Add( g_pClientShadowMgr );
-	IGameSystem::Add( g_pColorCorrectionMgr );	// NOTE: This must happen prior to ClientThinkList (color correction is updated there)
-	IGameSystem::Add( ClientThinkList() );
-	IGameSystem::Add( ClientSoundscapeSystem() );
-	IGameSystem::Add( PerfVisualBenchmark() );
-	IGameSystem::Add( MumbleSystem() );
-	
-	#if defined( TF_CLIENT_DLL )
-	IGameSystem::Add( CustomTextureToolCacheGameSystem() );
-	IGameSystem::Add( TFSharedContentManager() );
-	#endif
+	IGameSystem::Add(GameStringSystem());
+	IGameSystem::Add(SoundEmitterSystem());
+	IGameSystem::Add(ToolFrameworkClientSystem());
+	IGameSystem::Add(ClientLeafSystem());
+	IGameSystem::Add(DetailObjectSystem());
+	IGameSystem::Add(ViewportClientSystem());
+	IGameSystem::Add(ClientEffectPrecacheSystem());
+	IGameSystem::Add(g_pClientShadowMgr);
+	IGameSystem::Add(g_pColorCorrectionMgr);	// NOTE: This must happen prior to ClientThinkList (color correction is updated there)
+	IGameSystem::Add(ClientThinkList());
+	IGameSystem::Add(ClientSoundscapeSystem());
+	IGameSystem::Add(PerfVisualBenchmark());
+	IGameSystem::Add(MumbleSystem());
 
 #if defined( TF_CLIENT_DLL )
-	if ( g_AbuseReportMgr != NULL )
+	IGameSystem::Add(CustomTextureToolCacheGameSystem());
+	IGameSystem::Add(TFSharedContentManager());
+#endif
+
+#if defined( TF_CLIENT_DLL )
+	if (g_AbuseReportMgr != NULL)
 	{
-		IGameSystem::Add( g_AbuseReportMgr );
+		IGameSystem::Add(g_AbuseReportMgr);
 	}
 #endif
 
 #if defined( CLIENT_DLL ) && defined( COPY_CHECK_STRESSTEST )
-	IGameSystem::Add( GetPredictionCopyTester() );
+	IGameSystem::Add(GetPredictionCopyTester());
 #endif
 
-	modemanager->Init( );
+	modemanager->Init();
 
 	g_pClientMode->InitViewport();
 
@@ -1106,14 +1106,14 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 
 	g_pClientMode->Init();
 
-	if ( !IGameSystem::InitAllSystems() )
+	if (!IGameSystem::InitAllSystems())
 		return false;
 
 	g_pClientMode->Enable();
 
-	if ( !view )
+	if (!view)
 	{
-		view = ( IViewRender * )&g_DefaultViewRender;
+		view = (IViewRender *)&g_DefaultViewRender;
 	}
 
 	view->Init();
@@ -1134,16 +1134,16 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 
 	// Embed voice status icons inside chat element
 	{
-		vgui::VPANEL parent = enginevgui->GetPanel( PANEL_CLIENTDLL );
-		GetClientVoiceMgr()->Init( &g_VoiceStatusHelper, parent );
+		vgui::VPANEL parent = enginevgui->GetPanel(PANEL_CLIENTDLL);
+		GetClientVoiceMgr()->Init(&g_VoiceStatusHelper, parent);
 	}
 
-	if ( !PhysicsDLLInit( physicsFactory ) )
+	if (!PhysicsDLLInit(physicsFactory))
 		return false;
 
-	g_pGameSaveRestoreBlockSet->AddBlockHandler( GetEntitySaveRestoreBlockHandler() );
-	g_pGameSaveRestoreBlockSet->AddBlockHandler( GetPhysSaveRestoreBlockHandler() );
-	g_pGameSaveRestoreBlockSet->AddBlockHandler( GetViewEffectsRestoreBlockHandler() );
+	g_pGameSaveRestoreBlockSet->AddBlockHandler(GetEntitySaveRestoreBlockHandler());
+	g_pGameSaveRestoreBlockSet->AddBlockHandler(GetPhysSaveRestoreBlockHandler());
+	g_pGameSaveRestoreBlockSet->AddBlockHandler(GetViewEffectsRestoreBlockHandler());
 
 	ClientWorldFactoryInit();
 
@@ -1156,33 +1156,6 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 #ifndef _X360
 	HookHapticMessages(); // Always hook the messages
 #endif
-
-// Discord RPC
-DiscordEventHandlers handlers;
-memset(&handlers, 0, sizeof(handlers));
-	
-handlers.ready = HandleDiscordReady;
-handlers.disconnected = HandleDiscordDisconnected;
-handlers.errored = HandleDiscordError;
-handlers.joinGame = HandleDiscordJoin;
-handlers.spectateGame = HandleDiscordSpectate;
-handlers.joinRequest = HandleDiscordJoinRequest;
-
-char appid[255];
-sprintf(appid, "%d", engine->GetAppID());
-Discord_Initialize(cl_discord_appid.GetString(), &handlers, 1, appid);
-
-if (!g_bTextMode)
-{
-	DiscordRichPresence discordPresence;
-	memset(&discordPresence, 0, sizeof(discordPresence));
-
-	discordPresence.state = "In-Game";
-	discordPresence.details = "Main Menu";
-	discordPresence.startTimestamp = startTimestamp;
-	discordPresence.largeImageKey = "ico";
-	Discord_UpdatePresence(&discordPresence);
-}
 
 	return true;
 }
@@ -1251,6 +1224,41 @@ void CHLClient::PostInit()
 		}
 	}
 #endif
+
+// Discord RPC
+	DiscordEventHandlers handlers;
+	memset(&handlers, 0, sizeof(handlers));
+
+	handlers.ready = HandleDiscordReady;
+	handlers.disconnected = HandleDiscordDisconnected;
+	handlers.errored = HandleDiscordError;
+	handlers.joinGame = HandleDiscordJoin;
+	handlers.spectateGame = HandleDiscordSpectate;
+	handlers.joinRequest = HandleDiscordJoinRequest;
+
+	char appid[255];
+	sprintf(appid, "%d", engine->GetAppID());
+
+	Discord_Initialize(cl_discord_appid.GetString(), &handlers, 1, appid);
+
+	extern ConVar of_enable_rpc;
+
+	if (!g_bTextMode && of_enable_rpc.GetBool())
+	{
+		DiscordRichPresence discordPresence;
+		memset(&discordPresence, 0, sizeof(discordPresence));
+
+		discordPresence.state = "In-Game";
+		discordPresence.details = "Main Menu";
+		discordPresence.startTimestamp = startTimestamp;
+		discordPresence.largeImageKey = "ico";
+		Discord_UpdatePresence(&discordPresence);
+	}
+	else
+	{
+		Discord_ClearPresence();
+		Discord_Shutdown();
+	}
 }
 
 //-----------------------------------------------------------------------------

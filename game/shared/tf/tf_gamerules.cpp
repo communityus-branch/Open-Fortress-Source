@@ -879,8 +879,6 @@ void CTFGameRules::SetupOnRoundStart( void )
 #ifdef GAME_DLL
 	m_szMostRecentCappers[0] = 0;
 #endif
-
-	BroadcastSound(0, GetMusicNamePreRound());
 }
 
 //-----------------------------------------------------------------------------
@@ -910,8 +908,6 @@ void CTFGameRules::SetupOnRoundRunning( void )
 		pPlayer->TeamFortress_SetSpeed();
 		pPlayer->SpeakConceptIfAllowed( MP_CONCEPT_ROUND_START );
 	}
-	
-	BroadcastSound(0, GetMusicNameActiveRound());
 }
 
 //-----------------------------------------------------------------------------
@@ -3663,20 +3659,20 @@ const char *CTFGameRules::GetMusicNamePreRound(void)
 
 const char *CTFGameRules::GetMusicNameActiveRound(void)
 {
-	const char *songtest = "Music.StartRound.Test";
-	const char *songbase = "Music.StartRound.";
-	const char *mapname = STRING(gpGlobals->mapname);
+	const char *songtest2 = "Music.ActiveRound.Test";
+	const char *songbase2 = "Music.ActiveRound.";
+	const char *mapname2 = STRING(gpGlobals->mapname);
 
-	char tempresult[MAX_PATH];
+	char tempresult2[MAX_PATH];
 
-	strcpy(tempresult, songbase);
-	strcat(tempresult, mapname);
+	strcpy(tempresult2, songbase2);
+	strcat(tempresult2, mapname2);
 
 	if (rara_testmusic.GetBool())
-		return songtest;
+		return songtest2;
 
-	const char *result = (const char*)tempresult;
+	const char *result2 = (const char*)tempresult2;
 
-	return result;
+	return result2;
 }
 #endif

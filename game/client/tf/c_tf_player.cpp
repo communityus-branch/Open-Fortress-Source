@@ -87,6 +87,8 @@ ConVar ofd_color_r( "ofd_color_r", "128", FCVAR_ARCHIVE | FCVAR_USERINFO, "Sets 
 ConVar ofd_color_g( "ofd_color_g", "0", FCVAR_ARCHIVE | FCVAR_USERINFO, "Sets merc color's green channel value", true, -1, true, 255 );
 ConVar ofd_color_b( "ofd_color_b", "128", FCVAR_ARCHIVE | FCVAR_USERINFO, "Sets merc color's blue channel value", true, -1, true, 255 );
 
+ConVar of_enable_rpc("of_enable_rpc", "1", FCVAR_ARCHIVE, "Enables/Disables Discord Rich Presence. Requires a game restart.");
+
 #define BDAY_HAT_MODEL		"models/effects/bday_hat.mdl"
 
 IMaterial	*g_pHeadLabelMaterial[2] = { NULL, NULL }; 
