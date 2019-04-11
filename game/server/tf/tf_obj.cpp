@@ -36,7 +36,7 @@
 #include "te_effect_dispatch.h"
 #include "tf_gamestats.h"
 #include "tf_ammo_pack.h"
-#include "tf_dropped_weapon.h"
+#include "of_dropped_weapon.h"
 #include "tf_obj_sapper.h"
 #include "particle_parse.h"
 #include "tf_fx.h"

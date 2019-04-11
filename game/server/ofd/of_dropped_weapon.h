@@ -29,6 +29,7 @@ public:
 	virtual unsigned int PhysicsSolidMaskForEntity( void ) const;
 
 	int GiveAmmo( int iCount, int iAmmoType );
+	int WeaponID;
 
 	static CTFDroppedWeapon *Create( const Vector &vecOrigin, const QAngle &vecAngles, CBaseEntity *pOwner, const char *pszModelName );
 

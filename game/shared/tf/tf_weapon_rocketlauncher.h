@@ -15,6 +15,7 @@
 // Client specific.
 #ifdef CLIENT_DLL
 #define CTFRocketLauncher C_TFRocketLauncher
+#define CTFOriginal C_TFOriginal
 #endif
 
 //=============================================================================
@@ -59,6 +60,18 @@ private:
 	CTFRocketLauncher( const CTFRocketLauncher & ) {}
 };
 
+// Mercenary specific version
+class CTFOriginal : public CTFRocketLauncher
+{
+public:
+	DECLARE_CLASS( CTFOriginal, CTFRocketLauncher );
+	DECLARE_NETWORKCLASS(); 
+	DECLARE_PREDICTABLE();
+
+	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_ORIGINAL; }
+};
+
+
 // Server specific
 #ifdef GAME_DLL
 
@@ -79,5 +92,7 @@ public:
 };
 
 #endif
+
+
 
 #endif // TF_WEAPON_ROCKETLAUNCHER_H

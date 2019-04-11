@@ -27,6 +27,7 @@ BEGIN_DATADESC( CTeamplayRoundWin )
 
 	// Outputs.
 	DEFINE_OUTPUT( m_outputOnRoundWin, "OnRoundWin" ),
+	DEFINE_OUTPUT( m_outputOnRoundWinAny, "OnRoundWinAny" ),
 
 END_DATADESC()
 
@@ -72,6 +73,11 @@ void CTeamplayRoundWin::RoundWin( void )
 
 	// Output.
 	m_outputOnRoundWin.FireOutput( this, this );
+}
+
+void CTeamplayRoundWin::OnRoundWinAny( void )
+{
+	m_outputOnRoundWinAny.FireOutput( this, this );
 }
 
 //-----------------------------------------------------------------------------

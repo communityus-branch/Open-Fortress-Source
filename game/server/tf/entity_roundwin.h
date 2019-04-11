@@ -24,6 +24,7 @@ public:
 
 	// Input
 	void InputRoundWin( inputdata_t &inputdata );
+	void OnRoundWinAny( void );
 
 private:
 
@@ -36,10 +37,9 @@ private:
 	int	 m_iWinReason;
 
 	COutputEvent m_outputOnRoundWin; // Fired when the entity tells the game rules a team has won the round
+	COutputEvent m_outputOnRoundWinAny; // Fired when any team wins
 
 	DECLARE_DATADESC();
 };
-
+extern CUtlVector< CHandle<CTeamplayRoundWin> >		g_hEntityRoundWins;
 #endif // ENTITY_ROUND_WIN_H
-
-

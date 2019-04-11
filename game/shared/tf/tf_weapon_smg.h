@@ -13,6 +13,8 @@
 // Client specific.
 #ifdef CLIENT_DLL
 #define CTFSMG C_TFSMG
+#define CTFSMG_Mercenary C_TFSMG_Mercenary
+#define CTFTommyGun C_TFTommyGun
 #endif
 
 //=============================================================================
@@ -42,5 +44,28 @@ private:
 
 	CTFSMG( const CTFSMG & ) {}
 };
+
+// Mercenary specific version
+class CTFSMG_Mercenary : public CTFSMG
+{
+public:
+	DECLARE_CLASS( CTFSMG_Mercenary, CTFSMG );
+	DECLARE_NETWORKCLASS(); 
+	DECLARE_PREDICTABLE();
+
+	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_SMG_MERCENARY; }
+};
+
+// TommyGun version
+class CTFTommyGun : public CTFSMG
+{
+public:
+	DECLARE_CLASS( CTFTommyGun, CTFSMG );
+	DECLARE_NETWORKCLASS(); 
+	DECLARE_PREDICTABLE();
+
+	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_TOMMYGUN; }
+};
+
 
 #endif // TF_WEAPON_SMG_H

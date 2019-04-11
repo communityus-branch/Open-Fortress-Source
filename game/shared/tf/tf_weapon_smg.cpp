@@ -20,6 +20,28 @@ END_PREDICTION_DATA()
 LINK_ENTITY_TO_CLASS( tf_weapon_smg, CTFSMG );
 PRECACHE_WEAPON_REGISTER( tf_weapon_smg );
 
+IMPLEMENT_NETWORKCLASS_ALIASED( TFSMG_Mercenary, DT_WeaponSMG_Mercenary )
+
+BEGIN_NETWORK_TABLE( CTFSMG_Mercenary, DT_WeaponSMG_Mercenary )
+END_NETWORK_TABLE()
+
+BEGIN_PREDICTION_DATA( CTFSMG_Mercenary )
+END_PREDICTION_DATA()
+
+LINK_ENTITY_TO_CLASS( tf_weapon_smg_mercenary, CTFSMG_Mercenary );
+PRECACHE_WEAPON_REGISTER( tf_weapon_smg_mercenary );
+
+IMPLEMENT_NETWORKCLASS_ALIASED( TFTommyGun, DT_WeaponTommyGun )
+
+BEGIN_NETWORK_TABLE( CTFTommyGun, DT_WeaponTommyGun )
+END_NETWORK_TABLE()
+
+BEGIN_PREDICTION_DATA( CTFTommyGun )
+END_PREDICTION_DATA()
+
+LINK_ENTITY_TO_CLASS( tf_weapon_tommygun, CTFTommyGun );
+PRECACHE_WEAPON_REGISTER( tf_weapon_tommygun );
+
 // Server specific.
 #ifndef CLIENT_DLL
 BEGIN_DATADESC( CTFSMG )

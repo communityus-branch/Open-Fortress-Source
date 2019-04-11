@@ -37,6 +37,7 @@ struct WeaponData_t
 	float	m_flProjectileSpeed;			// Start speed for projectiles (nail, etc.); NOTE: union with something non-projectile
 	float	m_flSmackDelay;					// how long after swing should damage happen for melee weapons
 	bool	m_bUseRapidFireCrits;
+	bool	m_bCenterfireProjectile;
 
 	void Init( void )
 	{

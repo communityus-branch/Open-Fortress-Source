@@ -5,7 +5,7 @@
 //=============================================================================//
 
 #include "cbase.h"
-#include "tf_dropped_weapon.h"
+#include "of_dropped_weapon.h"
 #include "tf_shareddefs.h"
 #include "ammodef.h"
 #include "tf_gamerules.h"
@@ -65,13 +65,12 @@ void CTFDroppedWeapon::Precache( void )
 CTFDroppedWeapon *CTFDroppedWeapon::Create( const Vector &vecOrigin, const QAngle &vecAngles, CBaseEntity *pOwner, const char *pszModelName )
 {
 	CTFDroppedWeapon *pDroppedWeapon = static_cast<CTFDroppedWeapon*>( CBaseAnimating::CreateNoSpawn( "tf_dropped_weapon", vecOrigin, vecAngles, pOwner ) );
-/*	if ( pDroppedWeapon )
+	if ( pDroppedWeapon )
 	{
 		pDroppedWeapon->SetModelName( AllocPooledString( pszModelName ) );
-		pDroppedWeapon->SetWeaponID(  )
 		DispatchSpawn( pDroppedWeapon );
 	}
-*/
+
 	return pDroppedWeapon;
 }
 
@@ -113,13 +112,15 @@ void CTFDroppedWeapon::PackTouch( CBaseEntity *pOther )
 	if( GetOwnerEntity() == pOther && m_bAllowOwnerPickup == false )
 		return;
 
-//	CBasePlayer *pPlayer = ToBasePlayer( pOther );
+	CBasePlayer *pPlayer = ToBasePlayer( pOther );
 
-//	Assert( pPlayer );
+	Assert( pPlayer );
 
-//	bool bSuccess = true;
-//	CTFWeaponBase *pWeapon = (CTFWeaponBase *)pPlayer->GiveNamedItem( STRING(m_iszWeaponName) );	
-/*	for ( int iWeapon = 0; iWeapon < TF_WEAPON_COUNT; ++iWeapon )
+	bool bSuccess = true;
+		
+	const char *pszWeaponName = WeaponIdToClassname( WeaponID );
+	CTFWeaponBase *pWeapon = (CTFWeaponBase *)pPlayer->GiveNamedItem( pszWeaponName );
+	for ( int iWeapon = 0; iWeapon < TF_WEAPON_COUNT; ++iWeapon )
 	{		
 		CTFWeaponBase *pCarriedWeapon = (CTFWeaponBase *)pPlayer->GetWeapon( iWeapon );
 		if ( pCarriedWeapon == pWeapon ) 
@@ -134,7 +135,7 @@ void CTFDroppedWeapon::PackTouch( CBaseEntity *pOther )
 		pWeapon->GiveTo( pPlayer );		
 		UTIL_Remove( this );
 	}
-*/
+
 }
 
 //-----------------------------------------------------------------------------

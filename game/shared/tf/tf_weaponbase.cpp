@@ -635,7 +635,7 @@ bool CTFWeaponBase::ReloadSingly( void )
 
 			if ( SendWeaponAnim( ACT_VM_RELOAD ) )
 			{
-				if ( GetWeaponID() == TF_WEAPON_GRENADELAUNCHER )
+				if ( GetWeaponID() == TF_WEAPON_GRENADELAUNCHER || GetWeaponID() == TF_WEAPON_GRENADELAUNCHER_MERCENARY )
 				{
 					SetReloadTimer( GetTFWpnData().m_WeaponData[TF_WEAPON_PRIMARY_MODE].m_flTimeReload );
 				}
@@ -757,7 +757,7 @@ bool CTFWeaponBase::ReloadsAll( void )
 
 			if ( SendWeaponAnim( ACT_VM_RELOAD ) )
 			{
-				if ( GetWeaponID() == TF_WEAPON_GRENADELAUNCHER )
+				if ( GetWeaponID() == TF_WEAPON_GRENADELAUNCHER || GetWeaponID() == TF_WEAPON_GRENADELAUNCHER_MERCENARY )
 				{
 					SetReloadTimer( GetTFWpnData().m_WeaponData[TF_WEAPON_PRIMARY_MODE].m_flTimeReload );
 				}

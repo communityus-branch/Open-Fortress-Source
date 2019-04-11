@@ -39,6 +39,17 @@ END_PREDICTION_DATA()
 LINK_ENTITY_TO_CLASS( tf_weapon_rocketlauncher, CTFRocketLauncher );
 PRECACHE_WEAPON_REGISTER( tf_weapon_rocketlauncher );
 
+IMPLEMENT_NETWORKCLASS_ALIASED( TFOriginal, DT_WeaponOriginal )
+
+BEGIN_NETWORK_TABLE( CTFOriginal, DT_WeaponOriginal )
+END_NETWORK_TABLE()
+
+BEGIN_PREDICTION_DATA( CTFOriginal )
+END_PREDICTION_DATA()
+
+LINK_ENTITY_TO_CLASS( tf_weapon_original, CTFOriginal );
+PRECACHE_WEAPON_REGISTER( tf_weapon_original );
+
 // Server specific.
 #ifndef CLIENT_DLL
 BEGIN_DATADESC( CTFRocketLauncher )

@@ -31,7 +31,7 @@ BEGIN_DATADESC(CWeaponSpawner)
 DEFINE_KEYFIELD(m_iszWeaponName, FIELD_STRING, "weaponname"),
 DEFINE_KEYFIELD(m_iszWeaponModel, FIELD_STRING, "powerup_model"),
 DEFINE_KEYFIELD(m_iszPickupSound, FIELD_STRING, "pickup_sound"),
-DEFINE_KEYFIELD( m_bDisableSpin, FIELD_BOOLEAN, "disable_spin"),
+DEFINE_KEYFIELD(m_bDisableSpin, FIELD_BOOLEAN, "disable_spin"),
 DEFINE_KEYFIELD(m_bDisableShowOutline, FIELD_BOOLEAN, "disable_glow"),
 
 END_DATADESC()

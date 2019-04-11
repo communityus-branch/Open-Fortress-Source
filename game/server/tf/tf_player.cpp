@@ -782,7 +782,7 @@ bool CTFPlayer::IsReadyToSpawn( void )
 //-----------------------------------------------------------------------------
 bool CTFPlayer::ShouldGainInstantSpawn( void )
 {
-	return ( GetPlayerClass()->GetClassIndex() == TF_CLASS_UNDEFINED || IsClassMenuOpen() );
+		return ( GetPlayerClass()->GetClassIndex() == TF_CLASS_UNDEFINED || IsClassMenuOpen() );
 }
 
 //-----------------------------------------------------------------------------
@@ -823,8 +823,13 @@ void CTFPlayer::Spawn()
 
 	SetMoveType( MOVETYPE_WALK );
 	BaseClass::Spawn();
-
+	
 	DestroyViewModels();
+	
+	CreateViewModel( 1 );
+	// Make sure it has no model set, in case it had one before
+	GetViewModel(1)->SetModel( "" );
+	
 	CreateViewModel();
 	
 	// Kind of lame, but CBasePlayer::Spawn resets a lot of the state that we initially want on.
@@ -960,7 +965,7 @@ void CTFPlayer::Spawn()
 		}
 
 		Msg("playing round active music\n");
-	}
+	}	
 }
 
 //-----------------------------------------------------------------------------
@@ -1048,23 +1053,24 @@ void CTFPlayer::CreateViewModel( int iViewModel )
 		DispatchSpawn( pViewModel );
 		pViewModel->FollowEntity( this, false );
 		m_hViewModel.Set( iViewModel, pViewModel );
+	
+		CTFViewModel* vmhands = static_cast<CTFViewModel*>(CreateEntityByName("hand_viewmodel"));
+		if ( vmhands && iViewModel+2 != 3 )
+		{
+			vmhands->SetAbsOrigin( GetAbsOrigin() );
+			vmhands->SetOwner( this );
+			vmhands->SetParent( this );
+			vmhands->SetIndex( iViewModel+2 );
+			DispatchSpawn(vmhands);
+			vmhands->m_nSkin = m_nSkin;
+			vmhands->SetLocalOrigin( vec3_origin );
+			vmhands->FollowEntity( pViewModel );
+			vmhands->AddEffects(EF_BONEMERGE);
+			vmhands->SetModel( GetPlayerClass()->GetArmModelName() );
+			vmhands->SetLightingOrigin( pViewModel->GetLightingOrigin() );
+			m_hViewModel.Set( iViewModel+2, vmhands );
 	}
-	CTFViewModel* vmhands = static_cast<CTFViewModel*>(CreateEntityByName("hand_viewmodel"));
-	if ( vmhands )
-	{
-		vmhands->SetAbsOrigin( GetAbsOrigin() );
-		vmhands->SetOwner( this );
-		vmhands->SetParent( this );
-		vmhands->SetIndex( iViewModel+2 );
-		DispatchSpawn(vmhands);
-		vmhands->m_nSkin = m_nSkin;
-		vmhands->SetLocalOrigin(vec3_origin);
-		vmhands->FollowEntity( pViewModel );
-		vmhands->AddEffects(EF_BONEMERGE);
-		vmhands->SetModel( GetPlayerClass()->GetArmModelName() );
-		m_hViewModel.Set( iViewModel+2, vmhands );
-	}
-
+}
 
 }
 
@@ -2887,7 +2893,7 @@ int CTFPlayer::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 						CTFWeaponBase *pWeapon = ToTFPlayer( info.GetAttacker() )->GetActiveTFWeapon();
 						if ( pWeapon )
 						{
-							if ( pWeapon->GetWeaponID() == TF_WEAPON_ROCKETLAUNCHER )
+							if ( pWeapon->GetWeaponID() == TF_WEAPON_ROCKETLAUNCHER || pWeapon->GetWeaponID() == TF_WEAPON_ORIGINAL )
 							{
 								// Rocket launcher only has half the bonus of the other weapons at short range
 								flRandomDamage *= 0.5;
@@ -4556,6 +4562,7 @@ void CTFPlayer::CheatImpulseCommands( int iImpulse )
 				GiveNamedItem("tf_weapon_crowbar");
 				GiveNamedItem("tf_weapon_flamethrower");
 				GiveNamedItem("tf_weapon_grenadelauncher");
+				GiveNamedItem("tf_weapon_grenadelauncher_mercenary");
 				GiveNamedItem("tf_weapon_knife");
 				GiveNamedItem("tf_weapon_minigun");
 				GiveNamedItem("tf_weapon_gatlinggun");
@@ -4568,9 +4575,12 @@ void CTFPlayer::CheatImpulseCommands( int iImpulse )
 				GiveNamedItem("tf_weapon_revolver");
 				GiveNamedItem("tf_weapon_revolver_mercenary");
 				GiveNamedItem("tf_weapon_rocketlauncher");
+				GiveNamedItem("tf_weapon_rocketlauncher_mercenary");
 				GiveNamedItem("tf_weapon_scattergun");
 				GiveNamedItem("tf_weapon_shotgun_soldier");
 				GiveNamedItem("tf_weapon_smg");
+				GiveNamedItem("tf_weapon_smg_mercenary");
+				GiveNamedItem("tf_weapon_tommygun");
 				GiveNamedItem("tf_weapon_sniperrifle");
 				GiveNamedItem("tf_weapon_supershotgun");
 				GiveNamedItem("tf_weapon_syringegun_medic");
@@ -5180,7 +5190,7 @@ void CTFPlayer::Weapon_Drop( CBaseCombatWeapon *pWeapon, const Vector *pvecTarge
 //-----------------------------------------------------------------------------
 void CTFPlayer::RemoveInvisibility( void )
 {
-	if ( !m_Shared.InCond( TF_COND_STEALTHED ) )
+	if ( !m_Shared.InCond( TF_COND_STEALTHED ) || TFGameRules()->IsDMGamemode() )
 		return;
 
 	// remove quickly
@@ -5727,12 +5737,12 @@ void CTFPlayer::Taunt( void )
 		return;
 
 	// Check to see if we are in water (above our waist).
-	if ( GetWaterLevel() > WL_Waist )
-		return;
+//	if ( GetWaterLevel() > WL_Waist )
+//		return;
 
 	// Check to see if we are on the ground.
-	if ( GetGroundEntity() == NULL )
-		return;
+//	if ( GetGroundEntity() == NULL )
+//		return;
 
 	// Allow voice commands, etc to be interrupted.
 	CMultiplayer_Expresser *pExpresser = GetMultiplayerExpresser();

@@ -128,6 +128,9 @@ public:
 
 	// Called before a new round is started (so the previous round can end)
 	virtual void	PreviousRoundEnd( void );
+	
+	// Called when any team wins
+	virtual void	RoundWinAny( void );
 
 	// Send the team scores down to the client
 	virtual void	SendTeamScoresEvent( void ) { return; }

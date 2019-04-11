@@ -806,9 +806,9 @@ void CTFPlayerShared::OnRemoveZoomed( void )
 void CTFPlayerShared::OnAddDisguising( void )
 {
 #ifdef CLIENT_DLL
-	if ( m_pOuter->m_pDisguisingEffect )
+	if ( m_pOuter->m_pDisguisingEffect && InCond( TF_COND_STEALTHED ) )
 	{
-//		m_pOuter->ParticleProp()->StopEmission( m_pOuter->m_pDisguisingEffect );
+		m_pOuter->ParticleProp()->StopEmission( m_pOuter->m_pDisguisingEffect );
 	}
 
 	if ( !m_pOuter->IsLocalPlayer() && ( !InCond( TF_COND_STEALTHED ) || !m_pOuter->IsEnemyPlayer() ) )

@@ -23,6 +23,7 @@
 	#include "gameinterface.h"
 	#include "eventqueue.h"
 	#include "team_control_point_master.h"
+	#include "entity_roundwin.h"
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -30,6 +31,7 @@
 
 #ifndef CLIENT_DLL
 CUtlVector< CHandle<CTeamControlPointMaster> >		g_hControlPointMasters;
+CUtlVector< CHandle<CTeamplayRoundWin> >		g_hEntityRoundWins;
 
 extern bool IsInCommentaryMode( void );
 #endif

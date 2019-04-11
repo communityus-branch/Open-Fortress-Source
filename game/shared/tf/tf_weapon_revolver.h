@@ -46,7 +46,7 @@ private:
 	CTFRevolver( const CTFRevolver & ) {}
 };
 
-// Scout specific version
+// Mercenary specific version
 class CTFRevolver_Mercenary : public CTFRevolver
 {
 public:

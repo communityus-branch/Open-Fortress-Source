@@ -29,8 +29,10 @@
 	#include "tf_objective_resource.h"
 	#include "tf_player_resource.h"
 	#include "team_control_point_master.h"
+	#include "entity_roundwin.h"
 	#include "playerclass_info_parse.h"
 	#include "team_control_point_master.h"
+	#include "entity_roundwin.h"
 	#include "coordsize.h"
 	#include "entity_healthkit.h"
 	#include "tf_gamestats.h"
@@ -82,6 +84,9 @@ extern ConVar of_bunnyhop;
 extern ConVar of_crouchjump;
 extern ConVar mp_disable_respawn_times;
 extern ConVar fraglimit;
+extern ConVar of_bunnyhop_max_speed_factor;
+extern ConVar tf_maxspeed;
+extern ConVar sv_airaccelerate;
 
 ConVar tf_caplinear( "tf_caplinear", "1", FCVAR_REPLICATED | FCVAR_DEVELOPMENTONLY, "If set to 1, teams must capture control points linearly." );
 ConVar tf_stalematechangeclasstime( "tf_stalematechangeclasstime", "20", FCVAR_REPLICATED | FCVAR_DEVELOPMENTONLY, "Amount of time that players are allowed to change class in stalemates." );
@@ -598,6 +603,7 @@ static const char *s_PreserveEnts[] =
 	"keyframe_rope",
 	"move_rope",
 	"tf_viewmodel",
+	"hand_viewmodel",
 	"", // END Marker
 };
 
@@ -610,8 +616,9 @@ void CTFGameRules::Activate()
 	of_bunnyhop.SetValue(0);
 	of_crouchjump.SetValue(0);
 	mp_disable_respawn_times.SetValue(0);
-
-
+	of_bunnyhop_max_speed_factor.SetValue(1.2f);
+	tf_maxspeed.SetValue(400);
+	sv_airaccelerate.SetValue(10);
 	m_iBirthdayMode = BIRTHDAY_RECALCULATE;
 
 	m_nGameType.Set(TF_GAMETYPE_UNDEFINED);
@@ -647,6 +654,9 @@ void CTFGameRules::Activate()
 		of_gamemode_dm.SetValue(1);
 		of_bunnyhop.SetValue(1);
 		of_crouchjump.SetValue(1);
+		of_bunnyhop_max_speed_factor.SetValue(0);
+		tf_maxspeed.SetValue(0);
+		sv_airaccelerate.SetValue(500);
 		if ( fraglimit.GetFloat() == 0 ) fraglimit.SetValue( 50 );
 		mp_disable_respawn_times.SetValue(1);
 
@@ -922,6 +932,15 @@ void CTFGameRules::PreviousRoundEnd( void )
 	}
 
 	m_iPreviousRoundWinners = GetWinningTeam();
+}
+
+void CTFGameRules::RoundWinAny( void )
+{
+	// Fire an RoundWinAny output when the round gets won
+	if ( g_hEntityRoundWins.Count() && g_hEntityRoundWins[0] )
+	{
+		g_hEntityRoundWins[0]->OnRoundWinAny();
+	}
 }
 
 //-----------------------------------------------------------------------------

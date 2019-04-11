@@ -177,7 +177,6 @@ void CTFWeaponBaseGun::SecondaryAttack( void )
 CBaseEntity *CTFWeaponBaseGun::FireProjectile( CTFPlayer *pPlayer )
 {
 	int iProjectile = m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_iProjectile;
-
 	CBaseEntity *pProjectile = NULL;
 
 	switch( iProjectile )
@@ -365,13 +364,24 @@ CBaseEntity *CTFWeaponBaseGun::FireRocket( CTFPlayer *pPlayer )
 
 	// Server only - create the rocket.
 #ifdef GAME_DLL
-
+	
+	bool bCenter = m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_bCenterfireProjectile;
 	Vector vecSrc;
 	QAngle angForward;
-	Vector vecOffset( 23.5f, 12.0f, -3.0f );
+	Vector vecOffset( 23.5f, 12.0f, -3.0f );	
+	if ( bCenter )
+	{
+		vecOffset.x = 12.0f; //forward backwards
+		vecOffset.y = 0.0f; // left right
+		vecOffset.z = -8.0f; //up down
+	}
+	
 	if ( pPlayer->GetFlags() & FL_DUCKING )
 	{
-		vecOffset.z = 8.0f;
+		if ( bCenter )
+			vecOffset.z = 0.0f;
+		else
+			vecOffset.z = 8.0f;
 	}
 	GetProjectileFireSetup( pPlayer, vecOffset, &vecSrc, &angForward, false );
 
