@@ -20,10 +20,13 @@
 
 #include "tf_imagepanel.h"
 #include "c_tf_player.h"
+#include "tf_gamerules.h"
 
 using namespace vgui;
 
 DECLARE_BUILD_FACTORY( CTFImagePanel );
+
+extern ConVar ofd_coloredhud;
 
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -59,11 +62,16 @@ void CTFImagePanel::ApplySettings( KeyValues *inResourceData )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CTFImagePanel::UpdateBGImage( void )
+void CTFImagePanel::UpdateBGImage(void)
 {
 	if ( m_iBGTeam >= 0 && m_iBGTeam < TF_TEAM_COUNT )
 	{
-		if ( m_szTeamBG[m_iBGTeam] && m_szTeamBG[m_iBGTeam][0] )
+		if (TFGameRules() && TFGameRules()->IsDMGamemode())
+		{
+			int iColorIndex = (ofd_coloredhud.GetBool() );
+			SetImage(m_szTeamBG[iColorIndex]);
+		}
+		else if ( m_szTeamBG[m_iBGTeam] && m_szTeamBG[m_iBGTeam][0] )
 		{
 			SetImage( m_szTeamBG[m_iBGTeam] );
 		}

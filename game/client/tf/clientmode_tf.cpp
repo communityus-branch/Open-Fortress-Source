@@ -59,6 +59,9 @@ void HUDMinModeChangedCallBack( IConVar *var, const char *pOldString, float flOl
 	engine->ExecuteClientCmd( "hud_reloadscheme" );
 }
 ConVar cl_hud_minmode( "cl_hud_minmode", "0", FCVAR_ARCHIVE, "Set to 1 to turn on the advanced minimalist HUD mode.", HUDMinModeChangedCallBack );
+#ifdef OPENFORTRESS_DLL
+ConVar ofd_coloredhud( "ofd_coloredhud", "0", FCVAR_ARCHIVE, "Enable colored hud panels", HUDMinModeChangedCallBack);
+#endif 
 
 IClientMode *g_pClientMode = NULL;
 

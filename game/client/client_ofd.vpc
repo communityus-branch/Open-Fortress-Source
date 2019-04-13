@@ -32,6 +32,8 @@ $Project "Client (OFD)"
 			$File	"ofd\ofd_hud_weaponselection.cpp"
 			$File	"ofd\c_ofd_trigger_jump.h"
 			$File	"ofd\c_ofd_trigger_jump.cpp"
+			$File   "ofd\ofd_imagecoloredhudpanel.cpp"
+			$File   "ofd\ofd_imagecoloredhudpanel.h"
 			$File	"$SRCDIR\game\shared\ofd\ofd_trigger_jump_shared.cpp"
 		}
 		
