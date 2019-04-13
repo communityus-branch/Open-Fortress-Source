@@ -26,6 +26,7 @@ class C_MuzzleFlashModel;
 class C_BaseObject;
 
 extern ConVar tf_medigun_autoheal;
+extern ConVar of_autoreload;
 extern ConVar cl_autorezoom;
 extern ConVar ofd_color_r;
 extern ConVar ofd_color_g;
@@ -175,6 +176,7 @@ public:
 
 	bool			GetMedigunAutoHeal( void ){ return tf_medigun_autoheal.GetBool(); }
 	bool			ShouldAutoRezoom( void ){ return cl_autorezoom.GetBool(); }
+	bool			ShouldAutoReload( void ){ return of_autoreload.GetBool(); }
 
 public:
 	// Shared functions

@@ -84,7 +84,7 @@ const char *GetSyringeTrailParticleName( int iTeamNumber, bool bCritical )
 	}
 	else 
 	{
-		return ( bCritical ? "nailtrails_medic_mercenary_crit" : "nailtrails_medic_mercenary" );
+		return ( bCritical ? "nailtrails_medic_dm_crit" : "nailtrails_medic_dm" );
 	}
 }
 

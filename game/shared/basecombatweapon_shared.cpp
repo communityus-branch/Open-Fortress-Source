@@ -53,6 +53,7 @@
 
 extern bool UTIL_ItemCanBeTouchedByPlayer( CBaseEntity *pItem, CBasePlayer *pPlayer );
 extern ConVar of_infiniteammo;
+extern ConVar of_autoreload;
 
 #if defined ( TF_CLIENT_DLL ) || defined ( TF_DLL )
 #ifdef _DEBUG
@@ -1377,7 +1378,7 @@ bool CBaseCombatWeapon::ReloadOrSwitchWeapons( void )
 	{
 		// Weapon is useable. Reload if empty and weapon has waited as long as it has to after firing
 		if ( UsesClipsForAmmo1() && !AutoFiresFullClip() && 
-			 ( m_iClip1 < GetMaxClip1() ) && 
+			 ( m_iClip1 == 0 ) && 
 			 (GetWeaponFlags() & ITEM_FLAG_NOAUTORELOAD) == false && 
 			 m_flNextPrimaryAttack < gpGlobals->curtime && 
 			 m_flNextSecondaryAttack < gpGlobals->curtime )
@@ -1385,6 +1386,7 @@ bool CBaseCombatWeapon::ReloadOrSwitchWeapons( void )
 			// if we're successfully reloading, we're done
 			if ( Reload() )
 				return true;
+			
 		}
 	}
 

@@ -149,7 +149,7 @@ const char *CTFGrenadePipebombProjectile::GetTrailParticleName( void )
 		}
 		else
 		{
-			return "stickybombtrail_mercenary";
+			return "stickybombtrail_dm";
 		}
 	}
 	else
@@ -164,7 +164,7 @@ const char *CTFGrenadePipebombProjectile::GetTrailParticleName( void )
 		}
 		else
 		{
-			return "pipebombtrail_mercenary";
+			return "pipebombtrail_dm";
 		}
 	}
 }
@@ -223,11 +223,11 @@ void CTFGrenadePipebombProjectile::OnDataChanged(DataUpdateType_t updateType)
 
 				if ( m_iType == TF_GL_MODE_REMOTE_DETONATE )
 				{
-					pPlayer->m_Shared.UpdateParticleColor( ParticleProp()->Create( "critical_grenade_mercenary", PATTACH_ABSORIGIN_FOLLOW ) );
+					pPlayer->m_Shared.UpdateParticleColor( ParticleProp()->Create( "critical_grenade_dm", PATTACH_ABSORIGIN_FOLLOW ) );
 				}
 				else
 				{
-					pPlayer->m_Shared.UpdateParticleColor( ParticleProp()->Create( "critical_pipe_mercenary", PATTACH_ABSORIGIN_FOLLOW ) );
+					pPlayer->m_Shared.UpdateParticleColor( ParticleProp()->Create( "critical_pipe_dm", PATTACH_ABSORIGIN_FOLLOW ) );
 				}
 				break;
 			default:
@@ -264,7 +264,7 @@ void CTFGrenadePipebombProjectile::Simulate( void )
 			}
 			else 
 			{
-				ParticleProp()->Create( "stickybomb_pulse_mercenary", PATTACH_ABSORIGIN );
+				ParticleProp()->Create( "stickybomb_pulse_dm", PATTACH_ABSORIGIN );
 			}
 			m_bPulsed = true;
 		}
@@ -379,7 +379,7 @@ void CTFGrenadePipebombProjectile::Precache()
 	PrecacheModel( TF_WEAPON_PIPEGRENADE_MODEL );
 	PrecacheParticleSystem( "stickybombtrail_blue" );
 	PrecacheParticleSystem( "stickybombtrail_red" );
-	PrecacheParticleSystem( "stickybombtrail_mercenary" );
+	PrecacheParticleSystem( "stickybombtrail_dm" );
 
 	BaseClass::Precache();
 }

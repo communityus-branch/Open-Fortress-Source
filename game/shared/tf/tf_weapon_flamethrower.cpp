@@ -730,7 +730,7 @@ void CTFFlameThrower::RestartParticleEffect( void )
 					pszParticleEffect = "flamethrower_crit_blue";
 					break;
 				default:
-					pszParticleEffect = "flamethrower_crit_mercenary";
+					pszParticleEffect = "flamethrower_crit_dm";
 					break;
 			}
 		}
@@ -745,7 +745,7 @@ void CTFFlameThrower::RestartParticleEffect( void )
 					pszParticleEffect = "flamethrower_blue";
 					break;
 				default:
-					pszParticleEffect = "flamethrower_mercenary";
+					pszParticleEffect = "flamethrower_dm";
 					break;
 			}
 		}		

@@ -1851,7 +1851,10 @@ void CTFGameRules::ClientSettingsChanged( CBasePlayer *pPlayer )
 
 	// keep track of their tf_medigun_autoheal value
 	pTFPlayer->SetMedigunAutoHeal( Q_atoi( engine->GetClientConVarValue( pPlayer->entindex(), "tf_medigun_autoheal" ) ) > 0 );
-
+	
+	// keep track of their of_autoreload value
+	pTFPlayer->SetAutoReload( Q_atoi( engine->GetClientConVarValue( pPlayer->entindex(), "of_autoreload" ) ) > 0 );
+	
 	// keep track of their cl_autorezoom value
 	pTFPlayer->SetAutoRezoom( Q_atoi( engine->GetClientConVarValue( pPlayer->entindex(), "cl_autorezoom" ) ) > 0 );
 

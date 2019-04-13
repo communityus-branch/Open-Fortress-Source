@@ -41,6 +41,10 @@ extern CTFWeaponInfo *GetTFWeaponInfo( int iWeapon );
 extern ConVar of_muzzlelight;
 #endif
 
+#if defined (CLIENT_DLL)
+ConVar of_autoreload( "of_autoreload", "1", FCVAR_CLIENTDLL | FCVAR_ARCHIVE | FCVAR_USERINFO, "Automaticaly reload when not firing" );
+#endif
+
 ConVar tf_weapon_criticals( "tf_weapon_criticals", "0", FCVAR_NOTIFY | FCVAR_REPLICATED, "Whether or not random crits are enabled." );
 ConVar of_infiniteammo( "of_infiniteammo", "0", FCVAR_NOTIFY | FCVAR_REPLICATED, "Whether or not reloading is disabled" );
 extern ConVar tf_useparticletracers;
@@ -575,6 +579,43 @@ void CTFWeaponBase::AbortReload( void )
 	BaseClass::AbortReload();
 
 	m_iReloadMode.Set( TF_RELOAD_START );
+}
+
+bool CTFWeaponBase::ReloadOrSwitchWeapons( void )
+{
+	CBasePlayer *pOwner = ToBasePlayer( GetOwner() );
+	CTFPlayer *pPlayer = ToTFPlayer( GetOwner() );
+	Assert( pOwner );
+
+	m_bFireOnEmpty = false;
+
+	// If we don't have any ammo, switch to the next best weapon
+	if ( !HasAnyAmmo() && m_flNextPrimaryAttack < gpGlobals->curtime && m_flNextSecondaryAttack < gpGlobals->curtime )
+	{
+		// weapon isn't useable, switch.
+		if ( ( (GetWeaponFlags() & ITEM_FLAG_NOAUTOSWITCHEMPTY) == false ) && ( g_pGameRules->SwitchToNextBestWeapon( pOwner, this ) ) )
+		{
+			m_flNextPrimaryAttack = gpGlobals->curtime + 0.3;
+			return true;
+		}
+	}
+	else
+	{
+		// Weapon is useable. Reload if empty and weapon has waited as long as it has to after firing
+		if ( UsesClipsForAmmo1() && !AutoFiresFullClip() && 
+			 ( ( m_iClip1 < GetMaxClip1() && pPlayer && pPlayer->ShouldAutoReload() ) || m_iClip1 == 0 ) && 
+			 (GetWeaponFlags() & ITEM_FLAG_NOAUTORELOAD) == false && 
+			 m_flNextPrimaryAttack < gpGlobals->curtime && 
+			 m_flNextSecondaryAttack < gpGlobals->curtime )
+		{
+			// if we're successfully reloading, we're done
+			if ( Reload() )
+				return true;
+			
+		}
+	}
+
+	return false;
 }
 
 //-----------------------------------------------------------------------------
