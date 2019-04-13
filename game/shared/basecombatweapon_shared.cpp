@@ -1377,7 +1377,7 @@ bool CBaseCombatWeapon::ReloadOrSwitchWeapons( void )
 	{
 		// Weapon is useable. Reload if empty and weapon has waited as long as it has to after firing
 		if ( UsesClipsForAmmo1() && !AutoFiresFullClip() && 
-			 (m_iClip1 == 0) && 
+			 ( m_iClip1 < GetMaxClip1() ) && 
 			 (GetWeaponFlags() & ITEM_FLAG_NOAUTORELOAD) == false && 
 			 m_flNextPrimaryAttack < gpGlobals->curtime && 
 			 m_flNextSecondaryAttack < gpGlobals->curtime )
@@ -1802,7 +1802,8 @@ void CBaseCombatWeapon::ItemPostFrame( void )
 		// no fire buttons down or reloading
 		if ( !ReloadOrSwitchWeapons() && ( m_bInReload == false ) )
 		{
-			WeaponIdle();
+			if ( GetActivity() != ACT_VM_RELOAD )
+				WeaponIdle();
 		}
 	}
 }

@@ -52,7 +52,7 @@ DEFINE_THINKFUNC( FlyThink ),
 END_DATADESC()
 #endif
 
-ConVar tf_rocket_show_radius( "tf_rocket_show_radius", "0", FCVAR_REPLICATED | FCVAR_CHEAT | FCVAR_DEVELOPMENTONLY, "Render rocket radius." );
+ConVar tf_rocket_show_radius( "tf_rocket_show_radius", "0", FCVAR_REPLICATED | FCVAR_CHEAT , "Render rocket radius." );
 
 //=============================================================================
 //
@@ -312,6 +312,8 @@ void CTFBaseRocket::Explode( trace_t *pTrace, CBaseEntity *pOther )
 
 	CTakeDamageInfo info( this, pAttacker, vec3_origin, vecOrigin, GetDamage(), GetDamageType() );
 	float flRadius = GetRadius();
+	if ( GetWeaponID() == TF_WEAPON_ORIGINAL )
+		flRadius *= 0.1;
 	RadiusDamage( info, vecOrigin, flRadius, CLASS_NONE, NULL );
 
 	// Debug!

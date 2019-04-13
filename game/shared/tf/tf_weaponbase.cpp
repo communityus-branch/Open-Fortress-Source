@@ -1041,7 +1041,7 @@ void CTFWeaponBase::ItemBusyFrame( void )
 		{
 			if ( pPlayer->m_nButtons & IN_ATTACK )
 			{
-				if (( m_bInReload || (ReloadsSingly() && m_iReloadMode!=TF_RELOAD_START)) && Clip1() > 0 )
+				if ( ( m_bInReload || ( ReloadsSingly() && m_iReloadMode!=TF_RELOAD_START ) ) && Clip1() > 0 )
 				{
 					AbortReload();
 					
@@ -1102,9 +1102,8 @@ void CTFWeaponBase::ReloadSinglyPostFrame( void )
 {
 	if ( m_flTimeWeaponIdle > gpGlobals->curtime )
 		return;
-
 	// if the clip is empty and we have ammo remaining, 
-	if ( ( ( Clip1() == 0 ) && ( GetOwner()->GetAmmoCount(m_iPrimaryAmmoType) > 0 ) ) ||
+	if ( ( ( Clip1() < GetMaxClip1() ) && ( GetOwner()->GetAmmoCount(m_iPrimaryAmmoType) > 0 ) ) ||
 		// or we are already in the process of reloading but not finished
 		( m_iReloadMode != TF_RELOAD_START ) )
 	{
@@ -1151,6 +1150,7 @@ bool CTFWeaponBase::WeaponShouldBeLowered( void )
 //-----------------------------------------------------------------------------
 bool CTFWeaponBase::Ready( void )
 {
+	
 	// If we don't have the anim, just hide for now
 	if ( SelectWeightedSequence( ACT_VM_IDLE_LOWERED ) == ACTIVITY_NOT_AVAILABLE )
 	{
@@ -1209,7 +1209,7 @@ void CTFWeaponBase::SetWeaponVisible( bool visible )
 // Purpose: Allows the weapon to choose proper weapon idle animation
 //-----------------------------------------------------------------------------
 void CTFWeaponBase::WeaponIdle( void )
-{
+{	
 	//See if we should idle high or low
 	if ( WeaponShouldBeLowered() )
 	{
@@ -1235,7 +1235,7 @@ void CTFWeaponBase::WeaponIdle( void )
 		{
 			if ( !( m_bReloadsSingly && m_iReloadMode != TF_RELOAD_START ) )
 			{
-				SendWeaponAnim( ACT_VM_IDLE );
+				SendWeaponAnim( ACT_VM_IDLE ); 
 				m_flTimeWeaponIdle = gpGlobals->curtime + SequenceDuration();
 			}
 		}
