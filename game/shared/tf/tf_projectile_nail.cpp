@@ -185,7 +185,7 @@ const char *GetNailTrailParticleName(int iTeamNumber, bool bCritical)
 	}
 	else 
 	{
-		return (bCritical ? "nailtrails_scout_mercenary_crit" : "nailtrails_scout_mercenary");
+		return (bCritical ? "nailtrails_scout_dm_crit" : "nailtrails_scout_dm");
 	}
 }
 
