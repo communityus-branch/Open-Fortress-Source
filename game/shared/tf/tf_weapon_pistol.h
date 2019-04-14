@@ -89,15 +89,6 @@ public:
 	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_PISTOL_AKIMBO; }
 	bool			PrimaryAttackSwapsActivities( void ){ return true; }
 };
-class CTFHandCannon : public CTFPistol
-{
-public:
-	DECLARE_CLASS(CTFHandCannon, CTFPistol);
-	DECLARE_NETWORKCLASS();
-	DECLARE_PREDICTABLE();
-
-	virtual int		GetWeaponID(void) const { return TF_WEAPON_PISTOL_MERCENARY; }
-};
 
 
 #endif // TF_WEAPON_PISTOL_H

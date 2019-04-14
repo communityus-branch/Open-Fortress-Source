@@ -88,17 +88,6 @@ END_PREDICTION_DATA()
 
 LINK_ENTITY_TO_CLASS( tf_weapon_pistol_akimbo, CTFPistol_Akimbo );
 PRECACHE_WEAPON_REGISTER( tf_weapon_pistol_akimbo );
-//
-IMPLEMENT_NETWORKCLASS_ALIASED( TFHandCannon, DT_TFHandCannon )
-
-BEGIN_NETWORK_TABLE( CTFHandCannon, DT_TFHandCannon )
-END_NETWORK_TABLE()
-
-BEGIN_PREDICTION_DATA( CTFHandCannon )
-END_PREDICTION_DATA()
-
-LINK_ENTITY_TO_CLASS( tf_weapon_handcannon, CTFHandCannon );
-PRECACHE_WEAPON_REGISTER( tf_weapon_handcannon );
 
 //=============================================================================
 //
