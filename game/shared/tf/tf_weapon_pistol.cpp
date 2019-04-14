@@ -88,17 +88,6 @@ END_PREDICTION_DATA()
 
 LINK_ENTITY_TO_CLASS( tf_weapon_pistol_akimbo, CTFPistol_Akimbo );
 PRECACHE_WEAPON_REGISTER( tf_weapon_pistol_akimbo );
-//
-IMPLEMENT_NETWORKCLASS_ALIASED( TFDeagle, DT_TFDeagle)
-
-BEGIN_NETWORK_TABLE( CTFDeagle, DT_TFDeagle )
-END_NETWORK_TABLE()
-
-BEGIN_PREDICTION_DATA( CTFDeagle )
-END_PREDICTION_DATA()
-
-LINK_ENTITY_TO_CLASS( tf_weapon_deagle, CTFDeagle );
-PRECACHE_WEAPON_REGISTER( tf_weapon_deagle );
 
 //=============================================================================
 //
@@ -158,4 +147,54 @@ void CTFPistol::PrimaryAttack( void )
 		return;
 
 	BaseClass::PrimaryAttack();
+}
+
+
+
+
+//Act tables for Merc
+acttable_t CTFPistol::m_acttablePistol[] =
+{
+	{ ACT_MP_STAND_IDLE,					ACT_MERC_STAND_PISTOL,				false },
+	{ ACT_MP_CROUCH_IDLE,					ACT_MERC_CROUCH_PISTOL,				false },
+	{ ACT_MP_RUN,							ACT_MERC_RUN_PISTOL,				false },
+	{ ACT_MP_WALK,							ACT_MP_WALK_SECONDARY,				false },
+	{ ACT_MP_AIRWALK,						ACT_MP_AIRWALK_SECONDARY,			false },
+	{ ACT_MP_CROUCHWALK,					ACT_MERC_CROUCHWALK_PISTOL,			false },
+	{ ACT_MP_JUMP,							ACT_MP_JUMP_SECONDARY,				false },
+	{ ACT_MP_JUMP_START,					ACT_MP_JUMP_START_SECONDARY,		false },
+	{ ACT_MP_JUMP_FLOAT,					ACT_MP_JUMP_FLOAT_SECONDARY,		false },
+	{ ACT_MP_JUMP_LAND,						ACT_MP_JUMP_LAND_SECONDARY,			false },
+	{ ACT_MP_SWIM,							ACT_MERC_SWIM_PISTOL,				false },
+
+	{ ACT_MP_ATTACK_STAND_PRIMARYFIRE,		ACT_MERC_ATTACK_STAND_PISTOL,		false },
+	{ ACT_MP_ATTACK_CROUCH_PRIMARYFIRE,		ACT_MERC_ATTACK_CROUCH_PISTOL,		false },
+	{ ACT_MP_ATTACK_SWIM_PRIMARYFIRE,		ACT_MERC_ATTACK_SWIM_PISTOL,		false },
+
+	{ ACT_MP_RELOAD_STAND,					ACT_MERC_RELOAD_STAND_PISTOL,		false },
+	{ ACT_MP_RELOAD_CROUCH,					ACT_MERC_RELOAD_CROUCH_PISTOL,		false },
+	{ ACT_MP_RELOAD_SWIM,					ACT_MERC_RELOAD_SWIM_PISTOL,		false },
+
+	{ ACT_MP_GESTURE_FLINCH,				ACT_MP_GESTURE_FLINCH_SECONDARY,	false },
+
+	{ ACT_MP_GESTURE_VC_HANDMOUTH,			ACT_MP_GESTURE_VC_HANDMOUTH_SECONDARY,	false },
+	{ ACT_MP_GESTURE_VC_FINGERPOINT,		ACT_MP_GESTURE_VC_FINGERPOINT_SECONDARY,	false },
+	{ ACT_MP_GESTURE_VC_FISTPUMP,			ACT_MP_GESTURE_VC_FISTPUMP_SECONDARY,	false },
+	{ ACT_MP_GESTURE_VC_THUMBSUP,			ACT_MP_GESTURE_VC_THUMBSUP_SECONDARY,	false },
+	{ ACT_MP_GESTURE_VC_NODYES,				ACT_MP_GESTURE_VC_NODYES_SECONDARY,	false },
+	{ ACT_MP_GESTURE_VC_NODNO,				ACT_MP_GESTURE_VC_NODNO_SECONDARY,	false },
+};
+
+//Act table remapping for Merc
+acttable_t *CTFPistol::ActivityList( int &iActivityCount )
+{
+	if (GetTFPlayerOwner()->GetPlayerClass()->GetClassIndex() == TF_CLASS_MERCENARY)
+	{
+		iActivityCount = ARRAYSIZE(m_acttablePistol);
+		return m_acttablePistol;
+	}
+	else
+	{
+		return BaseClass::ActivityList(iActivityCount);
+	}
 }

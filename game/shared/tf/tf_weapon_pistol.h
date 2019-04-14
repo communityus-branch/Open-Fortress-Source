@@ -16,7 +16,6 @@
 #define CTFPistol_Scout C_TFPistol_Scout
 #define CTFPistol_Mercenary C_TFPistol_Mercenary
 #define CTFPistol_Akimbo C_TFPistol_Akimbo
-#define CTFDeagle C_TFDeagle
 #endif
 
 // We allow the pistol to fire as fast as the player can click.
@@ -53,6 +52,9 @@ public:
 	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_PISTOL; }
 	CNetworkVar( float,	m_flSoonestPrimaryAttack );
 
+	virtual acttable_t *ActivityList( int &iActivityCount );
+	static acttable_t m_acttablePistol[];
+
 private:
 	CTFPistol( const CTFPistol & ) {}
 };
@@ -85,15 +87,6 @@ public:
 
 	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_PISTOL_AKIMBO; }
 	bool			PrimaryAttackSwapsActivities( void ){ return true; }
-};
-class CTFDeagle : public CTFPistol
-{
-public:
-	DECLARE_CLASS(CTFDeagle, CTFPistol);
-	DECLARE_NETWORKCLASS();
-	DECLARE_PREDICTABLE();
-
-	virtual int		GetWeaponID(void) const { return TF_WEAPON_PISTOL_MERCENARY; }
 };
 
 
