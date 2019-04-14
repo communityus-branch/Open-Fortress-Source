@@ -66,7 +66,6 @@ CREATE_SIMPLE_WEAPON_TABLE( TFSuperShotgun, tf_weapon_supershotgun )
 CTFShotgun::CTFShotgun()
 {
 	m_bReloadsSingly = true;
-//	m_bReloadsAll = true;
 }
 
 //-----------------------------------------------------------------------------

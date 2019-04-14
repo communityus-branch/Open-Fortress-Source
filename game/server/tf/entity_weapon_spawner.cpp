@@ -20,6 +20,8 @@
 
 extern ConVar ofd_instagib;
 
+ConVar mp_weaponstay( "mp_weaponstay", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "Weapons dont dissapeer.");
+
 //-----------------------------------------------------------------------------
 // Purpose: Spawn function for the Weapon Spawner
 //-----------------------------------------------------------------------------
@@ -85,19 +87,291 @@ bool CWeaponSpawner::MyTouch( CBasePlayer *pPlayer )
 			if ( pCarriedWeapon == pWeapon ) 
 			{
 				int iMaxPrimary = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_PRIMARY];
-				if ( pPlayer->GiveAmmo( ceil(iMaxPrimary * 0.5), TF_AMMO_PRIMARY, true ) )
+				if ( pPlayer->GiveAmmo( ceil(iMaxPrimary * PackRatios[GetPowerupSize()]), TF_AMMO_PRIMARY, true ) )
 				{
 					CSingleUserRecipientFilter filter( pPlayer );
 					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
-					m_nRenderFX = kRenderFxDistort;
+					if ( mp_weaponstay.GetBool() )
+					{
+						bSuccess = false;
+					}
+					else
+					{
+						m_nRenderFX = kRenderFxDistort;
+					}
 					return bSuccess;
 				}
+
 				int iMaxSecondary = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_SECONDARY];
-				if (  pPlayer->GiveAmmo( ceil(iMaxSecondary * 0.5), TF_AMMO_SECONDARY, true ) )
+				if ( pPlayer->GiveAmmo( ceil(iMaxSecondary * PackRatios[GetPowerupSize()]), TF_AMMO_SECONDARY, true ) )
 				{
 					CSingleUserRecipientFilter filter( pPlayer );
 					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
-					m_nRenderFX = kRenderFxDistort;
+					if ( mp_weaponstay.GetBool() )
+					{
+						bSuccess = false;
+					}
+					else
+					{
+						m_nRenderFX = kRenderFxDistort;
+					}
+					return bSuccess;
+				}
+
+				int iMaxMetal = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_METAL];
+				if ( pPlayer->GiveAmmo( ceil(iMaxMetal * PackRatios[GetPowerupSize()]), TF_AMMO_METAL, true ) )
+				{
+					CSingleUserRecipientFilter filter( pPlayer );
+					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
+					if ( mp_weaponstay.GetBool() )
+					{
+						bSuccess = false;
+					}
+					else
+					{
+						m_nRenderFX = kRenderFxDistort;
+					}
+					return bSuccess;
+				}
+
+				///
+				int iMaxShotgun = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_SHOTGUN];
+				if (pPlayer->GiveAmmo(ceil(iMaxShotgun * PackRatios[GetPowerupSize()]), TF_AMMO_SHOTGUN, true))
+				{
+					CSingleUserRecipientFilter filter( pPlayer );
+					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
+					if ( mp_weaponstay.GetBool() )
+					{
+						bSuccess = false;
+					}
+					else
+					{
+						m_nRenderFX = kRenderFxDistort;
+					}
+					return bSuccess;
+				}
+
+				int iMaxScatter = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_SCATTERGUN];
+				if (pPlayer->GiveAmmo(ceil(iMaxScatter * PackRatios[GetPowerupSize()]), TF_AMMO_SCATTERGUN, true))
+				{
+					CSingleUserRecipientFilter filter( pPlayer );
+					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
+					if ( mp_weaponstay.GetBool() )
+					{
+						bSuccess = false;
+					}
+					else
+					{
+						m_nRenderFX = kRenderFxDistort;
+					}
+					return bSuccess;
+				}
+
+				int iMaxSuperSG = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_SUPERSHOTGUN];
+				if (pPlayer->GiveAmmo(ceil(iMaxSuperSG * PackRatios[GetPowerupSize()]), TF_AMMO_SUPERSHOTGUN, true))
+				{
+					CSingleUserRecipientFilter filter( pPlayer );
+					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
+					if ( mp_weaponstay.GetBool() )
+					{
+						bSuccess = false;
+					}
+					else
+					{
+						m_nRenderFX = kRenderFxDistort;
+					}
+					return bSuccess;
+				}
+
+				int iMaxNails = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_NAILS];
+				if (pPlayer->GiveAmmo(ceil(iMaxNails * PackRatios[GetPowerupSize()]), TF_AMMO_NAILS, true))
+				{
+					CSingleUserRecipientFilter filter( pPlayer );
+					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
+					if ( mp_weaponstay.GetBool() )
+					{
+						bSuccess = false;
+					}
+					else
+					{
+						m_nRenderFX = kRenderFxDistort;
+					}
+					return bSuccess;
+				}
+
+				int iMaxPistol = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_PISTOL];
+				if (pPlayer->GiveAmmo(ceil(iMaxPistol * PackRatios[GetPowerupSize()]), TF_AMMO_PISTOL, true))
+				{
+					CSingleUserRecipientFilter filter( pPlayer );
+					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
+					if ( mp_weaponstay.GetBool() )
+					{
+						bSuccess = false;
+					}
+					else
+					{
+						m_nRenderFX = kRenderFxDistort;
+					}
+					return bSuccess;
+				}
+
+				int iMaxSMG = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_SMG];
+				if (pPlayer->GiveAmmo(ceil(iMaxSMG * PackRatios[GetPowerupSize()]), TF_AMMO_SMG, true))
+				{
+					CSingleUserRecipientFilter filter( pPlayer );
+					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
+					if ( mp_weaponstay.GetBool() )
+					{
+						bSuccess = false;
+					}
+					else
+					{
+						m_nRenderFX = kRenderFxDistort;
+					}
+					return bSuccess;
+				}
+
+				int iMaxSniper = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_SNIPERRIFLE];
+				if (pPlayer->GiveAmmo(ceil(iMaxSniper * PackRatios[GetPowerupSize()]), TF_AMMO_SNIPERRIFLE, true))
+				{
+					CSingleUserRecipientFilter filter( pPlayer );
+					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
+					if ( mp_weaponstay.GetBool() )
+					{
+						bSuccess = false;
+					}
+					else
+					{
+						m_nRenderFX = kRenderFxDistort;
+					}
+					return bSuccess;
+				}
+
+				int iMaxMini = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_MINIGUN];
+				if (pPlayer->GiveAmmo(ceil(iMaxMini * PackRatios[GetPowerupSize()]), TF_AMMO_MINIGUN, true))
+				{
+					CSingleUserRecipientFilter filter( pPlayer );
+					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
+					if ( mp_weaponstay.GetBool() )
+					{
+						bSuccess = false;
+					}
+					else
+					{
+						m_nRenderFX = kRenderFxDistort;
+					}
+					return bSuccess;
+				}
+
+				int iMaxFire = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_FLAMETHROWER];
+				if (pPlayer->GiveAmmo(ceil(iMaxFire * PackRatios[GetPowerupSize()]), TF_AMMO_FLAMETHROWER, true))
+				{
+					CSingleUserRecipientFilter filter( pPlayer );
+					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
+					if ( mp_weaponstay.GetBool() )
+					{
+						bSuccess = false;
+					}
+					else
+					{
+						m_nRenderFX = kRenderFxDistort;
+					}
+					return bSuccess;
+				}
+
+				int iMaxRevolver = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_REVOLVER];
+				if (pPlayer->GiveAmmo(ceil(iMaxRevolver * PackRatios[GetPowerupSize()]), TF_AMMO_REVOLVER, true))
+				{
+					CSingleUserRecipientFilter filter( pPlayer );
+					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
+					if ( mp_weaponstay.GetBool() )
+					{
+						bSuccess = false;
+					}
+					else
+					{
+						m_nRenderFX = kRenderFxDistort;
+					}
+					return bSuccess;
+				}
+
+				int iMaxGL = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_GRENADELAUNCHER];
+				if (pPlayer->GiveAmmo(ceil(iMaxGL * PackRatios[GetPowerupSize()]), TF_AMMO_GRENADELAUNCHER, true))
+				{
+					CSingleUserRecipientFilter filter( pPlayer );
+					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
+					if ( mp_weaponstay.GetBool() )
+					{
+						bSuccess = false;
+					}
+					else
+					{
+						m_nRenderFX = kRenderFxDistort;
+					}
+					return bSuccess;
+				}
+
+				int iMaxPipe = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_PIPEBOMBLAUNCHER];
+				if (pPlayer->GiveAmmo(ceil(iMaxPipe * PackRatios[GetPowerupSize()]), TF_AMMO_PIPEBOMBLAUNCHER, true))
+				{
+					CSingleUserRecipientFilter filter( pPlayer );
+					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
+					if ( mp_weaponstay.GetBool() )
+					{
+						bSuccess = false;
+					}
+					else
+					{
+						m_nRenderFX = kRenderFxDistort;
+					}
+					return bSuccess;
+				}
+
+				int iMaxSynringe = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_SYNRINGES];
+				if (pPlayer->GiveAmmo(ceil(iMaxSynringe * PackRatios[GetPowerupSize()]), TF_AMMO_SYNRINGES, true))
+				{
+					CSingleUserRecipientFilter filter( pPlayer );
+					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
+					if ( mp_weaponstay.GetBool() )
+					{
+						bSuccess = false;
+					}
+					else
+					{
+						m_nRenderFX = kRenderFxDistort;
+					}
+					return bSuccess;
+				}
+
+				int iMaxRPG = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_ROCKETLAUNCHER];
+				if (pPlayer->GiveAmmo(ceil(iMaxRPG * PackRatios[GetPowerupSize()]), TF_AMMO_ROCKETLAUNCHER, true))
+				{
+					CSingleUserRecipientFilter filter( pPlayer );
+					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
+					if ( mp_weaponstay.GetBool() )
+					{
+						bSuccess = false;
+					}
+					else
+					{
+						m_nRenderFX = kRenderFxDistort;
+					}
+					return bSuccess;
+				}
+
+				int iMaxRail = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_RAILGUN];
+				if (pPlayer->GiveAmmo(ceil(iMaxRail * PackRatios[GetPowerupSize()]), TF_AMMO_RAILGUN, true))
+				{
+					CSingleUserRecipientFilter filter( pPlayer );
+					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
+					if ( mp_weaponstay.GetBool() )
+					{
+						bSuccess = false;
+					}
+					else
+					{
+						m_nRenderFX = kRenderFxDistort;
+					}
 					return bSuccess;
 				}
 				bSuccess=false;
@@ -111,8 +385,15 @@ bool CWeaponSpawner::MyTouch( CBasePlayer *pPlayer )
 			EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
 
 			pWeapon->GiveTo( pPlayer );
-			m_nRenderFX = kRenderFxDistort;
 		}
+	}
+	if ( mp_weaponstay.GetBool() )
+	{
+		bSuccess = false;
+	}
+	else
+	{
+		m_nRenderFX = kRenderFxDistort;
 	}
 	return bSuccess;
 

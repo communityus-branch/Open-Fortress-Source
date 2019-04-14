@@ -297,6 +297,11 @@ void CTFWeaponBase::Precache()
 		Q_snprintf( pTracerEffectCrit, sizeof(pTracerEffectCrit), "%s_blue_crit", pTFInfo->m_szTracerEffect );
 		PrecacheParticleSystem( pTracerEffect );
 		PrecacheParticleSystem( pTracerEffectCrit );
+		
+		Q_snprintf( pTracerEffect, sizeof(pTracerEffect), "%s_dm", pTFInfo->m_szTracerEffect );
+		Q_snprintf( pTracerEffectCrit, sizeof(pTracerEffectCrit), "%s_dm_crit", pTFInfo->m_szTracerEffect );
+		PrecacheParticleSystem( pTracerEffect );
+		PrecacheParticleSystem( pTracerEffectCrit );		
 	}
 }
 
@@ -603,15 +608,23 @@ bool CTFWeaponBase::ReloadOrSwitchWeapons( void )
 	{
 		// Weapon is useable. Reload if empty and weapon has waited as long as it has to after firing
 		if ( UsesClipsForAmmo1() && !AutoFiresFullClip() && 
-			 ( ( ( m_iClip1 < GetMaxClip1() ) && pPlayer && pPlayer->ShouldAutoReload() ) ||  m_iClip1 == 0  ) && 
 			 (GetWeaponFlags() & ITEM_FLAG_NOAUTORELOAD) == false && 
 			 m_flNextPrimaryAttack < gpGlobals->curtime && 
 			 m_flNextSecondaryAttack < gpGlobals->curtime )
 		{
-			// if we're successfully reloading, we're done
-			if ( Reload() )
-				return true;
-			
+			if ( pPlayer && pPlayer->ShouldAutoReload() )
+			{
+				if ( m_iClip1 < GetMaxClip1() )
+				{
+					if ( Reload() )
+					return true;
+				}
+			}
+			else if ( m_iClip1 == 0 )
+			{
+					if ( Reload() )
+					return true;				
+			}
 		}
 	}
 
@@ -1330,8 +1343,15 @@ const char *CTFWeaponBase::GetTracerType( void )
 	{
 		if ( !m_szTracerName[0] )
 		{
-			Q_snprintf( m_szTracerName, MAX_TRACER_NAME, "%s_%s", GetTFWpnData().m_szTracerEffect, 
-				(GetOwner() && GetOwner()->GetTeamNumber() == TF_TEAM_RED ) ? "red" : "blue" );
+			if( GetOwner() )
+			{
+				if ( GetOwner()->GetTeamNumber() == TF_TEAM_RED )
+					Q_snprintf( m_szTracerName, MAX_TRACER_NAME, "%s_%s", GetTFWpnData().m_szTracerEffect, "red" );
+				else if ( GetOwner()->GetTeamNumber() == TF_TEAM_BLUE )
+					Q_snprintf( m_szTracerName, MAX_TRACER_NAME, "%s_%s", GetTFWpnData().m_szTracerEffect, "blue" );
+				else
+					Q_snprintf( m_szTracerName, MAX_TRACER_NAME, "%s_%s", GetTFWpnData().m_szTracerEffect, "dm" );					
+			}
 		}
 
 		return m_szTracerName;
