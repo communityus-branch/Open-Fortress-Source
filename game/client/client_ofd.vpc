@@ -274,6 +274,8 @@ $Project "Client (OFD)"
 				$File	"$SRCDIR\game\shared\tf\tf_weaponbase_melee.h"
 				$File	"$SRCDIR\game\shared\tf\tf_weaponbase_rocket.cpp"
 				$File	"$SRCDIR\game\shared\tf\tf_weaponbase_rocket.h"
+				$File	"$SRCDIR\game\shared\ofd\ofd_physgauntlet.cpp"
+				$File	"$SRCDIR\game\shared\ofd\ofd_physgauntlet.h"
 			}
 
 			$Folder	"vgui"

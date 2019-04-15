@@ -190,7 +190,7 @@ $Project "Server (OFD)"
 					}
 				}
 			}
-
+			
 			$Folder	"Weapon"
 			{
 				$File	"$SRCDIR\game\shared\tf\tf_weapon_bat.cpp"
@@ -261,6 +261,8 @@ $Project "Server (OFD)"
 				$File	"$SRCDIR\game\shared\tf\tf_weaponbase_melee.h"
 				$File	"$SRCDIR\game\shared\tf\tf_weaponbase_rocket.cpp"
 				$File	"$SRCDIR\game\shared\tf\tf_weaponbase_rocket.h"
+				$File	"$SRCDIR\game\shared\ofd\ofd_physgauntlet.cpp"
+				$File	"$SRCDIR\game\shared\ofd\ofd_physgauntlet.h"
 			}
 		}
 		
