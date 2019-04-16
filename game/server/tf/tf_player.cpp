@@ -97,7 +97,7 @@ ConVar ofd_spawnprotecttime( "ofd_spawnprotecttime", "3", FCVAR_REPLICATED | FCV
 ConVar ofe_huntedcount( "ofe_huntedcount", "1", FCVAR_REPLICATED | FCVAR_NOTIFY , "How many Hunted there is." );
 
 extern ConVar ofd_forceclass;
-extern ConVar ofd_forceteam;
+extern ConVar ofd_allowteams;
 extern ConVar spec_freeze_time;
 extern ConVar spec_freeze_traveltime;
 extern ConVar sv_maxunlag;
@@ -1501,10 +1501,10 @@ void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 		}
 		else 
 		{
-			if (ofd_forceteam.GetBool() == 1) ChangeTeam(TF_TEAM_MERCENARY);
+			if (ofd_allowteams.GetBool() == 0) ChangeTeam(TF_TEAM_MERCENARY);
 			if (ofd_forceclass.GetBool() == 1) SetDesiredPlayerClassIndex(TF_CLASS_MERCENARY);
 
-			if (ofd_forceteam.GetBool() == 1) return;
+			if (ofd_allowteams.GetBool() == 0) return;
 		}
 		
 	}
@@ -3071,7 +3071,7 @@ bool CTFPlayer::ShouldCollide( int collisionGroup, int contentsMask ) const
 	if ( ( ( collisionGroup == COLLISION_GROUP_PLAYER_MOVEMENT ) && tf_avoidteammates.GetBool() ) ||
 		collisionGroup == TFCOLLISION_GROUP_ROCKETS )
 	{
-		if (TFGameRules() && TFGameRules()->IsDMGamemode() && ofd_forceteam.GetBool() == 1 && !TFGameRules()->IsTeamplay())
+		if (TFGameRules() && TFGameRules()->IsDMGamemode() && !ofd_allowteams.GetBool() && !TFGameRules()->IsTeamplay())
 		{
 			return BaseClass::ShouldCollide(collisionGroup, contentsMask);
 		}

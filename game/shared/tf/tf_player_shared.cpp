@@ -62,7 +62,7 @@ ConVar tf_spy_cloak_no_attack_time( "tf_spy_cloak_no_attack_time", "2.0", FCVAR_
 ConVar tf_damage_disablespread( "tf_damage_disablespread", "1", FCVAR_NOTIFY | FCVAR_REPLICATED, "Toggles the random damage spread applied to all player damage." );
 
 ConVar ofd_forceclass( "ofd_forceclass", "1", FCVAR_REPLICATED | FCVAR_NOTIFY , "Force players to be Mercenary in DM." );
-ConVar ofd_forceteam( "ofd_forceteam", "1", FCVAR_REPLICATED | FCVAR_NOTIFY, "Force players on the Mercenary team in DM." );
+ConVar ofd_allowteams( "ofd_allowteams", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "Allow RED and BLU in DM." );
 extern ConVar of_infiniteammo;
 
 #define TF_SPY_STEALTH_BLINKTIME   0.3f

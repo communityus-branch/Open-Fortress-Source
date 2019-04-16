@@ -38,8 +38,6 @@ class CAmmoPackSmall : public CAmmoPack
 public:
 	DECLARE_CLASS( CAmmoPackSmall, CAmmoPack );
 	powerupsize_t	GetPowerupSize( void ) { return POWERUP_SMALL; }
-	string_t m_iszModel=MAKE_STRING( "" );
-	string_t m_iszPickupSound=MAKE_STRING( "AmmoPack.Touch" );
 	virtual const char *GetPowerupModel( void ) { return "models/items/ammopack_small.mdl"; }
 	DECLARE_DATADESC();
 };
@@ -50,8 +48,6 @@ public:
 	DECLARE_CLASS( CAmmoPackMedium, CAmmoPack );
 	powerupsize_t	GetPowerupSize( void ) { return POWERUP_MEDIUM; }
 	virtual const char *GetPowerupModel( void ) { return "models/items/ammopack_medium.mdl"; }
-	string_t m_iszModel=MAKE_STRING( "" );
-	string_t m_iszPickupSound=MAKE_STRING( "AmmoPack.Touch" );
 	DECLARE_DATADESC();
 };
 

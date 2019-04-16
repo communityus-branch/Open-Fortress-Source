@@ -23,6 +23,7 @@ BEGIN_DATADESC( CCondPowerup )
 DEFINE_KEYFIELD( m_bCondition, FIELD_INTEGER, "condID" ),
 DEFINE_KEYFIELD( m_bCondDuration, FIELD_FLOAT, "duration" ),
 DEFINE_KEYFIELD( m_iszPowerupModel, FIELD_STRING, "powerup_model" ),
+DEFINE_KEYFIELD( m_iszPowerupModelOLD, FIELD_STRING, "powerup_model" ),
 DEFINE_KEYFIELD( m_iszPickupSound, FIELD_STRING, "pickup_sound" ),
 DEFINE_KEYFIELD( m_bDisableShowOutline, FIELD_BOOLEAN, "disable_glow" ),
 
@@ -38,7 +39,8 @@ LINK_ENTITY_TO_CLASS( dm_powerup_spawner, CCondPowerup );
 void CCondPowerup::Spawn( void )
 {
 	Precache();
-	SetModel( STRING( m_iszPowerupModel ) );
+	if (m_iszPowerupModel==MAKE_STRING( "" )) SetModel( STRING(m_iszPowerupModelOLD)  );
+	else SetModel( STRING(m_iszPowerupModel) );
 	
 	SetTransmitState( FL_EDICT_ALWAYS );
 
@@ -50,7 +52,8 @@ void CCondPowerup::Spawn( void )
 //-----------------------------------------------------------------------------
 void CCondPowerup::Precache( void )
 {
-	PrecacheModel( STRING( m_iszPowerupModel ) );
+	if (m_iszPowerupModel==MAKE_STRING( "" )) PrecacheModel( STRING(m_iszPowerupModelOLD)  );
+	else PrecacheModel( STRING(m_iszPowerupModel) );
 	PrecacheScriptSound( STRING( m_iszPickupSound ) );
 }
 

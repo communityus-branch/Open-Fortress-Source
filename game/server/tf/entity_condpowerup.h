@@ -31,7 +31,8 @@ public:
 	powerupsize_t	GetPowerupSize( void ) { return POWERUP_FULL; }
 	int m_bCondition=5;
 	float m_bCondDuration=5;
-	string_t m_iszPowerupModel=MAKE_STRING( "models/pickups/pickup_powerup_uber.mdl" );
+	string_t m_iszPowerupModel=MAKE_STRING( "" );
+	string_t m_iszPowerupModelOLD=MAKE_STRING( "" );
 	string_t m_iszPickupSound=MAKE_STRING( "AmmoPack.Touch" );
 
 	CNetworkVar(bool, m_bDisableShowOutline);

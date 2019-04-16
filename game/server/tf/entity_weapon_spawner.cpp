@@ -31,7 +31,8 @@ BEGIN_DATADESC(CWeaponSpawner)
 
 // Inputs.
 DEFINE_KEYFIELD(m_iszWeaponName, FIELD_STRING, "weaponname"),
-DEFINE_KEYFIELD(m_iszWeaponModel, FIELD_STRING, "powerup_model"),
+DEFINE_KEYFIELD(m_iszWeaponModel, FIELD_STRING, "model"),
+DEFINE_KEYFIELD(m_iszWeaponModelOLD, FIELD_STRING, "powerup_model"),
 DEFINE_KEYFIELD(m_iszPickupSound, FIELD_STRING, "pickup_sound"),
 DEFINE_KEYFIELD(m_bDisableSpin, FIELD_BOOLEAN, "disable_spin"),
 DEFINE_KEYFIELD(m_bDisableShowOutline, FIELD_BOOLEAN, "disable_glow"),
@@ -51,6 +52,7 @@ void CWeaponSpawner::Spawn( void )
 	m_nRenderFX = kRenderFxNone;
 	if ( ofd_instagib.GetInt() <= 0 ) {
 	Precache();
+	if (m_iszWeaponModel==MAKE_STRING( "" )) m_iszWeaponModel=m_iszWeaponModelOLD;
 	SetModel( STRING(m_iszWeaponModel) );
 	BaseClass::Spawn();
 	}
@@ -61,6 +63,7 @@ void CWeaponSpawner::Spawn( void )
 //-----------------------------------------------------------------------------
 void CWeaponSpawner::Precache( void )
 {
+	if (m_iszWeaponModel==MAKE_STRING( "" )) m_iszWeaponModel=m_iszWeaponModelOLD;
 	PrecacheModel( STRING(m_iszWeaponModel) );
 	PrecacheScriptSound( STRING( m_iszPickupSound) );
 }

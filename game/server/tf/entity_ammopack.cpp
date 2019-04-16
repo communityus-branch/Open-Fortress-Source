@@ -26,7 +26,7 @@ LINK_ENTITY_TO_CLASS( item_ammopack_medium, CAmmoPackMedium );
 BEGIN_DATADESC( CAmmoPack )
 
 // Inputs.
-DEFINE_KEYFIELD( m_iszModel, FIELD_STRING, "powerup_model" ),
+DEFINE_KEYFIELD( m_iszModel, FIELD_STRING, "model" ),
 DEFINE_KEYFIELD( m_iszPickupSound, FIELD_STRING, "pickup_sound" ),
 
 END_DATADESC()
@@ -34,7 +34,7 @@ END_DATADESC()
 BEGIN_DATADESC( CAmmoPackSmall )
 
 // Inputs.
-DEFINE_KEYFIELD( m_iszModel, FIELD_STRING, "powerup_model" ),
+DEFINE_KEYFIELD( m_iszModel, FIELD_STRING, "model" ),
 DEFINE_KEYFIELD( m_iszPickupSound, FIELD_STRING, "pickup_sound" ),
 
 END_DATADESC()
@@ -42,7 +42,7 @@ END_DATADESC()
 BEGIN_DATADESC( CAmmoPackMedium )
 
 // Inputs.
-DEFINE_KEYFIELD( m_iszModel, FIELD_STRING, "powerup_model" ),
+DEFINE_KEYFIELD( m_iszModel, FIELD_STRING, "model" ),
 DEFINE_KEYFIELD( m_iszPickupSound, FIELD_STRING, "pickup_sound" ),
 
 END_DATADESC()

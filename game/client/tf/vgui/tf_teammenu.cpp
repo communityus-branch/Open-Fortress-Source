@@ -32,7 +32,7 @@
 
 using namespace vgui;
 
-extern ConVar	ofd_forceteam;
+extern ConVar	ofd_allowteams;
 
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
@@ -307,7 +307,7 @@ void CTFTeamMenu::ShowPanel( bool bShow )
 
 	if (bShow)
 	{
-		if (TFGameRules()->IsDMGamemode() && !TFGameRules()->IsTeamplay() &&ofd_forceteam.GetBool() == 1)
+		if (TFGameRules()->IsDMGamemode() && !TFGameRules()->IsTeamplay() && !ofd_allowteams.GetBool() )
 		{
 			gViewPortInterface->ShowPanel(PANEL_DMTEAMSELECT, true);
 		}
@@ -386,7 +386,7 @@ void CTFTeamMenu::ShowPanel( bool bShow )
 	}
 	else
 	{
-		if (TFGameRules()->IsDMGamemode() && !TFGameRules()->IsTeamplay() && ofd_forceteam.GetBool() == 1)
+		if (TFGameRules()->IsDMGamemode() && !TFGameRules()->IsTeamplay() && !ofd_allowteams.GetBool() )
 		{
 			gViewPortInterface->ShowPanel(PANEL_DMTEAMSELECT, false);
 		}

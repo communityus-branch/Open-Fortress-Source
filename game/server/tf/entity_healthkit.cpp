@@ -27,7 +27,7 @@ LINK_ENTITY_TO_CLASS( item_healthkit_medium, CHealthKitMedium );
 BEGIN_DATADESC( CHealthKit )
 
 // Inputs.
-DEFINE_KEYFIELD( m_iszModel, FIELD_STRING, "powerup_model" ),
+DEFINE_KEYFIELD( m_iszModel, FIELD_STRING, "model" ),
 DEFINE_KEYFIELD( m_iszPickupSound, FIELD_STRING, "pickup_sound" ),
 
 END_DATADESC()
@@ -35,7 +35,7 @@ END_DATADESC()
 BEGIN_DATADESC( CHealthKitSmall )
 
 // Inputs.
-DEFINE_KEYFIELD( m_iszModel, FIELD_STRING, "powerup_model" ),
+DEFINE_KEYFIELD( m_iszModel, FIELD_STRING, "model" ),
 DEFINE_KEYFIELD( m_iszPickupSound, FIELD_STRING, "pickup_sound" ),
 
 END_DATADESC()
@@ -43,7 +43,7 @@ END_DATADESC()
 BEGIN_DATADESC( CHealthKitMedium )
 
 // Inputs.
-DEFINE_KEYFIELD( m_iszModel, FIELD_STRING, "powerup_model" ),
+DEFINE_KEYFIELD( m_iszModel, FIELD_STRING, "model" ),
 DEFINE_KEYFIELD( m_iszPickupSound, FIELD_STRING, "pickup_sound" ),
 
 END_DATADESC()
