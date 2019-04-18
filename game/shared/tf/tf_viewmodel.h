@@ -19,6 +19,7 @@
 
 #if defined( CLIENT_DLL )
 #define CTFViewModel C_TFViewModel
+#define CTFHandModel C_TFHandModel
 #endif
 
 class CTFViewModel : public CBaseViewModel
@@ -69,6 +70,13 @@ private:
 	QAngle m_vLoweredWeaponOffset;
 
 #endif
+};
+
+class CTFHandModel : public CTFViewModel
+{
+	DECLARE_CLASS( CTFHandModel, CTFViewModel );
+public:
+	DECLARE_NETWORKCLASS(); 
 };
 
 #endif // TF_VIEWMODEL_H

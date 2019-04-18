@@ -720,7 +720,7 @@ bool CTFClientScoreBoardDialog::ShouldShowAsSpectator( int iPlayerIndex )
 	{
 		// either spectating or unassigned team should show in spectator list
 		int iTeam = tf_PR->GetTeam( iPlayerIndex );
-		if ( TEAM_SPECTATOR == iTeam || TEAM_UNASSIGNED == iTeam  ) //stickynote
+		if ( TEAM_SPECTATOR == iTeam )
 			return true;
 	}
 	return false;

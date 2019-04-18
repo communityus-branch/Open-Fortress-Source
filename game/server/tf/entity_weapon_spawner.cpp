@@ -388,15 +388,15 @@ bool CWeaponSpawner::MyTouch( CBasePlayer *pPlayer )
 			EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
 
 			pWeapon->GiveTo( pPlayer );
+			if ( mp_weaponstay.GetBool() )
+			{
+				bSuccess = false;
+			}
+			else
+			{
+				m_nRenderFX = kRenderFxDistort;
+			}
 		}
-	}
-	if ( mp_weaponstay.GetBool() )
-	{
-		bSuccess = false;
-	}
-	else
-	{
-		m_nRenderFX = kRenderFxDistort;
 	}
 	return bSuccess;
 

@@ -110,11 +110,12 @@ void C_WeaponSpawner::UpdateGlowEffect( void )
 {
 	DestroyGlowEffect();
 	
-	if ( !m_bDisableShowOutline )
+	if ( !m_bDisableShowOutline && m_bShouldGlow )
 		m_pGlowEffect = new CGlowObject( this, TFGameRules()->GetTeamGlowColor(GetLocalPlayerTeam()), 1.0, true, true );
-
-	if ( !m_bShouldGlow )
+/*
+	if ( !m_bShouldGlow && m_pGlowEffect )
 		m_pGlowEffect->SetAlpha( 0.0f );
+*/
 }
 
 void C_WeaponSpawner::DestroyGlowEffect(void)

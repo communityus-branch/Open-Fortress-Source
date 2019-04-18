@@ -177,7 +177,6 @@ void CTFMinigun::SharedAttack()
 	{
 		m_iWeaponMode = TF_WEAPON_SECONDARY_MODE;
 	}
-
 	switch ( m_iWeaponState )
 	{
 	default:
@@ -231,6 +230,8 @@ void CTFMinigun::SharedAttack()
 		{
 			if ( m_iWeaponMode == TF_WEAPON_SECONDARY_MODE )
 			{
+				if ( GetWeaponID() == TF_WEAPON_GATLINGGUN )
+					WindDown();
 #ifdef GAME_DLL
 				pPlayer->ClearWeaponFireScene();
 				pPlayer->SpeakWeaponFire( MP_CONCEPT_WINDMINIGUN );
@@ -313,6 +314,7 @@ void CTFMinigun::SecondaryAttack( void )
 {
 	if ( GetWeaponID() == TF_WEAPON_GATLINGGUN )
 		return;
+
 	CTFPlayer *pPlayer = ToTFPlayer( GetPlayerOwner() );
 	if ( !pPlayer )
 		return;

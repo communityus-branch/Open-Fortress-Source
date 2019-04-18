@@ -21,6 +21,7 @@
 #include "c_team.h"
 #include "c_tf_player.h"
 #include "tf_shareddefs.h"
+#include "tf_gamerules.h"
 #include "tf_hud_playerstatus.h"
 
 using namespace vgui;
@@ -115,7 +116,6 @@ void CTFHudPlayerClass::ApplySchemeSettings( IScheme *pScheme )
 {
 	// load control settings...
 	LoadControlSettings( "resource/UI/HudPlayerClass.res" );
-
 	m_nTeam = TEAM_UNASSIGNED;
 	m_nClass = TF_CLASS_UNDEFINED;
 	m_nDisguiseTeam = TEAM_UNASSIGNED;
@@ -131,6 +131,7 @@ void CTFHudPlayerClass::ApplySchemeSettings( IScheme *pScheme )
 //-----------------------------------------------------------------------------
 void CTFHudPlayerClass::OnThink()
 {
+	
 	if ( m_flNextThink < gpGlobals->curtime )
 	{
 		C_TFPlayer *pPlayer = C_TFPlayer::GetLocalTFPlayer();
@@ -144,7 +145,6 @@ void CTFHudPlayerClass::OnThink()
 				bTeamChange = true;
 				m_nTeam = pPlayer->GetTeamNumber();
 			}
-
 			int nCloakLevel = 0;
 			bool bCloakChange = false;
 			float flInvis = pPlayer->GetPercentInvisible();

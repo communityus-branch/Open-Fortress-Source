@@ -26,6 +26,7 @@ public:
 	void	Precache( void );
 	bool	MyTouch( CBasePlayer *pPlayer );
 	string_t m_iszModel=MAKE_STRING( "" );
+	string_t m_iszModelOLD=MAKE_STRING( "" );
 	string_t m_iszPickupSound=MAKE_STRING( "HealthKit.Touch" );
 	virtual const char *GetPowerupModel( void ) { return "models/items/medkit_large.mdl"; }
 

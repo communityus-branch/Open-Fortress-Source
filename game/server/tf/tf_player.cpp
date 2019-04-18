@@ -1054,7 +1054,7 @@ void CTFPlayer::CreateViewModel( int iViewModel )
 		pViewModel->FollowEntity( this, false );
 		m_hViewModel.Set( iViewModel, pViewModel );
 	
-		CTFViewModel* vmhands = static_cast<CTFViewModel*>(CreateEntityByName("hand_viewmodel"));
+		CTFViewModel* vmhands = static_cast<CTFViewModel*>(CreateEntityByName("tf_handmodel"));
 		if ( vmhands && iViewModel+2 != 3 )
 		{
 			vmhands->SetAbsOrigin( GetAbsOrigin() );
@@ -1346,19 +1346,6 @@ CBaseEntity* CTFPlayer::EntSelectSpawnPoint()
 		} 
 	case TEAM_SPECTATOR:
 	case TEAM_UNASSIGNED:
-		//stickynote start
-		{
-			pSpawnPointName = "info_player_teamspawn";
-			if ( SelectSpawnSpot( pSpawnPointName, pSpot ) )
-			{
-				g_pLastSpawnPoints[ GetTeamNumber() ] = pSpot;
-			}
-
-			// need to save this for later so we can apply and modifiers to the armor and grenades...after the call to InitClass()
-			m_pSpawnPoint = dynamic_cast<CTFTeamSpawn*>( pSpot );
-			break;
-		}
-		//stickynote end
 	default:
 		{
 			pSpot = CBaseEntity::Instance( INDEXENT(0) );
@@ -1551,7 +1538,7 @@ void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 			return;
 		}
 		
-		if (  GetTeamNumber() != TEAM_UNASSIGNED  && !IsDead() ) //stickynote
+		if ( GetTeamNumber() != TEAM_UNASSIGNED && !IsDead() ) 
 		{
 			CommitSuicide( false, true );
 		}
@@ -1687,7 +1674,7 @@ void CTFPlayer::ForceChangeTeam( int iTeamNum )
 
 	if ( iNewTeam == TEAM_UNASSIGNED )
 	{
-		// StateTransition( TF_STATE_OBSERVER ); //stickynote
+		StateTransition( TF_STATE_OBSERVER );
 	}
 	else if ( iNewTeam == TEAM_SPECTATOR )
 	{
@@ -1737,7 +1724,7 @@ void CTFPlayer::ChangeTeam( int iTeamNum )
 
 	if ( iTeamNum == TEAM_UNASSIGNED )
 	{
-		// StateTransition( TF_STATE_OBSERVER ); //stickynote
+		StateTransition( TF_STATE_OBSERVER );
 	}
 	else if ( iTeamNum == TEAM_SPECTATOR )
 	{

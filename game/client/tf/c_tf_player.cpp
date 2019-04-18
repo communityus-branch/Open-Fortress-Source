@@ -70,6 +70,7 @@
 #include "cam_thirdperson.h"
 #include "tf_hud_chat.h"
 #include "iclientmode.h"
+#include "tf_viewmodel.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -3195,8 +3196,12 @@ int	C_TFPlayer::DrawOverriddenViewmodel( C_BaseViewModel *pViewmodel, int flags 
 	{
 		// Force the invulnerable material
 		modelrender->ForcedMaterialOverride( *pPlayer->GetInvulnMaterialRef() );
-
-		ret = pViewmodel->DrawOverriddenViewmodel( flags );
+		
+		CTFHandModel* vmhands = dynamic_cast<CTFHandModel*>( pViewmodel );
+		if ( vmhands )
+			ret = vmhands->DrawOverriddenViewmodel( flags );
+		else
+			ret = pViewmodel->DrawOverriddenViewmodel( flags ); //checking the tf_viewmodel stuff
 
 		modelrender->ForcedMaterialOverride( NULL );
 	}

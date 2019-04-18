@@ -355,7 +355,7 @@ void CTFGameStats::Event_PlayerSpawned( CTFPlayer *pPlayer )
 	// if player is spawning as a member of valid team, increase the spawn count for his class
 	int iTeam = pPlayer->GetTeamNumber();
 	int iClass = pPlayer->GetPlayerClass()->GetClassIndex();
-	if (/* TEAM_UNASSIGNED != iTeam && */ TEAM_SPECTATOR != iTeam ) //stickynote
+	if ( TEAM_UNASSIGNED != iTeam &&  TEAM_SPECTATOR != iTeam ) 
 	{
 		if ( m_reportedStats.m_pCurrentGame != NULL )
 		{

@@ -155,7 +155,7 @@ void CTFClassMenu::ShowPanel( bool bShow )
 			 C_TFPlayer::GetLocalTFPlayer() && 
 			 C_TFPlayer::GetLocalTFPlayer()->GetTeamNumber() != TFGameRules()->GetWinningTeam()
 			 && C_TFPlayer::GetLocalTFPlayer()->GetTeamNumber() != TEAM_SPECTATOR 
-			 && C_TFPlayer::GetLocalTFPlayer()->GetTeamNumber() == TEAM_UNASSIGNED //stickynote
+			 && C_TFPlayer::GetLocalTFPlayer()->GetTeamNumber() != TEAM_UNASSIGNED 
 			 && GetSpectatorMode() == OBS_MODE_NONE )
 		{
 			SetVisible( false );

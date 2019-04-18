@@ -1651,7 +1651,7 @@ void CWeaponPhysCannon::PuntVPhysics( CBaseEntity *pEntity, const Vector &vecFor
 		{
 			//FIXME: Do we want to do this if there's no physics object?
 			Physgun_OnPhysGunPickup( pEntity, pOwner, PUNTED_BY_CANNON );
-			DryFire();
+//			DryFire();
 			return;
 		}
 				

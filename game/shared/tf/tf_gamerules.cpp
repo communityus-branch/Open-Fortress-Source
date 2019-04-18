@@ -603,7 +603,7 @@ static const char *s_PreserveEnts[] =
 	"keyframe_rope",
 	"move_rope",
 	"tf_viewmodel",
-	"hand_viewmodel",
+	"tf_handmodel",
 	"", // END Marker
 };
 

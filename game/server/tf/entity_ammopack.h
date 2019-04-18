@@ -28,6 +28,7 @@ public:
 
 	powerupsize_t	GetPowerupSize( void ) { return POWERUP_FULL; }
 	string_t m_iszModel=MAKE_STRING( "" );
+	string_t m_iszModelOLD=MAKE_STRING( "" );
 	string_t m_iszPickupSound=MAKE_STRING( "AmmoPack.Touch" );
 	virtual const char *GetPowerupModel( void ) { return "models/items/ammopack_large.mdl"; }
 	DECLARE_DATADESC();

@@ -27,6 +27,7 @@ BEGIN_DATADESC( CAmmoPack )
 
 // Inputs.
 DEFINE_KEYFIELD( m_iszModel, FIELD_STRING, "model" ),
+DEFINE_KEYFIELD( m_iszModelOLD, FIELD_STRING, "powerup_model" ),
 DEFINE_KEYFIELD( m_iszPickupSound, FIELD_STRING, "pickup_sound" ),
 
 END_DATADESC()
@@ -35,6 +36,7 @@ BEGIN_DATADESC( CAmmoPackSmall )
 
 // Inputs.
 DEFINE_KEYFIELD( m_iszModel, FIELD_STRING, "model" ),
+DEFINE_KEYFIELD( m_iszModelOLD, FIELD_STRING, "powerup_model" ),
 DEFINE_KEYFIELD( m_iszPickupSound, FIELD_STRING, "pickup_sound" ),
 
 END_DATADESC()
@@ -43,6 +45,7 @@ BEGIN_DATADESC( CAmmoPackMedium )
 
 // Inputs.
 DEFINE_KEYFIELD( m_iszModel, FIELD_STRING, "model" ),
+DEFINE_KEYFIELD( m_iszModelOLD, FIELD_STRING, "powerup_model" ),
 DEFINE_KEYFIELD( m_iszPickupSound, FIELD_STRING, "pickup_sound" ),
 
 END_DATADESC()
@@ -58,9 +61,14 @@ END_DATADESC()
 void CAmmoPack::Spawn( void )
 {
 	Precache();
-	if (m_iszModel==MAKE_STRING( "" )) SetModel( GetPowerupModel() );
+	if ( m_iszModel==MAKE_STRING( "" ) )
+	{
+		if ( m_iszModelOLD!=MAKE_STRING( "" ) )
+			SetModel( STRING(m_iszModelOLD) );
+		else
+			SetModel( GetPowerupModel() );
+	}
 	else SetModel( STRING(m_iszModel) );
-
 	BaseClass::Spawn();
 }
 
@@ -69,7 +77,13 @@ void CAmmoPack::Spawn( void )
 //-----------------------------------------------------------------------------
 void CAmmoPack::Precache( void )
 {
-	if (m_iszModel==MAKE_STRING( "" )) PrecacheModel( GetPowerupModel() );
+	if ( m_iszModel==MAKE_STRING( "" ) )
+	{
+		if ( m_iszModelOLD!=MAKE_STRING( "" ) )
+			PrecacheModel( STRING(m_iszModelOLD) );
+		else
+			PrecacheModel( GetPowerupModel() );
+	}
 	else PrecacheModel( STRING(m_iszModel) );	
 	PrecacheScriptSound( STRING(m_iszPickupSound) );
 }

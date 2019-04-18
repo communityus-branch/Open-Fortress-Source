@@ -31,6 +31,17 @@ IMPLEMENT_NETWORKCLASS_ALIASED( TFViewModel, DT_TFViewModel )
 BEGIN_NETWORK_TABLE( CTFViewModel, DT_TFViewModel )
 END_NETWORK_TABLE()
 
+LINK_ENTITY_TO_CLASS( tf_handmodel, CTFHandModel );
+
+IMPLEMENT_NETWORKCLASS_ALIASED( TFHandModel, DT_TFHandModel )
+
+BEGIN_NETWORK_TABLE( CTFHandModel, DT_TFHandModel )
+#ifndef CLIENT_DLL
+SendPropEHandle(SENDINFO_NAME(m_hMoveParent, moveparent)),
+#else
+RecvPropInt(RECVINFO_NAME(m_hNetworkMoveParent, moveparent), 0, RecvProxy_IntToMoveParent),
+#endif
+END_NETWORK_TABLE()
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
@@ -339,8 +350,12 @@ void CViewModelInvisProxy::OnBind( C_BaseEntity *pEnt )
 	CTFViewModel *pVM = dynamic_cast<CTFViewModel *>( pEnt );
 	if ( !pVM )
 	{
-		m_pPercentInvisible->SetFloatValue( 0.0f );
-		return;
+		CTFHandModel *pVM = dynamic_cast<CTFHandModel *>( pEnt );
+		if ( !pVM )
+		{
+			m_pPercentInvisible->SetFloatValue( 0.0f );
+			return;
+		}
 	}
 
 	CTFPlayer *pPlayer = ToTFPlayer( pVM->GetOwner() );
