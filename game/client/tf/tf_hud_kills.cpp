@@ -37,6 +37,7 @@ using namespace vgui;
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
+ConVar ofd_disablekillcount( "ofd_disablekillcount", "0", FCVAR_CLIENTDLL | FCVAR_ARCHIVE | FCVAR_USERINFO, "Disable killcount showing in your HUD" );
 
 DECLARE_HUDELEMENT( CTFHudKills );
 
@@ -90,7 +91,7 @@ bool CTFHudKills::ShouldDraw( void )
 {
 	C_TFPlayer *pPlayer = C_TFPlayer::GetLocalTFPlayer();
 
-	if ( !pPlayer )
+	if ( !pPlayer || ofd_disablekillcount.GetBool() )
 	{
 		return false;
 	}
