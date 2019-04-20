@@ -12,7 +12,6 @@
 bool UseHWMorphModels();
 #endif
 
-
 #define TF_CLASS_UNDEFINED_FILE			""
 #define TF_CLASS_SCOUT_FILE				"scripts/playerclasses/scout"
 #define TF_CLASS_SNIPER_FILE			"scripts/playerclasses/sniper"
@@ -115,43 +114,13 @@ void TFPlayerClassData_t::Parse( const char *szName )
 		pKV->deleteThis();
 	}
 }
-/*
-class CSetCustomModel : public CBaseEntity
-{
-public:
-	DECLARE_CLASS(CSetCustomModel, CBaseEntity);
-	void	Spawn(void);
-};
-
-BEGIN_DATADESC( CSetCustomModel )
-
-DEFINE_KEYFIELD(m_iszScoutModel, FIELD_STRING, "scoutmodel"),
-DEFINE_KEYFIELD(m_iszSoldierModel, FIELD_STRING, "soldiermodel"),
-DEFINE_KEYFIELD(m_iszPyroModel, FIELD_STRING, "pyromodel"),
-DEFINE_KEYFIELD(m_iszDemoModel, FIELD_STRING, "demomodel"),
-DEFINE_KEYFIELD(m_iszHeavyModel, FIELD_STRING, "heavymodel"),
-DEFINE_KEYFIELD(m_iszEngineerModel, FIELD_STRING, "engineermodel"),
-DEFINE_KEYFIELD(m_iszMedicModel, FIELD_STRING, "medicmodel"),
-DEFINE_KEYFIELD(m_iszSniperModel, FIELD_STRING, "snipermodel"),
-DEFINE_KEYFIELD(m_iszSpyModel, FIELD_STRING, "spymodel"),
-DEFINE_KEYFIELD(m_iszMercenaryModel, FIELD_STRING, "mercenarymodel"),
-DEFINE_KEYFIELD(m_iszCivilianModel, FIELD_STRING, "civilianmodel"),
-
-END_DATADESC()
-
-LINK_ENTITY_TO_CLASS( setcustommodel, CSetCustomModel );
-
-void CSetCustomModel::Spawn(void)
-{
-	BaseClass::Spawn();
-}
-*/
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
 const char *TFPlayerClassData_t::GetModelName() const
 {
 #ifdef CLIENT_DLL
+
 	if ( UseHWMorphModels() )
 	{
 		if ( m_szHWMModelName[0] != '\0' )
@@ -161,7 +130,9 @@ const char *TFPlayerClassData_t::GetModelName() const
 	}
 	
 	return m_szModelName;
+	
 #else
+
 	return m_szModelName;
 #endif
 }
@@ -290,6 +261,7 @@ TFPlayerClassData_t *GetPlayerClassData( int iClass )
 
 BEGIN_RECV_TABLE_NOBASE( CTFPlayerClassShared, DT_TFPlayerClassShared )
 	RecvPropInt( RECVINFO( m_iClass ) ),
+	RecvPropString( RECVINFO( m_iszSetCustomModel ) ),
 END_RECV_TABLE()
 
 // Server specific.
@@ -297,6 +269,7 @@ END_RECV_TABLE()
 
 BEGIN_SEND_TABLE_NOBASE( CTFPlayerClassShared, DT_TFPlayerClassShared )
 	SendPropInt( SENDINFO( m_iClass ), Q_log2( TF_CLASS_COUNT_ALL )+1, SPROP_UNSIGNED ),
+	SendPropStringT( SENDINFO( m_iszSetCustomModel ) ),
 END_SEND_TABLE()
 
 #endif
@@ -308,7 +281,28 @@ END_SEND_TABLE()
 CTFPlayerClassShared::CTFPlayerClassShared()
 {
 	m_iClass.Set( TF_CLASS_UNDEFINED );
+#ifdef CLIENT_DLL
+	m_iszSetCustomModel[0] = '\0';
+#else
+	m_iszSetCustomModel.Set( NULL_STRING );
+#endif	
 }
+
+#ifndef CLIENT_DLL
+void CTFPlayerClassShared::SetCustomModel( const char *pszModelName )
+{
+	if (pszModelName && pszModelName[0])
+	{
+		bool bPrecache = CBaseEntity::IsPrecacheAllowed();
+		CBaseEntity::SetAllowPrecache( true );
+		CBaseEntity::PrecacheModel( pszModelName );
+		CBaseEntity::SetAllowPrecache( bPrecache );
+		m_iszSetCustomModel.Set( AllocPooledString( pszModelName ) );
+	}
+	else
+		m_iszSetCustomModel.Set( NULL_STRING );
+}
+#endif
 
 //-----------------------------------------------------------------------------
 // Purpose: Initialize the player class.
@@ -317,6 +311,11 @@ bool CTFPlayerClassShared::Init( int iClass )
 {
 	Assert ( ( iClass >= TF_FIRST_NORMAL_CLASS ) && ( iClass <= TF_LAST_NORMAL_CLASS ) );
 	m_iClass = iClass;
+#ifdef CLIENT_DLL
+	m_iszSetCustomModel[0] = '\0';
+#else
+	m_iszSetCustomModel.Set( NULL_STRING );
+#endif	
 	return true;
 }
 
@@ -338,4 +337,18 @@ bool CTFPlayerClassShared::CanBuildObject( int iObjectType )
 	}
 
 	return bFound;
+}
+
+const char	*CTFPlayerClassShared::GetModelName( void ) const						
+{ 
+	// Does this play have an overridden model?
+#ifdef CLIENT_DLL
+	if ( m_iszSetCustomModel[0] ) return m_iszSetCustomModel;
+#else
+	if ( m_iszSetCustomModel.Get() != NULL_STRING ) return ( STRING( m_iszSetCustomModel.Get() ) );
+#endif
+	static char modelFilename[ 256 ];
+	Q_strncpy( modelFilename, GetPlayerClassData( m_iClass )->GetModelName(), sizeof( modelFilename ) );
+	
+	return modelFilename;
 }

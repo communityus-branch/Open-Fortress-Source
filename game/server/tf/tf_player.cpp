@@ -6539,20 +6539,12 @@ void CTFPlayer::SetCustomModel(inputdata_t &inputdata)
 	InvalidateMdlCache();
 	if (inputdata.value.String())
 	{
-		if (rara_testcustmodel.GetBool())
-		{
-			PrecacheModel("models/humans/group01/male_01.mdl");
-			SetModel("models/humans/group01/male_01.mdl");
-		}
-		else
-		{
-			PrecacheModel(inputdata.value.String());
-			SetModel(inputdata.value.String());
-		}
+		PrecacheModel(inputdata.value.String());
+		GetPlayerClass()->SetCustomModel(inputdata.value.String());
 	}
 	else
 	{
-		SetModel(GetPlayerClass()->GetModelName());
+		GetPlayerClass()->SetCustomModel( "" );
 	}
 	UpdateModel();
 	DevMsg("CTFPlayer::SetCustomModel - Input successful, data input %s\n", inputdata.value.String());
