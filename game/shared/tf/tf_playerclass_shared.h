@@ -89,9 +89,12 @@ public:
 	bool		Init( int iClass );
 	bool		IsClass( int iClass ) const						{ return ( m_iClass == iClass ); }
 	int			GetClassIndex( void )							{ return m_iClass; }
-
+	
 	const char	*GetName( void ) const							{ return GetPlayerClassData( m_iClass )->m_szClassName; }
-	const char	*GetModelName( void ) const						{ return GetPlayerClassData( m_iClass )->GetModelName(); }		
+#ifndef CLIENT_DLL
+	void		SetCustomModel( const char *pszModelName );
+#endif	
+	const char	*GetModelName( void ) const					/*	{ return GetPlayerClassData( m_iClass )->GetModelName()*/;// }		
 	const char	*GetArmModelName( void ) const					{ return GetPlayerClassData( m_iClass )->GetArmModelName(); }		
 	float		GetMaxSpeed( void )								{ return GetPlayerClassData( m_iClass )->m_flMaxSpeed; }
 	int			GetMaxHealth( void )							{ return GetPlayerClassData( m_iClass )->m_nMaxHealth; }
@@ -105,6 +108,11 @@ public:
 protected:
 
 	CNetworkVar( int,	m_iClass );
+#ifdef CLIENT_DLL
+	char	m_iszSetCustomModel[MAX_PATH];
+#else
+	CNetworkVar(string_t,m_iszSetCustomModel);
+#endif
 };
 
 #endif // TF_PLAYERCLASS_SHARED_H
