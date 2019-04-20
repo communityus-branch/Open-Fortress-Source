@@ -15,6 +15,7 @@
 #define CTFSMG C_TFSMG
 #define CTFSMG_Mercenary C_TFSMG_Mercenary
 #define CTFTommyGun C_TFTommyGun
+#define CTFAR C_TFAR
 #endif
 
 //=============================================================================
@@ -65,6 +66,18 @@ public:
 	DECLARE_PREDICTABLE();
 
 	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_TOMMYGUN; }
+};
+
+// AR
+class CTFAR : public CTFSMG
+{
+public:
+	DECLARE_CLASS(CTFAR, CTFSMG);
+	DECLARE_NETWORKCLASS();
+	DECLARE_PREDICTABLE();
+
+	virtual int		GetWeaponID(void) const { return TF_WEAPON_AR; }
+	
 };
 
 
