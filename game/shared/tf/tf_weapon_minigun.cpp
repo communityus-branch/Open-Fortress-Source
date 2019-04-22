@@ -173,7 +173,7 @@ void CTFMinigun::SharedAttack()
 	{
 		m_iWeaponMode = TF_WEAPON_PRIMARY_MODE;
 	}
-	else if ( pPlayer->m_nButtons & IN_ATTACK2 && GetWeaponID() != TF_WEAPON_GATLINGGUN )
+	else if ( pPlayer->m_nButtons & IN_ATTACK2 )
 	{
 		m_iWeaponMode = TF_WEAPON_SECONDARY_MODE;
 	}
@@ -312,13 +312,14 @@ void CTFMinigun::SharedAttack()
 //-----------------------------------------------------------------------------
 void CTFMinigun::SecondaryAttack( void )
 {
-	if ( GetWeaponID() == TF_WEAPON_GATLINGGUN )
-		return;
 
 	CTFPlayer *pPlayer = ToTFPlayer( GetPlayerOwner() );
 	if ( !pPlayer )
 		return;
-	SharedAttack();
+	if ( GetWeaponID() == TF_WEAPON_GATLINGGUN )
+		WindDown();
+	else
+		SharedAttack();
 }
 
 //-----------------------------------------------------------------------------

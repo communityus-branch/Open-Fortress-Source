@@ -402,7 +402,9 @@ void CTFPlayerShared::OnConditionAdded( int nCond )
 	case TF_COND_INVULNERABLE:
 		OnAddInvulnerable();
 		break;
-
+	case TF_COND_SPAWNPROTECT:
+		OnAddInvulnerable();
+		break;
 	case TF_COND_TELEPORTED:
 		OnAddTeleported();
 		break;
@@ -475,7 +477,9 @@ void CTFPlayerShared::OnConditionRemoved( int nCond )
 	case TF_COND_INVULNERABLE:
 		OnRemoveInvulnerable();
 		break;
-
+	case TF_COND_SPAWNPROTECT:
+		OnRemoveInvulnerable();
+		break;
 	case TF_COND_TELEPORTED:
 		OnRemoveTeleported();
 		break;
@@ -713,7 +717,7 @@ void CTFPlayerShared::ConditionGameRulesThink( void )
 		}
 	}
 
-	if ( InCond( TF_COND_INVULNERABLE )  )
+	if ( InCondUber()  )
 	{
 		bool bRemoveInvul = false;
 
@@ -734,7 +738,7 @@ void CTFPlayerShared::ConditionGameRulesThink( void )
 		{
 			m_flInvulnerableOffTime = 0;
 			RemoveCond( TF_COND_INVULNERABLE_WEARINGOFF );
-			RemoveCond( TF_COND_INVULNERABLE );
+			RemoveCondUber();//Stickynote
 		}
 	}
 
@@ -859,12 +863,14 @@ void CTFPlayerShared::OnDisguiseChanged( void )
 void CTFPlayerShared::OnAddCritBoosted( void )
 {
 #ifdef CLIENT_DLL
+	m_pOuter->OnAddCritBoosted();
 	m_pOuter->EmitSound( "Mercenary.LaughEvil01" );
 #endif
 }
 void CTFPlayerShared::OnRemoveCritBoosted( void )
 {
 #ifdef CLIENT_DLL
+	m_pOuter->OnRemoveCritBoosted();
 	m_pOuter->EmitSound( "Mercenary.NegativeVocalization01" );
 #endif
 }
@@ -1653,7 +1659,7 @@ void CTFPlayerShared::SetInvulnerable( bool bState, bool bInstant )
 		if ( bInstant )
 		{
 			m_flInvulnerableOffTime = 0;
-			RemoveCond( TF_COND_INVULNERABLE );
+			RemoveCondUber();
 			RemoveCond( TF_COND_INVULNERABLE_WEARINGOFF );
 		}
 		else
@@ -2576,4 +2582,21 @@ CTFWeaponBase *CTFPlayer::Weapon_GetWeaponByType( int iType )
 bool CTFPlayer::IsEnemy(const CBaseEntity *pEntity) const
 {
 	return (pEntity->GetTeamNumber() != GetTeamNumber() );
+}
+
+
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+bool CTFPlayerShared::InCondUber( void )
+{
+	if ( InCond( TF_COND_INVULNERABLE ) || InCond( TF_COND_SPAWNPROTECT ) )
+		return true;
+	else
+		return false;
+}
+void CTFPlayerShared::RemoveCondUber( void )
+{
+	RemoveCond( TF_COND_INVULNERABLE );
+	RemoveCond( TF_COND_SPAWNPROTECT );
 }

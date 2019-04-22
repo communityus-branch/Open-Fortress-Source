@@ -169,6 +169,7 @@ void CTFWeaponBaseMelee::SecondaryAttack()
 //-----------------------------------------------------------------------------
 void CTFWeaponBaseMelee::Swing( CTFPlayer *pPlayer )
 {
+	pPlayer->m_Shared.RemoveCond( TF_COND_SPAWNPROTECT );
 	CalcIsAttackCritical();
 
 	// Play the melee swing and miss (whoosh) always.
@@ -224,7 +225,7 @@ void CTFWeaponBaseMelee::SwingNoDelay( CTFPlayer *pPlayer )
 //-----------------------------------------------------------------------------
 void CTFWeaponBaseMelee::DoViewModelAnimation( void )
 {
-	Activity act = ( m_iWeaponMode == TF_WEAPON_PRIMARY_MODE ) ? ACT_VM_HITCENTER : ACT_VM_SWINGHARD;
+	Activity act = ( IsCurrentAttackACrit() ) ? ACT_VM_SWINGHARD : ACT_VM_HITCENTER;
 	SendWeaponAnim( act );
 }
 

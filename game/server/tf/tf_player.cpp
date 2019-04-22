@@ -824,11 +824,12 @@ void CTFPlayer::Spawn()
 	SetMoveType( MOVETYPE_WALK );
 	BaseClass::Spawn();
 	
-	DestroyViewModels();
+//	DestroyViewModels();
 	
 	CreateViewModel( 1 );
 	// Make sure it has no model set, in case it had one before
 	GetViewModel(1)->SetModel( "" );
+	GetViewModel(2)->SetModel( GetPlayerClass()->GetArmModelName() );
 	
 	CreateViewModel();
 	
@@ -891,7 +892,7 @@ void CTFPlayer::Spawn()
 		}
 		if ( TFGameRules()->IsDMGamemode() || of_forcespawnprotect.GetBool() == 1 )
 		{
-			m_Shared.AddCond( TF_COND_INVULNERABLE , ofd_spawnprotecttime.GetFloat() );
+			m_Shared.AddCond( TF_COND_SPAWNPROTECT , ofd_spawnprotecttime.GetFloat() );
 		}
 		if ( !m_bSeenRoundInfo )
 		{
@@ -1053,25 +1054,24 @@ void CTFPlayer::CreateViewModel( int iViewModel )
 		DispatchSpawn( pViewModel );
 		pViewModel->FollowEntity( this, false );
 		m_hViewModel.Set( iViewModel, pViewModel );
-	
-		CTFViewModel* vmhands = static_cast<CTFViewModel*>(CreateEntityByName("tf_handmodel"));
-		if ( vmhands && iViewModel+2 != 3 )
-		{
-			vmhands->SetAbsOrigin( GetAbsOrigin() );
-			vmhands->SetOwner( this );
-			vmhands->SetParent( this );
-			vmhands->SetIndex( iViewModel+2 );
-			DispatchSpawn(vmhands);
-			vmhands->m_nSkin = m_nSkin;
-			vmhands->SetLocalOrigin( vec3_origin );
-			vmhands->FollowEntity( pViewModel );
-			vmhands->AddEffects(EF_BONEMERGE);
-			vmhands->SetModel( GetPlayerClass()->GetArmModelName() );
-			vmhands->SetLightingOrigin( pViewModel->GetLightingOrigin() );
-			m_hViewModel.Set( iViewModel+2, vmhands );
 	}
-}
-
+	
+	CTFViewModel* vmhands = static_cast<CTFViewModel*>(CreateEntityByName("tf_handmodel"));
+	if ( vmhands && iViewModel+2 != 3 )
+	{
+		vmhands->SetAbsOrigin( GetAbsOrigin() );
+		vmhands->SetOwner( this );
+		vmhands->SetParent( this );
+		vmhands->SetIndex( iViewModel+2 );
+		DispatchSpawn(vmhands);
+		vmhands->m_nSkin = m_nSkin;
+		vmhands->SetLocalOrigin( vec3_origin );
+		vmhands->FollowEntity( pViewModel );
+		vmhands->AddEffects(EF_BONEMERGE);
+		vmhands->SetModel( GetPlayerClass()->GetArmModelName() );
+		vmhands->SetLightingOrigin( pViewModel->GetLightingOrigin() );
+		m_hViewModel.Set( iViewModel+2, vmhands );
+	}
 }
 
 void CTFPlayer::CreateHandModel(int index, int iOtherVm)
@@ -1488,8 +1488,14 @@ void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 		}
 		else 
 		{
-			if (ofd_allowteams.GetBool() == 0) ChangeTeam(TF_TEAM_MERCENARY);
-			if (ofd_forceclass.GetBool() == 1) SetDesiredPlayerClassIndex(TF_CLASS_MERCENARY);
+			if (ofd_allowteams.GetBool() == 0)
+			{				
+				ChangeTeam(TF_TEAM_MERCENARY);
+			}
+			if (ofd_forceclass.GetBool() == 1) 
+				SetDesiredPlayerClassIndex(TF_CLASS_MERCENARY);
+			else
+				ShowViewPortPanel( PANEL_CLASS_MERCENARY );
 
 			if (ofd_allowteams.GetBool() == 0) return;
 		}
@@ -2504,7 +2510,7 @@ void CTFPlayer::TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, 
 	{
 		// no impact effects
 	}
-	else if ( m_Shared.InCond( TF_COND_INVULNERABLE ) )
+	else if ( m_Shared.InCondUber() )
 	{ 
 		// Make bullet impacts
 		g_pEffects->Ricochet( ptr->endpos - (vecDir * 8), -vecDir );
@@ -2763,7 +2769,7 @@ int CTFPlayer::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 	int bitsDamage = inputInfo.GetDamageType();
 
 	// If we're invulnerable, force ourselves to only take damage events only, so we still get pushed
-	if ( m_Shared.InCond( TF_COND_INVULNERABLE ) )
+	if ( m_Shared.InCondUber() )
 	{
 		bool bAllowDamage = false;
 
@@ -3235,7 +3241,7 @@ int CTFPlayer::OnTakeDamage_Alive( const CTakeDamageInfo &info )
 	}
 
 	//No bleeding while invul or disguised.
-	bool bBleed = ( m_Shared.InCond( TF_COND_DISGUISED ) == false && m_Shared.InCond( TF_COND_INVULNERABLE ) == false );
+	bool bBleed = ( m_Shared.InCond( TF_COND_DISGUISED ) == false && m_Shared.InCondUber() == false );
 	if ( bBleed && pAttacker->IsPlayer() )
 	{
 		CTFWeaponBase *pWeapon = ToTFPlayer( pAttacker )->GetActiveTFWeapon();
@@ -5810,7 +5816,7 @@ void CTFPlayer::ModifyOrAppendCriteria( AI_CriteriaSet& criteriaSet )
 	}
 	criteriaSet.AppendCriteria( "killsthislife", UTIL_VarArgs( "%d", iTotalKills ) );
 	criteriaSet.AppendCriteria( "disguised", m_Shared.InCond( TF_COND_DISGUISED ) ? "1" : "0" );
-	criteriaSet.AppendCriteria( "invulnerable", m_Shared.InCond( TF_COND_INVULNERABLE ) ? "1" : "0" );
+	criteriaSet.AppendCriteria( "invulnerable", m_Shared.InCondUber() ? "1" : "0" );
 	criteriaSet.AppendCriteria( "beinghealed", m_Shared.InCond( TF_COND_HEALTH_BUFF ) ? "1" : "0" );
 	criteriaSet.AppendCriteria( "waitingforplayers", (TFGameRules()->IsInWaitingForPlayers() || TFGameRules()->IsInPreMatch()) ? "1" : "0" );
 

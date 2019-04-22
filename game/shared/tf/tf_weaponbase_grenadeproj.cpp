@@ -138,6 +138,16 @@ void CTFWeaponBaseGrenadeProj::Spawn()
 {
 	m_flSpawnTime = gpGlobals->curtime;
 	BaseClass::Spawn();
+	if (of_muzzlelight.GetBool())
+	{
+		AddEffects(EF_DIMLIGHT);
+	}
+	else
+	{
+		RemoveEffects(EF_DIMLIGHT);
+	}
+
+	CreateLightEffects();
 }
 
 //-----------------------------------------------------------------------------

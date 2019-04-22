@@ -2987,7 +2987,7 @@ bool CTFGameRules::PlayerMayCapturePoint( CBasePlayer *pPlayer, int iPointIndex,
 		return false;
 	}
 
-	if ( pTFPlayer->m_Shared.InCond( TF_COND_INVULNERABLE ) )
+	if ( pTFPlayer->m_Shared.InCondUber() )
 	{
 		if ( pszReason )
 		{
@@ -3018,7 +3018,7 @@ bool CTFGameRules::PlayerMayBlockPoint( CBasePlayer *pPlayer, int iPointIndex, c
 		return false;
 
 	// Invuln players can block points
-	if ( pTFPlayer->m_Shared.InCond( TF_COND_INVULNERABLE ) )
+	if ( pTFPlayer->m_Shared.InCondUber() )
 	{
 		if ( pszReason )
 		{

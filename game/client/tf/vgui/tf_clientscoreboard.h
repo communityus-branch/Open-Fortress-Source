@@ -45,6 +45,7 @@ protected:
 
 private:
 	void InitPlayerList( vgui::SectionedListPanel *pPlayerList );
+	void RemovePlayerList( vgui::SectionedListPanel *pPlayerList );
 	void SetPlayerListImages( vgui::SectionedListPanel *pPlayerList );
 	void UpdateTeamInfo();
 	void UpdatePlayerList();

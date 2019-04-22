@@ -854,7 +854,7 @@ public:
 
 		if ( pPlayer )
 		{
-			if ( pPlayer->m_Shared.InCond( TF_COND_INVULNERABLE ) && !pPlayer->m_Shared.InCond( TF_COND_INVULNERABLE_WEARINGOFF ) )
+			if ( pPlayer->m_Shared.InCondUber() && !pPlayer->m_Shared.InCond( TF_COND_INVULNERABLE_WEARINGOFF ) )
 			{
 				m_pResult->SetFloatValue( 1.0 );
 			}
@@ -1332,7 +1332,7 @@ void C_TFPlayer::OnDataChanged( DataUpdateType_t updateType )
 	UpdateVisibility();
 
 	// Check for full health and remove decals.
-	if ( ( m_iHealth > m_iOldHealth && m_iHealth >= GetMaxHealth() ) || m_Shared.InCond( TF_COND_INVULNERABLE ) )
+	if ( ( m_iHealth > m_iOldHealth && m_iHealth >= GetMaxHealth() ) || m_Shared.InCondUber() )
 	{
 		// If we were just fully healed, remove all decals
 		RemoveAllDecals();
@@ -1617,6 +1617,53 @@ void C_TFPlayer::OnRemoveTeleported( void )
 		m_pTeleporterEffect = NULL;
 	}
 }
+
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+void C_TFPlayer::OnAddCritBoosted( void )
+{
+//	C_TFPlayer *pPlayer = ToTFPlayer( GetOwnerEntity() );
+
+	if ( !m_pCritEffect )
+	{
+		char *pEffect = NULL;
+
+		switch( GetTeamNumber() )
+		{
+		case TF_TEAM_BLUE:
+			pEffect = "critgun_weaponmodel_blu";
+			break;
+		case TF_TEAM_RED:
+			pEffect = "critgun_weaponmodel_blu";
+			break;
+		case TF_TEAM_MERCENARY:
+			pEffect = "critgun_weaponmodel_blu";
+			break;
+		default:
+			break;
+		}
+
+		if ( pEffect /*&& pPlayer*/ )
+		{
+			/*pPlayer->m_Shared.UpdateParticleColor(*/m_pCritEffect = ParticleProp()->Create( pEffect, PATTACH_ABSORIGIN_FOLLOW )/*)*/;
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+void C_TFPlayer::OnRemoveCritBoosted( void )
+{
+	if ( m_pCritEffect )
+	{
+		ParticleProp()->StopEmission( m_pCritEffect );
+		m_pCritEffect = NULL;
+	}
+}
+
+
 
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -3012,7 +3059,7 @@ int C_TFPlayer::GetSkin()
 	}
 
 	// 3 and 4 are invulnerable
-	if ( m_Shared.InCond( TF_COND_INVULNERABLE ) )
+	if ( m_Shared.InCondUber() )
 	{
 		switch( iVisibleTeam )
 		{
@@ -3069,7 +3116,7 @@ void C_TFPlayer::AddDecal( const Vector& rayStart, const Vector& rayEnd,
 		return;
 	}
 
-	if ( m_Shared.InCond( TF_COND_INVULNERABLE ) )
+	if ( m_Shared.InCondUber() )
 	{ 
 		Vector vecDir = rayEnd - rayStart;
 		VectorNormalize(vecDir);
@@ -3171,7 +3218,7 @@ bool C_TFPlayer::IsOverridingViewmodel( void )
 		pPlayer = assert_cast<C_TFPlayer*>(pLocalPlayer->GetObserverTarget());
 	}
 
-	if ( pPlayer->m_Shared.InCond( TF_COND_INVULNERABLE ) )
+	if ( pPlayer->m_Shared.InCondUber() )
 		return true;
 
 	return BaseClass::IsOverridingViewmodel();
@@ -3192,7 +3239,7 @@ int	C_TFPlayer::DrawOverriddenViewmodel( C_BaseViewModel *pViewmodel, int flags 
 		pPlayer = assert_cast<C_TFPlayer*>(pLocalPlayer->GetObserverTarget());
 	}
 
-	if ( pPlayer->m_Shared.InCond( TF_COND_INVULNERABLE ) )
+	if ( pPlayer->m_Shared.InCondUber() )
 	{
 		// Force the invulnerable material
 		modelrender->ForcedMaterialOverride( *pPlayer->GetInvulnMaterialRef() );

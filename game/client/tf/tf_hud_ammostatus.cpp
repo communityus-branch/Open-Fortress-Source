@@ -35,6 +35,8 @@ using namespace vgui;
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
+extern ConVar of_noreload;
+extern ConVar of_infiniteammo;
 
 DECLARE_HUDELEMENT( CTFHudWeaponAmmo );
 
@@ -212,17 +214,29 @@ void CTFHudWeaponAmmo::OnThink()
 				m_nAmmo2 = nAmmo2;
 				m_hCurrentActiveWeapon = pWeapon;
 
-				if ( m_hCurrentActiveWeapon.Get()->UsesClipsForAmmo1() )
+				if ( m_hCurrentActiveWeapon.Get()->UsesClipsForAmmo1() && !of_noreload.GetBool() )
 				{
 					UpdateAmmoLabels( true, true, false );
 
 					SetDialogVariable( "Ammo", m_nAmmo );
-					SetDialogVariable( "AmmoInReserve", m_nAmmo2 );
+					if ( of_infiniteammo.GetBool() )
+						SetDialogVariable( "AmmoInReserve", "Inf" );
+					else
+						SetDialogVariable( "AmmoInReserve", m_nAmmo2 );
 				}
 				else
 				{
 					UpdateAmmoLabels( false, false, true );
-					SetDialogVariable( "Ammo", m_nAmmo );
+					if ( of_noreload.GetBool() )
+						if (of_infiniteammo.GetBool())
+							SetDialogVariable( "Ammo", "Inf" );
+						else
+							SetDialogVariable( "Ammo", m_nAmmo+m_nAmmo2 );
+					else
+						if (of_infiniteammo.GetBool())
+							SetDialogVariable( "Ammo", "Inf" );
+						else
+							SetDialogVariable( "Ammo", m_nAmmo );
 				}
 			}
 		}

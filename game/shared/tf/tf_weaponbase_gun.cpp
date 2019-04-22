@@ -94,6 +94,7 @@ void CTFWeaponBaseGun::PrimaryAttack( void )
 #ifndef CLIENT_DLL
 	pPlayer->RemoveInvisibility();
 	pPlayer->RemoveDisguise();
+	pPlayer->m_Shared.RemoveCond( TF_COND_SPAWNPROTECT );
 
 	// Minigun has custom handling
 	if ( GetWeaponID() != TF_WEAPON_MINIGUN && GetWeaponID() != TF_WEAPON_GATLINGGUN )

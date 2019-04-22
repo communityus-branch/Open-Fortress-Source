@@ -31,8 +31,11 @@
 #include "tf_hud_kills.h"
 #include "tf_gamerules.h"
 #include "c_tf_playerresource.h"
+#include "multiplay_gamerules.h"
 
 using namespace vgui;
+
+extern ConVar fraglimit;
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -146,7 +149,8 @@ void CTFHudKills::OnThink()
 			m_nKills = nKills;
 			
 			UpdateKillLabel( true );
-			SetDialogVariable( "Kills", m_nKills );
+			SetDialogVariable( "Kills",m_nKills );
+			SetDialogVariable( "FragLimit", fraglimit.GetInt()  );
 		}
 
 		m_flNextThink = gpGlobals->curtime + 0.1f;

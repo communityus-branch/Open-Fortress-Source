@@ -38,7 +38,7 @@ public:
 	CTFSMG();// {}
 //	~CTFSMG() {}
 
-
+	
 	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_SMG; }
 
 private:
@@ -75,7 +75,6 @@ public:
 	DECLARE_CLASS(CTFAR, CTFSMG);
 	DECLARE_NETWORKCLASS();
 	DECLARE_PREDICTABLE();
-
 	virtual int		GetWeaponID(void) const { return TF_WEAPON_AR; }
 	
 };

@@ -45,6 +45,8 @@ using namespace vgui;
 #define SCOREBOARD_MAX_LIST_ENTRIES 12
 
 extern bool IsInCommentaryMode( void );
+extern ConVar ofd_allowteams;
+extern ConVar fraglimit;
 
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
@@ -127,7 +129,7 @@ void CTFClientScoreBoardDialog::ShowPanel( bool bShow )
 {
 	// Catch the case where we call ShowPanel before ApplySchemeSettings, eg when
 	// going from windowed <-> fullscreen
-	
+	Reset();
 	if ( TFGameRules()->IsDMGamemode() && !TFGameRules()->IsTeamplay() )
     {
         LoadControlSettings("Resource/UI/scoreboarddm.res");
@@ -181,15 +183,50 @@ void CTFClientScoreBoardDialog::ShowPanel( bool bShow )
 //-----------------------------------------------------------------------------
 void CTFClientScoreBoardDialog::Reset()
 {
-	InitPlayerList( m_pPlayerListBlue );
-	InitPlayerList( m_pPlayerListRed );
-	InitPlayerList( m_pPlayerListMercenary );
+	RemovePlayerList( m_pPlayerListBlue );
+	RemovePlayerList( m_pPlayerListRed );
+	RemovePlayerList( m_pPlayerListMercenary );
+	if ( TFGameRules() )
+	{
+		if ( !TFGameRules()->IsDMGamemode() || ofd_allowteams.GetBool() )
+		{
+			InitPlayerList( m_pPlayerListBlue );
+			InitPlayerList( m_pPlayerListRed );
+		}
+		if ( TFGameRules()->IsDMGamemode() )
+			InitPlayerList( m_pPlayerListMercenary );
+	}
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Inits the player list in a list panel
 //-----------------------------------------------------------------------------
 void CTFClientScoreBoardDialog::InitPlayerList( SectionedListPanel *pPlayerList )
+{
+	// Avatars are always displayed at 32x32 regardless of resolution
+	if ( ShowAvatars() )
+	{
+		pPlayerList->AddColumnToSection( 0, "avatar", "", SectionedListPanel::COLUMN_IMAGE | SectionedListPanel::COLUMN_CENTER, m_iAvatarWidth );
+	}
+	pPlayerList->AddColumnToSection( 0, "name", "#TF_Scoreboard_Name", 0, m_iNameWidth );
+	if ( !TFGameRules() && TFGameRules()->IsDMGamemode() )
+	{
+		pPlayerList->AddColumnToSection( 0, "status", "", SectionedListPanel::COLUMN_IMAGE | SectionedListPanel::COLUMN_CENTER, m_iStatusWidth );
+		pPlayerList->AddColumnToSection( 0, "nemesis", "", SectionedListPanel::COLUMN_IMAGE, m_iNemesisWidth );
+		pPlayerList->AddColumnToSection( 0, "class", "", 0, m_iClassWidth );
+	}
+	if ( TFGameRules() && TFGameRules()->IsDMGamemode() )
+		pPlayerList->AddColumnToSection( 0, "kills", "#TF_Scoreboard_Kills", SectionedListPanel::COLUMN_RIGHT, m_iKillsWidth );
+	pPlayerList->AddColumnToSection( 0, "score", "#TF_Scoreboard_Score", SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
+	pPlayerList->AddColumnToSection( 0, "ping", "#TF_Scoreboard_Ping", SectionedListPanel::COLUMN_RIGHT, m_iPingWidth );
+	if ( TFGameRules() && TFGameRules()->IsDMGamemode() )
+	{
+		pPlayerList->AddColumnToSection( 0, "status", "", SectionedListPanel::COLUMN_IMAGE | SectionedListPanel::COLUMN_CENTER, m_iStatusWidth );
+		pPlayerList->AddColumnToSection( 0, "nemesis", "", SectionedListPanel::COLUMN_IMAGE, m_iNemesisWidth );
+	}
+}
+
+void CTFClientScoreBoardDialog::RemovePlayerList( SectionedListPanel *pPlayerList )
 {
 	pPlayerList->SetVerticalScrollbar( false );
 	pPlayerList->RemoveAll();
@@ -199,19 +236,6 @@ void CTFClientScoreBoardDialog::InitPlayerList( SectionedListPanel *pPlayerList 
 	pPlayerList->SetSectionFgColor( 0, Color( 255, 255, 255, 255 ) );
 	pPlayerList->SetBgColor( Color( 0, 0, 0, 0 ) );
 	pPlayerList->SetBorder( NULL );
-
-	// Avatars are always displayed at 32x32 regardless of resolution
-	if ( ShowAvatars() )
-	{
-		pPlayerList->AddColumnToSection( 0, "avatar", "", SectionedListPanel::COLUMN_IMAGE | SectionedListPanel::COLUMN_CENTER, m_iAvatarWidth );
-	}
-	pPlayerList->AddColumnToSection( 0, "name", "#TF_Scoreboard_Name", 0, m_iNameWidth );
-	pPlayerList->AddColumnToSection( 0, "status", "", SectionedListPanel::COLUMN_IMAGE | SectionedListPanel::COLUMN_CENTER, m_iStatusWidth );
-	pPlayerList->AddColumnToSection( 0, "nemesis", "", SectionedListPanel::COLUMN_IMAGE, m_iNemesisWidth );
-	pPlayerList->AddColumnToSection( 0, "class", "", 0, m_iClassWidth );
-	pPlayerList->AddColumnToSection( 0, "kills", "#TF_Scoreboard_Kills", SectionedListPanel::COLUMN_RIGHT, m_iKillsWidth );
-	pPlayerList->AddColumnToSection( 0, "score", "#TF_Scoreboard_Score", SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
-	pPlayerList->AddColumnToSection( 0, "ping", "#TF_Scoreboard_Ping", SectionedListPanel::COLUMN_RIGHT, m_iPingWidth );
 }
 
 //-----------------------------------------------------------------------------
@@ -233,6 +257,8 @@ void CTFClientScoreBoardDialog::Update()
 	UpdateSpectatorList();
 	UpdatePlayerDetails();
 	MoveToCenterOfScreen();
+	
+	SetDialogVariable( "FragLimit", VarArgs( "%d Frags", fraglimit.GetInt() ) );
 
 	// update every second
 	m_fNextUpdateTime = gpGlobals->curtime + 1.0f; 
@@ -695,13 +721,18 @@ const wchar_t *GetPointsString( int iPoints )
 	wchar_t wzScoreVal[128];
 	static wchar_t wzScore[128];
 	_snwprintf( wzScoreVal, ARRAYSIZE( wzScoreVal ), L"%i", iPoints );
-	if ( 1 == iPoints ) 
-	{
-		g_pVGuiLocalize->ConstructString( wzScore, sizeof(wzScore), g_pVGuiLocalize->Find( "#TF_ScoreBoard_Point" ), 1, wzScoreVal );
-	}
+	if ( TFGameRules() && TFGameRules()->IsDMGamemode() )
+		g_pVGuiLocalize->ConstructString( wzScore, sizeof(wzScore),g_pVGuiLocalize->Find( "#TF_ScoreBoard_Points_NoLabel" ), 1, wzScoreVal );
 	else
 	{
-		g_pVGuiLocalize->ConstructString( wzScore, sizeof(wzScore), g_pVGuiLocalize->Find( "#TF_ScoreBoard_Points" ), 1, wzScoreVal );
+		if ( 1 == iPoints ) 
+		{
+			g_pVGuiLocalize->ConstructString( wzScore, sizeof(wzScore), g_pVGuiLocalize->Find( "#TF_ScoreBoard_Point" ), 1, wzScoreVal );
+		}
+		else
+		{
+			g_pVGuiLocalize->ConstructString( wzScore, sizeof(wzScore), g_pVGuiLocalize->Find( "#TF_ScoreBoard_Points" ), 1, wzScoreVal );
+		}
 	}
 	return wzScore;
 }
@@ -748,6 +779,7 @@ void CTFClientScoreBoardDialog::FireGameEvent( IGameEvent *event )
 	{
 		Update();
 	}
+	
 }
 
 //-----------------------------------------------------------------------------

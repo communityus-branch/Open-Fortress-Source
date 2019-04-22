@@ -159,6 +159,9 @@ public:
 	void			StopBurningSound( void );
 	void			OnAddTeleported( void );
 	void			OnRemoveTeleported( void );
+	
+	void			OnAddCritBoosted( void );
+	void			OnRemoveCritBoosted( void );
 
 	bool			CanShowClassMenu( void );
 
@@ -269,6 +272,7 @@ private:
 	int					m_iForcedIDTarget;
 
 	CNewParticleEffect	*m_pTeleporterEffect;
+	CNewParticleEffect	*m_pCritEffect;
 	bool				m_bToolRecordingVisibility;
 
 	int					m_iOldState;
