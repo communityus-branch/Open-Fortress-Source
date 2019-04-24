@@ -43,6 +43,7 @@ extern ConVar of_muzzlelight;
 
 #if defined (CLIENT_DLL)
 ConVar of_autoreload( "of_autoreload", "1", FCVAR_CLIENTDLL | FCVAR_ARCHIVE | FCVAR_USERINFO, "Automaticaly reload when not firing" );
+ConVar of_autoswitchweapons("of_autoswitchweapons", "0", FCVAR_CLIENTDLL | FCVAR_ARCHIVE | FCVAR_USERINFO , "Enables/Disables autoswitching when picking up new weapons.");
 #endif
 
 ConVar tf_weapon_criticals( "tf_weapon_criticals", "0", FCVAR_NOTIFY | FCVAR_REPLICATED, "Whether or not random crits are enabled." );

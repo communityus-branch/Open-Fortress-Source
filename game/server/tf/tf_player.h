@@ -293,6 +293,9 @@ public:
 	bool ShouldAutoReload( void ) { return m_bAutoReload; }
 	void SetAutoReload( bool bAutoReload ) { m_bAutoReload = bAutoReload; }
 
+	bool ShouldAutoSwitchWeapons( void ) { return m_bAutoSwitchWeapons; }
+	void SetAutoSwitchWeapons( bool bAutoSwitchWeapons ) { m_bAutoSwitchWeapons = bAutoSwitchWeapons; }	
+	
 	virtual void	ModifyOrAppendCriteria( AI_CriteriaSet& criteriaSet );
 
 	virtual bool CanHearAndReadChatFrom( CBasePlayer *pPlayer );
@@ -524,7 +527,8 @@ private:
 	bool 				m_bMedigunAutoHeal;
 	bool				m_bAutoRezoom;	// does the player want to re-zoom after each shot for sniper rifles
 	bool				m_bAutoReload;	// does the player want to reload after each shot
-
+	bool				m_bAutoSwitchWeapons;
+	
 public:
 	bool				SetPowerplayEnabled( bool bOn );
 	bool				PlayerHasPowerplay( void );

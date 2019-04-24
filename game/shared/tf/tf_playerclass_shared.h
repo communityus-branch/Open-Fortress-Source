@@ -94,7 +94,9 @@ public:
 #ifndef CLIENT_DLL
 	void		SetCustomModel( const char *pszModelName );
 #endif	
-	const char	*GetModelName( void ) const					/*	{ return GetPlayerClassData( m_iClass )->GetModelName()*/;// }		
+	const char	*GetModelName( void ) const					/*	{ return GetPlayerClassData( m_iClass )->GetModelName()*/;// }	
+	const char 	*GetSetCustomModel ( void ) const;		
+	bool 		UsesCustomModel ( void );		
 	const char	*GetArmModelName( void ) const					{ return GetPlayerClassData( m_iClass )->GetArmModelName(); }		
 	float		GetMaxSpeed( void )								{ return GetPlayerClassData( m_iClass )->m_flMaxSpeed; }
 	int			GetMaxHealth( void )							{ return GetPlayerClassData( m_iClass )->m_nMaxHealth; }

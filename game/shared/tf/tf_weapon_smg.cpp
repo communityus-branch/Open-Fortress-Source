@@ -54,16 +54,17 @@ END_PREDICTION_DATA()
 LINK_ENTITY_TO_CLASS( tf_weapon_tommygun, CTFTommyGun );
 PRECACHE_WEAPON_REGISTER( tf_weapon_tommygun );
 
-IMPLEMENT_NETWORKCLASS_ALIASED(TFAR, DT_WeaponAR)
+IMPLEMENT_NETWORKCLASS_ALIASED( TFAssaultRifle, DT_WeaponAssaultRifle )
 
-BEGIN_NETWORK_TABLE(CTFAR, DT_WeaponAR)
+BEGIN_NETWORK_TABLE( CTFAssaultRifle, DT_WeaponAssaultRifle )
 END_NETWORK_TABLE()
 
-BEGIN_PREDICTION_DATA(CTFAR)
+BEGIN_PREDICTION_DATA( CTFAssaultRifle )
 END_PREDICTION_DATA()
 
-LINK_ENTITY_TO_CLASS(tf_weapon_assaultrifle, CTFAR);
-PRECACHE_WEAPON_REGISTER(tf_weapon_assaultrifle);
+LINK_ENTITY_TO_CLASS( tf_weapon_assaultrifle, CTFAssaultRifle );
+PRECACHE_WEAPON_REGISTER( tf_weapon_assaultrifle );
+
 
 // Server specific.
 #ifndef CLIENT_DLL
@@ -75,9 +76,5 @@ END_DATADESC()
 //
 // Weapon SMG functions.
 //
-CTFSMG::CTFSMG( void )
-{
-//	m_bReloadsAll = true;
-}
 
 

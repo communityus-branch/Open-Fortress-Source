@@ -1271,8 +1271,8 @@ BEGIN_PREDICTION_DATA( CWeaponPhysCannon )
 END_PREDICTION_DATA()
 #endif
 
-LINK_ENTITY_TO_CLASS( tf_weapon_physgauntlet, CWeaponPhysCannon );
-PRECACHE_WEAPON_REGISTER( tf_weapon_physgauntlet );
+LINK_ENTITY_TO_CLASS( tf_weapon_physcannon, CWeaponPhysCannon );
+PRECACHE_WEAPON_REGISTER( tf_weapon_physcannon );
 
 #ifndef CLIENT_DLL
 

@@ -49,6 +49,7 @@ LINK_ENTITY_TO_CLASS( dm_weapon_spawner, CWeaponSpawner );
 
 void CWeaponSpawner::Spawn( void )
 {
+	ResetSequence( LookupSequence("spin") );
 	m_nRenderFX = kRenderFxNone;
 	if ( ofd_instagib.GetInt() <= 0 ) {
 	Precache();

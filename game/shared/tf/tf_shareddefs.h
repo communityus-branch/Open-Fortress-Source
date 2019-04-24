@@ -340,8 +340,9 @@ enum
 	TF_WEAPON_TOMMYGUN,
 	TF_WEAPON_GRENADELAUNCHER_MERCENARY,
 	TF_WEAPON_ORIGINAL,
-	TF_WEAPON_AR,
+	TF_WEAPON_ASSAULTRIFLE,
 	TF_WEAPON_SHOTGUN_MERCENARY,
+	TF_WEAPON_SWORD,
 
 	TF_WEAPON_COUNT
 };
@@ -411,6 +412,7 @@ enum
 	TF_COND_SELECTED_TO_TELEPORT,
 	TF_COND_CRITBOOSTED,
 	TF_COND_SPAWNPROTECT,
+	TF_COND_SHIELD_CHARGE,
 
 	// The following conditions all expire faster when the player is being healed
 	// If you add a new condition that shouldn't have this behavior, add it before this section.

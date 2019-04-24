@@ -2313,10 +2313,11 @@ void CTFPlayer::ItemPostFrame()
 
 void CTFPlayer::SetOffHandWeapon( CTFWeaponBase *pWeapon )
 {
+
 	m_hOffHandWeapon = pWeapon;
 	if ( m_hOffHandWeapon.Get() )
 	{
-		m_hOffHandWeapon->Deploy();
+				m_hOffHandWeapon->Deploy();
 	}
 }
 

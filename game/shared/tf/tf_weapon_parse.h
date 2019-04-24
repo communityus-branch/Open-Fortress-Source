@@ -36,6 +36,7 @@ struct WeaponData_t
 	int		m_iAmmoPerShot;					// How much ammo each shot consumes
 	float	m_flProjectileSpeed;			// Start speed for projectiles (nail, etc.); NOTE: union with something non-projectile
 	float	m_flSmackDelay;					// how long after swing should damage happen for melee weapons
+	float 	m_flMeleeRange;
 	bool	m_bUseRapidFireCrits;
 	bool	m_bCenterfireProjectile;
 

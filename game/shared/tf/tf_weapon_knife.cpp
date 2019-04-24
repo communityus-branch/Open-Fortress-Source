@@ -97,7 +97,7 @@ void CTFKnife::PrimaryAttack( void )
 #endif
 
 	// Swing the weapon.
-	SwingNoDelay( pPlayer );
+	Swing( pPlayer );
 
 #if !defined( CLIENT_DLL ) 
 	pPlayer->SpeakWeaponFire();

@@ -829,7 +829,9 @@ void CTFPlayer::Spawn()
 	CreateViewModel( 1 );
 	// Make sure it has no model set, in case it had one before
 	GetViewModel(1)->SetModel( "" );
+	
 	GetViewModel(2)->SetModel( GetPlayerClass()->GetArmModelName() );
+	GetViewModel(2)->m_nSkin = m_nSkin;
 	
 	CreateViewModel();
 	
@@ -6517,6 +6519,12 @@ void CTFPlayer::SetCustomModel(inputdata_t &inputdata)
 	if (inputdata.value.String())
 	{
 		PrecacheModel(inputdata.value.String());
+		const char *pszModel = inputdata.value.String();
+		if ( pszModel && pszModel[0] )
+		{
+			int iModel = PrecacheModel( pszModel );
+			PrecacheGibsForModel( iModel );
+		}		
 		GetPlayerClass()->SetCustomModel(inputdata.value.String());
 	}
 	else
@@ -6766,6 +6774,10 @@ void CTFPlayer::GiveAllItems()
 		pWeapon->DefaultTouch(this);
 
 	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_wrench");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+		pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_umbrella");
 	if (pWeapon)
 		pWeapon->DefaultTouch(this);
 }

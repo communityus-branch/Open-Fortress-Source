@@ -193,33 +193,6 @@ void CTFWeaponBaseMelee::Swing( CTFPlayer *pPlayer )
 
 	m_flSmackTime = gpGlobals->curtime  + m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_flSmackDelay  ;
 }
-
-void CTFWeaponBaseMelee::SwingNoDelay( CTFPlayer *pPlayer )
-{
-	CalcIsAttackCritical();
-
-	// Play the melee swing and miss (whoosh) always.
-	SendPlayerAnimEvent( pPlayer );
-
-	DoViewModelAnimation();
-
-	// Set next attack times.
-	m_flNextPrimaryAttack = gpGlobals->curtime + m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_flTimeFireDelay;
-
-	SetWeaponIdleTime( m_flNextPrimaryAttack + m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_flTimeIdleEmpty );
-	
-	if ( IsCurrentAttackACrit() )
-	{
-		WeaponSound( BURST );
-	}
-	else
-	{
-		WeaponSound( MELEE_MISS );
-	}
-
-	m_flSmackTime = gpGlobals->curtime;
-}
-
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
@@ -259,7 +232,7 @@ bool CTFWeaponBaseMelee::DoSwingTrace( trace_t &trace )
 	// Setup a volume for the melee weapon to be swung - approx size, so all melee behave the same.
 	static Vector vecSwingMins( -18, -18, -18 );
 	static Vector vecSwingMaxs( 18, 18, 18 );
-
+	float range = m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_flMeleeRange;
 	// Get the current player.
 	CTFPlayer *pPlayer = GetTFPlayerOwner();
 	if ( !pPlayer )
@@ -269,7 +242,7 @@ bool CTFWeaponBaseMelee::DoSwingTrace( trace_t &trace )
 	Vector vecForward; 
 	AngleVectors( pPlayer->EyeAngles(), &vecForward );
 	Vector vecSwingStart = pPlayer->Weapon_ShootPosition();
-	Vector vecSwingEnd = vecSwingStart + vecForward * 48;
+	Vector vecSwingEnd = vecSwingStart + vecForward * range;
 
 	// See if we hit anything.
 	UTIL_TraceLine( vecSwingStart, vecSwingEnd, MASK_SOLID, pPlayer, COLLISION_GROUP_NONE, &trace );

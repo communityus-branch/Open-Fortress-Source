@@ -98,6 +98,8 @@ void CTFWeaponInfo::Parse( KeyValues *pKeyValuesData, const char *szWeaponName )
 
 	m_WeaponData[TF_WEAPON_PRIMARY_MODE].m_flSmackDelay			= pKeyValuesData->GetFloat( "SmackDelay", 0.2f );
 	m_WeaponData[TF_WEAPON_SECONDARY_MODE].m_flSmackDelay		= pKeyValuesData->GetFloat( "Secondary_SmackDelay", 0.2f );
+	m_WeaponData[TF_WEAPON_PRIMARY_MODE].m_flMeleeRange			= pKeyValuesData->GetFloat( "MeleeRange", 48 );
+	m_WeaponData[TF_WEAPON_SECONDARY_MODE].m_flMeleeRange		= pKeyValuesData->GetFloat( "Secondary_MeleeRange", 48 );	
 
 	m_bDoInstantEjectBrass = ( pKeyValuesData->GetInt( "DoInstantEjectBrass", 1 ) != 0 );
 	const char *pszBrassModel = pKeyValuesData->GetString( "BrassModel", NULL );

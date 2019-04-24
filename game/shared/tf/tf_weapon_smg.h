@@ -15,7 +15,7 @@
 #define CTFSMG C_TFSMG
 #define CTFSMG_Mercenary C_TFSMG_Mercenary
 #define CTFTommyGun C_TFTommyGun
-#define CTFAR C_TFAR
+#define CTFAssaultRifle C_TFAssaultRifle
 #endif
 
 //=============================================================================
@@ -35,8 +35,8 @@ public:
 	DECLARE_DATADESC();
 #endif
 
-	CTFSMG();// {}
-//	~CTFSMG() {}
+	CTFSMG() {}
+	~CTFSMG() {}
 
 	
 	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_SMG; }
@@ -69,14 +69,14 @@ public:
 };
 
 // AR
-class CTFAR : public CTFSMG
+class CTFAssaultRifle : public CTFSMG
 {
 public:
-	DECLARE_CLASS(CTFAR, CTFSMG);
+	DECLARE_CLASS(CTFAssaultRifle, CTFSMG);
 	DECLARE_NETWORKCLASS();
 	DECLARE_PREDICTABLE();
-	virtual int		GetWeaponID(void) const { return TF_WEAPON_AR; }
 	
+	virtual int		GetWeaponID(void) const { return TF_WEAPON_ASSAULTRIFLE; }
 };
 
 

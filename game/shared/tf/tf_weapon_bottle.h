@@ -14,6 +14,7 @@
 
 #ifdef CLIENT_DLL
 #define CTFBottle C_TFBottle
+#define CTFSword C_TFSword
 #endif
 
 //=============================================================================
@@ -42,5 +43,22 @@ private:
 	CTFBottle( const CTFBottle & ) {}
 	CNetworkVar( bool,	m_bBroken  );
 };
+
+class CTFSword : public CTFBottle
+{
+public:
+
+	DECLARE_CLASS( CTFSword, CTFBottle );
+	DECLARE_NETWORKCLASS(); 
+	DECLARE_PREDICTABLE();
+
+	CTFSword() {}
+	virtual int			GetWeaponID( void ) const			{ return TF_WEAPON_SWORD; }
+
+private:
+
+	CTFSword( const CTFSword & ) {}
+};
+
 
 #endif // TF_WEAPON_BOTTLE_H

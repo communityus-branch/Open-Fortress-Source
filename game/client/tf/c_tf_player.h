@@ -27,6 +27,7 @@ class C_BaseObject;
 
 extern ConVar tf_medigun_autoheal;
 extern ConVar of_autoreload;
+extern ConVar of_autoswitchweapons;
 extern ConVar cl_autorezoom;
 extern ConVar ofd_color_r;
 extern ConVar ofd_color_g;
@@ -180,6 +181,7 @@ public:
 	bool			GetMedigunAutoHeal( void ){ return tf_medigun_autoheal.GetBool(); }
 	bool			ShouldAutoRezoom( void ){ return cl_autorezoom.GetBool(); }
 	bool			ShouldAutoReload( void ){ return of_autoreload.GetBool(); }
+	bool			ShouldAutoSwitchWeapons( void ){ return of_autoswitchweapons.GetBool(); }
 
 public:
 	// Shared functions

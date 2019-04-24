@@ -341,7 +341,6 @@ bool CTFPlayerClassShared::CanBuildObject( int iObjectType )
 
 const char	*CTFPlayerClassShared::GetModelName( void ) const						
 { 
-	// Does this play have an overridden model?
 #ifdef CLIENT_DLL
 	if ( m_iszSetCustomModel[0] ) return m_iszSetCustomModel;
 #else
@@ -351,4 +350,23 @@ const char	*CTFPlayerClassShared::GetModelName( void ) const
 	Q_strncpy( modelFilename, GetPlayerClassData( m_iClass )->GetModelName(), sizeof( modelFilename ) );
 	
 	return modelFilename;
+}
+
+const char	*CTFPlayerClassShared::GetSetCustomModel( void ) const						
+{ 
+#ifdef CLIENT_DLL
+	return m_iszSetCustomModel;
+#else
+	return ( STRING( m_iszSetCustomModel.Get() ) );
+#endif
+}
+
+bool CTFPlayerClassShared::UsesCustomModel( void )
+{
+#ifdef CLIENT_DLL
+	if ( m_iszSetCustomModel[0] ) return true;
+#else
+	if ( m_iszSetCustomModel.Get() != NULL_STRING ) return true;
+#endif	
+return false;
 }

@@ -373,7 +373,9 @@ void C_TFRagdoll::CreateTFRagdoll()
 	if ( pData )
 	{
 		int nModelIndex = modelinfo->GetModelIndex( pData->GetModelName() );
-		SetModelIndex( nModelIndex );	
+		if (  pPlayer->GetPlayerClass()->UsesCustomModel() )
+			nModelIndex = modelinfo->GetModelIndex( pPlayer->GetPlayerClass()->GetSetCustomModel() );
+		SetModelIndex( nModelIndex );
 
 		if ( m_iTeam == TF_TEAM_RED )
 		{
