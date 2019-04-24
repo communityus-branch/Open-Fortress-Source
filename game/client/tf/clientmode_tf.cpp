@@ -46,6 +46,7 @@
 #include "cam_thirdperson.h"
 #include "clienteffectprecachesystem.h"
 #include "glow_outline_effect.h"
+#include "of_discordrpc.h"
 
 #if defined( _X360 )
 #include "tf_clientscoreboard.h"
@@ -117,6 +118,8 @@ void CTFModeManager::LevelInit( const char *newmap )
 	}
 
 	g_ThirdPersonManager.Init();
+	
+	g_discordrpc.LevelInit( newmap );
 }
 
 void CTFModeManager::LevelShutdown( void )

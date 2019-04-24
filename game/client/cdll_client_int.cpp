@@ -148,7 +148,7 @@
 #include "fbxsystem/fbxsystem.h"
 #endif
 
-#include "discord_rpc.h"
+#include "of_discordrpc.h"
 #include <time.h>
 
 extern vgui::IInputInternal *g_InputInternal;
@@ -334,7 +334,6 @@ void DispatchHudText( const char *pszName );
 static ConVar s_CV_ShowParticleCounts("showparticlecounts", "0", 0, "Display number of particles drawn per frame");
 static ConVar s_cl_team("cl_team", "default", FCVAR_USERINFO|FCVAR_ARCHIVE, "Default team when joining a game");
 static ConVar s_cl_class("cl_class", "default", FCVAR_USERINFO|FCVAR_ARCHIVE, "Default class when joining a game");
-static ConVar cl_discord_appid("cl_discord_appid", "558662173736566794", FCVAR_DEVELOPMENTONLY | FCVAR_CHEAT);
 static int64_t startTimestamp = time(0);
 
 #ifdef HL1MP_CLIENT_DLL
@@ -841,43 +840,6 @@ bool IsEngineThreaded()
 	return false;
 }
 
-//-----------------------------------------------------------------------------
-// Constructor
-//-----------------------------------------------------------------------------
-
-static void HandleDiscordReady(const DiscordUser* connectedUser)
-{
-	DevMsg("Discord: Connected to user %s#%s - %s\n",
-		connectedUser->username,
-		connectedUser->discriminator,
-		connectedUser->userId);
-}
-
-static void HandleDiscordDisconnected(int errcode, const char* message)
-{
-	DevMsg("Discord: Disconnected (%d: %s)\n", errcode, message);
-}
-
-static void HandleDiscordError(int errcode, const char* message)
-{
-	DevMsg("Discord: Error (%d: %s)\n", errcode, message);
-}
-
-static void HandleDiscordJoin(const char* secret)
-{
-	// Not implemented
-}
-
-static void HandleDiscordSpectate(const char* secret)
-{
-	// Not implemented
-}
-
-static void HandleDiscordJoinRequest(const DiscordUser* request)
-{
-	// Not implemented
-}
-
 CHLClient::CHLClient() 
 {
 	// Kinda bogus, but the logic in the engine is too convoluted to put it there
@@ -1157,6 +1119,10 @@ int CHLClient::Init(CreateInterfaceFn appSystemFactory, CreateInterfaceFn physic
 	HookHapticMessages(); // Always hook the messages
 #endif
 
+#ifdef OPENFORTRESS_DLL
+	g_discordrpc.Init();
+#endif
+
 	return true;
 }
 
@@ -1225,40 +1191,6 @@ void CHLClient::PostInit()
 	}
 #endif
 
-// Discord RPC
-	DiscordEventHandlers handlers;
-	memset(&handlers, 0, sizeof(handlers));
-
-	handlers.ready = HandleDiscordReady;
-	handlers.disconnected = HandleDiscordDisconnected;
-	handlers.errored = HandleDiscordError;
-	handlers.joinGame = HandleDiscordJoin;
-	handlers.spectateGame = HandleDiscordSpectate;
-	handlers.joinRequest = HandleDiscordJoinRequest;
-
-	char appid[255];
-	sprintf(appid, "%d", engine->GetAppID());
-
-	Discord_Initialize(cl_discord_appid.GetString(), &handlers, 1, appid);
-
-	extern ConVar of_enable_rpc;
-
-	if (!g_bTextMode && of_enable_rpc.GetBool())
-	{
-		DiscordRichPresence discordPresence;
-		memset(&discordPresence, 0, sizeof(discordPresence));
-
-		discordPresence.state = "In-Game";
-		discordPresence.details = "Main Menu";
-		discordPresence.startTimestamp = startTimestamp;
-		discordPresence.largeImageKey = "ico";
-		Discord_UpdatePresence(&discordPresence);
-	}
-	else
-	{
-		Discord_ClearPresence();
-		Discord_Shutdown();
-	}
 }
 
 //-----------------------------------------------------------------------------
@@ -1317,7 +1249,9 @@ void CHLClient::Shutdown( void )
 	ShutdownFbx();
 #endif
 
-Discord_Shutdown();
+#ifdef OPENFORTRESS_DLL
+	g_discordrpc.Shutdown();
+#endif
 	
 	// This call disconnects the VGui libraries which we rely on later in the shutdown path, so don't do it
 //	DisconnectTier3Libraries( );
@@ -1389,6 +1323,10 @@ void CHLClient::HudUpdate( bool bActive )
 	// I don't think this is necessary any longer, but I will leave it until
 	// I can check into this further.
 	C_BaseTempEntity::CheckDynamicTempEnts();
+
+#ifdef OPENFORTRESS_DLL
+	g_discordrpc.RunFrame();
+#endif
 
 #ifdef SIXENSE
 	// If we're not connected, update sixense so we can move the mouse cursor when in the menus
@@ -1731,24 +1669,14 @@ void CHLClient::LevelInitPreEntity( char const* pMapName )
 	}
 #endif
 
-// Discord RPC
-if (!g_bTextMode)
-{
-	DiscordRichPresence discordPresence;
-	memset(&discordPresence, 0, sizeof(discordPresence));
-
-	char buffer[256];
-	discordPresence.state = "In-Game";
-	sprintf(buffer, "Map: %s", pMapName);
-	discordPresence.details = buffer;
-	discordPresence.largeImageKey = "ico";
-	Discord_UpdatePresence(&discordPresence);
-}
-
 	// Check low violence settings for this map
 	g_RagdollLVManager.SetLowViolence( pMapName );
 
 	gHUD.LevelInit();
+
+#ifdef OPENFORTRESS_DLL
+	g_discordrpc.Reset();
+#endif
 
 #if defined( REPLAY_ENABLED )
 	// Initialize replay ragdoll recorder
@@ -1835,23 +1763,14 @@ void CHLClient::LevelShutdown( void )
 	StopAllRumbleEffects();
 
 	gHUD.LevelShutdown();
-
-// Discord RPC
-if (!g_bTextMode)
-{
-	DiscordRichPresence discordPresence;
-	memset(&discordPresence, 0, sizeof(discordPresence));
-
-	discordPresence.state = "In-Game";
-	discordPresence.details = "Main Menu";
-	discordPresence.startTimestamp = startTimestamp;
-	discordPresence.largeImageKey = "ModImageHere";
-	Discord_UpdatePresence(&discordPresence);
-}	
 	
 	internalCenterPrint->Clear();
 
 	messagechars->Clear();
+
+#ifdef OPENFORTRESS_DLL
+	g_discordrpc.Reset();
+#endif
 
 #if !( defined( TF_CLIENT_DLL ) || defined( TF_MOD_CLIENT ) )
 	// don't want to do this for TF2 because we have particle systems in our
