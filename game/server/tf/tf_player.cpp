@@ -4547,36 +4547,7 @@ void CTFPlayer::CheatImpulseCommands( int iImpulse )
 				extern int gEvilImpulse101;
 				gEvilImpulse101 = true;
 
-				GiveAmmo( 1000, TF_AMMO_PRIMARY );
-				GiveAmmo( 1000, TF_AMMO_SECONDARY );
-				GiveAmmo( 1000, TF_AMMO_METAL );
-				TakeHealth( 999, DMG_GENERIC );
-
-				GiveNamedItem("tf_weapon_crowbar");
-				GiveNamedItem("tf_weapon_flamethrower");
-				GiveNamedItem("tf_weapon_grenadelauncher");
-				GiveNamedItem("tf_weapon_grenadelauncher_mercenary");
-				GiveNamedItem("tf_weapon_knife");
-				GiveNamedItem("tf_weapon_minigun");
-				GiveNamedItem("tf_weapon_gatlinggun");
-				GiveNamedItem("tf_weapon_nailgun");
-				GiveNamedItem("tf_weapon_original");
-				GiveNamedItem("tf_weapon_pipebomblauncher");
-				GiveNamedItem("tf_weapon_pistol_mercenary");
-				GiveNamedItem("tf_weapon_pistol_akimbo");
-				GiveNamedItem("tf_weapon_railgun");
-				GiveNamedItem("tf_weapon_revolver");
-				GiveNamedItem("tf_weapon_revolver_mercenary");
-				GiveNamedItem("tf_weapon_rocketlauncher");
-				GiveNamedItem("tf_weapon_rocketlauncher_mercenary");
-				GiveNamedItem("tf_weapon_scattergun");
-				GiveNamedItem("tf_weapon_shotgun_soldier");
-				GiveNamedItem("tf_weapon_smg");
-				GiveNamedItem("tf_weapon_smg_mercenary");
-				GiveNamedItem("tf_weapon_tommygun");
-				GiveNamedItem("tf_weapon_sniperrifle");
-				GiveNamedItem("tf_weapon_supershotgun");
-				GiveNamedItem("tf_weapon_syringegun_medic");
+				GiveAllItems();
 
 				gEvilImpulse101 = false;
 			}
@@ -6554,4 +6525,247 @@ void CTFPlayer::SetCustomModel(inputdata_t &inputdata)
 	}
 	UpdateModel();
 	DevMsg("CTFPlayer::SetCustomModel - Input successful, data input %s\n", inputdata.value.String());
+}
+
+
+
+void CTFPlayer::GiveAllItems()
+{
+	GiveAmmo(1000, TF_AMMO_PRIMARY);
+	GiveAmmo(1000, TF_AMMO_SECONDARY);
+	GiveAmmo(1000, TF_AMMO_METAL);
+	GiveAmmo(1000, TF_AMMO_GRENADES1);
+	GiveAmmo(1000, TF_AMMO_GRENADES2);
+	GiveAmmo(1000, TF_AMMO_GRENADELAUNCHER);
+	GiveAmmo(1000, TF_AMMO_PIPEBOMBLAUNCHER);
+	GiveAmmo(1000, TF_AMMO_REVOLVER);
+	GiveAmmo(1000, TF_AMMO_ROCKETLAUNCHER);
+	GiveAmmo(1000, TF_AMMO_SNIPERRIFLE);
+	GiveAmmo(1000, TF_AMMO_SMG);
+	GiveAmmo(1000, TF_AMMO_SCATTERGUN);
+	GiveAmmo(1000, TF_AMMO_PISTOL);
+	GiveAmmo(1000, TF_AMMO_FLAMETHROWER);
+	GiveAmmo(1000, TF_AMMO_SYNRINGES);
+	GiveAmmo(1000, TF_AMMO_MINIGUN);
+	GiveAmmo(1000, TF_AMMO_SHOTGUN);
+	GiveAmmo(1000, TF_AMMO_NAILS);
+	GiveAmmo(1000, TF_AMMO_SUPERSHOTGUN);
+	GiveAmmo(1000, TF_AMMO_RAILGUN);
+	GiveAmmo(1000, TF_AMMO_ASSAULTRIFLE);
+
+	TakeHealth(999, DMG_GENERIC);
+
+	CTFWeaponBase *pWeapon = (CTFWeaponBase *)GetWeapon( 0 );
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_assaultrifle");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_bat");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_bonesaw");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_bottle");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	//pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_builder");
+	//if (pWeapon)
+	//	pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_chainsaw");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_club");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_combatknife");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_crowbar");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_fireaxe");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_fists");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_flamethrower");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_gatlinggun");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_grenadelauncher");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_grenadelauncher_mercenary");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_invis");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_knife");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_medigun");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_minigun");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_nailgun");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_objectselection");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_pda_engineer_build");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_pda_engineer_destroy");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_pda_spy");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_physgauntlet");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_pipebomblauncher");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_pistol");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_pistol_akimbo");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_pistol_mercenary");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_pistol_scout");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_quadlauncher");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_railgun");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_revolver");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_revolver_mercenary");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_rocketlauncher");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_rocketlauncher_dm");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_scattergun");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_scrapcannon");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_shotgun_hwg");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_shotgun_mercenary");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_shotgun_primary");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_shotgun_pyro");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_shotgun_soldier");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_shovel");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_smg");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_smg_mercenary");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_sniperrifle");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_supershotgun");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_syringegun_medic");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_tommygun");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_tripmine");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_umbrella");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
+
+	pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_wrench");
+	if (pWeapon)
+		pWeapon->DefaultTouch(this);
 }

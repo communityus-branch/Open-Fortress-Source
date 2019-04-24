@@ -536,6 +536,7 @@ public:
 	bool				IsAllowedToPickupWeapons( void ) { return true; }
 	bool				Weapon_CanUse( void ) { return true; }
 	bool				Weapon_EquipAmmoOnly( CBaseCombatWeapon *pWeapon ) { return false; }
+	void				GiveAllItems();
 };
 
 //-----------------------------------------------------------------------------

@@ -35,6 +35,8 @@ $Project "Client (OFD)"
 			$File   "ofd\ofd_imagecoloredhudpanel.cpp"
 			$File   "ofd\ofd_imagecoloredhudpanel.h"
 			$File	"$SRCDIR\game\shared\ofd\ofd_trigger_jump_shared.cpp"
+			$File	"$SRCDIR\game\shared\ofd\ofd_physgauntlet.cpp"
+			$File	"$SRCDIR\game\shared\ofd\ofd_physgauntlet.h"
 		}
 		
 		$File	"$SRCDIR\game\shared\basecombatweapon_shared.h"
@@ -276,8 +278,6 @@ $Project "Client (OFD)"
 				$File	"$SRCDIR\game\shared\tf\tf_weaponbase_melee.h"
 				$File	"$SRCDIR\game\shared\tf\tf_weaponbase_rocket.cpp"
 				$File	"$SRCDIR\game\shared\tf\tf_weaponbase_rocket.h"
-				$File	"$SRCDIR\game\shared\ofd\ofd_physgauntlet.cpp"
-				$File	"$SRCDIR\game\shared\ofd\ofd_physgauntlet.h"
 			}
 
 			$Folder	"vgui"

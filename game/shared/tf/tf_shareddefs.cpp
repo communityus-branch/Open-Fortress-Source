@@ -104,6 +104,7 @@ const char *g_aAmmoNames[] =
 	"TF_AMMO_SYNRINGES",
 	"TF_AMMO_ROCKETLAUNCHER",
 	"TF_AMMO_RAILGUN",
+	"TF_AMMO_ASSAULTRIFLE",
 };
 
 //-----------------------------------------------------------------------------

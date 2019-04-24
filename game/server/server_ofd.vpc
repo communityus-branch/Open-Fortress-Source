@@ -34,6 +34,8 @@ $Project "Server (OFD)"
 			$File	"$SRCDIR\game\shared\ofd\ofd_trigger_jump_shared.cpp"
 			$File	"ofd\hl1_ents.h"
 			$File	"ofd\hl1_ents.cpp"
+			$File	"$SRCDIR\game\shared\ofd\ofd_physgauntlet.cpp"
+			$File	"$SRCDIR\game\shared\ofd\ofd_physgauntlet.h"
 		}
 		
 		$File	"ai_relationship.cpp"
@@ -261,8 +263,6 @@ $Project "Server (OFD)"
 				$File	"$SRCDIR\game\shared\tf\tf_weaponbase_melee.h"
 				$File	"$SRCDIR\game\shared\tf\tf_weaponbase_rocket.cpp"
 				$File	"$SRCDIR\game\shared\tf\tf_weaponbase_rocket.h"
-				$File	"$SRCDIR\game\shared\ofd\ofd_physgauntlet.cpp"
-				$File	"$SRCDIR\game\shared\ofd\ofd_physgauntlet.h"
 			}
 		}
 		
