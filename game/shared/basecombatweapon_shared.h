@@ -662,6 +662,10 @@ protected:
 	int						m_iOldState;
 
 #endif // End Client .dll only
+
+	//ofd hack
+public:
+	bool			m_bQuakeRLHack;
 };
 
 #endif // COMBATWEAPON_SHARED_H

@@ -533,6 +533,9 @@ public:
 	void				SetHandsModel( const char* model );
 	void				SetCustomModel( inputdata_t &inputdata );
 	bool				m_bNotAlreadyPlayingMusic;
+	bool				IsAllowedToPickupWeapons( void ) { return true; }
+	bool				Weapon_CanUse( void ) { return true; }
+	bool				Weapon_EquipAmmoOnly( CBaseCombatWeapon *pWeapon ) { return false; }
 };
 
 //-----------------------------------------------------------------------------

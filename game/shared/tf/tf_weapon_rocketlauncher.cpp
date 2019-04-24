@@ -39,17 +39,6 @@ END_PREDICTION_DATA()
 LINK_ENTITY_TO_CLASS( tf_weapon_rocketlauncher, CTFRocketLauncher );
 PRECACHE_WEAPON_REGISTER( tf_weapon_rocketlauncher );
 
-IMPLEMENT_NETWORKCLASS_ALIASED( TFOriginal, DT_WeaponOriginal )
-
-BEGIN_NETWORK_TABLE( CTFOriginal, DT_WeaponOriginal )
-END_NETWORK_TABLE()
-
-BEGIN_PREDICTION_DATA( CTFOriginal )
-END_PREDICTION_DATA()
-
-LINK_ENTITY_TO_CLASS( tf_weapon_original, CTFOriginal );
-PRECACHE_WEAPON_REGISTER( tf_weapon_original );
-
 // Server specific.
 #ifndef CLIENT_DLL
 BEGIN_DATADESC( CTFRocketLauncher )
@@ -210,3 +199,122 @@ void CTFRocketLauncher::DrawCrosshair( void )
 */
 
 #endif
+
+
+//HACKS FOR DM ROCKET LAUNCHER HOT SWAP WEAPON AND SOUNDS BELOW
+
+#define SOLDIER_VIEW_MODEL			"models/weapons/v_models/v_rocketlauncher_soldier.mdl"
+#define SOLDIER_WORLD_MODEL			"models/weapons/w_models/w_rocketlauncher.mdl"
+#define QUAKE_VIEW_MODEL			"models/weapons/v_models/v_original.mdl"
+#define QUAKE_WORLD_MODEL			"models/weapons/c_models/c_bet_rocketlauncher/c_bet_rocketlauncher.mdl"
+
+IMPLEMENT_NETWORKCLASS_ALIASED(TFOriginal, DT_TFOriginal);
+
+BEGIN_NETWORK_TABLE(CTFOriginal, DT_TFOriginal)
+#ifdef CLIENT_DLL
+RecvPropInt(RECVINFO(m_iTF2ViewIndex)),
+RecvPropInt(RECVINFO(m_iTF2WorldIndex)),
+RecvPropInt(RECVINFO(m_iQuakeViewIndex)),
+RecvPropInt(RECVINFO(m_iQuakeWorldIndex)),
+#else
+SendPropInt(SENDINFO(m_iTF2ViewIndex)),
+SendPropInt(SENDINFO(m_iTF2WorldIndex)),
+SendPropInt(SENDINFO(m_iQuakeViewIndex)),
+SendPropInt(SENDINFO(m_iQuakeWorldIndex)),
+#endif
+END_NETWORK_TABLE()
+
+BEGIN_PREDICTION_DATA( CTFOriginal )
+#ifdef CLIENT_DLL
+	DEFINE_PRED_FIELD( m_iTF2ViewIndex, FIELD_INTEGER, FTYPEDESC_INSENDTABLE | FTYPEDESC_MODELINDEX ),
+	DEFINE_PRED_FIELD( m_iTF2WorldIndex, FIELD_INTEGER, FTYPEDESC_INSENDTABLE | FTYPEDESC_MODELINDEX ),
+	DEFINE_PRED_FIELD( m_iQuakeViewIndex, FIELD_INTEGER, FTYPEDESC_INSENDTABLE | FTYPEDESC_MODELINDEX ),
+	DEFINE_PRED_FIELD( m_iQuakeWorldIndex, FIELD_INTEGER, FTYPEDESC_INSENDTABLE | FTYPEDESC_MODELINDEX ),
+#endif
+END_PREDICTION_DATA()
+
+LINK_ENTITY_TO_CLASS(tf_weapon_rocketlauncher_dm, CTFOriginal);
+PRECACHE_WEAPON_REGISTER(tf_weapon_rocketlauncher_dm);
+
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+void CTFOriginal::Precache( void )
+{
+	m_iTF2ViewIndex			= PrecacheModel( SOLDIER_VIEW_MODEL );
+	m_iTF2WorldIndex		= PrecacheModel( SOLDIER_WORLD_MODEL );
+	m_iQuakeViewIndex		= PrecacheModel( QUAKE_VIEW_MODEL );
+	m_iQuakeWorldIndex		= PrecacheModel( QUAKE_WORLD_MODEL );
+
+	BaseClass::Precache();
+}
+
+bool CTFOriginal::Deploy( void )
+{
+	CTFPlayer *pPlayer = ToTFPlayer(GetTFPlayerOwner());
+	int iModelToUse = 0;
+
+	if ( pPlayer )
+	{
+#ifdef GAME_DLL
+		iModelToUse = V_atoi(engine->GetClientConVarValue(pPlayer->entindex(), "ofd_use_quake_rl"));
+#else
+		extern ConVar ofd_use_quake_rl;
+		iModelToUse = V_atoi(ofd_use_quake_rl.GetString());
+#endif
+	}
+
+	if ( iModelToUse )
+	{
+		ActivateQuakeModel();
+	}
+	else
+	{
+		ActivateSoldierModel();
+	}
+
+	return BaseClass::Deploy();
+}
+
+void CTFOriginal::ActivateSoldierModel( void )
+{
+	m_iViewModelIndex	= m_iTF2ViewIndex;
+	m_iWorldModelIndex	= m_iTF2WorldIndex;
+	SetModel( GetViewModel() );
+	m_bQuakeRLHack = false;
+}
+
+void CTFOriginal::ActivateQuakeModel( void )
+{
+	m_iViewModelIndex	= m_iQuakeViewIndex;
+	m_iWorldModelIndex	= m_iQuakeWorldIndex;
+	SetModel( GetViewModel() );
+	m_bQuakeRLHack = true;
+}
+
+const char *CTFOriginal::GetViewModel( int ) const
+{
+	if ( m_iViewModelIndex == m_iTF2ViewIndex)
+	{
+		return SOLDIER_VIEW_MODEL;
+	}
+	else
+	{
+		return QUAKE_VIEW_MODEL;
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+const char *CTFOriginal::GetWorldModel( void ) const
+{
+	if ( m_iViewModelIndex == m_iTF2ViewIndex)
+	{
+		return SOLDIER_WORLD_MODEL;
+	}
+	else
+	{
+		return QUAKE_WORLD_MODEL;
+	}
+}

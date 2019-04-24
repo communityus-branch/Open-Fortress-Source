@@ -178,6 +178,7 @@ const char *g_aWeaponNames[] =
 	"TF_WEAPON_GRENADELAUNCHER_MERCENARY",
 	"TF_WEAPON_ORIGINAL",
 	"TF_WEAPON_AR",
+	"TF_WEAPON_SHOTGUN_MERCENARY",
 
 	"TF_WEAPON_COUNT",	// end marker, do not add below here
 };
@@ -251,6 +252,7 @@ int g_aWeaponDamageTypes[] =
 	DMG_BLAST | DMG_HALF_FALLOFF | DMG_USEDISTANCEMOD,		// TF_WEAPON_GRENADELAUNCHER_MERCENARY,
 	DMG_BLAST | DMG_HALF_FALLOFF | DMG_USEDISTANCEMOD,		// TF_WEAPON_ORIGINAL,
 	DMG_BULLET,	// TF_WEAPON_AR,
+	DMG_BUCKSHOT | DMG_USEDISTANCEMOD ,	// TF_WEAPON_SHOTGUN_MERCENARY,
 	
 	// This is a special entry that must match with TF_WEAPON_COUNT
 	// to protect against updating the weapon list without updating this list

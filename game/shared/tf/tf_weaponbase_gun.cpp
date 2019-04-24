@@ -482,13 +482,27 @@ CBaseEntity *CTFWeaponBaseGun::FirePipeBomb( CTFPlayer *pPlayer, bool bRemoteDet
 //-----------------------------------------------------------------------------
 void CTFWeaponBaseGun::PlayWeaponShootSound( void )
 {
-	if ( IsCurrentAttackACrit() )
+	if (!m_bQuakeRLHack)
 	{
-		WeaponSound( BURST );
+		if (IsCurrentAttackACrit())
+		{
+			WeaponSound(BURST);
+		}
+		else
+		{
+			WeaponSound(SINGLE);
+		}
 	}
 	else
 	{
-		WeaponSound( SINGLE );
+		if (IsCurrentAttackACrit())
+		{
+			WeaponSound(SPECIAL1);
+		}
+		else
+		{
+			WeaponSound(SPECIAL2);
+		}
 	}
 }
 

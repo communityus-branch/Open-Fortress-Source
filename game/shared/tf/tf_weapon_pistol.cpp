@@ -188,12 +188,14 @@ acttable_t CTFPistol::m_acttablePistol[] =
 //Act table remapping for Merc
 acttable_t *CTFPistol::ActivityList( int &iActivityCount )
 {
+#if 0
 	if (GetTFPlayerOwner()->GetPlayerClass()->GetClassIndex() == TF_CLASS_MERCENARY)
 	{
 		iActivityCount = ARRAYSIZE(m_acttablePistol);
 		return m_acttablePistol;
 	}
 	else
+#endif
 	{
 		return BaseClass::ActivityList(iActivityCount);
 	}

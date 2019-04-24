@@ -195,6 +195,8 @@ CTFWeaponBase::CTFWeaponBase()
 	m_iLastCritCheckFrame = 0;
 	m_bCurrentAttackIsCrit = false;
 	m_iCurrentSeed = -1;
+
+	m_bQuakeRLHack = false;
 }
 
 // -----------------------------------------------------------------------------
@@ -706,7 +708,10 @@ bool CTFWeaponBase::ReloadSingly( void )
 			}
 
 #ifndef CLIENT_DLL
-			WeaponSound( RELOAD );
+			if (m_bQuakeRLHack)
+				WeaponSound( RELOAD_NPC );
+			else
+				WeaponSound( RELOAD );
 #endif
 
 			// Next continue to reload shells?
@@ -827,7 +832,10 @@ bool CTFWeaponBase::ReloadsAll( void )
 			}
 
 #ifndef CLIENT_DLL
-			WeaponSound( RELOAD );
+			if (m_bQuakeRLHack)
+				WeaponSound( RELOAD_NPC );
+			else
+				WeaponSound( RELOAD );
 #endif
 
 			// Next continue to reload shells?
@@ -956,7 +964,10 @@ bool CTFWeaponBase::DefaultReload( int iClipSize1, int iClipSize2, int iActivity
 
 #ifndef CLIENT_DLL
 	// Play reload
-	WeaponSound( RELOAD );
+	if (m_bQuakeRLHack)
+		WeaponSound( RELOAD_NPC );
+	else
+		WeaponSound( RELOAD );
 #endif
 
 	// Play the player's reload animation
