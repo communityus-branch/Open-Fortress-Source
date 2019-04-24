@@ -51,6 +51,7 @@
 #include "cdll_int.h"
 #include "tf_weaponbase.h"
 #include "tf_playerclass_shared.h"
+#include "ofd_physgauntlet.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -6780,4 +6781,9 @@ void CTFPlayer::GiveAllItems()
 		pWeapon = (CTFWeaponBase *)GiveNamedItem("tf_weapon_umbrella");
 	if (pWeapon)
 		pWeapon->DefaultTouch(this);
+}
+
+CBaseEntity	*CTFPlayer::GetHeldObject(void)
+{
+	return PhysCannonGetHeldEntity(GetActiveWeapon());
 }

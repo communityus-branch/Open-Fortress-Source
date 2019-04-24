@@ -246,6 +246,7 @@ public:
 	bool PlayerOwnsObject( CBaseObject *pObject );
 	void DetonateOwnedObjectsOfType( int iType );
 	void StartBuildingObjectOfType( int iType );
+	virtual CBaseEntity	*GetHeldObject(void);
 
 	CTFTeam *GetTFTeam( void );
 	CTFTeam *GetOpposingTFTeam( void );
