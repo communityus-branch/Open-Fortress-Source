@@ -373,7 +373,7 @@ void C_TFRagdoll::CreateTFRagdoll()
 	if ( pData )
 	{
 		int nModelIndex = modelinfo->GetModelIndex( pData->GetModelName() );
-		if (  pPlayer->GetPlayerClass()->UsesCustomModel() )
+		if (  pPlayer && pPlayer->GetPlayerClass()->UsesCustomModel() )
 			nModelIndex = modelinfo->GetModelIndex( pPlayer->GetPlayerClass()->GetSetCustomModel() );
 		SetModelIndex( nModelIndex );
 
