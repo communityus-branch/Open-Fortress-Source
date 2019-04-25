@@ -48,6 +48,7 @@ ConVar of_autoswitchweapons("of_autoswitchweapons", "0", FCVAR_CLIENTDLL | FCVAR
 
 ConVar tf_weapon_criticals( "tf_weapon_criticals", "0", FCVAR_NOTIFY | FCVAR_REPLICATED, "Whether or not random crits are enabled." );
 ConVar of_infiniteammo( "of_infiniteammo", "0", FCVAR_NOTIFY | FCVAR_REPLICATED, "Whether or not reloading is disabled" );
+ConVar ofd_multiweapons( "ofd_multiweapons", "1", FCVAR_NOTIFY | FCVAR_REPLICATED, "Toggle the Quake-like Multi weapon system." );
 extern ConVar tf_useparticletracers;
 
 //=============================================================================
@@ -233,6 +234,27 @@ void CTFWeaponBase::Spawn()
 	m_szTracerName[0] = '\0';
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+int CTFWeaponBase::GetSlot( void ) const
+{
+	if ( TFGameRules() && TFGameRules()->IsDMGamemode() && ofd_multiweapons.GetBool() )
+		return GetWpnData().iSlotDM;
+
+	return GetWpnData().iSlot;
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+int CTFWeaponBase::GetPosition( void ) const
+{
+	if ( TFGameRules() && TFGameRules()->IsDMGamemode() && ofd_multiweapons.GetBool() )
+		return GetWpnData().iPositionDM;	
+	return GetWpnData().iPosition;
+}
+
 // -----------------------------------------------------------------------------
 // Purpose:
 // -----------------------------------------------------------------------------
@@ -346,6 +368,41 @@ const char *CTFWeaponBase::GetViewModel( int iViewModel ) const
 		return BaseClass::GetViewModel();
 	}
 
+	CTFPlayer *pPlayer = GetTFPlayerOwner();
+	bool bScout = pPlayer->GetPlayerClass()->IsClass( TF_CLASS_SCOUT );
+	bool bSoldier = pPlayer->GetPlayerClass()->IsClass( TF_CLASS_SOLDIER );
+	bool bPyro = pPlayer->GetPlayerClass()->IsClass( TF_CLASS_PYRO );
+	bool bDemo = pPlayer->GetPlayerClass()->IsClass( TF_CLASS_DEMOMAN );
+	bool bHeavy = pPlayer->GetPlayerClass()->IsClass( TF_CLASS_HEAVYWEAPONS );
+	bool bEngi = pPlayer->GetPlayerClass()->IsClass( TF_CLASS_ENGINEER );
+	bool bMedic = pPlayer->GetPlayerClass()->IsClass( TF_CLASS_MEDIC );
+	bool bSniper = pPlayer->GetPlayerClass()->IsClass( TF_CLASS_SNIPER );
+	bool bSpy = pPlayer->GetPlayerClass()->IsClass( TF_CLASS_SPY );
+	bool bCivilian = pPlayer->GetPlayerClass()->IsClass( TF_CLASS_CIVILIAN );
+	bool bMercenary = pPlayer->GetPlayerClass()->IsClass( TF_CLASS_MERCENARY );
+	
+	if ( bScout && GetTFWpnData().szScoutViewModel[0] != 0 )
+		return GetTFWpnData().szScoutViewModel;
+	if ( bSoldier && GetTFWpnData().szSoldierViewModel[0] != 0 )
+		return GetTFWpnData().szSoldierViewModel;
+	if ( bPyro && GetTFWpnData().szPyroViewModel[0] != 0 )
+		return GetTFWpnData().szPyroViewModel;	
+	if ( bDemo && GetTFWpnData().szDemomanViewModel[0] != 0 )
+		return GetTFWpnData().szDemomanViewModel;		
+	if ( bHeavy && GetTFWpnData().szHeavyViewModel[0] != 0  )
+		return GetTFWpnData().szHeavyViewModel;	
+	if ( bEngi && GetTFWpnData().szEngineerViewModel[0] != 0  )
+		return GetTFWpnData().szEngineerViewModel;	
+	if ( bMedic && GetTFWpnData().szScoutViewModel[0] != 0 )
+		return GetTFWpnData().szMedicViewModel;	
+	if ( bSniper && GetTFWpnData().szSniperViewModel[0] != 0 )
+		return GetTFWpnData().szSniperViewModel;
+	if ( bSpy && GetTFWpnData().szSpyViewModel[0] != 0  )
+		return GetTFWpnData().szSpyViewModel;
+	if ( bCivilian && GetTFWpnData().szCivilianViewModel[0] != 0  )
+		return GetTFWpnData().szCivilianViewModel;
+	if ( bMercenary && GetTFWpnData().szMercenaryViewModel[0] != 0 )
+		return GetTFWpnData().szMercenaryViewModel;
 	return GetTFWpnData().szViewModel;
 }
 

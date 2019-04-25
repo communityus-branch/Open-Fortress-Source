@@ -22,6 +22,7 @@
 
 #if defined ( TF_DLL ) || defined ( TF_CLIENT_DLL )
 #include "tf_shareddefs.h"
+#include "tf_gamerules.h"
 #endif
 
 #if !defined( CLIENT_DLL )
@@ -433,6 +434,7 @@ int CBaseCombatWeapon::GetWeight( void ) const
 bool CBaseCombatWeapon::AllowsAutoSwitchTo( void ) const
 {
 	return GetWpnData().bAutoSwitchTo;
+//	return false; //stickynote
 }
 
 //-----------------------------------------------------------------------------

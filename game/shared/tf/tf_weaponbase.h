@@ -125,6 +125,8 @@ class CTFWeaponBase : public CBaseCombatWeapon
 	virtual bool Holster( CBaseCombatWeapon *pSwitchingTo = NULL );
 	virtual bool Deploy( void );
 	virtual bool ReloadOrSwitchWeapons( void );
+	virtual int				GetSlot( void ) const;
+	virtual int				GetPosition( void ) const;
 	
 	// Attacks.
 	virtual void PrimaryAttack();

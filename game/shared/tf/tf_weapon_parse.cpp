@@ -34,6 +34,19 @@ CTFWeaponInfo::CTFWeaponInfo()
 
 	m_bHasTeamSkins_Viewmodel = false;
 	m_bHasTeamSkins_Worldmodel = false;
+	
+	szScoutViewModel[0] = 0;
+	szSoldierViewModel[0] = 0;
+	szPyroViewModel[0] = 0;
+	szDemomanViewModel[0] = 0;
+	szHeavyViewModel[0] = 0;
+	szEngineerViewModel[0] = 0;
+	szMedicViewModel[0] = 0;
+	szSniperViewModel[0] = 0;
+	szSpyViewModel[0] = 0;
+	szMercenaryViewModel[0] = 0;
+	szCivilianViewModel[0] = 0;
+	
 
 	m_szMuzzleFlashModel[0] = '\0';
 	m_flMuzzleFlashModelDuration = 0;
@@ -174,6 +187,18 @@ void CTFWeaponInfo::Parse( KeyValues *pKeyValuesData, const char *szWeaponName )
 	m_bHasTeamSkins_Viewmodel	= ( pKeyValuesData->GetInt( "HasTeamSkins_Viewmodel", 0 ) != 0 );
 	m_bHasTeamSkins_Worldmodel	= ( pKeyValuesData->GetInt( "HasTeamSkins_Worldmodel", 0 ) != 0 );
 
+	Q_strncpy( szScoutViewModel, pKeyValuesData->GetString( "scout_viewmodel" ), MAX_WEAPON_STRING );
+	Q_strncpy( szSoldierViewModel, pKeyValuesData->GetString( "soldier_viewmodel" ), MAX_WEAPON_STRING );
+	Q_strncpy( szPyroViewModel, pKeyValuesData->GetString( "pyro_viewmodel" ), MAX_WEAPON_STRING );
+	Q_strncpy( szDemomanViewModel, pKeyValuesData->GetString( "demoman_viewmodel" ), MAX_WEAPON_STRING );
+	Q_strncpy( szHeavyViewModel, pKeyValuesData->GetString( "heavy_viewmodel" ), MAX_WEAPON_STRING );
+	Q_strncpy( szEngineerViewModel, pKeyValuesData->GetString( "engineer_viewmodel" ), MAX_WEAPON_STRING );
+	Q_strncpy( szMedicViewModel, pKeyValuesData->GetString( "medic_viewmodel" ), MAX_WEAPON_STRING );
+	Q_strncpy( szSniperViewModel, pKeyValuesData->GetString( "sniper_viewmodel" ), MAX_WEAPON_STRING );
+	Q_strncpy( szSpyViewModel, pKeyValuesData->GetString( "spy_viewmodel" ), MAX_WEAPON_STRING );
+	Q_strncpy( szMercenaryViewModel, pKeyValuesData->GetString( "mercenary_viewmodel" ), MAX_WEAPON_STRING );
+	Q_strncpy( szCivilianViewModel, pKeyValuesData->GetString( "civilian_viewmodel" ), MAX_WEAPON_STRING );
+	
 	// Model muzzleflash
 	const char *pszMuzzleFlashModel = pKeyValuesData->GetString( "MuzzleFlashModel", NULL );
 

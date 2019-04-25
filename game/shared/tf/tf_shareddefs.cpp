@@ -75,6 +75,9 @@ const char *g_aGameTypeNames[] =
 	"Undefined",
 	"#Gametype_CTF",
 	"#Gametype_CP",
+	"#Gametype_DM",
+	"#Gametype_TDM",
+	"#Gametype_ESC",
 };
 
 //-----------------------------------------------------------------------------
@@ -181,8 +184,9 @@ const char *g_aWeaponNames[] =
 	"TF_WEAPON_ASSAULTRIFLE",
 	"TF_WEAPON_SHOTGUN_MERCENARY",
 	"TF_WEAPON_SWORD",
+	"TF_WEAPON_FLAG",
 
-	"TF_WEAPON_COUNT",	// end marker, do not add below here
+	"TF_WEAPON_COUNT",	// end marker, do not add below here 
 };
 
 int g_aWeaponDamageTypes[] =
@@ -256,6 +260,7 @@ int g_aWeaponDamageTypes[] =
 	DMG_BULLET | DMG_USEDISTANCEMOD,	// TF_WEAPON_ASSAULTRIFLE,
 	DMG_BUCKSHOT | DMG_USEDISTANCEMOD ,	// TF_WEAPON_SHOTGUN_MERCENARY,
 	DMG_CLUB, //TF_WEAPON_SWORD
+	DMG_CLUB, //TF_WEAPON_FLAG
 	
 	// This is a special entry that must match with TF_WEAPON_COUNT
 	// to protect against updating the weapon list without updating this list

@@ -90,6 +90,19 @@ public:
 	// Skins
 	bool	m_bHasTeamSkins_Viewmodel;
 	bool	m_bHasTeamSkins_Worldmodel;
+	
+	//Viewmodels
+	char					szScoutViewModel[MAX_WEAPON_STRING];
+	char					szSoldierViewModel[MAX_WEAPON_STRING];
+	char					szPyroViewModel[MAX_WEAPON_STRING];
+	char					szDemomanViewModel[MAX_WEAPON_STRING];
+	char					szHeavyViewModel[MAX_WEAPON_STRING];
+	char					szEngineerViewModel[MAX_WEAPON_STRING];
+	char					szMedicViewModel[MAX_WEAPON_STRING];
+	char					szSniperViewModel[MAX_WEAPON_STRING];
+	char					szSpyViewModel[MAX_WEAPON_STRING];
+	char					szMercenaryViewModel[MAX_WEAPON_STRING];	
+	char					szCivilianViewModel[MAX_WEAPON_STRING];	
 
 	// Muzzle flash
 	char	m_szMuzzleFlashModel[128];
