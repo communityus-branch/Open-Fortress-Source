@@ -100,7 +100,8 @@ bool CAmmoPack::MyTouch( CBasePlayer *pPlayer )
 		CTFPlayer *pTFPlayer = ToTFPlayer( pPlayer );
 		if ( !pTFPlayer )
 			return false;
-
+		if ( pTFPlayer->RestockAmmo(PackRatios[GetPowerupSize()]) )
+			bSuccess = true;
 		int iMaxPrimary = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_PRIMARY];
 		if ( pPlayer->GiveAmmo( ceil(iMaxPrimary * PackRatios[GetPowerupSize()]), TF_AMMO_PRIMARY, true ) )
 		{
@@ -222,3 +223,5 @@ bool CAmmoPack::MyTouch( CBasePlayer *pPlayer )
 
 	return bSuccess;
 }
+
+

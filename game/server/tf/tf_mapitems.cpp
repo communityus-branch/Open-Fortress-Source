@@ -680,7 +680,7 @@ void RemoveResults(CTFGoal *Goal, CTFPlayer *pPlayer)
 	{
 		pPlayer->TF_AddFrags(Goal->frags);
 	}
-
+	
 	pPlayer->RemoveAmmo( Goal->ammo_shells, TF_AMMO_SHELLS );
 	pPlayer->RemoveAmmo( Goal->ammo_nails, TF_AMMO_NAILS );
 	pPlayer->RemoveAmmo( Goal->ammo_rockets, TF_AMMO_ROCKETS );

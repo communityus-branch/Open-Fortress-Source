@@ -2106,6 +2106,7 @@ void CBaseCombatCharacter::Weapon_Equip( CBaseCombatWeapon *pWeapon )
 	else if (pWeapon->GetDefaultClip1() >  pWeapon->GetMaxClip1() )
 	{
 		pWeapon->m_iClip1 = pWeapon->GetMaxClip1();
+		pWeapon->m_iMaxAmmo = pWeapon->GetMaxAmmo();
 		GiveAmmo( (pWeapon->GetDefaultClip1() - pWeapon->GetMaxClip1()), pWeapon->m_iPrimaryAmmoType); 
 	}
 

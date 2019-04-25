@@ -93,8 +93,10 @@ public:
 	
 	int						iMaxClip1;								// max primary clip size (-1 if no clip)
 	int						iMaxClip2;								// max secondary clip size (-1 if no clip)
+	int						iMaxAmmo;
 	int						iDefaultClip1;							// amount of primary ammo in the gun when it's created
 	int						iDefaultClip2;							// amount of secondary ammo in the gun when it's created
+	int						iDefaultAmmo;
 	int						iWeight;								// this value used to determine this weapon's importance in autoselection.
 	int						iRumbleEffect;							// Which rumble effect to use when fired? (xbox)
 	bool					bAutoSwitchTo;							// whether this weapon should be considered for autoswitching to

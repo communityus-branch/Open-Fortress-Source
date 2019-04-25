@@ -1077,29 +1077,6 @@ void CTFPlayer::CreateViewModel( int iViewModel )
 	}
 }
 
-void CTFPlayer::CreateHandModel(int index, int iOtherVm)
-{
-	Assert(index >= 0 && index < MAX_VIEWMODELS && iOtherVm >= 0 && iOtherVm < MAX_VIEWMODELS );
-
-	if (GetViewModel(index))
-		return;
-
-	CBaseViewModel *vm = (CBaseViewModel *)CreateEntityByName("hand_viewmodel");
-	if (vm)
-	{
-		vm->SetAbsOrigin( GetAbsOrigin() );
-		vm->SetOwner(this);
-		vm->SetIndex(index);
-		DispatchSpawn(vm);
-		vm->SetParent( this );
-		vm->AddEffects(EF_BONEMERGE);
-		vm->SetLocalOrigin( GetAbsOrigin() );
-	
-		vm->FollowEntity(GetViewModel(iOtherVm), true);
-		m_hViewModel.Set(index, vm);
-	}
-}
-
 //-----------------------------------------------------------------------------
 // Purpose: Gets the view model for the player's off hand
 //-----------------------------------------------------------------------------
@@ -1144,6 +1121,49 @@ void CTFPlayer::GiveDefaultItems()
 	// Give a builder weapon for each object the player class is allowed to build
 	ManageBuilderWeapons( pData );
 }
+
+int CTFPlayer::GetCarriedWeapons( void )
+{
+	CTFWeaponBase *pWeapon = (CTFWeaponBase *)GetWeapon( 0 );
+	int WeaponCount=0;
+	for ( int iWeapon = 0; iWeapon < TF_WEAPON_COUNT; ++iWeapon )
+	{
+		pWeapon = (CTFWeaponBase *)GetWeapon( iWeapon );
+		//If we have a weapon in this slot, count up
+		if ( pWeapon )
+		{
+			WeaponCount++;
+		}
+	}
+
+	return WeaponCount;
+}
+
+bool CTFPlayer::RestockAmmo( float PowerupSize )
+{
+	bool bSuccess=false;
+	CTFWeaponBase *pWeapon = (CTFWeaponBase *)GetWeapon( 0 );
+	for ( int iWeapon = 0; iWeapon < GetCarriedWeapons(); ++iWeapon )
+	{
+		pWeapon = (CTFWeaponBase *)GetWeapon( iWeapon );
+		//If we have a weapon in this slot, count up
+		if ( pWeapon )
+		{
+			if ( pWeapon->m_iMaxAmmo < pWeapon->GetMaxAmmo() )
+			{
+				pWeapon->m_iMaxAmmo += pWeapon->GetMaxAmmo() * PowerupSize;
+				if ( pWeapon->m_iMaxAmmo > pWeapon->GetMaxAmmo() )
+					pWeapon->m_iMaxAmmo = pWeapon->GetMaxAmmo();
+					DevMsg("Powerup Size is %s\n", PowerupSize);
+					bSuccess = true;
+			}
+			
+		}
+	}
+	return bSuccess;
+}
+
+
 
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -1209,7 +1229,7 @@ void CTFPlayer::ManageRegularWeapons( TFPlayerClassData_t *pData )
 {
 	CTFWeaponBase *pWeapon = (CTFWeaponBase *)GetWeapon( 0 );
 	if( ofd_instagib.GetInt() == 0 )
-		for ( int iWeapon = 0; iWeapon < TF_PLAYER_WEAPON_COUNT; ++iWeapon )
+		for ( int iWeapon = 0; iWeapon < GetCarriedWeapons()+5; ++iWeapon )
 		{
 			if ( pData->m_aWeapons[iWeapon] != TF_WEAPON_NONE )
 			{
@@ -1261,7 +1281,7 @@ void CTFPlayer::ManageRegularWeapons( TFPlayerClassData_t *pData )
 		}
 	else
 	{
-		for ( int iWeapon = 0; iWeapon < TF_PLAYER_WEAPON_COUNT; ++iWeapon )
+		for ( int iWeapon = 0; iWeapon < GetCarriedWeapons()+5; ++iWeapon )
 		{
 			
 				pWeapon = (CTFWeaponBase *)GetWeapon( iWeapon );
@@ -1300,7 +1320,7 @@ void CTFPlayer::ManageRegularWeapons( TFPlayerClassData_t *pData )
 					}
 		}	
 	}
-	for ( int iWeapon = 0; iWeapon < TF_PLAYER_WEAPON_COUNT; ++iWeapon )
+	for ( int iWeapon = 0; iWeapon < GetCarriedWeapons()+5; ++iWeapon )
 	{
 		if( GetActiveWeapon() != NULL ) break;
 		if ( m_bRegenerating == false )
@@ -3749,9 +3769,9 @@ void CTFPlayer::DropAmmoPack( void )
 		return;
 
 	// Fill the ammo pack with unused player ammo, if out add a minimum amount.
-	int iPrimary = max( 5, GetAmmoCount( TF_AMMO_PRIMARY ) );
-	int iSecondary = max( 5, GetAmmoCount( TF_AMMO_SECONDARY ) );
-	int iMetal = max( 5, GetAmmoCount( TF_AMMO_METAL ) );	
+	int iPrimary = max( 5, pWeapon->MaxAmmo() );
+	int iSecondary = max( 5, pWeapon->MaxAmmo() );
+	int iMetal = max( 5, pWeapon->MaxAmmo() );	
 
 	// Create the ammo pack.
 	CTFAmmoPack *pAmmoPack = CTFAmmoPack::Create( vecPackOrigin, vecPackAngles, this, pszWorldModel );
@@ -6787,3 +6807,4 @@ CBaseEntity	*CTFPlayer::GetHeldObject(void)
 {
 	return PhysCannonGetHeldEntity(GetActiveWeapon());
 }
+

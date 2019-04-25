@@ -112,19 +112,19 @@ void CTFAmmoPack::PackTouch( CBaseEntity *pOther )
 	if( GetOwnerEntity() == pOther && m_bAllowOwnerPickup == false )
 		return;
 
-	CBasePlayer *pPlayer = ToBasePlayer( pOther );
+//	CBasePlayer *pPlayer = ToBasePlayer( pOther );
+	CTFPlayer *pTFPlayer = ToTFPlayer( pOther );
 
-	Assert( pPlayer );
+	Assert( pTFPlayer );
 
-	int iAmmoTaken = 0;
+//	int iAmmoTaken = 0;
 
-	int i;
-	for ( i=0;i<TF_AMMO_COUNT;i++ )
-	{
-		iAmmoTaken += pPlayer->GiveAmmo( m_iAmmo[i], i );
-	}
+//	int i;
+	bool bSuccess = false;
+	if ( pTFPlayer->RestockAmmo( 0.5f ) )
+			bSuccess = true;
 
-	if ( iAmmoTaken > 0 )
+	if ( bSuccess )
 	{
 		UTIL_Remove( this );
 	}

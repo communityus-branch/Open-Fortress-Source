@@ -188,12 +188,12 @@ void CTFClientScoreBoardDialog::Reset()
 	RemovePlayerList( m_pPlayerListMercenary );
 	if ( TFGameRules() )
 	{
-		if ( !TFGameRules()->IsDMGamemode() || ofd_allowteams.GetBool() )
+		if ( !TFGameRules()->IsDMGamemode() || ofd_allowteams.GetBool() || TFGameRules()->IsTeamplay() )
 		{
 			InitPlayerList( m_pPlayerListBlue );
 			InitPlayerList( m_pPlayerListRed );
 		}
-		if ( TFGameRules()->IsDMGamemode() )
+		if ( TFGameRules()->IsDMGamemode() && !TFGameRules()->IsTeamplay()  )
 			InitPlayerList( m_pPlayerListMercenary );
 	}
 }

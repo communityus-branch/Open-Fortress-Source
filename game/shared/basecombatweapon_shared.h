@@ -367,6 +367,8 @@ public:
 	virtual int				GetMaxClip2( void ) const;
 	virtual int				GetDefaultClip1( void ) const;
 	virtual int				GetDefaultClip2( void ) const;
+	virtual int				GetMaxAmmo( void ) const;
+	virtual int				GetDefaultAmmo( void ) const;
 	virtual int				GetWeight( void ) const;
 	virtual bool			AllowsAutoSwitchTo( void ) const;
 	virtual bool			AllowsAutoSwitchFrom( void ) const;
@@ -389,6 +391,8 @@ public:
 	virtual int				GetSecondaryAmmoType( void )  const { return m_iSecondaryAmmoType; }
 	virtual int				Clip1() { return m_iClip1; }
 	virtual int				Clip2() { return m_iClip2; }
+	virtual int				MaxAmmo() { return m_iMaxAmmo; }
+	virtual int				DefaultAmmo() { return m_iDefaultAmmo; }
 
 	// Ammo quantity queries for weapons that do not use clips. These are only
 	// used to determine how much ammo is in a weapon that does not have an owner.
@@ -613,6 +617,8 @@ public:
 	CNetworkVar( int, m_iSecondaryAmmoType );	// "secondary" ammo index into the ammo info array
 	CNetworkVar( int, m_iClip1 );				// number of shots left in the primary weapon clip, -1 it not used
 	CNetworkVar( int, m_iClip2 );				// number of shots left in the secondary weapon clip, -1 it not used
+	CNetworkVar( int, m_iMaxAmmo );				// number of shots left in the primary weapon clip, -1 it not used
+	CNetworkVar( int, m_iDefaultAmmo );
 	bool					m_bFiresUnderwater;		// true if this weapon can fire underwater
 	bool					m_bAltFiresUnderwater;		// true if this weapon can fire underwater
 	float					m_fMinRange1;			// What's the closest this weapon can be used?

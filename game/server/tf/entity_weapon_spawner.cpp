@@ -90,8 +90,7 @@ bool CWeaponSpawner::MyTouch( CBasePlayer *pPlayer )
 			CTFWeaponBase *pCarriedWeapon = (CTFWeaponBase *)pPlayer->GetWeapon( iWeapon );
 			if ( pCarriedWeapon == pWeapon ) 
 			{
-				int iMaxPrimary = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_PRIMARY];
-				if ( pPlayer->GiveAmmo( ceil(iMaxPrimary * PackRatios[GetPowerupSize()]), TF_AMMO_PRIMARY, true ) )
+				if ( pTFPlayer->RestockAmmo(PackRatios[GetPowerupSize()]) )
 				{
 					CSingleUserRecipientFilter filter( pPlayer );
 					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );

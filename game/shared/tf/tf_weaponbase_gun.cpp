@@ -220,14 +220,14 @@ CBaseEntity *CTFWeaponBaseGun::FireProjectile( CTFPlayer *pPlayer )
 
 	if ( m_iClip1 != -1 )
 	{
-		if ( of_noreload.GetBool() == 0 || pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) <= 0 )
+		if ( of_noreload.GetBool() == 0 || MaxAmmo() <= 0 )
 		{
 			m_iClip1 -= m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_iAmmoPerShot;
 		}
 		else
 		{
 			if ( of_infiniteammo.GetBool() != 1 ) 
-					pPlayer->RemoveAmmo( 1, m_iPrimaryAmmoType );
+					m_iMaxAmmo -= 1;
 		}
 		
 	}
@@ -236,12 +236,13 @@ CBaseEntity *CTFWeaponBaseGun::FireProjectile( CTFPlayer *pPlayer )
 		if ( m_iWeaponMode == TF_WEAPON_PRIMARY_MODE )
 		{
 			if ( of_infiniteammo.GetBool() != 1 ) 
-				pPlayer->RemoveAmmo( m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_iAmmoPerShot, m_iPrimaryAmmoType );
+				m_iMaxAmmo -= m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_iAmmoPerShot;
 		}
 		else
 		{
 			if ( of_infiniteammo.GetBool() != 1 ) 
 				pPlayer->RemoveAmmo( m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_iAmmoPerShot, m_iSecondaryAmmoType );
+				
 		}
 	}
 

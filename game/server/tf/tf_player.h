@@ -87,7 +87,6 @@ public:
 	virtual void		ResetScores( void );
 
 	void				CreateViewModel( int iViewModel = 0 );
-	virtual void	    CreateHandModel( int viewmodelindex = 1, int iOtherVm = 0 );
 	CBaseViewModel		*GetOffHandViewModel();
 	void				SendOffHandViewModelActivity( Activity activity );
 
@@ -393,6 +392,8 @@ public:
 	CTFWeaponBase		*Weapon_OwnsThisID( int iWeaponID );
 	CTFWeaponBase		*Weapon_GetWeaponByType( int iType );
 
+	bool				RestockAmmo( float PowerupSize );
+	
 private:
 
 	int					GetAutoTeam( void );
@@ -400,6 +401,7 @@ private:
 	// Creation/Destruction.
 	void				InitClass( void );
 	void				GiveDefaultItems();
+	int					GetCarriedWeapons();
 	bool				SelectSpawnSpot( const char *pEntClassName, CBaseEntity* &pSpot );
 	void				PrecachePlayerModels( void );
 	void				RemoveNemesisRelationships();

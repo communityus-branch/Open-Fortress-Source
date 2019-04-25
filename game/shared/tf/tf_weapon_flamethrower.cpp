@@ -184,7 +184,7 @@ void CTFFlameThrower::ItemPostFrame()
 	if ( !pOwner )
 		return;
 
-	int iAmmo = pOwner->GetAmmoCount( m_iPrimaryAmmoType );
+	int iAmmo = MaxAmmo();
 
 	if ( pOwner->IsAlive() && ( pOwner->m_nButtons & IN_ATTACK ) && iAmmo > 0 )
 	{
@@ -415,7 +415,7 @@ void CTFFlameThrower::PrimaryAttack()
 	int iAmmoToSubtract = (int) m_flAmmoUseRemainder;
 	if ( iAmmoToSubtract > 0 )
 	{
-		pOwner->RemoveAmmo( iAmmoToSubtract, m_iPrimaryAmmoType );
+		m_iMaxAmmo -= iAmmoToSubtract;
 		m_flAmmoUseRemainder -= iAmmoToSubtract;
 		// round to 2 digits of precision
 		m_flAmmoUseRemainder = (float) ( (int) (m_flAmmoUseRemainder * 100) ) / 100.0f;
@@ -513,7 +513,7 @@ void CTFFlameThrower::OnDataChanged(DataUpdateType_t updateType)
 {
 	BaseClass::OnDataChanged(updateType);
 
-	if ( IsCarrierAlive() && ( WeaponState() == WEAPON_IS_ACTIVE ) && ( GetPlayerOwner()->GetAmmoCount( m_iPrimaryAmmoType ) > 0 ) )
+	if ( IsCarrierAlive() && ( WeaponState() == WEAPON_IS_ACTIVE ) && ( MaxAmmo() > 0 ) )
 	{
 		if ( m_iWeaponState > FT_STATE_IDLE )
 		{

@@ -118,6 +118,7 @@ bool CTFHudWeaponAmmo::ShouldDraw( void )
 
 	CTFWeaponBase *pWeapon = pPlayer->GetActiveTFWeapon();
 
+	
 	if ( !pWeapon )
 	{
 		return false;
@@ -197,12 +198,12 @@ void CTFHudWeaponAmmo::OnThink()
 			// Clip ammo not used, get total ammo count.
 			if ( nAmmo1 < 0 )
 			{
-				nAmmo1 = pPlayer->GetAmmoCount( pWeapon->GetPrimaryAmmoType() );
+				nAmmo1 = pWeapon->MaxAmmo();
 			}
 			// Clip ammo, so the second ammo is the total ammo.
 			else
 			{
-				nAmmo2 = pPlayer->GetAmmoCount( pWeapon->GetPrimaryAmmoType() );
+				nAmmo2 = pWeapon->MaxAmmo();
 			}
 			
 			hudlcd->SetGlobalStat( "(ammo_primary)", VarArgs( "%d", nAmmo1 ) );

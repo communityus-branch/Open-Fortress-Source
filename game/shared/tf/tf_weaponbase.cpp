@@ -617,7 +617,7 @@ bool CTFWeaponBase::Reload( void )
 	if ( m_iReloadMode == TF_RELOAD_START ) 
 	{
 		// If I don't have any spare ammo, I can't reload
-		if ( GetOwner()->GetAmmoCount(m_iPrimaryAmmoType) <= 0 )
+		if ( MaxAmmo() <= 0 )
 			return false;
 
 		if ( Clip1() >= GetMaxClip1())
@@ -784,14 +784,14 @@ bool CTFWeaponBase::ReloadSingly( void )
 				return false;
 
 			// If we have ammo, remove ammo and add it to clip
-			if ( pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) > 0 && !m_bReloadedThroughAnimEvent )
+			if ( MaxAmmo() > 0 && !m_bReloadedThroughAnimEvent )
 			{
 				m_iClip1 = min( ( m_iClip1 + 1 ), GetMaxClip1() );
 				if ( of_infiniteammo.GetBool() != 1 ) 
-					pPlayer->RemoveAmmo( 1, m_iPrimaryAmmoType );
+					m_iMaxAmmo -= 1;
 			}
 
-			if ( Clip1() == GetMaxClip1() || pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) <= 0 )
+			if ( Clip1() == GetMaxClip1() || MaxAmmo() <= 0 )
 			{
 				m_iReloadMode.Set( TF_RELOAD_FINISH );
 			}
@@ -907,16 +907,15 @@ bool CTFWeaponBase::ReloadsAll( void )
 				return false;
 
 			// If we have ammo, remove ammo and add it to clip
-			if ( pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) > 0 && !m_bReloadedThroughAnimEvent )
+			if ( MaxAmmo() > 0 && !m_bReloadedThroughAnimEvent )
 			{
 				if( of_infiniteammo.GetBool() != 1 )
-					pPlayer->RemoveAmmo( GetMaxClip1() - m_iClip1 , m_iPrimaryAmmoType );
-				
+					m_iMaxAmmo -= GetMaxClip1() - m_iClip1;
 				m_iClip1 =  GetMaxClip1();
 			}
 			
 			m_iReloadMode.Set( TF_RELOAD_FINISH );
-			if ( Clip1() == GetMaxClip1() || pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) <= 0 )
+			if ( Clip1() == GetMaxClip1() || MaxAmmo() <= 0 )
 			{
 				m_iReloadMode.Set( TF_RELOAD_FINISH );
 			}
@@ -968,11 +967,12 @@ void CTFWeaponBase::Operator_HandleAnimEvent( animevent_t *pEvent, CBaseCombatCh
 	{
 		if ( pEvent->event == AE_WPN_INCREMENTAMMO )
 		{
-			if ( pOperator->GetAmmoCount( m_iPrimaryAmmoType ) > 0 && !m_bReloadedThroughAnimEvent )
+			if ( m_iMaxAmmo > 0 && !m_bReloadedThroughAnimEvent )
 			{
 				m_iClip1 = min( ( m_iClip1 + 1 ), GetMaxClip1() );
 				if ( of_infiniteammo.GetBool () != 1 )
-					pOperator->RemoveAmmo( 1, m_iPrimaryAmmoType );
+					m_iMaxAmmo -= 1;
+					
 			}
 
 			m_bReloadedThroughAnimEvent = true;
@@ -999,7 +999,7 @@ bool CTFWeaponBase::DefaultReload( int iClipSize1, int iClipSize2, int iActivity
 	if ( UsesClipsForAmmo1() )
 	{
 		// need to reload primary clip?
-		int primary	= min( iClipSize1 - m_iClip1, pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) );
+		int primary	= min( iClipSize1 - m_iClip1, MaxAmmo() );
 		if ( primary != 0 )
 		{
 			bReloadPrimary = true;
@@ -1226,7 +1226,7 @@ void CTFWeaponBase::ReloadSinglyPostFrame( void )
 	if ( m_flTimeWeaponIdle > gpGlobals->curtime )
 		return;
 	// if the clip is empty and we have ammo remaining, 
-	if ( ( ( Clip1() < GetMaxClip1() ) && ( GetOwner()->GetAmmoCount(m_iPrimaryAmmoType) > 0 ) ) ||
+	if ( ( ( Clip1() < GetMaxClip1() ) && ( MaxAmmo() > 0 ) ) ||
 		// or we are already in the process of reloading but not finished
 		( m_iReloadMode != TF_RELOAD_START ) )
 	{
@@ -1242,7 +1242,7 @@ void CTFWeaponBase::ReloadsAllPostFrame( void )
 		return;
 
 	// if the clip is empty and we have ammo remaining, 
-	if (  (  /* ( Clip1() == 0 )  &&  */ ( GetOwner()->GetAmmoCount(m_iPrimaryAmmoType) > 0 ) )  ||
+	if (  (  /* ( Clip1() == 0 )  &&  */ ( MaxAmmo() > 0 ) )  ||
 		// or we are already in the process of reloading but not finished
 		( m_iReloadMode != TF_RELOAD_START ) )
 	{
@@ -2391,11 +2391,11 @@ bool CTFWeaponBase::OnFireEvent( C_BaseViewModel *pViewModel, const Vector& orig
 	{
 		CTFPlayer *pPlayer = GetTFPlayerOwner();
 
-		if ( pPlayer && pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) > 0 && !m_bReloadedThroughAnimEvent )
+		if ( pPlayer && MaxAmmo() > 0 && !m_bReloadedThroughAnimEvent )
 		{
 			m_iClip1 = min( ( m_iClip1 + 1 ), GetMaxClip1() );
 			if( of_infiniteammo.GetBool() != 1 )
-				pPlayer->RemoveAmmo( 1, m_iPrimaryAmmoType );
+				m_iMaxAmmo -= 1;
 		}
 
 		m_bReloadedThroughAnimEvent = true;
