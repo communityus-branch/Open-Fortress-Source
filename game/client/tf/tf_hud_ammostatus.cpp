@@ -128,6 +128,8 @@ bool CTFHudWeaponAmmo::ShouldDraw( void )
 	{
 		return false;
 	}
+	if ( pWeapon->GetMaxAmmo() == -1 )
+		return false;
 
 	return CHudElement::ShouldDraw();
 }

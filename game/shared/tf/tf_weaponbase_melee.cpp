@@ -169,7 +169,9 @@ void CTFWeaponBaseMelee::SecondaryAttack()
 //-----------------------------------------------------------------------------
 void CTFWeaponBaseMelee::Swing( CTFPlayer *pPlayer )
 {
+#ifndef CLIENT_DLL
 	pPlayer->m_Shared.RemoveCond( TF_COND_SPAWNPROTECT );
+#endif
 	CalcIsAttackCritical();
 
 	// Play the melee swing and miss (whoosh) always.

@@ -832,7 +832,7 @@ void CTFPlayer::Spawn()
 	GetViewModel(1)->SetModel( "" );
 	
 	GetViewModel(2)->SetModel( GetPlayerClass()->GetArmModelName() );
-	GetViewModel(2)->m_nSkin = m_nSkin;
+	GetViewModel(2)->m_nSkin = GetTeamNumber()-2;
 	
 	CreateViewModel();
 	
@@ -1122,11 +1122,25 @@ void CTFPlayer::GiveDefaultItems()
 	ManageBuilderWeapons( pData );
 }
 
+void CTFPlayer::StripWeapons( void )
+{
+	CTFWeaponBase *pWeapon = (CTFWeaponBase *)GetWeapon( 0 );
+	for ( int iWeapon = 0; iWeapon < TF_WEAPON_COUNT; iWeapon++ )
+	{
+		pWeapon = (CTFWeaponBase *)GetWeapon( iWeapon );
+		if ( pWeapon )
+		{
+			Weapon_Detach( pWeapon );
+			UTIL_Remove( pWeapon );
+		}
+	}
+}
+
 int CTFPlayer::GetCarriedWeapons( void )
 {
 	CTFWeaponBase *pWeapon = (CTFWeaponBase *)GetWeapon( 0 );
-	int WeaponCount=0;
-	for ( int iWeapon = 0; iWeapon < TF_WEAPON_COUNT; ++iWeapon )
+	int WeaponCount = 0;
+	for ( int iWeapon = 0; iWeapon < TF_WEAPON_COUNT; iWeapon++ )
 	{
 		pWeapon = (CTFWeaponBase *)GetWeapon( iWeapon );
 		//If we have a weapon in this slot, count up
@@ -1135,15 +1149,14 @@ int CTFPlayer::GetCarriedWeapons( void )
 			WeaponCount++;
 		}
 	}
-
 	return WeaponCount;
 }
 
 bool CTFPlayer::RestockAmmo( float PowerupSize )
 {
-	bool bSuccess=false;
+	bool bSuccess = false;
 	CTFWeaponBase *pWeapon = (CTFWeaponBase *)GetWeapon( 0 );
-	for ( int iWeapon = 0; iWeapon < GetCarriedWeapons(); ++iWeapon )
+	for ( int iWeapon = 0; iWeapon < GetCarriedWeapons(); iWeapon++ )
 	{
 		pWeapon = (CTFWeaponBase *)GetWeapon( iWeapon );
 		//If we have a weapon in this slot, count up
@@ -1154,7 +1167,6 @@ bool CTFPlayer::RestockAmmo( float PowerupSize )
 				pWeapon->m_iMaxAmmo += pWeapon->GetMaxAmmo() * PowerupSize;
 				if ( pWeapon->m_iMaxAmmo > pWeapon->GetMaxAmmo() )
 					pWeapon->m_iMaxAmmo = pWeapon->GetMaxAmmo();
-					DevMsg("Powerup Size is %s\n", PowerupSize);
 					bSuccess = true;
 			}
 			
@@ -1227,9 +1239,11 @@ void CTFPlayer::ManageBuilderWeapons( TFPlayerClassData_t *pData )
 //-----------------------------------------------------------------------------
 void CTFPlayer::ManageRegularWeapons( TFPlayerClassData_t *pData )
 {
+	StripWeapons();
+	DevMsg("%d\n", GetCarriedWeapons());
 	CTFWeaponBase *pWeapon = (CTFWeaponBase *)GetWeapon( 0 );
 	if( ofd_instagib.GetInt() == 0 )
-		for ( int iWeapon = 0; iWeapon < GetCarriedWeapons()+5; ++iWeapon )
+		for ( int iWeapon = 0; iWeapon < GetCarriedWeapons()+5; iWeapon++ )
 		{
 			if ( pData->m_aWeapons[iWeapon] != TF_WEAPON_NONE )
 			{

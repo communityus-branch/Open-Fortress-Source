@@ -402,6 +402,7 @@ private:
 	void				InitClass( void );
 	void				GiveDefaultItems();
 	int					GetCarriedWeapons();
+	void				StripWeapons();
 	bool				SelectSpawnSpot( const char *pEntClassName, CBaseEntity* &pSpot );
 	void				PrecachePlayerModels( void );
 	void				RemoveNemesisRelationships();
