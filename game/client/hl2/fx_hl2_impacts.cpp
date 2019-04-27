@@ -80,6 +80,7 @@ void ImpactGaussCallback( const CEffectData &data )
 
 DECLARE_CLIENT_EFFECT( "ImpactGauss", ImpactGaussCallback );
 
+#ifndef OPENFORTRESS_DLL
 //-----------------------------------------------------------------------------
 // Purpose: Handle weapon impacts
 //-----------------------------------------------------------------------------
@@ -113,6 +114,7 @@ void ImpactCallback( const CEffectData &data )
 }
 
 DECLARE_CLIENT_EFFECT( "Impact", ImpactCallback );
+#endif
 
 //-----------------------------------------------------------------------------
 // Purpose: 

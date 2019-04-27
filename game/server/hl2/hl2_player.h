@@ -15,6 +15,13 @@
 #include "simtimer.h"
 #include "soundenvelope.h"
 
+#ifdef OPENFORTRESS_DLL
+
+#include "tf_player.h"
+#define CHL2_Player CTFPlayer
+
+#else
+
 class CAI_Squad;
 class CPropCombineBall;
 
@@ -381,4 +388,5 @@ void CHL2_Player::DisableCappedPhysicsDamage()
 }
 
 
+#endif // OPENFORTRESS_DLL
 #endif	//HL2_PLAYER_H

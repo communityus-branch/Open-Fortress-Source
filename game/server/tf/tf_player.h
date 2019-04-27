@@ -12,6 +12,7 @@
 #include "tf_player_shared.h"
 #include "tf_playerclass.h"
 #include "entity_tfstart.h"
+#include "hl2_playerlocaldata.h"
 
 class CTFPlayer;
 class CTFTeam;
@@ -22,6 +23,8 @@ class CTFWeaponBuilder;
 class CBaseObject;
 class CTFWeaponBase;
 class CIntroViewpoint;
+class CAI_Squad;
+class CPropCombineBall;
 
 //=============================================================================
 //
@@ -58,6 +61,26 @@ struct DamagerHistory_t
 };
 #define MAX_DAMAGER_HISTORY 2
 
+#define ARMOR_DECAY_TIME 3.5f
+
+enum HL2PlayerPhysFlag_e
+{
+	// 1 -- 5 are used by enum PlayerPhysFlag_e in player.h
+
+	PFLAG_ONBARNACLE	= ( 1<<6 )		// player is hangning from the barnalce
+};
+
+class IPhysicsPlayerController;
+class CLogicPlayerProxy;
+
+struct commandgoal_t
+{
+	Vector		m_vecGoalLocation;
+	CBaseEntity	*m_pGoalEntity;
+};
+
+// Time between checks to determine whether NPCs are illuminated by the flashlight
+#define FLASHLIGHT_NPC_CHECK_INTERVAL	0.4
 //=============================================================================
 //
 // TF Player
@@ -545,6 +568,57 @@ public:
 	bool				Weapon_CanUse( void ) { return true; }
 	bool				Weapon_EquipAmmoOnly( CBaseCombatWeapon *pWeapon ) { return false; }
 	void				GiveAllItems();
+	void				AddAccount( int amount, bool bTrackChange=true );	// Add money to this player's account.
+
+
+	///==HL2 PORT START==///
+	bool				IsSprinting( void ) { return false; }
+	bool				IsWeaponLowered( void ) { return false; }
+	void				StartWaterDeathSounds(void);
+	void				StopWaterDeathSounds(void);
+	virtual bool		Weapon_Lower(void) { return false; }
+	void				StopSprinting( void ) { return; }
+	bool				ApplyBattery(float powerMultiplier = 1.0) { return false; }
+	float				SuitPower_GetCurrentPercentage( void ) { return 100; } //act as if we always have max suit power when talking about AI stuff, since it's all flashlight related
+	virtual	bool		IsHoldingEntity( CBaseEntity *pEnt );
+	void				MissedAR2AltFire() {;}
+	void				CombineBallSocketed( CPropCombineBall *pCombineBall );
+	virtual void		StopLoopingSounds(void);
+
+	CNetworkVar( int, m_iAccount );	// How much cash this player has.
+
+	// Commander Mode for controller NPCs
+	enum CommanderCommand_t
+	{
+		CC_NONE,
+		CC_TOGGLE,
+		CC_FOLLOW,
+		CC_SEND,
+	};
+
+	virtual void CommanderMode();
+	void CommanderUpdate();
+	void CommanderExecute( CommanderCommand_t command = CC_TOGGLE );
+	bool CommanderFindGoal( commandgoal_t *pGoal );
+	void NotifyFriendsOfDamage( CBaseEntity *pAttackerEntity );
+	CAI_BaseNPC *GetSquadCommandRepresentative();
+	int GetNumSquadCommandables();
+	int GetNumSquadCommandableMedics();
+	bool CommanderExecuteOne(CAI_BaseNPC *pNpc, const commandgoal_t &goal, CAI_BaseNPC **Allies, int numAllies);
+	void OnSquadMemberKilled(inputdata_t &data);
+
+	CAI_Squad *			m_pPlayerAISquad;
+	CSimpleSimTimer		m_CommanderUpdateTimer;
+	float				m_RealTimeLastSquadCommand;
+	CommanderCommand_t	m_QueuedCommand;
+
+	CSoundPatch *m_sndLeeches;
+	CSoundPatch *m_sndWaterSplashes;
+
+	// This player's HL2 specific data that should only be replicated to 
+	//  the player and not to other players.
+	CNetworkVarEmbedded( CHL2PlayerLocalData, m_HL2Local );
+	///==HL2 PORT END==///
 };
 
 //-----------------------------------------------------------------------------

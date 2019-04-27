@@ -13,18 +13,13 @@ $Configuration
 {
 	$Compiler
 	{
-		$AdditionalIncludeDirectories	".\hl2;.\tf;.\tf\vgui;$SRCDIR\game\shared\Multiplayer;$SRCDIR\game\shared\tf;$BASE;.\ofd;$SRCDIR\game\shared\ofd"
-		$PreprocessorDefinitions		"$BASE;TF_MOD_CLIENT;GLOWS_ENABLE;OPENFORTRESS_DLL"
+		$AdditionalIncludeDirectories	".\hl2;.\tf;.\tf\vgui;$SRCDIR\game\shared\Multiplayer;$SRCDIR\game\shared\tf;$BASE;.\ofd;$SRCDIR\game\shared\ofd;.\hl2;$SRCDIR\game\shared\hl2;.\episodic;$SRCDIR\game\shared\episodic"
+		$PreprocessorDefinitions		"$BASE;TF_MOD_CLIENT;GLOWS_ENABLE;OPENFORTRESS_DLL;HL2_CLIENT_DLL;HL2_EPISODIC"
 	}
 }
 
 $Project "Client (OFD)"
 {
-	$Folder "Source Files"
-	{
-		-$File	"$SRCDIR\game\shared\weapon_parse_default.cpp"
-	}
-	
 	$Folder	"Source Files"
 	{
 		$Folder	"OPENFORTRESS DLL"
@@ -39,6 +34,7 @@ $Project "Client (OFD)"
 			$File	"$SRCDIR\game\shared\ofd\ofd_trigger_jump_shared.cpp"
 			$File	"$SRCDIR\game\shared\ofd\ofd_physgauntlet.cpp"
 			$File	"$SRCDIR\game\shared\ofd\ofd_physgauntlet.h"
+			$File	"ofd\ofz_hud_account.cpp"
 		}
 		
 		$File	"$SRCDIR\game\shared\basecombatweapon_shared.h"
@@ -61,6 +57,10 @@ $Project "Client (OFD)"
 		$File	"glow_outline_effect.h"
 		$File	"worldlight.cpp"
 		$File	"worldlight.h"
+		$File	"hud_base_account.cpp"
+		$File	"hud_base_account.h"
+		
+		-$File	"$SRCDIR\game\shared\weapon_parse_default.cpp"
 
 		$Folder	"TF"
 		{
@@ -336,6 +336,72 @@ $Project "Client (OFD)"
 			$File	"$SRCDIR\game\shared\weapon_ifmbasecamera.cpp"
 			$File	"$SRCDIR\game\shared\weapon_ifmbasecamera.h"
 			$File	"$SRCDIR\game\shared\weapon_ifmsteadycam.cpp"
+		}
+		
+
+		$Folder	"HL2 DLL"
+		{
+			$File	"$SRCDIR\game\shared\hl2\basehlcombatweapon_shared.cpp"
+			$File	"hl2\c_antlion_dust.cpp"
+			$File	"hl2\c_ar2_explosion.cpp"
+			$File	"hl2\c_barnacle.cpp"
+			$File	"hl2\c_barney.cpp"
+			$File	"hl2\c_basehelicopter.cpp"
+			$File	"hl2\c_basehelicopter.h"
+			$File	"hl2\c_basehlcombatweapon.cpp"
+			$File	"hl2\c_basehlcombatweapon.h"
+			$File	"hl2\c_citadel_effects.cpp"
+			$File	"hl2\c_corpse.cpp"
+			$File	"hl2\c_corpse.h"
+			$File	"hl2\c_env_alyxtemp.cpp"
+			$File	"hl2\c_env_headcrabcanister.cpp"
+			$File	"hl2\c_env_starfield.cpp"
+			$File	"hl2\c_func_tankmortar.cpp"
+			$File	"hl2\c_hl2_playerlocaldata.cpp"
+			$File	"hl2\c_hl2_playerlocaldata.h"
+			$File	"hl2\c_info_teleporter_countdown.cpp"
+			$File	"hl2\c_npc_antlionguard.cpp"
+			$File	"hl2\c_npc_combinegunship.cpp"
+			$File	"hl2\c_npc_manhack.cpp"
+			$File	"hl2\c_npc_rollermine.cpp"
+			$File	"hl2\c_plasma_beam_node.cpp"
+			$File	"hl2\c_prop_combine_ball.cpp"
+			$File	"hl2\c_prop_combine_ball.h"
+			$File	"episodic\c_prop_scalable.cpp"
+			$File	"hl2\c_rotorwash.cpp"
+			$File	"hl2\c_script_intro.cpp"
+			$File	"$SRCDIR\game\shared\script_intro_shared.cpp"
+			$File	"hl2\c_strider.cpp"
+			$File	"hl2\c_te_concussiveexplosion.cpp"
+			$File	"hl2\c_te_flare.cpp"
+			$File	"hl2\c_thumper_dust.cpp"
+			$File	"hl2\c_vehicle_airboat.cpp"
+			$File	"hl2\c_vehicle_cannon.cpp"
+			$File	"hl2\c_vehicle_crane.cpp"
+			$File	"hl2\c_vehicle_crane.h"
+			$File	"episodic\c_vehicle_jeep_episodic.cpp"
+			$File	"hl2\c_vehicle_prisoner_pod.cpp"
+			$File	"episodic\c_vort_charge_token.cpp"
+			$File	"hl2\c_weapon__stubs_hl2.cpp"
+			$File	"hl2\c_weapon_crossbow.cpp"
+			$File	"episodic\c_weapon_hopwire.cpp"
+			//$File	"hl2\c_weapon_physcannon.cpp"
+			$File	"hl2\c_weapon_stunstick.cpp"
+			$File	"$SRCDIR\game\shared\hl2\citadel_effects_shared.h"
+			$File	"$SRCDIR\game\shared\hl2\env_headcrabcanister_shared.cpp"
+			$File	"$SRCDIR\game\shared\hl2\env_headcrabcanister_shared.h"
+			$File	"$SRCDIR\game\shared\episodic\npc_advisor_shared.h"
+			$File	"episodic\c_npc_advisor.cpp"
+			$File	"episodic\episodic_screenspaceeffects.cpp"
+			$File	"episodic\episodic_screenspaceeffects.h"
+			$File	"episodic\flesh_internal_material_proxy.cpp"
+			$File	"hl2\fx_antlion.cpp"
+			$File	"hl2\fx_bugbait.cpp"
+			$File	"hl2\fx_hl2_impacts.cpp"
+			$File	"hl2\fx_hl2_tracers.cpp"
+			$File	"hl2\shieldproxy.cpp"
+			$File	"$SRCDIR\game\shared\hl2\survival_gamerules.cpp"
+			$File	"episodic\c_npc_puppet.cpp"
 		}
 	}
 }

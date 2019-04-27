@@ -52,5 +52,4 @@ public:
 
 EXTERN_SEND_TABLE(DT_HL2Local);
 
-
 #endif // HL2_PLAYERLOCALDATA_H

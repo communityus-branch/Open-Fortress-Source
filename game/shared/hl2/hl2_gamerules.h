@@ -10,6 +10,12 @@
 #pragma once
 #endif
 
+#ifdef OPENFORTRESS_DLL
+#include "tf_gamerules.h"
+#define CHalfLife2 CTFGameRules
+
+#else
+
 #include "gamerules.h"
 #include "singleplay_gamerules.h"
 #include "hl2_shareddefs.h"
@@ -100,6 +106,7 @@ private:
 #endif
 };
 
+#endif // OPENFORTRESS_DLL
 
 //-----------------------------------------------------------------------------
 // Gets us at the Half-Life 2 game rules
@@ -112,7 +119,6 @@ inline CHalfLife2* HL2GameRules()
 
 	return static_cast<CHalfLife2*>(g_pGameRules);
 }
-
 
 
 #endif // HL2_GAMERULES_H

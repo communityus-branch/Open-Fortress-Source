@@ -262,31 +262,19 @@ void CGameRules::RefreshSkillData ( bool forceUpdate )
 	}
 	GlobalEntity_Add( "skill.cfg", STRING(gpGlobals->mapname), GLOBAL_ON );
 
-#if !(defined( TF_DLL ) || defined( TF_MOD ) )&& !defined( DOD_DLL )
 	char	szExec[256];
-#endif 
 
 	ConVarRef skill( "skill" );
 
 	SetSkillLevel( skill.IsValid() ? skill.GetInt() : 1 );
 
-#ifdef HL2_DLL
 	// HL2 current only uses one skill config file that represents MEDIUM skill level and
 	// synthesizes EASY and HARD. (sjb)
 	Q_snprintf( szExec,sizeof(szExec), "exec skill_manifest.cfg\n" );
 
 	engine->ServerCommand( szExec );
 	engine->ServerExecute();
-#else
 
-#if !(defined( TF_DLL ) || defined( TF_MOD ) ) && !defined( DOD_DLL )
-	Q_snprintf( szExec,sizeof(szExec), "exec skill%d.cfg\n", GetSkillLevel() );
-
-	engine->ServerCommand( szExec );
-	engine->ServerExecute();
-#endif // TF_DLL && DOD_DLL
-
-#endif // HL2_DLL
 #endif // CLIENT_DLL
 }
 

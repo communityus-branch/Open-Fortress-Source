@@ -79,7 +79,7 @@ void CEnvZoom::InputZoom( inputdata_t &inputdata )
 	if ( pPlayer )
 	{
 
-#ifdef HL2_DLL
+#ifndef OPENFORTRESS_DLL //#ifdef HL2_DLL
 		if ( pPlayer == pPlayer->GetFOVOwner() )
 		{
 			CHL2_Player *pHLPlayer = static_cast<CHL2_Player*>( pPlayer );

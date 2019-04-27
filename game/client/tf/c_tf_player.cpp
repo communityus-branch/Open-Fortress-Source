@@ -1075,6 +1075,8 @@ IMPLEMENT_CLIENTCLASS_DT( C_TFPlayer, DT_TFPlayer, CTFPlayer )
 	RecvPropDataTable( "tfnonlocaldata", 0, 0, &REFERENCE_RECV_TABLE(DT_TFNonLocalPlayerExclusive) ),
 
 	RecvPropInt( RECVINFO( m_iSpawnCounter ) ),
+	
+	RecvPropInt( RECVINFO( m_iAccount ) ),
 
 END_RECV_TABLE()
 
@@ -3861,4 +3863,9 @@ void C_TFPlayer::CalcViewIdle(QAngle& eyeAngles)
 	eyeAngles[ROLL] += IdleScale * sin(gpGlobals->curtime * cl_hl1_iroll_cycle.GetFloat()) * cl_hl1_iroll_level.GetFloat();
 	eyeAngles[PITCH] += IdleScale * sin(gpGlobals->curtime * cl_hl1_ipitch_cycle.GetFloat()) * cl_hl1_ipitch_level.GetFloat();
 	eyeAngles[YAW] += IdleScale * sin(gpGlobals->curtime * cl_hl1_iyaw_cycle.GetFloat()) * cl_hl1_iyaw_level.GetFloat();
+}
+
+int C_TFPlayer::GetAccount() const
+{
+	return m_iAccount;
 }

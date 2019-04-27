@@ -78,6 +78,7 @@ const char *g_aGameTypeNames[] =
 	"#Gametype_DM",
 	"#Gametype_TDM",
 	"#Gametype_ESC",
+	"#Gametype_ZS",
 };
 
 //-----------------------------------------------------------------------------
@@ -652,5 +653,5 @@ bool ClassCanBuild( int iClass, int iObjectType )
 	return false;
 	*/
 
-	return ( iClass == TF_CLASS_ENGINEER );
+	return (( iClass == TF_CLASS_ENGINEER ) || ( TFGameRules()->IsZSGamemode()));
 }

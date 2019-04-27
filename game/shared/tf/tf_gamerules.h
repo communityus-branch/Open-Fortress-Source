@@ -109,7 +109,7 @@ public:
 
 	bool			IsBirthday( void );
 
-	virtual const unsigned char *GetEncryptionKey( void ) { return (unsigned char *)"E2NcUkG2"; }
+	virtual const unsigned char *GetEncryptionKey( void ) { return (unsigned char *)"Op3Nf0rt"; }
 
 #ifdef GAME_DLL
 public:
@@ -327,15 +327,30 @@ public:
 	int	 m_iPreviousRoundWinners;
 
 	virtual bool	IsDMGamemode(void) { return GetGameType() == TF_GAMETYPE_DM || GetGameType() == TF_GAMETYPE_TDM; }
-	virtual bool	IsTeamplay(void) { return GetGameType() == TF_GAMETYPE_TDM; }
+	virtual bool	IsTeamplay(void) { return GetGameType() == TF_GAMETYPE_TDM || GetGameType() == TF_GAMETYPE_ZS; }
 	virtual bool	IsESCGamemode(void) { return GetGameType() == TF_GAMETYPE_ESC; }
+	virtual bool	IsZSGamemode(void) { return GetGameType() == TF_GAMETYPE_DM; }
 	int TF_HUNTED_COUNT;
 	int		m_iBirthdayMode;
 
 #ifdef GAME_DLL
 	virtual const char *GetMusicNamePreRound( void );
 	virtual const char *GetMusicNameActiveRound( void );
+
+	bool	NPC_ShouldDropGrenade( CBasePlayer *pRecipient );
+	bool	NPC_ShouldDropHealth( CBasePlayer *pRecipient );
+	void	NPC_DroppedHealth( void );
+	void	NPC_DroppedGrenade( void );
+	bool	MegaPhyscannonActive( void ) { return false;	}
+	
+	virtual bool IsAlyxInDarknessMode();
+	virtual bool			ShouldBurningPropsEmitLight();
+
+	virtual void			InitDefaultAIRelationships( void );
+	virtual const char*		AIClassText(int classType);
 #endif
+	float	m_flLastHealthDropTime;
+	float	m_flLastGrenadeDropTime;
 };
 
 //-----------------------------------------------------------------------------

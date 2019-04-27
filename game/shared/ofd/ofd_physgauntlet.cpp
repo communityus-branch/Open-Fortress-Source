@@ -3644,4 +3644,19 @@ void CallbackPhyscannonImpact( const CEffectData &data )
 
 DECLARE_CLIENT_EFFECT( "PhyscannonImpact", CallbackPhyscannonImpact );
 
+#else
+
+CBaseEntity *GetPlayerHeldEntity( CBasePlayer *pPlayer )
+{
+	CBaseEntity *pObject = NULL;
+	CPlayerPickupController *pPlayerPickupController = (CPlayerPickupController *)(pPlayer->GetUseEntity());
+
+	if ( pPlayerPickupController )
+	{
+		pObject = pPlayerPickupController->GetGrabController().GetAttached();
+	}
+
+	return pObject;
+}
+
 #endif

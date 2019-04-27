@@ -387,6 +387,11 @@ private:
 	CUtlVector<breakmodel_t>	m_aGibs;
 
 	C_TFPlayer( const C_TFPlayer & );
+
+	int		m_iAccount;
+public:
+	// Get how much $$$ this guy has.
+	int GetAccount() const;
 };
 
 inline C_TFPlayer* ToTFPlayer( C_BaseEntity *pEntity )

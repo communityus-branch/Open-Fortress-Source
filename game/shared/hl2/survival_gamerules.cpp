@@ -1,7 +1,7 @@
 //========= Copyright Valve Corporation, All rights reserved. ============//
 #include "cbase.h"
 
-#ifdef HL2_EPISODIC
+#if defined( HL2_EPISODIC ) && !defined( OPENFORTRESS_DLL )
 
 #include "hl2_gamerules.h"
 #include "ammodef.h"

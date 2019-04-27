@@ -94,6 +94,8 @@ CLIENTEFFECT_REGISTER_END_CONDITIONAL( engine->GetDXSupportLevel() >= 90 )
 
 #define SCREEN_FILE		"scripts/vgui_screens.txt"
 
+vgui::HScheme g_hVGuiCombineScheme = 0;
+
 void CTFModeManager::Init()
 {
 	g_pClientMode = GetClientModeNormal();
@@ -104,6 +106,13 @@ void CTFModeManager::Init()
 	LoadObjectInfos( ::filesystem );
 
 	GetClientVoiceMgr()->SetHeadLabelOffset( 40 );
+
+	// Load up the combine control panel scheme
+	g_hVGuiCombineScheme = vgui::scheme()->LoadSchemeFromFileEx( enginevgui->GetPanel( PANEL_CLIENTDLL ), IsXbox() ? "resource/ClientScheme.res" : "resource/CombinePanelScheme.res", "CombineScheme" );
+	if (!g_hVGuiCombineScheme)
+	{
+		Warning( "Couldn't load combine panel scheme!\n" );
+	}
 }
 
 void CTFModeManager::LevelInit( const char *newmap )

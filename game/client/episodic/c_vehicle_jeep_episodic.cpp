@@ -14,7 +14,7 @@
 #include "c_te_effect_dispatch.h"
 #include "hl2_vehicle_radar.h"
 #include "usermessages.h"
-#include "hud_radar.h"
+//#include "hud_radar.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -61,6 +61,7 @@ END_RECV_TABLE()
 //-----------------------------------------------------------------------------
 void __MsgFunc_UpdateJalopyRadar(bf_read &msg) 
 {
+/*
 	// Radar code here!
 	if( !GetHudRadar() )
 		return;
@@ -93,6 +94,7 @@ void __MsgFunc_UpdateJalopyRadar(bf_read &msg)
 	{
 		GetHudRadar()->AddRadarContact( g_pJalopy->m_vecRadarContactPos[i], g_pJalopy->m_iRadarContactType[i], flContactTimeToLive );	
 	}
+*/
 }
 
 //-----------------------------------------------------------------------------
@@ -112,6 +114,7 @@ C_PropJeepEpisodic::C_PropJeepEpisodic()
 //-----------------------------------------------------------------------------
 void C_PropJeepEpisodic::Simulate( void )
 {
+	/*
 	// Keep trying to hook to the radar.
 	if( GetHudRadar() != NULL )
 	{
@@ -120,6 +123,7 @@ void C_PropJeepEpisodic::Simulate( void )
 		// assumed to be singletons. This is appropriate for EP2, however. (sjb)
 		GetHudRadar()->SetVehicle( this );
 	}
+	*/
 
 	BaseClass::Simulate();
 }
