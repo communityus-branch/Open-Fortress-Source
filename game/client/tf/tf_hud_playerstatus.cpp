@@ -81,12 +81,36 @@ static char *g_szMercenaryClassImages[] =
 	"",
 };
 
+static char *g_szMercenaryColorlessClassImages[] = 
+{ 
+	"",
+	"../hud/colorless/class_scoutcolorless", 
+	"../hud/colorless/class_snipercolorless",
+	"../hud/colorless/class_soldiercolorless",
+	"../hud/colorless/class_democolorless",
+	"../hud/colorless/class_mediccolorless",
+	"../hud/colorless/class_heavycolorless",
+	"../hud/colorless/class_pyrocolorless",
+	"../hud/colorless/class_spycolorless",
+	"../hud/colorless/class_engicolorless",
+	"../hud/colorless/class_mercenarycolorless",
+	"../hud/colorless/class_civiliancolorless",
+	"",
+};
+
+static char *g_szEmpty[] = 
+{ 
+	"../hud/empty"
+};
+
+
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
 CTFHudPlayerClass::CTFHudPlayerClass( Panel *parent, const char *name ) : EditablePanel( parent, name )
 {
 	m_pClassImage = new CTFClassImage( this, "PlayerStatusClassImage" );
+	m_pClassImageColorless = new CTFClassImage( this, "PlayerStatusClassImageColor" );
 	m_pSpyImage = new CTFImagePanel( this, "PlayerStatusSpyImage" );
 	m_pSpyOutlineImage = new CTFImagePanel( this, "PlayerStatusSpyOutlineImage" );
 
@@ -197,11 +221,13 @@ void CTFHudPlayerClass::OnThink()
 					{
 						m_pSpyImage->SetVisible( true );
 						m_pClassImage->SetClass( m_nDisguiseTeam, m_nDisguiseClass, iCloakState );
+						m_pClassImageColorless->SetClassColorless( m_nDisguiseTeam, m_nDisguiseClass, iCloakState );
 					}
 					else
 					{
 						m_pSpyImage->SetVisible( false );
 						m_pClassImage->SetClass( m_nTeam, m_nClass, iCloakState );
+						m_pClassImageColorless->SetClassColorless( m_nTeam, m_nClass, iCloakState );
 					}
 				}
 			}
@@ -580,5 +606,38 @@ void CTFClassImage::SetClass( int iTeam, int iClass, int iCloakstate )
 	if ( Q_strlen( szImage ) > 0 )
 	{
 		SetImage( szImage );
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+void CTFClassImage::SetClassColorless( int iTeam, int iClass, int iCloakstate )
+{
+	char szImageColorless[128];
+	szImageColorless[0] = '\0';
+
+
+	if ( iTeam == TF_TEAM_MERCENARY )
+	{
+		Q_strncpy( szImageColorless, g_szMercenaryColorlessClassImages[ iClass ], sizeof(szImageColorless) );
+		switch( iCloakstate )
+		{
+			case 2:
+				Q_strncat( szImageColorless, "_cloak", sizeof(szImageColorless), COPY_ALL_CHARACTERS );
+				break;
+			case 1:
+				Q_strncat( szImageColorless, "_halfcloak", sizeof(szImageColorless), COPY_ALL_CHARACTERS );
+				break;
+			default:
+				break;
+		}
+	}
+	else
+		Q_strncpy( szImageColorless, g_szEmpty[ 0 ], sizeof(szImageColorless) );
+
+	if ( Q_strlen( szImageColorless ) > 0 )
+	{
+		SetImage( szImageColorless );
 	}
 }

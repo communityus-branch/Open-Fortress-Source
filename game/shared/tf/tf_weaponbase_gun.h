@@ -40,6 +40,8 @@ public:
 	virtual void PrimaryAttack();
 	virtual void SecondaryAttack( void );
 	virtual bool Holster( CBaseCombatWeapon *pSwitchingTo );
+	
+	virtual void	DoViewModelAnimation( void );
 
 	// Derived classes call this to fire a bullet.
 	//bool TFBaseGunFire( void );

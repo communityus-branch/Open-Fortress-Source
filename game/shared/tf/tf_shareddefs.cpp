@@ -186,6 +186,7 @@ const char *g_aWeaponNames[] =
 	"TF_WEAPON_SHOTGUN_MERCENARY",
 	"TF_WEAPON_SWORD",
 	"TF_WEAPON_FLAG",
+	"TF_WEAPON_BERSERK",
 
 	"TF_WEAPON_COUNT",	// end marker, do not add below here 
 };
@@ -262,6 +263,7 @@ int g_aWeaponDamageTypes[] =
 	DMG_BUCKSHOT | DMG_USEDISTANCEMOD ,	// TF_WEAPON_SHOTGUN_MERCENARY,
 	DMG_CLUB, //TF_WEAPON_SWORD
 	DMG_CLUB, //TF_WEAPON_FLAG
+	DMG_CLUB | DMG_BLAST, //TF_WEAPON_BERSERK
 	
 	// This is a special entry that must match with TF_WEAPON_COUNT
 	// to protect against updating the weapon list without updating this list

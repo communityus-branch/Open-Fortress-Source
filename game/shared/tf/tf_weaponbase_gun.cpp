@@ -110,7 +110,7 @@ void CTFWeaponBaseGun::PrimaryAttack( void )
 	if (PrimaryAttackSwapsActivities())
 	{
 		if (!m_bSwapFire)
-			SendWeaponAnim( ACT_VM_PRIMARYATTACK );
+			DoViewModelAnimation();
 		else
 			SendWeaponAnim( ACT_VM_SECONDARYATTACK );
 
@@ -118,7 +118,7 @@ void CTFWeaponBaseGun::PrimaryAttack( void )
 	}
 	else
 	{
-		SendWeaponAnim( ACT_VM_PRIMARYATTACK );
+		DoViewModelAnimation();
 	}
 
 	pPlayer->SetAnimation( PLAYER_ATTACK1 );
@@ -645,3 +645,14 @@ void CTFWeaponBaseGun::ZoomOutIn( void )
 	ZoomOut();
 	SetContextThink( &CTFWeaponBaseGun::ZoomIn, gpGlobals->curtime + ZOOM_REZOOM_TIME, ZOOM_CONTEXT );
 }
+
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+void CTFWeaponBaseGun::DoViewModelAnimation( void )
+{
+
+	Activity act = ( IsCurrentAttackACrit() && GetTFWpnData().m_bUsesCritAnimation ) ? ACT_VM_PRIMARYATTACK_CRIT : ACT_VM_PRIMARYATTACK;
+	SendWeaponAnim( act );
+}
+

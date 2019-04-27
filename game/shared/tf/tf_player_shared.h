@@ -209,6 +209,7 @@ private:
 	void OnAddBurning( void );
 	void OnAddDisguising( void );
 	void OnAddDisguised( void );
+	void OnAddBerserk( void );
 
 	void OnRemoveZoomed( void );
 	void OnRemoveBurning( void );
@@ -218,6 +219,7 @@ private:
 	void OnRemoveInvulnerable( void );
 	void OnRemoveCritBoosted( void );
 	void OnRemoveTeleported( void );
+	void OnRemoveBerserk( void );
 
 	float GetCritMult( void );
 

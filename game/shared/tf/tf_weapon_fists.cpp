@@ -32,6 +32,19 @@ END_PREDICTION_DATA()
 LINK_ENTITY_TO_CLASS( tf_weapon_fists, CTFFists );
 PRECACHE_WEAPON_REGISTER( tf_weapon_fists );
 
+
+
+IMPLEMENT_NETWORKCLASS_ALIASED( TFBerserk, DT_TFWeaponBerserk )
+
+BEGIN_NETWORK_TABLE( CTFBerserk, DT_TFWeaponBerserk )
+END_NETWORK_TABLE()
+
+BEGIN_PREDICTION_DATA( CTFBerserk )
+END_PREDICTION_DATA()
+
+LINK_ENTITY_TO_CLASS( tf_weapon_berserk, CTFBerserk );
+PRECACHE_WEAPON_REGISTER( tf_weapon_berserk );
+
 //=============================================================================
 //
 // Weapon Fists functions.
@@ -135,4 +148,13 @@ void CTFFists::DoViewModelAnimation( void )
 	}
 
 	SendWeaponAnim( act );
+}
+
+bool CTFFists::CanHolster( void ) const
+{
+	
+	if ( GetWeaponID() == TF_WEAPON_BERSERK )
+		return false;
+
+	return BaseClass::CanHolster();
 }

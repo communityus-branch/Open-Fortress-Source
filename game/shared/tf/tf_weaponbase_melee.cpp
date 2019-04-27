@@ -200,7 +200,7 @@ void CTFWeaponBaseMelee::Swing( CTFPlayer *pPlayer )
 //-----------------------------------------------------------------------------
 void CTFWeaponBaseMelee::DoViewModelAnimation( void )
 {
-	Activity act = ( IsCurrentAttackACrit() ) ? ACT_VM_SWINGHARD : ACT_VM_HITCENTER;
+	Activity act = ( IsCurrentAttackACrit() && GetTFWpnData().m_bUsesCritAnimation ) ? ACT_VM_SWINGHARD : ACT_VM_HITCENTER;
 	SendWeaponAnim( act );
 }
 

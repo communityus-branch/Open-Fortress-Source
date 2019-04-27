@@ -102,116 +102,12 @@ bool CAmmoPack::MyTouch( CBasePlayer *pPlayer )
 			return false;
 		if ( pTFPlayer->RestockAmmo(PackRatios[GetPowerupSize()]) )
 			bSuccess = true;
-		int iMaxPrimary = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_PRIMARY];
-		if ( pPlayer->GiveAmmo( ceil(iMaxPrimary * PackRatios[GetPowerupSize()]), TF_AMMO_PRIMARY, true ) )
-		{
-			bSuccess = true;
-		}
-
-		int iMaxSecondary = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_SECONDARY];
-		if ( pPlayer->GiveAmmo( ceil(iMaxSecondary * PackRatios[GetPowerupSize()]), TF_AMMO_SECONDARY, true ) )
-		{
-			bSuccess = true;
-		}
 
 		int iMaxMetal = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_METAL];
 		if ( pPlayer->GiveAmmo( ceil(iMaxMetal * PackRatios[GetPowerupSize()]), TF_AMMO_METAL, true ) )
 		{
 			bSuccess = true;
 		}
-
-		///
-		int iMaxShotgun = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_SHOTGUN];
-		if (pPlayer->GiveAmmo(ceil(iMaxShotgun * PackRatios[GetPowerupSize()]), TF_AMMO_SHOTGUN, true))
-		{
-			bSuccess = true;
-		}
-
-		int iMaxScatter = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_SCATTERGUN];
-		if (pPlayer->GiveAmmo(ceil(iMaxScatter * PackRatios[GetPowerupSize()]), TF_AMMO_SCATTERGUN, true))
-		{
-			bSuccess = true;
-		}
-
-		int iMaxSuperSG = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_SUPERSHOTGUN];
-		if (pPlayer->GiveAmmo(ceil(iMaxSuperSG * PackRatios[GetPowerupSize()]), TF_AMMO_SUPERSHOTGUN, true))
-		{
-			bSuccess = true;
-		}
-
-		int iMaxNails = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_NAILS];
-		if (pPlayer->GiveAmmo(ceil(iMaxNails * PackRatios[GetPowerupSize()]), TF_AMMO_NAILS, true))
-		{
-			bSuccess = true;
-		}
-
-		int iMaxPistol = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_PISTOL];
-		if (pPlayer->GiveAmmo(ceil(iMaxPistol * PackRatios[GetPowerupSize()]), TF_AMMO_PISTOL, true))
-		{
-			bSuccess = true;
-		}
-
-		int iMaxSMG = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_SMG];
-		if (pPlayer->GiveAmmo(ceil(iMaxSMG * PackRatios[GetPowerupSize()]), TF_AMMO_SMG, true))
-		{
-			bSuccess = true;
-		}
-
-		int iMaxSniper = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_SNIPERRIFLE];
-		if (pPlayer->GiveAmmo(ceil(iMaxSniper * PackRatios[GetPowerupSize()]), TF_AMMO_SNIPERRIFLE, true))
-		{
-			bSuccess = true;
-		}
-
-		int iMaxMini = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_MINIGUN];
-		if (pPlayer->GiveAmmo(ceil(iMaxMini * PackRatios[GetPowerupSize()]), TF_AMMO_MINIGUN, true))
-		{
-			bSuccess = true;
-		}
-
-		int iMaxFire = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_FLAMETHROWER];
-		if (pPlayer->GiveAmmo(ceil(iMaxFire * PackRatios[GetPowerupSize()]), TF_AMMO_FLAMETHROWER, true))
-		{
-			bSuccess = true;
-		}
-
-		int iMaxRevolver = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_REVOLVER];
-		if (pPlayer->GiveAmmo(ceil(iMaxRevolver * PackRatios[GetPowerupSize()]), TF_AMMO_REVOLVER, true))
-		{
-			bSuccess = true;
-		}
-
-		int iMaxGL = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_GRENADELAUNCHER];
-		if (pPlayer->GiveAmmo(ceil(iMaxGL * PackRatios[GetPowerupSize()]), TF_AMMO_GRENADELAUNCHER, true))
-		{
-			bSuccess = true;
-		}
-
-		int iMaxPipe = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_PIPEBOMBLAUNCHER];
-		if (pPlayer->GiveAmmo(ceil(iMaxPipe * PackRatios[GetPowerupSize()]), TF_AMMO_PIPEBOMBLAUNCHER, true))
-		{
-			bSuccess = true;
-		}
-
-		int iMaxSynringe = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_SYNRINGES];
-		if (pPlayer->GiveAmmo(ceil(iMaxSynringe * PackRatios[GetPowerupSize()]), TF_AMMO_SYNRINGES, true))
-		{
-			bSuccess = true;
-		}
-
-		int iMaxRPG = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_ROCKETLAUNCHER];
-		if (pPlayer->GiveAmmo(ceil(iMaxRPG * PackRatios[GetPowerupSize()]), TF_AMMO_ROCKETLAUNCHER, true))
-		{
-			bSuccess = true;
-		}
-
-		int iMaxRail = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_RAILGUN];
-		if (pPlayer->GiveAmmo(ceil(iMaxRail * PackRatios[GetPowerupSize()]), TF_AMMO_RAILGUN, true))
-		{
-			bSuccess = true;
-		}
-		///
-
 		// did we give them anything?
 		if ( bSuccess )
 		{

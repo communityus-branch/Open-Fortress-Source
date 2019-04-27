@@ -345,6 +345,7 @@ enum
 	TF_WEAPON_SHOTGUN_MERCENARY,
 	TF_WEAPON_SWORD,
 	TF_WEAPON_FLAG,
+	TF_WEAPON_BERSERK,
 
 	TF_WEAPON_COUNT
 };
@@ -415,6 +416,7 @@ enum
 	TF_COND_CRITBOOSTED,
 	TF_COND_SPAWNPROTECT,
 	TF_COND_SHIELD_CHARGE,
+	TF_COND_BERSERK,
 
 	// The following conditions all expire faster when the player is being healed
 	// If you add a new condition that shouldn't have this behavior, add it before this section.

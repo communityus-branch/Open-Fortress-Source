@@ -35,6 +35,8 @@ CTFWeaponInfo::CTFWeaponInfo()
 	m_bHasTeamSkins_Viewmodel = false;
 	m_bHasTeamSkins_Worldmodel = false;
 	
+	m_bUsesCritAnimation = false;
+	
 	szScoutViewModel[0] = 0;
 	szSoldierViewModel[0] = 0;
 	szPyroViewModel[0] = 0;
@@ -186,6 +188,7 @@ void CTFWeaponInfo::Parse( KeyValues *pKeyValuesData, const char *szWeaponName )
 	m_bLowerWeapon			= ( pKeyValuesData->GetInt( "LowerMainWeapon", 0 ) != 0 );
 	m_bHasTeamSkins_Viewmodel	= ( pKeyValuesData->GetInt( "HasTeamSkins_Viewmodel", 0 ) != 0 );
 	m_bHasTeamSkins_Worldmodel	= ( pKeyValuesData->GetInt( "HasTeamSkins_Worldmodel", 0 ) != 0 );
+	m_bUsesCritAnimation	= ( pKeyValuesData->GetInt( "UsesCritAnimation", 0 ) != 0 );
 
 	Q_strncpy( szScoutViewModel, pKeyValuesData->GetString( "scout_viewmodel" ), MAX_WEAPON_STRING );
 	Q_strncpy( szSoldierViewModel, pKeyValuesData->GetString( "soldier_viewmodel" ), MAX_WEAPON_STRING );

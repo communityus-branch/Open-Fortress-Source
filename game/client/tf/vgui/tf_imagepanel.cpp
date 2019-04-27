@@ -66,12 +66,7 @@ void CTFImagePanel::UpdateBGImage(void)
 {
 	if ( m_iBGTeam >= 0 && m_iBGTeam < TF_TEAM_COUNT )
 	{
-		if (TFGameRules() && TFGameRules()->IsDMGamemode())
-		{
-			int iColorIndex = (ofd_coloredhud.GetBool() );
-			SetImage(m_szTeamBG[iColorIndex]);
-		}
-		else if ( m_szTeamBG[m_iBGTeam] && m_szTeamBG[m_iBGTeam][0] )
+		if ( m_szTeamBG[m_iBGTeam] && m_szTeamBG[m_iBGTeam][0] )
 		{
 			SetImage( m_szTeamBG[m_iBGTeam] );
 		}

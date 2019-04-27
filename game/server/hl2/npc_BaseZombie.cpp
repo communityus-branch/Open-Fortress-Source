@@ -1695,8 +1695,17 @@ void CNPC_BaseZombie::Spawn( void )
 
 	m_flNextMoanSound = gpGlobals->curtime + 9999;
 
-	SetZombieModel();
-
+	
+	char *szModel = (char *)STRING( GetModelName() );
+	if (!szModel || !*szModel)
+	{
+		SetZombieModel();
+	}
+	else
+	{
+		Precache();
+		SetModel( szModel );
+	}
 	NPCInit();
 
 	m_bIsSlumped = false;

@@ -434,6 +434,10 @@ void CTFPlayerShared::OnConditionAdded( int nCond )
 	case TF_COND_CRITBOOSTED:
 		OnAddCritBoosted();
 		break;
+	case TF_COND_BERSERK:
+		OnAddBerserk();
+		break;		
+		
 	default:
 		break;
 	}
@@ -486,6 +490,10 @@ void CTFPlayerShared::OnConditionRemoved( int nCond )
 	case TF_COND_CRITBOOSTED:
 		OnRemoveCritBoosted();
 		break;
+	case TF_COND_BERSERK:
+		OnRemoveBerserk();
+		break;	
+		
 	default:
 		break;
 	}
@@ -867,6 +875,7 @@ void CTFPlayerShared::OnAddCritBoosted( void )
 	m_pOuter->EmitSound( "Mercenary.LaughEvil01" );
 #endif
 }
+
 void CTFPlayerShared::OnRemoveCritBoosted( void )
 {
 #ifdef CLIENT_DLL
@@ -874,7 +883,19 @@ void CTFPlayerShared::OnRemoveCritBoosted( void )
 	m_pOuter->EmitSound( "Mercenary.NegativeVocalization01" );
 #endif
 }
+void CTFPlayerShared::OnAddBerserk( void )
+{
+#ifdef CLIENT_DLL
+	m_pOuter->EmitSound( "Mercenary.LaughEvil01" );
+#endif
+}
 
+void CTFPlayerShared::OnRemoveBerserk( void )
+{
+#ifdef CLIENT_DLL
+	m_pOuter->EmitSound( "Mercenary.NegativeVocalization01" );
+#endif
+}
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------

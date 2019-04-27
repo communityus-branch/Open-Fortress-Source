@@ -90,6 +90,7 @@ public:
 	// Skins
 	bool	m_bHasTeamSkins_Viewmodel;
 	bool	m_bHasTeamSkins_Worldmodel;
+	bool	m_bUsesCritAnimation;
 	
 	//Viewmodels
 	char					szScoutViewModel[MAX_WEAPON_STRING];

@@ -29,6 +29,7 @@ public:
 	}
 
 	void SetClass( int iTeam, int iClass, int iCloakstate );
+	void SetClassColorless( int iTeam, int iClass, int iCloakstate );
 };
 
 //-----------------------------------------------------------------------------
@@ -57,6 +58,7 @@ private:
 	float				m_flNextThink;
 
 	CTFClassImage		*m_pClassImage;
+	CTFClassImage		*m_pClassImageColorless;
 	CTFImagePanel		*m_pSpyImage; // used when spies are disguised
 	CTFImagePanel		*m_pSpyOutlineImage;
 
