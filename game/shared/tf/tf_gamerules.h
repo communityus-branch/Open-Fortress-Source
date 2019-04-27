@@ -329,7 +329,7 @@ public:
 	virtual bool	IsDMGamemode(void) { return GetGameType() == TF_GAMETYPE_DM || GetGameType() == TF_GAMETYPE_TDM; }
 	virtual bool	IsTeamplay(void) { return GetGameType() == TF_GAMETYPE_TDM || GetGameType() == TF_GAMETYPE_ZS; }
 	virtual bool	IsESCGamemode(void) { return GetGameType() == TF_GAMETYPE_ESC; }
-	virtual bool	IsZSGamemode(void) { return GetGameType() == TF_GAMETYPE_DM; }
+	virtual bool	IsZSGamemode(void) { return GetGameType() == TF_GAMETYPE_ZS; }
 	int TF_HUNTED_COUNT;
 	int		m_iBirthdayMode;
 
