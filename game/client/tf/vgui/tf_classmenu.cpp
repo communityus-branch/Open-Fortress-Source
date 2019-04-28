@@ -504,6 +504,9 @@ static const char *g_sClassImagesBlue[] = {
 	"class_sel_sm_medic_blu",
 	"class_sel_sm_sniper_blu",
 	"class_sel_sm_spy_blu",
+	
+	"class_sel_sm_mercenary_blu",
+	"class_sel_sm_civilian_blu",
 	"",
 };
 
@@ -520,6 +523,9 @@ static const char *g_sClassImagesRed[] = {
 	"class_sel_sm_medic_red",
 	"class_sel_sm_sniper_red",
 	"class_sel_sm_spy_red",
+	
+	"class_sel_sm_mercenary_red",
+	"class_sel_sm_civilian_red",	
 	"",
 };
 
@@ -536,6 +542,9 @@ static const char *g_sClassImagesMercenary[] = {
 	"class_sel_sm_medic_mercenary",
 	"class_sel_sm_sniper_mercenary",
 	"class_sel_sm_spy_mercenary",
+	
+	"class_sel_sm_mercenary_mercenary",
+	"class_sel_sm_civilian_mercenary",
 	"",
 };
 
