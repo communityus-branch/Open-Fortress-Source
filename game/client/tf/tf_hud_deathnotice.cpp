@@ -444,7 +444,7 @@ void CTFHudDeathNotice::Paint()
 		if ( killer[0] )
 		{
 			// Draw killer's name
-			Color clr = TFGameRules()->IsTeamplay() ? tf_PR->GetPlayerColor(msg.Killer.iPlayerID) : GetTeamColor(msg.Killer.iTeam, msg.bLocalPlayerInvolved);
+			Color clr = TFGameRules()->IsDMGamemode() && !TFGameRules()->IsTeamplay() ? tf_PR->GetPlayerColor(msg.Killer.iPlayerID) : GetTeamColor(msg.Killer.iTeam, msg.bLocalPlayerInvolved);
 			DrawText( x, yText, m_hTextFont, clr, killer );
 			x += iKillerTextWide;
 		}
@@ -456,7 +456,7 @@ void CTFHudDeathNotice::Paint()
 			x += iPlusIconWide;
 
 			// Draw assister's name
-			Color clr = TFGameRules()->IsTeamplay() ? tf_PR->GetPlayerColor(msg.Assister.iPlayerID) : GetTeamColor(msg.Assister.iTeam, msg.bLocalPlayerInvolved);
+			Color clr = TFGameRules()->IsDMGamemode() && !TFGameRules()->IsTeamplay() ? tf_PR->GetPlayerColor(msg.Assister.iPlayerID) : GetTeamColor(msg.Assister.iTeam, msg.bLocalPlayerInvolved);
 			DrawText(x, yText, m_hTextFont, clr, assister);
 			x += iAssisterTextWide;
 		}
@@ -504,7 +504,7 @@ void CTFHudDeathNotice::Paint()
 		}
 
 		// Draw victims name
-		Color clr = TFGameRules()->IsTeamplay() ? tf_PR->GetPlayerColor(msg.Victim.iPlayerID) : GetTeamColor(msg.Victim.iTeam, msg.bLocalPlayerInvolved);
+		Color clr = TFGameRules()->IsDMGamemode() && !TFGameRules()->IsTeamplay() ? tf_PR->GetPlayerColor(msg.Victim.iPlayerID) : GetTeamColor(msg.Victim.iTeam, msg.bLocalPlayerInvolved);
 		DrawText(x + iVictimTextOffset, yText, m_hTextFont, clr, victim);
 		x += iVictimTextWide;
 
