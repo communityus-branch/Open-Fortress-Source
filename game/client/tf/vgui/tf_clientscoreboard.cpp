@@ -497,7 +497,7 @@ void CTFClientScoreBoardDialog::UpdatePlayerList()
 			UpdatePlayerAvatar( playerIndex, pKeyValues );
 			
 			int itemID = pPlayerList->AddItem( 0, pKeyValues );
-			Color clr = g_PR->GetTeamColor( g_PR->GetTeam( playerIndex ) );
+			Color clr = TFGameRules()->IsDMGamemode() && !TFGameRules()->IsTeamplay() ? tf_PR->GetPlayerColor(playerIndex) : g_PR->GetTeamColor(g_PR->GetTeam(playerIndex));
 			pPlayerList->SetItemFgColor( itemID, clr );
 
 			if ( iSelectedPlayerIndex == playerIndex )
@@ -606,7 +606,7 @@ void CTFClientScoreBoardDialog::UpdatePlayerDetails()
 	SetDialogVariable( "backstabs", roundStats.m_iStat[TFSTAT_BACKSTABS] );
 	SetDialogVariable( "playername", tf_PR->GetPlayerName( playerIndex ) );
 	SetDialogVariable( "playerscore", GetPointsString( tf_PR->GetTotalScore( playerIndex ) ) );
-	Color clr = g_PR->GetTeamColor( g_PR->GetTeam( playerIndex ) );
+	Color clr = TFGameRules()->IsDMGamemode() && !TFGameRules()->IsTeamplay() ? tf_PR->GetPlayerColor(playerIndex) : g_PR->GetTeamColor(g_PR->GetTeam(playerIndex));
 	m_pLabelPlayerName->SetFgColor( clr );
 	m_pImagePanelHorizLine->SetFillColor( clr );
 
