@@ -230,7 +230,7 @@ static const char *pFollowerBoneNames[] =
 {
 	// Head
 	"Combine_Strider.Body_Bone",
-#ifdef HL2_EPISODIC
+#if TRUE //def HL2_EPISODIC
 	"Combine_Strider.Neck_Bone",
 	"Combine_Strider.Gun_Bone1",
 	"Combine_Strider.Gun_Bone2",
@@ -251,7 +251,7 @@ static const char *pFollowerBoneNames[] =
 enum
 {
 	STRIDER_BODY_FOLLOWER_INDEX = 0,
-#ifdef HL2_EPISODIC
+#if TRUE //def HL2_EPISODIC
 	STRIDER_NECK_FOLLOWER_INDEX,
 	STRIDER_GUN1_FOLLOWER_INDEX,
 	STRIDER_GUN2_FOLLOWER_INDEX,
@@ -295,7 +295,7 @@ LINK_ENTITY_TO_CLASS( npc_strider, CNPC_Strider );
 
 BEGIN_DATADESC( CNPC_Strider )
 
-#ifdef HL2_EPISODIC
+#if TRUE //def HL2_EPISODIC
 	DEFINE_UTLVECTOR( m_hAttachedBusters,	FIELD_EHANDLE ),
 #endif // HL2_EPISODIC
 
@@ -723,7 +723,7 @@ void CNPC_Strider::UpdateOnRemove()
 {
 	m_BoneFollowerManager.DestroyBoneFollowers();
 
-#ifdef HL2_EPISODIC
+#if TRUE //def HL2_EPISODIC
 	m_hAttachedBusters.Purge();
 #endif // HL2_EPISODIC
 
@@ -754,7 +754,7 @@ Class_T CNPC_Strider::Classify()
 //---------------------------------------------------------
 bool CNPC_Strider::ShouldAttractAutoAim( CBaseEntity *pAimingEnt )
 {
-#ifdef HL2_EPISODIC
+#if TRUE //def HL2_EPISODIC
 	if( m_hAttachedBusters.Count() > 0 )
 		return false;
 #endif//HL2_EPISODIC
@@ -3013,7 +3013,7 @@ void CNPC_Strider::TraceAttack( const CTakeDamageInfo &inputInfo, const Vector &
 		}
 	}
 
-#ifdef HL2_EPISODIC
+#if TRUE //def HL2_EPISODIC
 
 	// Attempt to hit strider busters in the area
 	float flDistSqr;
@@ -4769,7 +4769,7 @@ bool CNPC_Strider::ShouldProbeCollideAgainstEntity( CBaseEntity *pEntity )
 // Purpose: Lets us keep track of attached Strider busters
 // Input  : *pAttached - strider buster that is attached
 //-----------------------------------------------------------------------------
-#ifdef HL2_EPISODIC
+#if TRUE //def HL2_EPISODIC
 void CNPC_Strider::StriderBusterAttached( CBaseEntity *pAttached )
 {
 	// Add another to the list

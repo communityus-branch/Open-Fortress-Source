@@ -79,7 +79,7 @@ ConVar func_breakdmg_explosive( "func_breakdmg_explosive", "1.25" );
 
 ConVar sv_turbophysics( "sv_turbophysics", "0", FCVAR_REPLICATED, "Turns on turbo physics" );
 
-#ifdef HL2_EPISODIC
+#if TRUE // TRUE //def HL2_EPISODIC
 	#define PROP_FLARE_LIFETIME 30.0f
 	#define PROP_FLARE_IGNITE_SUBSTRACT 5.0f
 	CBaseEntity *CreateFlare( Vector vOrigin, QAngle Angles, CBaseEntity *pOwner, float flDuration );
@@ -246,7 +246,7 @@ void CBaseProp::Precache( void )
 	PrecacheScriptSound( "Metal.SawbladeStick" );
 	PrecacheScriptSound( "PropaneTank.Burst" );
 
-#ifdef HL2_EPISODIC
+#if TRUE //def HL2_EPISODIC
 	UTIL_PrecacheOther( "env_flare" );
 #endif
 
@@ -499,7 +499,7 @@ void CBreakableProp::HandleFirstCollisionInteractions( int index, gamevcollision
 
 		if ( tr.m_pEnt )
 		{
-#ifdef HL2_DLL
+#if TRUE //def HL2_DLL
 			// Don't paintsplat friendlies
 			int iClassify = tr.m_pEnt->Classify();
 			if ( iClassify != CLASS_PLAYER_ALLY_VITAL && iClassify != CLASS_PLAYER_ALLY && 
@@ -835,7 +835,7 @@ void CBreakableProp::Spawn()
 	
 	//jmd: I am guessing that the call to Spawn will set any flags that should be set anyway; this
 	//clears flags we don't want (specifically the FL_ONFIRE for explosive barrels in HL2MP)]
-#ifdef HL2MP
+#if TRUE //def HL2MP
 	ClearFlags();
 #endif 
 
@@ -1008,7 +1008,7 @@ void CBreakableProp::BreakablePropTouch( CBaseEntity *pOther )
 		}
 	}
 
-#ifdef HL2_EPISODIC
+#if TRUE //def HL2_EPISODIC
 	if ( m_hFlareEnt )
 	{
 		CAI_BaseNPC *pNPC = pOther->MyNPCPointer();
@@ -1463,7 +1463,7 @@ void CBreakableProp::OnPhysGunPickup( CBasePlayer *pPhysGunUser, PhysGunPickup_t
 	m_bOriginalBlockLOS = BlocksLOS();
 	SetBlocksLOS( false );
 
-#ifdef HL2_EPISODIC
+#if TRUE // TRUE //def HL2_EPISODIC
 	if ( HasInteraction( PROPINTER_PHYSGUN_CREATE_FLARE ) )
 	{
 		CreateFlare( PROP_FLARE_LIFETIME );
@@ -1472,7 +1472,7 @@ void CBreakableProp::OnPhysGunPickup( CBasePlayer *pPhysGunUser, PhysGunPickup_t
 }
 
 
-#ifdef HL2_EPISODIC
+#if TRUE // TRUE //def HL2_EPISODIC
 //-----------------------------------------------------------------------------
 // Purpose: Create a flare at the attachment point
 //-----------------------------------------------------------------------------
@@ -1501,7 +1501,7 @@ void CBreakableProp::CreateFlare( float flLifetime )
 
 		m_nSkin = 1;
 
-		AddEntityToDarknessCheck( pFlare );
+		//AddEntityToDarknessCheck( pFlare );
 
 		AddEffects( EF_NOSHADOW );
 	}
@@ -1732,7 +1732,7 @@ void CBreakableProp::Break( CBaseEntity *pBreaker, const CTakeDamageInfo &info )
 		WRITE_ANGLES( GetAbsAngles() );
 		MessageEnd();
 
-#ifndef HL2MP
+#ifdef HL2MP
 		UTIL_Remove( this );
 #endif
 		return;

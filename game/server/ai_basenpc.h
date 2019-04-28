@@ -1765,7 +1765,7 @@ public:
 	virtual void		Event_Killed( const CTakeDamageInfo &info );
 
 	virtual Vector		GetShootEnemyDir( const Vector &shootOrigin, bool bNoisy = true );
-#ifdef HL2_DLL
+#if TRUE //def HL2_DLL
 	virtual Vector		GetActualShootPosition( const Vector &shootOrigin );
 	virtual Vector		GetActualShootTrajectory( const Vector &shootOrigin );
 	virtual	Vector		GetAttackSpread( CBaseCombatWeapon *pWeapon, CBaseEntity *pTarget = NULL );

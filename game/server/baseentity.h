@@ -87,7 +87,7 @@ class IHasAttributes;
 
 typedef CUtlVector< CBaseEntity* > EntityList_t;
 
-#if defined( HL2_DLL )
+#if TRUE //defined( HL2_DLL )
 
 // For CLASSIFY
 enum Class_T

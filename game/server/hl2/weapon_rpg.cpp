@@ -32,7 +32,7 @@
 	#include "portal_util_shared.h"
 #endif
 
-#ifdef HL2_DLL
+#if TRUE //def HL2_DLL
 	extern int g_interactionPlayerLaunchedRPG;
 #endif
 
@@ -688,7 +688,7 @@ void CMissile::SeekThink( void )
 	// Think as soon as possible
 	SetNextThink( gpGlobals->curtime );
 
-#ifdef HL2_EPISODIC
+#if TRUE //def HL2_EPISODIC
 
 	if ( m_bCreateDangerSounds == true )
 	{
@@ -1155,7 +1155,7 @@ void CAPCMissile::DoExplosion( void )
 	}
 	else
 	{
-#ifdef HL2_EPISODIC
+#if TRUE //def HL2_EPISODIC
 		ExplosionCreate( GetAbsOrigin(), GetAbsAngles(), this, APC_MISSILE_DAMAGE, 100, true, 20000 );
 #else
 		ExplosionCreate( GetAbsOrigin(), GetAbsAngles(), GetOwnerEntity(), APC_MISSILE_DAMAGE, 100, true, 20000 );

@@ -26,6 +26,8 @@
 
 ConVar cl_richpresence_printmsg( "cl_richpresence_printmsg", "0", FCVAR_ARCHIVE, "" );
 
+ConVar of_enable_rpc("of_enable_rpc", "1", FCVAR_ARCHIVE, "Enables/Disables Discord Rich Presence. Requires a game restart.");
+
 //#define DISCORD_LIBRARY_DLL "discord-rpc.dll"
 #define DISCORD_APP_ID	"558662173736566794"
 
@@ -78,6 +80,16 @@ void CTFDiscordRPC::RunFrame()
 
 void CTFDiscordRPC::OnReady( const DiscordUser* user )
 {
+	if (!of_enable_rpc.GetBool())
+	{
+		Discord_Shutdown();
+
+		if ( steamapicontext->SteamFriends() )
+			steamapicontext->SteamFriends()->ClearRichPresence();
+
+		return;
+	}
+
 	ConColorMsg( Color( 114, 137, 218, 255 ), "[Rich Presence] Ready!\n" );
 	ConColorMsg( Color( 114, 137, 218, 255 ), "[Rich Presence] User %s#%s - %s\n", user->username, user->discriminator, user->userId );
 	

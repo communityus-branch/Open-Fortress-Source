@@ -104,7 +104,7 @@ public:
 	int SelectFailSchedule( int failedSchedule, int failedTask, AI_TaskFailureCode_t taskFailCode );
 	int TranslateSchedule( int scheduleType );
 
-#ifndef HL2_EPISODIC
+#if FALSE //ifndef HL2_EPISODIC
 	void CheckFlinches() {} // Zombie has custom flinch code
 #endif // HL2_EPISODIC
 
@@ -821,7 +821,7 @@ void CZombie::Extinguish()
 //---------------------------------------------------------
 int CZombie::OnTakeDamage_Alive( const CTakeDamageInfo &inputInfo )
 {
-#ifndef HL2_EPISODIC
+#if FALSE //ifndef HL2_EPISODIC
 	if ( inputInfo.GetDamageType() & DMG_BUCKSHOT )
 	{
 		if( !m_fIsTorso && inputInfo.GetDamage() > (m_iMaxHealth/3) )
@@ -842,7 +842,7 @@ int CZombie::OnTakeDamage_Alive( const CTakeDamageInfo &inputInfo )
 //-----------------------------------------------------------------------------
 bool CZombie::IsHeavyDamage( const CTakeDamageInfo &info )
 {
-#ifdef HL2_EPISODIC
+#if TRUE //def HL2_EPISODIC
 	if ( info.GetDamageType() & DMG_BUCKSHOT )
 	{
 		if ( !m_fIsTorso && info.GetDamage() > (m_iMaxHealth/3) )

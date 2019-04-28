@@ -14,7 +14,7 @@ $Configuration
 	$Compiler
 	{
 		$AdditionalIncludeDirectories	".\hl2;.\tf;.\tf\vgui;$SRCDIR\game\shared\Multiplayer;$SRCDIR\game\shared\tf;$BASE;.\ofd;$SRCDIR\game\shared\ofd;.\hl2;$SRCDIR\game\shared\hl2;.\episodic;$SRCDIR\game\shared\episodic"
-		$PreprocessorDefinitions		"$BASE;TF_MOD_CLIENT;GLOWS_ENABLE;OPENFORTRESS_DLL;HL2_CLIENT_DLL;HL2_EPISODIC"
+		$PreprocessorDefinitions		"$BASE;TF_MOD_CLIENT;GLOWS_ENABLE;OPENFORTRESS_DLL"
 	}
 }
 

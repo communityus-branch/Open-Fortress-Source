@@ -584,7 +584,7 @@ int CNPC_BaseZombie::MeleeAttack1Conditions ( float flDot, float flDist )
 	if( tr.fraction == 1.0 || !tr.m_pEnt )
 	{
 
-#ifdef HL2_EPISODIC
+#if TRUE //def HL2_EPISODIC
 
 		// If our trace was unobstructed but we were shooting 
 		if ( GetEnemy() && GetEnemy()->Classify() == CLASS_BULLSEYE )
@@ -630,7 +630,7 @@ int CNPC_BaseZombie::MeleeAttack1Conditions ( float flDot, float flDist )
 		}
 	}
 
-#ifdef HL2_EPISODIC
+#if TRUE //def HL2_EPISODIC
 
 	if ( !tr.m_pEnt->IsWorld() && GetEnemy() && GetEnemy()->GetGroundEntity() == tr.m_pEnt )
 	{
@@ -949,7 +949,7 @@ int CNPC_BaseZombie::OnTakeDamage_Alive( const CTakeDamageInfo &inputInfo )
 //-----------------------------------------------------------------------------
 void CNPC_BaseZombie::MakeAISpookySound( float volume, float duration )
 {
-#ifdef HL2_EPISODIC
+#if TRUE //def HL2_EPISODIC
 	if ( HL2GameRules()->IsAlyxInDarknessMode() )
 	{
 		CSoundEnt::InsertSound( SOUND_COMBAT, EyePosition(), volume, duration, this, SOUNDENT_CHANNEL_SPOOKY_NOISE );
@@ -1053,7 +1053,7 @@ bool CNPC_BaseZombie::IsChopped( const CTakeDamageInfo &info )
 //-----------------------------------------------------------------------------
 bool CNPC_BaseZombie::ShouldIgniteZombieGib( void )
 {
-#ifdef HL2_EPISODIC
+#if TRUE //def HL2_EPISODIC
 	// If we're in darkness mode, don't ignite giblets, because we don't want to
 	// pay the perf cost of multiple dynamic lights per giblet.
 	return ( IsOnFire() && !HL2GameRules()->IsAlyxInDarknessMode() );
@@ -1207,7 +1207,7 @@ void CNPC_BaseZombie::Ignite( float flFlameLifetime, bool bNPCOnly, float flSize
 {
 	BaseClass::Ignite( flFlameLifetime, bNPCOnly, flSize, bCalledByLevelDesigner );
 
-#ifdef HL2_EPISODIC
+#if TRUE //def HL2_EPISODIC
 	if ( HL2GameRules()->IsAlyxInDarknessMode() == true && GetEffectEntity() != NULL )
 	{
 		GetEffectEntity()->AddEffects( EF_DIMLIGHT );
@@ -1810,7 +1810,7 @@ void CNPC_BaseZombie::BuildScheduleTestBits( void )
 		ClearCustomInterruptCondition( COND_LIGHT_DAMAGE );
 		ClearCustomInterruptCondition( COND_HEAVY_DAMAGE );
 	}
-#ifndef HL2_EPISODIC
+#if FALSE //ifndef HL2_EPISODIC
 	else if ( m_flNextFlinch >= gpGlobals->curtime )
 	{
 		ClearCustomInterruptCondition( COND_LIGHT_DAMAGE );
@@ -2156,7 +2156,7 @@ void CNPC_BaseZombie::StartTask( const Task_t *pTask )
 
 	case TASK_ZOMBIE_WAIT_POST_MELEE:
 		{
-#ifndef HL2_EPISODIC
+#if FALSE //ifndef HL2_EPISODIC
 			TaskComplete();
 			return;
 #endif
@@ -2819,7 +2819,7 @@ AI_BEGIN_CUSTOM_NPC( base_zombie, CNPC_BaseZombie )
 	//=========================================================
 	// ChaseEnemy
 	//=========================================================
-#ifdef HL2_EPISODIC
+#if TRUE //def HL2_EPISODIC
 	DEFINE_SCHEDULE
 	(
 		SCHED_ZOMBIE_CHASE_ENEMY,
