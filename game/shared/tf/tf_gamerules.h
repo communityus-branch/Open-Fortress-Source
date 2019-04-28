@@ -201,6 +201,8 @@ public:
 
 	virtual const char *GetGameTypeName( void ){ return g_aGameTypeNames[m_nGameType]; }
 	virtual int GetGameType( void ){ return m_nGameType; }
+	virtual bool GetDMType( void ){ return m_nbIsDM; }
+	virtual bool GetTDM( void ){ return m_nbIsTeamplay; }
 
 	virtual bool FlagsMayBeCapped( void );
 	virtual bool WeaponSpawnersMayBeUsed( void );
@@ -325,12 +327,13 @@ public:
 
 	bool m_bControlSpawnsPerTeam[ MAX_TEAMS ][ MAX_CONTROL_POINTS ];
 	int	 m_iPreviousRoundWinners;
-
-	virtual bool	IsDMGamemode(void) { return GetGameType() == TF_GAMETYPE_DM || GetGameType() == TF_GAMETYPE_TDM; }
-	virtual bool	IsTeamplay(void) { return GetGameType() == TF_GAMETYPE_TDM || GetGameType() == TF_GAMETYPE_ZS; }
+	CNetworkVar( int, TF_HUNTED_COUNT ); // Type of game this map is (CTF, CP)
+	CNetworkVar( bool, m_nbIsDM ); // Is Deathmatch On?
+	CNetworkVar( bool, m_nbIsTeamplay ); // Is Teamplay? On?
+	virtual bool	IsDMGamemode(void) { return m_nbIsDM; }
+	virtual bool	IsTeamplay(void) { return m_nbIsTeamplay; }
 	virtual bool	IsESCGamemode(void) { return GetGameType() == TF_GAMETYPE_ESC; }
 	virtual bool	IsZSGamemode(void) { return GetGameType() == TF_GAMETYPE_ZS; }
-	int TF_HUNTED_COUNT;
 	int		m_iBirthdayMode;
 
 #ifdef GAME_DLL

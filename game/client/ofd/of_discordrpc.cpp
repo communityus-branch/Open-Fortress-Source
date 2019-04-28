@@ -133,7 +133,7 @@ void CTFDiscordRPC::SetLogo( void )
 		{
 			pszGameType = "Control Point";
 		}
-		else if (TFGameRules()->GetGameType() == TF_GAMETYPE_DM)
+		else if (TFGameRules()->IsDMGamemode())
 		{
 			pszGameType = "Deathmatch";
 		}

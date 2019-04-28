@@ -978,7 +978,6 @@ public:
 		C_BaseEntity *pEntity = BindArgToEntity( pC_BaseEntity );
 		if ( !pEntity )
 			return;
-
 		if ( TFGameRules() && TFGameRules()->IsDMGamemode() )
 		{
 			Vector vecColor = pEntity->GetItemTintColor();

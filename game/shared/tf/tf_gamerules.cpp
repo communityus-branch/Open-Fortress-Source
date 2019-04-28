@@ -184,14 +184,16 @@ BEGIN_NETWORK_TABLE_NOBASE( CTFGameRules, DT_TFGameRules )
 	RecvPropString( RECVINFO( m_pszTeamGoalStringRed ) ),
 	RecvPropString( RECVINFO( m_pszTeamGoalStringBlue ) ),
 	RecvPropString( RECVINFO(m_pszTeamGoalStringMercenary)),
-
+	RecvPropBool( RECVINFO( m_nbIsDM ) ),
+	RecvPropBool( RECVINFO( m_nbIsTeamplay ) ),
 #else
 
 	SendPropInt( SENDINFO( m_nGameType ), 3, SPROP_UNSIGNED ),
 	SendPropString( SENDINFO( m_pszTeamGoalStringRed ) ),
 	SendPropString( SENDINFO( m_pszTeamGoalStringBlue ) ),
 	SendPropString( SENDINFO( m_pszTeamGoalStringMercenary ) ),
-
+	SendPropBool( SENDINFO( m_nbIsDM ) ),
+	SendPropBool( SENDINFO( m_nbIsTeamplay ) ),
 #endif
 END_NETWORK_TABLE()
 
@@ -614,6 +616,9 @@ CTFGameRules::CTFGameRules()
 
 	// Initialize the game type
 	m_nGameType.Set( TF_GAMETYPE_UNDEFINED );
+	
+	m_nbIsDM = false;
+	m_nbIsTeamplay = false;
 
 	// Initialize the classes here.
 	InitPlayerClasses();
@@ -734,6 +739,8 @@ void CTFGameRules::Activate()
 	tf_maxspeed.SetValue(400);
 	sv_airaccelerate.SetValue(10);
 	m_iBirthdayMode = BIRTHDAY_RECALCULATE;
+	m_nbIsDM = false;
+	m_nbIsTeamplay = false;
 
 	m_nGameType.Set(TF_GAMETYPE_UNDEFINED);
 
@@ -750,16 +757,17 @@ void CTFGameRules::Activate()
 
 	if (gEntList.FindEntityByClassname(NULL, "of_logic_dm") || !Q_strncmp(STRING(gpGlobals->mapname), "dm_", 3) )
 	{
+		m_nbIsDM = true;
 		if (mp_teamplay.GetBool() || gEntList.FindEntityByClassname(NULL, "of_logic_tdm") )
 		{
-			m_nGameType.Set(TF_GAMETYPE_TDM);
+			m_nbIsTeamplay = true;
 			ConColorMsg(Color(77, 116, 85, 255), "[TFGameRules] Executing server TDM gamemode config file\n", NULL);
 			engine->ServerCommand("exec config_tdm.cfg \n");
 			engine->ServerExecute();
 		}
 		else 
 		{
-			m_nGameType.Set(TF_GAMETYPE_DM);
+			m_nbIsTeamplay = false;
 			ConColorMsg(Color(77, 116, 85, 255), "[TFGameRules] Executing server DM gamemode config file\n", NULL);
 			engine->ServerCommand("exec config_dm.cfg \n");
 			engine->ServerExecute();
@@ -773,7 +781,6 @@ void CTFGameRules::Activate()
 		sv_airaccelerate.SetValue(500);
 		if ( fraglimit.GetFloat() == 0 ) fraglimit.SetValue( 50 );
 		mp_disable_respawn_times.SetValue(1);
-
 		return;
 	}
 	
