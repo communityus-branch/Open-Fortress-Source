@@ -32,6 +32,7 @@ class CTFPowerup : public CItem
 {
 public:
 	DECLARE_CLASS( CTFPowerup, CItem );
+	
 
 	CTFPowerup();
 
@@ -42,10 +43,12 @@ public:
 	virtual bool	MyTouch( CBasePlayer *pPlayer );
 
 	bool			IsDisabled( void );
+	CNetworkVar( bool, bInitialDelay );
 	void			SetDisabled( bool bDisabled );
 
-	virtual float	GetRespawnDelay( void ) { return g_pGameRules->FlItemRespawnTime( this ); }
-	float fl_RespawnTime=-1;
+	float	GetRespawnDelay( void );
+	CNetworkVar( float, fl_RespawnTime);
+	CNetworkVar( float, fl_RespawnDelay);
 
 	// Input handlers
 	void			InputEnable( inputdata_t &inputdata );

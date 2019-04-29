@@ -64,6 +64,7 @@ CTFClientScoreBoardDialog::CTFClientScoreBoardDialog( IViewPort *pViewPort ) : C
 	m_pLabelPlayerName = new CTFLabel( this, "PlayerNameLabel", "" );
 	m_pImagePanelHorizLine = new ImagePanel( this, "HorizontalLine" );
 	m_pClassImage = new CTFClassImage( this, "ClassImage" );
+	m_pClassImageColorless= new CTFClassImage ( this, "ClassImageColorless" );
 	m_iImageDead = 0;
 	m_iImageDominated = 0;
 	m_iImageNemesis = 0;
@@ -209,21 +210,14 @@ void CTFClientScoreBoardDialog::InitPlayerList( SectionedListPanel *pPlayerList 
 		pPlayerList->AddColumnToSection( 0, "avatar", "", SectionedListPanel::COLUMN_IMAGE | SectionedListPanel::COLUMN_CENTER, m_iAvatarWidth );
 	}
 	pPlayerList->AddColumnToSection( 0, "name", "#TF_Scoreboard_Name", 0, m_iNameWidth );
-	if ( !TFGameRules() && TFGameRules()->IsDMGamemode() )
-	{
-		pPlayerList->AddColumnToSection( 0, "status", "", SectionedListPanel::COLUMN_IMAGE | SectionedListPanel::COLUMN_CENTER, m_iStatusWidth );
-		pPlayerList->AddColumnToSection( 0, "nemesis", "", SectionedListPanel::COLUMN_IMAGE, m_iNemesisWidth );
-		pPlayerList->AddColumnToSection( 0, "class", "", 0, m_iClassWidth );
-	}
+	pPlayerList->AddColumnToSection( 0, "status", "", SectionedListPanel::COLUMN_IMAGE | SectionedListPanel::COLUMN_CENTER, m_iStatusWidth );
+	pPlayerList->AddColumnToSection( 0, "nemesis", "", SectionedListPanel::COLUMN_IMAGE, m_iNemesisWidth );
+	pPlayerList->AddColumnToSection( 0, "class", "", 0, m_iClassWidth );
 	if ( TFGameRules() && TFGameRules()->IsDMGamemode() )
 		pPlayerList->AddColumnToSection( 0, "kills", "#TF_Scoreboard_Kills", SectionedListPanel::COLUMN_RIGHT, m_iKillsWidth );
-	pPlayerList->AddColumnToSection( 0, "score", "#TF_Scoreboard_Score", SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
+	else
+		pPlayerList->AddColumnToSection( 0, "score", "#TF_Scoreboard_Score", SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
 	pPlayerList->AddColumnToSection( 0, "ping", "#TF_Scoreboard_Ping", SectionedListPanel::COLUMN_RIGHT, m_iPingWidth );
-	if ( TFGameRules() && TFGameRules()->IsDMGamemode() )
-	{
-		pPlayerList->AddColumnToSection( 0, "status", "", SectionedListPanel::COLUMN_IMAGE | SectionedListPanel::COLUMN_CENTER, m_iStatusWidth );
-		pPlayerList->AddColumnToSection( 0, "nemesis", "", SectionedListPanel::COLUMN_IMAGE, m_iNemesisWidth );
-	}
 }
 
 void CTFClientScoreBoardDialog::RemovePlayerList( SectionedListPanel *pPlayerList )
@@ -614,12 +608,21 @@ void CTFClientScoreBoardDialog::UpdatePlayerDetails()
 	int iTeam = pLocalPlayer->GetTeamNumber();
 	if ( ( iTeam >= FIRST_GAME_TEAM ) && ( iClass >= TF_FIRST_NORMAL_CLASS ) && ( iClass <= TF_LAST_NORMAL_CLASS ) )
 	{
+		if ( iTeam == TF_TEAM_MERCENARY )
+		{
+			m_pClassImageColorless->SetClassColorless( iTeam, iClass, 0 );
+			m_pClassImageColorless->SetVisible( true );
+		}
+		else
+			m_pClassImageColorless->SetVisible( false );
+		
 		m_pClassImage->SetClass( iTeam, iClass, 0 );
 		m_pClassImage->SetVisible( true );
 	} 
 	else
 	{
 		m_pClassImage->SetVisible( false );
+		m_pClassImageColorless->SetVisible( false );
 	}
 }
 
@@ -629,6 +632,7 @@ void CTFClientScoreBoardDialog::UpdatePlayerDetails()
 void CTFClientScoreBoardDialog::ClearPlayerDetails()
 {
 	m_pClassImage->SetVisible( false );
+	m_pClassImageColorless->SetVisible( false );
 
 	// HLTV has no game stats
 	bool bVisible = !engine->IsHLTV();

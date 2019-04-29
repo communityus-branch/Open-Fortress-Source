@@ -428,7 +428,7 @@ void CTFHudFlagObjectives::OnTick()
 				{
 					m_pBlueFlag->SetEntity( pFlag );
 				}
-				else if ( m_pBlueFlag && pFlag->GetTeamNumber() == TF_TEAM_MERCENARY )
+				else if ( m_pMercenaryFlag && pFlag->GetTeamNumber() == TF_TEAM_MERCENARY )
 				{
 					m_pMercenaryFlag->SetEntity( pFlag );
 				}

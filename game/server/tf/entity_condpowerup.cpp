@@ -32,6 +32,10 @@ END_DATADESC()
 IMPLEMENT_SERVERCLASS_ST( CCondPowerup, DT_CondPowerup )
 SendPropBool( SENDINFO( m_bDisableShowOutline ) ),
 SendPropBool( SENDINFO( m_bRespawning) ),
+SendPropBool( SENDINFO( bInitialDelay ) ),
+SendPropTime( SENDINFO( m_flRespawnTick ) ),
+SendPropTime( SENDINFO( fl_RespawnTime ) ),
+SendPropTime( SENDINFO( fl_RespawnDelay ) ),
 END_SEND_TABLE()
 
 LINK_ENTITY_TO_CLASS( dm_powerup_spawner, CCondPowerup );
@@ -76,4 +80,17 @@ bool CCondPowerup::MyTouch( CBasePlayer *pPlayer )
 		m_nRenderFX = kRenderFxDistort;
 	}
 	return bSuccess;
+}
+
+CCondPowerup::CCondPowerup()
+{
+	m_flRespawnTick = 0.0f;
+}
+
+CBaseEntity* CCondPowerup::Respawn( void )
+{
+	CBaseEntity *ret = BaseClass::Respawn();
+	m_nRenderFX = kRenderFxDistort;
+	m_flRespawnTick = GetNextThink();
+	return ret;
 }

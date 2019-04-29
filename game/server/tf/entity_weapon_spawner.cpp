@@ -21,7 +21,8 @@
 extern ConVar ofd_instagib;
 
 ConVar mp_weaponstay( "mp_weaponstay", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "Weapons dont dissapeer.");
-
+ConVar ofd_allow_allclass_pickups( "ofd_allow_allclass_pickups", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "Non Merc Classes can pickup weapons.");
+ 
 //-----------------------------------------------------------------------------
 // Purpose: Spawn function for the Weapon Spawner
 //-----------------------------------------------------------------------------
@@ -36,13 +37,16 @@ DEFINE_KEYFIELD(m_iszWeaponModelOLD, FIELD_STRING, "powerup_model"),
 DEFINE_KEYFIELD(m_iszPickupSound, FIELD_STRING, "pickup_sound"),
 DEFINE_KEYFIELD(m_bDisableSpin, FIELD_BOOLEAN, "disable_spin"),
 DEFINE_KEYFIELD(m_bDisableShowOutline, FIELD_BOOLEAN, "disable_glow"),
-
 END_DATADESC()
 
 IMPLEMENT_SERVERCLASS_ST( CWeaponSpawner, DT_WeaponSpawner )
 	SendPropBool( SENDINFO( m_bDisableSpin ) ),
 	SendPropBool( SENDINFO( m_bDisableShowOutline ) ),
 	SendPropBool( SENDINFO( m_bRespawning ) ),
+	SendPropBool( SENDINFO( bInitialDelay ) ),
+	SendPropTime( SENDINFO( m_flRespawnTick ) ),
+	SendPropTime( SENDINFO( fl_RespawnTime ) ),
+	SendPropTime( SENDINFO( fl_RespawnDelay ) ),
 END_SEND_TABLE()
 
 LINK_ENTITY_TO_CLASS( dm_weapon_spawner, CWeaponSpawner );
@@ -58,6 +62,8 @@ void CWeaponSpawner::Spawn( void )
 	BaseClass::Spawn();
 	}
 }
+
+
 
 //-----------------------------------------------------------------------------
 // Purpose: Precache function for the ammopack
@@ -83,16 +89,16 @@ bool CWeaponSpawner::MyTouch( CBasePlayer *pPlayer )
 			return false;
 	
 		bSuccess = true;
-		CTFWeaponBase *pWeapon = (CTFWeaponBase *)pPlayer->GiveNamedItem( STRING(m_iszWeaponName) );
+		CTFWeaponBase *pWeapon = (CTFWeaponBase *)pTFPlayer->GiveNamedItem( STRING(m_iszWeaponName) );
 		
 		for ( int iWeapon = 0; iWeapon < TF_WEAPON_COUNT; ++iWeapon )
 		{		
-			CTFWeaponBase *pCarriedWeapon = (CTFWeaponBase *)pPlayer->GetWeapon( iWeapon );
-			if ( pCarriedWeapon == pWeapon ) 
+			CTFWeaponBase *pCarriedWeapon = (CTFWeaponBase *)pTFPlayer->GetWeapon( iWeapon );
+			if ( pCarriedWeapon == pWeapon || ( !ofd_allow_allclass_pickups.GetBool() && !pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_MERCENARY ) ) ) 
 			{
 				if ( pTFPlayer->RestockAmmo(PackRatios[GetPowerupSize()]) )
 				{
-					CSingleUserRecipientFilter filter( pPlayer );
+					CSingleUserRecipientFilter filter( pTFPlayer );
 					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
 					if ( mp_weaponstay.GetBool() )
 					{
@@ -101,13 +107,18 @@ bool CWeaponSpawner::MyTouch( CBasePlayer *pPlayer )
 					else
 					{
 						m_nRenderFX = kRenderFxDistort;
+					}
+					if ( pWeapon )
+					{
+						pTFPlayer->Weapon_Detach( pWeapon );
+						UTIL_Remove( pWeapon );
 					}
 					return bSuccess;
 				}
 				int iMaxMetal = pTFPlayer->GetPlayerClass()->GetData()->m_aAmmoMax[TF_AMMO_METAL];
-				if ( pPlayer->GiveAmmo( ceil(iMaxMetal * PackRatios[GetPowerupSize()]), TF_AMMO_METAL, true ) )
+				if ( pTFPlayer->GiveAmmo( ceil(iMaxMetal * PackRatios[GetPowerupSize()]), TF_AMMO_METAL, true ) )
 				{
-					CSingleUserRecipientFilter filter( pPlayer );
+					CSingleUserRecipientFilter filter( pTFPlayer );
 					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
 					if ( mp_weaponstay.GetBool() )
 					{
@@ -116,6 +127,11 @@ bool CWeaponSpawner::MyTouch( CBasePlayer *pPlayer )
 					else
 					{
 						m_nRenderFX = kRenderFxDistort;
+					}
+					if ( pWeapon )
+					{
+						pTFPlayer->Weapon_Detach( pWeapon );
+						UTIL_Remove( pWeapon );
 					}
 					return bSuccess;
 				}
@@ -126,10 +142,11 @@ bool CWeaponSpawner::MyTouch( CBasePlayer *pPlayer )
 		if ( bSuccess )
 		{
 		
-			CSingleUserRecipientFilter filter( pPlayer );
+			CSingleUserRecipientFilter filter( pTFPlayer );
 			EmitSound( filter, entindex(), STRING(m_iszPickupSound) );
-
-			pWeapon->GiveTo( pPlayer );
+			
+			CTFWeaponBase *pGivenWeapon = (CTFWeaponBase *)pTFPlayer->GiveNamedItem( STRING(m_iszWeaponName) );
+			pGivenWeapon->GiveTo( pTFPlayer );
 			if ( mp_weaponstay.GetBool() )
 			{
 				bSuccess = false;
@@ -139,7 +156,25 @@ bool CWeaponSpawner::MyTouch( CBasePlayer *pPlayer )
 				m_nRenderFX = kRenderFxDistort;
 			}
 		}
+	if ( pWeapon )
+	{
+		pTFPlayer->Weapon_Detach( pWeapon );
+		UTIL_Remove( pWeapon );
+	}
 	}
 	return bSuccess;
 
+}
+
+CWeaponSpawner::CWeaponSpawner()
+{
+	m_flRespawnTick = 0.0f;
+}
+
+CBaseEntity* CWeaponSpawner::Respawn( void )
+{
+	CBaseEntity *ret = BaseClass::Respawn();
+	m_nRenderFX = kRenderFxDistort;
+	m_flRespawnTick = GetNextThink();
+	return ret;
 }

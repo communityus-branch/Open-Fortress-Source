@@ -66,6 +66,7 @@ private:
 	CTFLabel					*m_pLabelPlayerName;
 	vgui::ImagePanel			*m_pImagePanelHorizLine;
 	CTFClassImage				*m_pClassImage;
+	CTFClassImage				*m_pClassImageColorless;
 
 	int							m_iImageDead;
 	int							m_iImageDominated;

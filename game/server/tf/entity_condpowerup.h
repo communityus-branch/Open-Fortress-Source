@@ -23,8 +23,11 @@ public:
 	DECLARE_CLASS( CCondPowerup, CTFPowerup );
 	DECLARE_SERVERCLASS();
 	DECLARE_DATADESC();
+	
+	CCondPowerup();
 
 	void	Spawn( void );
+	virtual CBaseEntity* Respawn( void );
 	void	Precache( void );
 	bool	MyTouch( CBasePlayer *pPlayer );
 
@@ -38,6 +41,8 @@ public:
 	CNetworkVar(bool, m_bDisableShowOutline);
 
 	IMPLEMENT_NETWORK_VAR_FOR_DERIVED( m_bRespawning );
+private:
+	CNetworkVar( float, m_flRespawnTick );
 };
 
 #endif // ENTITY_WEAPON_SPAWNER_H

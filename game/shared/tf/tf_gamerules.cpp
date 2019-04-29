@@ -772,7 +772,6 @@ void CTFGameRules::Activate()
 			engine->ServerCommand("exec config_dm.cfg \n");
 			engine->ServerExecute();
 		}
-
 		of_gamemode_dm.SetValue(1);
 		of_bunnyhop.SetValue(1);
 		of_crouchjump.SetValue(1);

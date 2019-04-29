@@ -32,6 +32,7 @@ DEFINE_KEYFIELD( m_bDisabled, FIELD_BOOLEAN, "StartDisabled" ),
 DEFINE_KEYFIELD( m_bHide, FIELD_BOOLEAN, "HiddenWhenRespawning" ),
 DEFINE_KEYFIELD( fl_RespawnTime, FIELD_FLOAT, "respawntime" ),
 DEFINE_KEYFIELD( m_iszSpawnSound, FIELD_STRING, "spawn_sound" ),
+DEFINE_KEYFIELD( fl_RespawnDelay, FIELD_FLOAT, "respawndelay" ),
 
 // Inputs.
 DEFINE_INPUTFUNC( FIELD_VOID, "Enable", InputEnable ),
@@ -54,6 +55,8 @@ CTFPowerup::CTFPowerup()
 {
 	m_bDisabled = false;
 	m_bRespawning = false;
+	fl_RespawnTime = -1.0f;
+	fl_RespawnDelay = -1.0f;
 
 	UseClientSideAnimation();
 }
@@ -63,6 +66,7 @@ CTFPowerup::CTFPowerup()
 //-----------------------------------------------------------------------------
 void CTFPowerup::Spawn( void )
 {
+	bInitialDelay = true;
 	BaseClass::Precache();
 	BaseClass::Spawn();
 
@@ -77,8 +81,16 @@ void CTFPowerup::Spawn( void )
 	{
 		SetDisabled( true );
 	}
-
-	m_bRespawning = false;
+	
+	if ( GetRespawnDelay() )
+	{
+		Respawn();
+	}
+	else
+	{
+		bInitialDelay = false;
+		m_bRespawning = false;
+	}
 	ResetSequence( LookupSequence("idle") );
 }
 
@@ -89,16 +101,19 @@ CBaseEntity* CTFPowerup::Respawn( void )
 {
 	m_bRespawning = true;
 	CBaseEntity *pReturn = BaseClass::Respawn();
-
+	
 	// Override the respawn time
-	if ( fl_RespawnTime < 0 )
+	if ( bInitialDelay )
 		SetNextThink( gpGlobals->curtime + GetRespawnDelay() );
 	else
 		SetNextThink( gpGlobals->curtime + fl_RespawnTime );
-
 	return pReturn;
 }
 
+float CTFPowerup::GetRespawnDelay( void )
+{
+	return fl_RespawnDelay;
+}
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
@@ -112,6 +127,7 @@ void CTFPowerup::Materialize( void )
 		RemoveEffects( EF_NODRAW );
 	}
 	m_bRespawning = false;
+	bInitialDelay = false;
 	SetTouch( &CItem::ItemTouch );
 }
 

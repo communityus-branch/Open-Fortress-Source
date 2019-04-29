@@ -1828,6 +1828,7 @@ void CBaseCombatWeapon::ItemPostFrame( void )
 		if ( !ReloadOrSwitchWeapons() && ( m_bInReload == false ) )
 		{
 			if ( GetActivity() != ACT_VM_RELOAD )
+//			SetNextThink ( GetActivity()->GetLength() ) stickynote
 				WeaponIdle();
 		}
 	}

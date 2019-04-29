@@ -88,8 +88,10 @@ BEGIN_DATADESC( CCaptureFlag )
 
 	// Keyfields.
 	DEFINE_KEYFIELD( m_nGameType, FIELD_INTEGER, "GameType" ),
-
+	DEFINE_KEYFIELD( m_flResetTime, FIELD_INTEGER, "ReturnTime"),
+	
 #ifdef GAME_DLL
+
 	// Inputs.
 	DEFINE_INPUTFUNC( FIELD_VOID, "Enable", InputEnable ),
 	DEFINE_INPUTFUNC( FIELD_VOID, "Disable", InputDisable ),
