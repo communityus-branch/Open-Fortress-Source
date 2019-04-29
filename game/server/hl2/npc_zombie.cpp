@@ -482,11 +482,13 @@ void CZombie::SetZombieModel( void )
 
 	if ( m_fIsTorso )
 	{
+		PrecacheModel("models/zombie/classic_torso.mdl");
 		SetModel( "models/zombie/classic_torso.mdl" );
 		SetHullType( HULL_TINY );
 	}
 	else
 	{
+		PrecacheModel("models/zombie/classic.mdl");
 		SetModel( "models/zombie/classic.mdl" );
 		SetHullType( HULL_HUMAN );
 	}

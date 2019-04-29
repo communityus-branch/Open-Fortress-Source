@@ -500,11 +500,13 @@ void CNPC_PoisonZombie::SetZombieModel( void )
 
 	if ( m_fIsTorso )
 	{
+		PrecacheModel("models/zombie/classic_torso.mdl");
 		SetModel( "models/zombie/classic_torso.mdl" );
 		SetHullType(HULL_TINY);
 	}
 	else
 	{
+		PrecacheModel("models/zombie/poison.mdl");
 		SetModel( "models/zombie/poison.mdl" );
 		SetHullType(HULL_HUMAN);
 	}

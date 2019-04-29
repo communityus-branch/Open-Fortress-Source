@@ -1704,6 +1704,7 @@ void CNPC_BaseZombie::Spawn( void )
 	else
 	{
 		Precache();
+		PrecacheModel( szModel );
 		SetModel( szModel );
 	}
 	NPCInit();

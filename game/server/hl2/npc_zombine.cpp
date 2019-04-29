@@ -254,6 +254,7 @@ void CNPC_Zombine::Precache( void )
 
 void CNPC_Zombine::SetZombieModel( void )
 {
+	PrecacheModel("models/zombie/zombie_soldier.mdl");
 	SetModel( "models/zombie/zombie_soldier.mdl" );
 	SetHullType( HULL_HUMAN );
 
