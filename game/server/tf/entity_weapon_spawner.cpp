@@ -53,13 +53,13 @@ LINK_ENTITY_TO_CLASS( dm_weapon_spawner, CWeaponSpawner );
 
 void CWeaponSpawner::Spawn( void )
 {
-	ResetSequence( LookupSequence("spin") );
 	m_nRenderFX = kRenderFxNone;
 	if ( ofd_instagib.GetInt() <= 0 ) {
 	Precache();
 	if (m_iszWeaponModel==MAKE_STRING( "" )) m_iszWeaponModel=m_iszWeaponModelOLD;
 	SetModel( STRING(m_iszWeaponModel) );
 	BaseClass::Spawn();
+	ResetSequence( LookupSequence("spin") );
 	}
 }
 
@@ -169,6 +169,7 @@ bool CWeaponSpawner::MyTouch( CBasePlayer *pPlayer )
 CWeaponSpawner::CWeaponSpawner()
 {
 	m_flRespawnTick = 0.0f;
+	ResetSequence( LookupSequence("spin") );
 }
 
 CBaseEntity* CWeaponSpawner::Respawn( void )
@@ -176,5 +177,6 @@ CBaseEntity* CWeaponSpawner::Respawn( void )
 	CBaseEntity *ret = BaseClass::Respawn();
 	m_nRenderFX = kRenderFxDistort;
 	m_flRespawnTick = GetNextThink();
+	ResetSequence( LookupSequence("spin") );
 	return ret;
 }

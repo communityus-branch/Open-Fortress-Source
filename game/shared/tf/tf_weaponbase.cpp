@@ -1216,6 +1216,20 @@ void CTFWeaponBase::ItemPostFrame( void )
 	{
 		ReloadsAllPostFrame();
 	}
+	// -----------------------
+	//  No buttons down
+	// -----------------------
+	if (!((pOwner->m_nButtons & IN_ATTACK) || (pOwner->m_nButtons & IN_ATTACK2) || (CanReload() && pOwner->m_nButtons & IN_RELOAD)))
+	{
+		// no fire buttons down or reloading
+		if ( !ReloadOrSwitchWeapons() && ( m_bInReload == false ) )
+		{
+			if ( GetActivity() != ACT_VM_RELOAD )
+				WeaponIdle();
+//			SetNextThink ( gpGlobals->curtime + 10 );//  + SequenceDuration() - GetTFWpnData().m_WeaponData[TF_WEAPON_PRIMARY_MODE].m_flTimeReload
+			
+		}
+	}
 }
 
 //-----------------------------------------------------------------------------
