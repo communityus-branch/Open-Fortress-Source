@@ -170,6 +170,7 @@ public:
 	// Custom damage/death 
 	bool ShouldIgnite( const CTakeDamageInfo &info );
 	bool ShouldIgniteZombieGib( void );
+	bool m_bDisableHeadcrab;
 	virtual bool IsChopped( const CTakeDamageInfo &info );
 	virtual bool IsSquashed( const CTakeDamageInfo &info ) { return false; }
 	virtual void DieChopped( const CTakeDamageInfo &info );

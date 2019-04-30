@@ -443,7 +443,7 @@ void CTFPlayer::TFPlayerThink()
 	}
 
 	// Check to see if we are in the air and taunting.  Stop if so.
-	if ( GetGroundEntity() == NULL && m_Shared.InCond( TF_COND_TAUNTING ) )
+/*	if ( GetGroundEntity() == NULL && m_Shared.InCond( TF_COND_TAUNTING ) )
 	{
 		if( m_hTauntScene.Get() )
 		{
@@ -452,7 +452,7 @@ void CTFPlayer::TFPlayerThink()
 			m_hTauntScene = NULL;
 		}
 	}
-
+*/
 	SetContextThink( &CTFPlayer::TFPlayerThink, gpGlobals->curtime, "TFPlayerThink" );
 }
 
@@ -5781,7 +5781,7 @@ void CTFPlayer::Taunt( void )
 		m_angTauntCamera = EyeAngles();
 
 		// Slam velocity to zero.
-		SetAbsVelocity( vec3_origin );
+//		SetAbsVelocity( vec3_origin );
 	}
 
 	pExpresser->DisallowMultipleScenes();

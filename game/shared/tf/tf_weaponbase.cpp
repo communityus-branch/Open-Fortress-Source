@@ -1225,8 +1225,11 @@ void CTFWeaponBase::ItemPostFrame( void )
 		if ( !ReloadOrSwitchWeapons() && ( m_bInReload == false ) )
 		{
 			if ( GetActivity() != ACT_VM_RELOAD )
-				WeaponIdle();
-//			SetNextThink ( gpGlobals->curtime + 10 );//  + SequenceDuration() - GetTFWpnData().m_WeaponData[TF_WEAPON_PRIMARY_MODE].m_flTimeReload
+//			{
+//				SetNextThink( gpGlobals->curtime + SequenceDuration() - GetTFWpnData().m_WeaponData[TF_WEAPON_PRIMARY_MODE].m_flTimeReload );
+//				SetThink(); 
+//			}
+			WeaponIdle();
 			
 		}
 	}

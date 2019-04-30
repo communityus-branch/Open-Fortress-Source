@@ -202,7 +202,6 @@ int AE_ZOMBIE_POPHEADCRAB;
 //=========================================================
 //=========================================================
 BEGIN_DATADESC( CNPC_BaseZombie )
-
 	DEFINE_SOUNDPATCH( m_pMoanSound ),
 	DEFINE_FIELD( m_fIsTorso, FIELD_BOOLEAN ),
 	DEFINE_FIELD( m_fIsHeadless, FIELD_BOOLEAN ),
@@ -219,7 +218,7 @@ BEGIN_DATADESC( CNPC_BaseZombie )
 	DEFINE_FIELD( m_iMoanSound, FIELD_INTEGER ),
 	DEFINE_FIELD( m_hObstructor, FIELD_EHANDLE ),
 	DEFINE_FIELD( m_bIsSlumped, FIELD_BOOLEAN ),
-
+	DEFINE_KEYFIELD( m_bDisableHeadcrab, FIELD_BOOLEAN, "DisableHeadcrab" ),
 END_DATADESC()
 
 
@@ -761,9 +760,12 @@ bool CNPC_BaseZombie::ShouldBecomeTorso( const CTakeDamageInfo &info, float flDa
 //-----------------------------------------------------------------------------
 HeadcrabRelease_t CNPC_BaseZombie::ShouldReleaseHeadcrab( const CTakeDamageInfo &info, float flDamageThreshold )
 {
+	if ( m_bDisableHeadcrab )
+		return RELEASE_NO;
+	
 	if ( m_iHealth <= 0 )
 	{
-		if ( info.GetDamageType() & DMG_REMOVENORAGDOLL )
+		if ( info.GetDamageType() & DMG_REMOVENORAGDOLL || m_bDisableHeadcrab )
 			return RELEASE_NO;
 
 		if ( info.GetDamageType() & DMG_SNIPER )
@@ -865,13 +867,14 @@ int CNPC_BaseZombie::OnTakeDamage_Alive( const CTakeDamageInfo &inputInfo )
 	else
 	{
 		HeadcrabRelease_t release = ShouldReleaseHeadcrab( info, flDamageThreshold );
-		
+	
+		if ( m_bDisableHeadcrab )
+			release = RELEASE_VAPORIZE;
 		switch( release )
 		{
 		case RELEASE_IMMEDIATE:
-			ReleaseHeadcrab( EyePosition(), vec3_origin, true, true );
-			break;
-
+				ReleaseHeadcrab( EyePosition(), vec3_origin, true, true );
+				break;
 		case RELEASE_RAGDOLL:
 			// Go a little easy on headcrab ragdoll force. They're light!
 			ReleaseHeadcrab( EyePosition(), inputInfo.GetDamageForce() * 0.25, true, false, true );
@@ -1073,7 +1076,7 @@ void CNPC_BaseZombie::DieChopped( const CTakeDamageInfo &info )
 
 	forceVector += CalcDamageForceVector( info );
 
-	if( !m_fIsHeadless && !bSquashed )
+	if( !m_fIsHeadless && !bSquashed && !m_bDisableHeadcrab )
 	{
 		if( random->RandomInt( 0, 1 ) == 0 )
 		{
@@ -1611,7 +1614,7 @@ void CNPC_BaseZombie::HandleAnimEvent( animevent_t *pEvent )
 
 	if ( pEvent->event == AE_ZOMBIE_POPHEADCRAB )
 	{
-		if ( GetInteractionPartner() == NULL )
+		if ( GetInteractionPartner() == NULL || m_bDisableHeadcrab )
 			return;
 
 		const char	*pString = pEvent->options;
@@ -2388,6 +2391,8 @@ bool CNPC_BaseZombie::HeadcrabFits( CBaseAnimating *pCrab )
 //-----------------------------------------------------------------------------
 void CNPC_BaseZombie::ReleaseHeadcrab( const Vector &vecOrigin, const Vector &vecVelocity, bool fRemoveHead, bool fRagdollBody, bool fRagdollCrab )
 {
+	if ( m_bDisableHeadcrab )
+		return;
 	CAI_BaseNPC		*pCrab;
 	Vector vecSpot = vecOrigin;
 

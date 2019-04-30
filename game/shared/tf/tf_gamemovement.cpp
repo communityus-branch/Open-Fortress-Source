@@ -39,7 +39,7 @@ ConVar  tf_clamp_back_speed_min( "tf_clamp_back_speed_min", "100", FCVAR_REPLICA
 ConVar 	of_bunnyhop( "of_bunnyhop", "0", FCVAR_NOTIFY | FCVAR_REPLICATED , "Allows enables/disables bunnyhoping." );
 ConVar 	of_crouchjump( "of_crouchjump", "0", FCVAR_NOTIFY | FCVAR_REPLICATED , "Allows enables/disables crouch jumping." );
 ConVar 	of_bunnyhop_max_speed_factor( "of_bunnyhop_max_speed_factor", "1.2", FCVAR_NOTIFY | FCVAR_REPLICATED , "Max Speed achievable with bunnyhoping." );
-ConVar 	ofd_jumpsound( "ofd_jumpsound", "0", FCVAR_CLIENTDLL | FCVAR_ARCHIVE | FCVAR_USERINFO , "Hough" );
+ConVar 	ofd_jumpsound( "ofd_jumpsound", "1", FCVAR_CLIENTDLL | FCVAR_ARCHIVE | FCVAR_USERINFO , "Hough" );
 
 #define TF_MAX_SPEED   400
 
@@ -360,6 +360,7 @@ bool CTFGameMovement::CheckJumpButton()
 
 	// Check to see if the player is a scout.
 	bool bScout = m_pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_SCOUT );
+#ifdef CLIENT_DLL
 	bool bSoldier = m_pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_SOLDIER );
 	bool bPyro = m_pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_PYRO );
 	bool bDemo = m_pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_DEMOMAN );
@@ -370,7 +371,7 @@ bool CTFGameMovement::CheckJumpButton()
 	bool bSpy = m_pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_SPY );
 	bool bCivilian = m_pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_CIVILIAN );
 	bool bMercenary = m_pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_MERCENARY );
-	
+#endif
 	bool bAirDash = false;
 	bool bOnGround = ( player->GetGroundEntity() != NULL );
 
@@ -469,6 +470,9 @@ bool CTFGameMovement::CheckJumpButton()
 
 	// Flag that we jumped and don't jump again until it is released.
 	mv->m_nOldButtons |= IN_JUMP;
+#ifdef CLIENT_DLL
+if ( ofd_jumpsound.GetBool() )
+{
 	if ( bScout )
 		m_pTFPlayer->EmitSound( "Scout.Jumpsound" );
 	else if ( bSoldier )
@@ -491,6 +495,8 @@ bool CTFGameMovement::CheckJumpButton()
 		m_pTFPlayer->EmitSound( "Civilian.Jumpsound" );
 	else if ( bMercenary )
 		m_pTFPlayer->EmitSound( "Mercenary.Jumpsound" );
+}
+#endif
 	return true;
 }
 
