@@ -2622,3 +2622,15 @@ void CTFPlayerShared::RemoveCondUber( void )
 	RemoveCond( TF_COND_INVULNERABLE );
 	RemoveCond( TF_COND_SPAWNPROTECT );
 }
+
+bool CTFPlayerShared::InCondShield( void )
+{
+	if ( InCond( TF_COND_SHIELD ) )
+		return true;
+	else
+		return false;
+}
+void CTFPlayerShared::RemoveCondShield( void )
+{
+	RemoveCond( TF_COND_SHIELD );
+}

@@ -49,6 +49,7 @@ ConVar of_autoswitchweapons("of_autoswitchweapons", "0", FCVAR_CLIENTDLL | FCVAR
 ConVar tf_weapon_criticals( "tf_weapon_criticals", "0", FCVAR_NOTIFY | FCVAR_REPLICATED, "Whether or not random crits are enabled." );
 ConVar of_infiniteammo( "of_infiniteammo", "0", FCVAR_NOTIFY | FCVAR_REPLICATED, "Whether or not reloading is disabled" );
 ConVar ofd_multiweapons( "ofd_multiweapons", "1", FCVAR_NOTIFY | FCVAR_REPLICATED, "Toggle the Quake-like Multi weapon system." );
+ConVar sv_reloadsync( "sv_reloadsync", "0", FCVAR_NOTIFY | FCVAR_REPLICATED | FCVAR_CHEAT , "Used for syncing up reloads" );
 extern ConVar tf_useparticletracers;
 
 //=============================================================================
@@ -500,10 +501,6 @@ void CTFWeaponBase::PrimaryAttack( void )
 	{
 		m_iReloadMode.Set( TF_RELOAD_START );
 	}
-	else if ( m_bReloadsAll ) 
-	{
-		m_iReloadMode.Set ( TF_RELOAD_START );
-	}
 }
 
 //-----------------------------------------------------------------------------
@@ -749,14 +746,13 @@ bool CTFWeaponBase::ReloadSingly( void )
 
 			if ( SendWeaponAnim( ACT_VM_RELOAD ) )
 			{
-				if ( GetWeaponID() == TF_WEAPON_GRENADELAUNCHER || GetWeaponID() == TF_WEAPON_GRENADELAUNCHER_MERCENARY )
+				if ( sv_reloadsync.GetFloat() <= 0 )
 				{
 					SetReloadTimer( GetTFWpnData().m_WeaponData[TF_WEAPON_PRIMARY_MODE].m_flTimeReload );
 				}
 				else
 				{
-					//SetReloadTimer( SequenceDuration() );
-					SetReloadTimer( GetTFWpnData().m_WeaponData[TF_WEAPON_PRIMARY_MODE].m_flTimeReload );
+					SetReloadTimer(sv_reloadsync.GetFloat());
 				}
 			}
 			else
@@ -874,13 +870,13 @@ bool CTFWeaponBase::ReloadsAll( void )
 
 			if ( SendWeaponAnim( ACT_VM_RELOAD ) )
 			{
-				if ( GetWeaponID() == TF_WEAPON_GRENADELAUNCHER || GetWeaponID() == TF_WEAPON_GRENADELAUNCHER_MERCENARY )
+				if ( sv_reloadsync.GetFloat() <= 0  )
 				{
 					SetReloadTimer( GetTFWpnData().m_WeaponData[TF_WEAPON_PRIMARY_MODE].m_flTimeReload );
 				}
 				else
 				{
-					SetReloadTimer( SequenceDuration() );
+					SetReloadTimer( sv_reloadsync.GetFloat() );
 				}
 			}
 			else
@@ -1041,11 +1037,17 @@ bool CTFWeaponBase::DefaultReload( int iClipSize1, int iClipSize2, int iActivity
 		{
 			flReloadTime = GetTFWpnData().m_WeaponData[TF_WEAPON_SECONDARY_MODE].m_flTimeReload;  
 		}
+		if ( sv_reloadsync.GetFloat() >0 )
+			flReloadTime = sv_reloadsync.GetFloat();
 	}
 	else
 	{
 		// No reload animation. Use the script time.
-		flReloadTime = GetTFWpnData().m_WeaponData[TF_WEAPON_PRIMARY_MODE].m_flTimeReload;  
+		if ( sv_reloadsync.GetFloat() > 0 )
+			flReloadTime = sv_reloadsync.GetFloat();
+		else
+			flReloadTime = GetTFWpnData().m_WeaponData[TF_WEAPON_PRIMARY_MODE].m_flTimeReload;  
+		
 		if ( bReloadSecondary )
 		{
 			flReloadTime = GetTFWpnData().m_WeaponData[TF_WEAPON_SECONDARY_MODE].m_flTimeReload;  
@@ -1073,7 +1075,10 @@ void CTFWeaponBase::UpdateReloadTimers( bool bStart )
 	// In reload.
 	else
 	{
-		SetReloadTimer( m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_flTimeReload );
+		if (sv_reloadsync.GetFloat() > 0)
+			SetReloadTimer( sv_reloadsync.GetFloat() );
+		else
+			SetReloadTimer( m_pWeaponInfo->GetWeaponData( m_iWeaponMode ).m_flTimeReload );
 	}
 }
 

@@ -95,7 +95,7 @@ void PhysCannonBeginUpgrade( CBaseAnimating *pAnim )
 
 bool PlayerHasMegaPhysCannon( void )
 {
-	return false;
+	return true;
 }
 
 bool PhysCannonAccountableForObject( CBaseCombatWeapon *pPhysCannon, CBaseEntity *pObject )
@@ -1574,8 +1574,8 @@ void CWeaponPhysCannon::PuntNonVPhysics( CBaseEntity *pEntity, const Vector &for
 	
 	info.SetAttacker( GetOwner() );
 	info.SetInflictor( this );
-	info.SetDamage( 1.0f );
-	info.SetDamageType( DMG_CRUSH | DMG_PHYSGUN );
+	info.SetDamage( 50.0f );
+	info.SetDamageType(DMG_DISSOLVE);
 	info.SetDamageForce( forward );	// Scale?
 	info.SetDamagePosition( tr.endpos );
 
@@ -1878,11 +1878,11 @@ void CWeaponPhysCannon::PrimaryAttack( void )
 		if( GetOwner()->IsPlayer() )
 		{
 			// Don't let the player zap any NPC's except regular antlions and headcrabs.
-			if( pEntity->IsPlayer() )
-			{
-				DryFire();
-				return;
-			}
+//			if( pEntity->IsPlayer() )
+//			{
+//				DryFire();
+//				return;
+//			}
 		}
 
 		PuntNonVPhysics( pEntity, forward, tr );

@@ -103,6 +103,7 @@ ConVar of_headshots( "of_headshots", "0", FCVAR_REPLICATED | FCVAR_NOTIFY , "Mak
 ConVar of_forcespawnprotect( "of_forcespawnprotect", "0", FCVAR_REPLICATED | FCVAR_NOTIFY , "How long the spawn protection lasts." );
 
 ConVar ofd_spawnprotecttime( "ofd_spawnprotecttime", "3", FCVAR_REPLICATED | FCVAR_NOTIFY , "How long the spawn protection lasts." );
+ConVar ofd_resistance( "ofd_resistance", "0.8", FCVAR_REPLICATED | FCVAR_NOTIFY , "How long the spawn protection lasts." );
 
 ConVar ofe_huntedcount( "ofe_huntedcount", "1", FCVAR_REPLICATED | FCVAR_NOTIFY , "How many Hunted there is." );
 
@@ -2854,7 +2855,11 @@ int CTFPlayer::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 			return 0;
 		}
 	}
-
+	if( m_Shared.InCondShield() )
+	{
+		float flDamage = info.GetDamage() * ofd_resistance.GetFloat();
+		info.SetDamage( flDamage );
+	}
 	// If we're not damaging ourselves, apply randomness
 	if ( info.GetAttacker() != this && !(bitsDamage & (DMG_DROWN | DMG_FALL)) ) 
 	{
@@ -2980,7 +2985,7 @@ int CTFPlayer::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 
 		info.SetDamage( flDamage );
 	}
-
+	
 	// NOTE: Deliberately skip base player OnTakeDamage, because we don't want all the stuff it does re: suit voice
 	bTookDamage = CBaseCombatCharacter::OnTakeDamage( info );
 
@@ -3578,10 +3583,18 @@ void CTFPlayer::Event_Killed( const CTakeDamageInfo &info )
 	if ( info_modified.GetDamageCustom() == TF_DMG_CUSTOM_SUICIDE )
 	{
 		// if this was suicide, recalculate attacker to see if we want to award the kill to a recent damager
-		info_modified.SetAttacker( TFGameRules()->GetDeathScorer( info.GetAttacker(), info.GetInflictor(), this ) );
+//		info_modified.SetAttacker( TFGameRules()->GetDeathScorer( info.GetAttacker(), info.GetInflictor(), this ) );
 	}
 
 	BaseClass::Event_Killed( info_modified );
+	
+	if ( info.GetDamageType() & DMG_DISSOLVE )
+	{
+		if ( m_hRagdoll )
+		{
+			m_hRagdoll->GetBaseAnimating()->Dissolve( NULL, gpGlobals->curtime, false, ENTITY_DISSOLVE_NORMAL );
+		}
+	}
 
 	CTFPlayer *pInflictor = ToTFPlayer( info.GetInflictor() );
 	if ( ( TF_DMG_CUSTOM_HEADSHOT == info.GetDamageCustom() ) && pInflictor )

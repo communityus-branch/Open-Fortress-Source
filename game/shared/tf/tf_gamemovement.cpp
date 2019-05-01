@@ -39,8 +39,9 @@ ConVar  tf_clamp_back_speed_min( "tf_clamp_back_speed_min", "100", FCVAR_REPLICA
 ConVar 	of_bunnyhop( "of_bunnyhop", "0", FCVAR_NOTIFY | FCVAR_REPLICATED , "Allows enables/disables bunnyhoping." );
 ConVar 	of_crouchjump( "of_crouchjump", "0", FCVAR_NOTIFY | FCVAR_REPLICATED , "Allows enables/disables crouch jumping." );
 ConVar 	of_bunnyhop_max_speed_factor( "of_bunnyhop_max_speed_factor", "1.2", FCVAR_NOTIFY | FCVAR_REPLICATED , "Max Speed achievable with bunnyhoping." );
+#if defined (CLIENT_DLL)
 ConVar 	ofd_jumpsound( "ofd_jumpsound", "1", FCVAR_CLIENTDLL | FCVAR_ARCHIVE | FCVAR_USERINFO , "Hough" );
-
+#endif
 #define TF_MAX_SPEED   400
 
 #define TF_WATERJUMP_FORWARD  30

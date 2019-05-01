@@ -110,6 +110,9 @@ public:
 	
 	bool InCondUber( void );
 	void RemoveCondUber( void );
+	
+	bool InCondShield( void );
+	void RemoveCondShield( void );
 
 #ifdef CLIENT_DLL
 	// This class only receives calls for these from C_TFPlayer, not

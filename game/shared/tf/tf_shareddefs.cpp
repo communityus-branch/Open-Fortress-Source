@@ -198,7 +198,7 @@ int g_aWeaponDamageTypes[] =
 	DMG_CLUB,		// TF_WEAPON_BOTTLE, 
 	DMG_CLUB,		// TF_WEAPON_FIREAXE,
 	DMG_CLUB,		// TF_WEAPON_CLUB,
-	DMG_CLUB,		// TF_WEAPON_CROWBAR,
+	DMG_DISSOLVE,		// TF_WEAPON_CROWBAR,
 	DMG_SLASH,		// TF_WEAPON_KNIFE,
 	DMG_CLUB,		// TF_WEAPON_FISTS,
 	DMG_CLUB,		// TF_WEAPON_SHOVEL,
@@ -263,7 +263,7 @@ int g_aWeaponDamageTypes[] =
 	DMG_BUCKSHOT | DMG_USEDISTANCEMOD ,	// TF_WEAPON_SHOTGUN_MERCENARY,
 	DMG_CLUB, //TF_WEAPON_SWORD
 	DMG_CLUB, //TF_WEAPON_FLAG
-	DMG_CLUB | DMG_BLAST, //TF_WEAPON_BERSERK
+	DMG_CLUB | DMG_ALWAYSGIB, //TF_WEAPON_BERSERK
 	
 	// This is a special entry that must match with TF_WEAPON_COUNT
 	// to protect against updating the weapon list without updating this list

@@ -96,7 +96,7 @@ bool CWeaponSpawner::MyTouch( CBasePlayer *pPlayer )
 			CTFWeaponBase *pCarriedWeapon = (CTFWeaponBase *)pTFPlayer->GetWeapon( iWeapon );
 			if ( pCarriedWeapon == pWeapon || ( !ofd_allow_allclass_pickups.GetBool() && !pTFPlayer->GetPlayerClass()->IsClass( TF_CLASS_MERCENARY ) ) ) 
 			{
-				if ( pTFPlayer->RestockAmmo(PackRatios[GetPowerupSize()]) )
+				if ( pTFPlayer->RestockAmmo(0.5f) )
 				{
 					CSingleUserRecipientFilter filter( pTFPlayer );
 					EmitSound( filter, entindex(), STRING(m_iszPickupSound) );

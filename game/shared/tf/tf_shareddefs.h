@@ -417,6 +417,7 @@ enum
 	TF_COND_SPAWNPROTECT,
 	TF_COND_SHIELD_CHARGE,
 	TF_COND_BERSERK,
+	TF_COND_SHIELD,
 
 	// The following conditions all expire faster when the player is being healed
 	// If you add a new condition that shouldn't have this behavior, add it before this section.

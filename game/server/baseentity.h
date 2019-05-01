@@ -840,14 +840,14 @@ protected:
 	int							m_iCurrentThinkContext;
 #endif
 
-	void RemoveExpiredConcepts( void );
+public:
+	void	AddContext( const char *nameandvalue );
 	int	GetContextCount() const;						// Call RemoveExpiredConcepts to clean out expired concepts
 	const char *GetContextName( int index ) const;		// note: context may be expired
 	const char *GetContextValue( int index ) const; 	// note: context may be expired
 	bool ContextExpired( int index ) const;
 	int FindContextByName( const char *name ) const;
-public:
-	void	AddContext( const char *nameandvalue );
+	void RemoveExpiredConcepts( void );
 
 protected:
 	CUtlVector< ResponseContext_t > m_ResponseContexts;
